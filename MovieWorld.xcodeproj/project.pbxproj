@@ -3,13 +3,16 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		994E3CFA23FA9C8B0034B4D2 /* MWInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994E3CF923FA9C8B0034B4D2 /* MWInterface.swift */; };
+		994E3CFC23FA9D990034B4D2 /* MWNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994E3CFB23FA9D990034B4D2 /* MWNavigationController.swift */; };
+		994E3D0023FAA0170034B4D2 /* MWContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994E3CFF23FAA0170034B4D2 /* MWContentView.swift */; };
+		994E3D0323FAA18E0034B4D2 /* MWFilm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994E3D0223FAA18E0034B4D2 /* MWFilm.swift */; };
 		9999E0CF23F9F378007EB718 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9999E0CE23F9F378007EB718 /* AppDelegate.swift */; };
-		9999E0D123F9F378007EB718 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9999E0D023F9F378007EB718 /* SceneDelegate.swift */; };
-		9999E0D323F9F378007EB718 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9999E0D223F9F378007EB718 /* ViewController.swift */; };
+		9999E0D323F9F378007EB718 /* MWFirstTabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9999E0D223F9F378007EB718 /* MWFirstTabViewController.swift */; };
 		9999E0D823F9F37A007EB718 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9999E0D723F9F37A007EB718 /* Assets.xcassets */; };
 		9999E0DB23F9F37A007EB718 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9999E0D923F9F37A007EB718 /* LaunchScreen.storyboard */; };
 		9999E0E323F9F3B7007EB718 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 9999E0E223F9F3B7007EB718 /* .gitignore */; };
@@ -19,10 +22,13 @@
 /* Begin PBXFileReference section */
 		0BE71B7BC15D4D1921BA2AA9 /* Pods-MovieWorld.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MovieWorld.debug.xcconfig"; path = "Target Support Files/Pods-MovieWorld/Pods-MovieWorld.debug.xcconfig"; sourceTree = "<group>"; };
 		4EA3DE178F6AFCF3BA8474BC /* Pods-MovieWorld.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MovieWorld.release.xcconfig"; path = "Target Support Files/Pods-MovieWorld/Pods-MovieWorld.release.xcconfig"; sourceTree = "<group>"; };
+		994E3CF923FA9C8B0034B4D2 /* MWInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWInterface.swift; sourceTree = "<group>"; };
+		994E3CFB23FA9D990034B4D2 /* MWNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWNavigationController.swift; sourceTree = "<group>"; };
+		994E3CFF23FAA0170034B4D2 /* MWContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWContentView.swift; sourceTree = "<group>"; };
+		994E3D0223FAA18E0034B4D2 /* MWFilm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWFilm.swift; sourceTree = "<group>"; };
 		9999E0CB23F9F378007EB718 /* MovieWorld.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MovieWorld.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9999E0CE23F9F378007EB718 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		9999E0D023F9F378007EB718 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		9999E0D223F9F378007EB718 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		9999E0D223F9F378007EB718 /* MWFirstTabViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWFirstTabViewController.swift; sourceTree = "<group>"; };
 		9999E0D723F9F37A007EB718 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9999E0DA23F9F37A007EB718 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9999E0DC23F9F37A007EB718 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -48,8 +54,40 @@
 				0BE71B7BC15D4D1921BA2AA9 /* Pods-MovieWorld.debug.xcconfig */,
 				4EA3DE178F6AFCF3BA8474BC /* Pods-MovieWorld.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		994E3CF823FA9C5B0034B4D2 /* BaseClasses */ = {
+			isa = PBXGroup;
+			children = (
+				994E3CF923FA9C8B0034B4D2 /* MWInterface.swift */,
+				994E3CFB23FA9D990034B4D2 /* MWNavigationController.swift */,
+			);
+			path = BaseClasses;
+			sourceTree = "<group>";
+		};
+		994E3CFD23FA9FE10034B4D2 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				9999E0D223F9F378007EB718 /* MWFirstTabViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		994E3CFE23FA9FEA0034B4D2 /* Controls */ = {
+			isa = PBXGroup;
+			children = (
+				994E3CFF23FAA0170034B4D2 /* MWContentView.swift */,
+			);
+			path = Controls;
+			sourceTree = "<group>";
+		};
+		994E3D0123FAA1780034B4D2 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				994E3D0223FAA18E0034B4D2 /* MWFilm.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		9999E0C223F9F378007EB718 = {
@@ -73,10 +111,12 @@
 		9999E0CD23F9F378007EB718 /* MovieWorld */ = {
 			isa = PBXGroup;
 			children = (
+				994E3D0123FAA1780034B4D2 /* Models */,
+				994E3CFE23FA9FEA0034B4D2 /* Controls */,
+				994E3CFD23FA9FE10034B4D2 /* Controllers */,
+				994E3CF823FA9C5B0034B4D2 /* BaseClasses */,
 				9999E0E223F9F3B7007EB718 /* .gitignore */,
 				9999E0CE23F9F378007EB718 /* AppDelegate.swift */,
-				9999E0D023F9F378007EB718 /* SceneDelegate.swift */,
-				9999E0D223F9F378007EB718 /* ViewController.swift */,
 				9999E0D723F9F37A007EB718 /* Assets.xcassets */,
 				9999E0D923F9F37A007EB718 /* LaunchScreen.storyboard */,
 				9999E0DC23F9F37A007EB718 /* Info.plist */,
@@ -207,9 +247,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9999E0D323F9F378007EB718 /* ViewController.swift in Sources */,
+				994E3D0023FAA0170034B4D2 /* MWContentView.swift in Sources */,
+				9999E0D323F9F378007EB718 /* MWFirstTabViewController.swift in Sources */,
 				9999E0CF23F9F378007EB718 /* AppDelegate.swift in Sources */,
-				9999E0D123F9F378007EB718 /* SceneDelegate.swift in Sources */,
+				994E3CFA23FA9C8B0034B4D2 /* MWInterface.swift in Sources */,
+				994E3CFC23FA9D990034B4D2 /* MWNavigationController.swift in Sources */,
+				994E3D0323FAA18E0034B4D2 /* MWFilm.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

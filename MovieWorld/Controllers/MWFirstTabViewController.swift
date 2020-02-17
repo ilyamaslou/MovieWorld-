@@ -8,13 +8,18 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class MWFirstTabViewController: UIViewController {
 
+    var singleFilmView: MWContentView { return self.view as! MWContentView }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
     }
-
-
+    
+    override func loadView() {
+        self.view = MWContentView()
+        view.backgroundColor = .white
+    }
 }
 

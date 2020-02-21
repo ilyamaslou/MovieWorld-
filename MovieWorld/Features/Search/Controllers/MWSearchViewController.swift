@@ -27,6 +27,7 @@ class MWSearchViewController: MWViewController {
         }
         
         view.backgroundColor = .yellow
+        self.title = "Search"
     }
 
 }

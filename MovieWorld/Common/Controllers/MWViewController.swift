@@ -10,11 +10,6 @@ import UIKit
 
 class MWViewController: UIViewController {
     
-//    private(set) lazy var navBar: MWNavigationBar = {
-//        let view = MWNavigationBar()
-//        return view
-//    }()
-    
     private(set) lazy var contentView: UIView = {
         let view = UIView()
         view.backgroundColor = .clear
@@ -41,13 +36,13 @@ class MWViewController: UIViewController {
     
     private func makeConstraints() {
         contentView.snp.makeConstraints { (make) in
-            make.edges.equalToSuperview()
+            make.left.right.bottom.equalToSuperview()
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.topMargin)
         }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         // Do any additional setup after loading the view.
     }
     

@@ -28,6 +28,7 @@ class MWMainTabViewController: MWViewController {
         }
         
         view.backgroundColor = .lightGray
+        self.title = "Season"
         
     }
 }

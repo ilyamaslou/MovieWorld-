@@ -10,8 +10,6 @@ import UIKit
 
 class MWTabBarViewController: UITabBarController {
     
-    private(set) var barItems: [UITabBarItem] = []
-
     lazy var mainTabBarItem: UITabBarItem = {
         let view: UITabBarItem = UITabBarItem(
             title: "Main",
@@ -48,7 +46,7 @@ class MWTabBarViewController: UITabBarController {
         searchVC.tabBarItem = self.searchTabBarItem
         
          self.viewControllers = [mainVC, categoryVC , searchVC]
-//        self.tabBarItem = viewControllers.map { }
+            .map{MWNavigationController(rootViewController: $0)}
         
         self.tabBar.isTranslucent = false
         self.tabBar.layer.masksToBounds = false

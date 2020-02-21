@@ -11,7 +11,7 @@ import SnapKit
 
 class MWContentView: UIView {
     
-    private let insets = UIEdgeInsets(top: 0, left: 16, bottom: 8, right: 16)
+    private let insets = UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16)
     private let contentInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
     private let imageSize = CGSize(width: 80, height: 120)
     private let film = MWFilm()

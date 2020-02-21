@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import SnapKit
 
-class MWFirstTabViewController: UIViewController {
+class MWMainTabViewController: MWViewController {
 
     var singleFilmView: MWContentView { return self.view as! MWContentView }
     
@@ -17,9 +18,17 @@ class MWFirstTabViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
     
-    override func loadView() {
-        self.view = MWContentView()
-        view.backgroundColor = .white
+    override func initController() {
+        super.initController()
+        let view = MWContentView()
+        contentView.addSubview(view)
+        
+        view.snp.makeConstraints { (make) in
+            make.edges.equalToSuperview()
+        }
+        
+        view.backgroundColor = .lightGray
+        
     }
 }
 

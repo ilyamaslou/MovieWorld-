@@ -11,11 +11,17 @@
 		994E3CFC23FA9D990034B4D2 /* MWNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994E3CFB23FA9D990034B4D2 /* MWNavigationController.swift */; };
 		994E3D0023FAA0170034B4D2 /* MWContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994E3CFF23FAA0170034B4D2 /* MWContentView.swift */; };
 		994E3D0323FAA18E0034B4D2 /* MWFilm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994E3D0223FAA18E0034B4D2 /* MWFilm.swift */; };
+		9979B44E23FFC1DB005421D9 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 9979B44D23FFC1DB005421D9 /* .gitignore */; };
+		9979B45523FFC2A5005421D9 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9979B45423FFC2A5005421D9 /* Colors.xcassets */; };
+		9979B45F23FFC666005421D9 /* MWTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9979B45E23FFC666005421D9 /* MWTabBarViewController.swift */; };
+		9979B46123FFCEF4005421D9 /* MWCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9979B46023FFCEF4005421D9 /* MWCategoryViewController.swift */; };
+		9979B46323FFCF19005421D9 /* MWSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9979B46223FFCF19005421D9 /* MWSearchViewController.swift */; };
+		9979B46523FFD0D5005421D9 /* MWViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9979B46423FFD0D5005421D9 /* MWViewController.swift */; };
+		9979B46723FFDB51005421D9 /* MWNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9979B46623FFDB51005421D9 /* MWNavigationBar.swift */; };
 		9999E0CF23F9F378007EB718 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9999E0CE23F9F378007EB718 /* AppDelegate.swift */; };
-		9999E0D323F9F378007EB718 /* MWFirstTabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9999E0D223F9F378007EB718 /* MWFirstTabViewController.swift */; };
+		9999E0D323F9F378007EB718 /* MWMainTabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9999E0D223F9F378007EB718 /* MWMainTabViewController.swift */; };
 		9999E0D823F9F37A007EB718 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9999E0D723F9F37A007EB718 /* Assets.xcassets */; };
 		9999E0DB23F9F37A007EB718 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9999E0D923F9F37A007EB718 /* LaunchScreen.storyboard */; };
-		9999E0E323F9F3B7007EB718 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 9999E0E223F9F3B7007EB718 /* .gitignore */; };
 		EA7F3466F643D84D46128BE3 /* Pods_MovieWorld.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C871CBC05AFA2A873B51B459 /* Pods_MovieWorld.framework */; };
 /* End PBXBuildFile section */
 
@@ -26,13 +32,19 @@
 		994E3CFB23FA9D990034B4D2 /* MWNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWNavigationController.swift; sourceTree = "<group>"; };
 		994E3CFF23FAA0170034B4D2 /* MWContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWContentView.swift; sourceTree = "<group>"; };
 		994E3D0223FAA18E0034B4D2 /* MWFilm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWFilm.swift; sourceTree = "<group>"; };
+		9979B44D23FFC1DB005421D9 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = .gitignore; path = ../../../Downloads/.gitignore; sourceTree = "<group>"; };
+		9979B45423FFC2A5005421D9 /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
+		9979B45E23FFC666005421D9 /* MWTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWTabBarViewController.swift; sourceTree = "<group>"; };
+		9979B46023FFCEF4005421D9 /* MWCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWCategoryViewController.swift; sourceTree = "<group>"; };
+		9979B46223FFCF19005421D9 /* MWSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWSearchViewController.swift; sourceTree = "<group>"; };
+		9979B46423FFD0D5005421D9 /* MWViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWViewController.swift; sourceTree = "<group>"; };
+		9979B46623FFDB51005421D9 /* MWNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWNavigationBar.swift; sourceTree = "<group>"; };
 		9999E0CB23F9F378007EB718 /* MovieWorld.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MovieWorld.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9999E0CE23F9F378007EB718 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		9999E0D223F9F378007EB718 /* MWFirstTabViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWFirstTabViewController.swift; sourceTree = "<group>"; };
+		9999E0D223F9F378007EB718 /* MWMainTabViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWMainTabViewController.swift; sourceTree = "<group>"; };
 		9999E0D723F9F37A007EB718 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9999E0DA23F9F37A007EB718 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9999E0DC23F9F37A007EB718 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		9999E0E223F9F3B7007EB718 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = .gitignore; path = ../../../Downloads/.gitignore; sourceTree = "<group>"; };
 		C871CBC05AFA2A873B51B459 /* Pods_MovieWorld.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MovieWorld.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -57,29 +69,20 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
-		994E3CF823FA9C5B0034B4D2 /* BaseClasses */ = {
-			isa = PBXGroup;
-			children = (
-				994E3CF923FA9C8B0034B4D2 /* MWInterface.swift */,
-				994E3CFB23FA9D990034B4D2 /* MWNavigationController.swift */,
-			);
-			path = BaseClasses;
-			sourceTree = "<group>";
-		};
 		994E3CFD23FA9FE10034B4D2 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				9999E0D223F9F378007EB718 /* MWFirstTabViewController.swift */,
+				9999E0D223F9F378007EB718 /* MWMainTabViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
 		};
-		994E3CFE23FA9FEA0034B4D2 /* Controls */ = {
+		994E3CFE23FA9FEA0034B4D2 /* Views */ = {
 			isa = PBXGroup;
 			children = (
 				994E3CFF23FAA0170034B4D2 /* MWContentView.swift */,
 			);
-			path = Controls;
+			path = Views;
 			sourceTree = "<group>";
 		};
 		994E3D0123FAA1780034B4D2 /* Models */ = {
@@ -88,6 +91,118 @@
 				994E3D0223FAA18E0034B4D2 /* MWFilm.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		9979B44F23FFC1F2005421D9 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				9979B45623FFC2E4005421D9 /* Navigation */,
+				9979B45723FFC2EE005421D9 /* Controllers */,
+				9979B45823FFC2F8005421D9 /* Controls */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+		9979B45023FFC20C005421D9 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				9979B45B23FFC322005421D9 /* Main */,
+				9979B45A23FFC319005421D9 /* Category */,
+				9979B45923FFC311005421D9 /* Search */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		9979B45123FFC220005421D9 /* Utility */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Utility;
+			sourceTree = "<group>";
+		};
+		9979B45223FFC229005421D9 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		9979B45323FFC243005421D9 /* Resourses */ = {
+			isa = PBXGroup;
+			children = (
+				9999E0D723F9F37A007EB718 /* Assets.xcassets */,
+				9979B45423FFC2A5005421D9 /* Colors.xcassets */,
+				9999E0D923F9F37A007EB718 /* LaunchScreen.storyboard */,
+			);
+			path = Resourses;
+			sourceTree = "<group>";
+		};
+		9979B45623FFC2E4005421D9 /* Navigation */ = {
+			isa = PBXGroup;
+			children = (
+				994E3CF923FA9C8B0034B4D2 /* MWInterface.swift */,
+			);
+			path = Navigation;
+			sourceTree = "<group>";
+		};
+		9979B45723FFC2EE005421D9 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				994E3CFB23FA9D990034B4D2 /* MWNavigationController.swift */,
+				9979B45E23FFC666005421D9 /* MWTabBarViewController.swift */,
+				9979B46423FFD0D5005421D9 /* MWViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		9979B45823FFC2F8005421D9 /* Controls */ = {
+			isa = PBXGroup;
+			children = (
+				9979B46623FFDB51005421D9 /* MWNavigationBar.swift */,
+			);
+			path = Controls;
+			sourceTree = "<group>";
+		};
+		9979B45923FFC311005421D9 /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				9979B45C23FFC3D3005421D9 /* Controllers */,
+			);
+			path = Search;
+			sourceTree = "<group>";
+		};
+		9979B45A23FFC319005421D9 /* Category */ = {
+			isa = PBXGroup;
+			children = (
+				9979B45D23FFC3DE005421D9 /* Controllers */,
+			);
+			path = Category;
+			sourceTree = "<group>";
+		};
+		9979B45B23FFC322005421D9 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				994E3D0123FAA1780034B4D2 /* Models */,
+				994E3CFD23FA9FE10034B4D2 /* Controllers */,
+				994E3CFE23FA9FEA0034B4D2 /* Views */,
+			);
+			path = Main;
+			sourceTree = "<group>";
+		};
+		9979B45C23FFC3D3005421D9 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				9979B46223FFCF19005421D9 /* MWSearchViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		9979B45D23FFC3DE005421D9 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				9979B46023FFCEF4005421D9 /* MWCategoryViewController.swift */,
+			);
+			path = Controllers;
 			sourceTree = "<group>";
 		};
 		9999E0C223F9F378007EB718 = {
@@ -111,15 +226,14 @@
 		9999E0CD23F9F378007EB718 /* MovieWorld */ = {
 			isa = PBXGroup;
 			children = (
-				994E3D0123FAA1780034B4D2 /* Models */,
-				994E3CFE23FA9FEA0034B4D2 /* Controls */,
-				994E3CFD23FA9FE10034B4D2 /* Controllers */,
-				994E3CF823FA9C5B0034B4D2 /* BaseClasses */,
-				9999E0E223F9F3B7007EB718 /* .gitignore */,
 				9999E0CE23F9F378007EB718 /* AppDelegate.swift */,
-				9999E0D723F9F37A007EB718 /* Assets.xcassets */,
-				9999E0D923F9F37A007EB718 /* LaunchScreen.storyboard */,
 				9999E0DC23F9F37A007EB718 /* Info.plist */,
+				9979B44F23FFC1F2005421D9 /* Common */,
+				9979B45023FFC20C005421D9 /* Features */,
+				9979B45323FFC243005421D9 /* Resourses */,
+				9979B45223FFC229005421D9 /* Extensions */,
+				9979B45123FFC220005421D9 /* Utility */,
+				9979B44D23FFC1DB005421D9 /* .gitignore */,
 			);
 			path = MovieWorld;
 			sourceTree = "<group>";
@@ -193,7 +307,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				9999E0DB23F9F37A007EB718 /* LaunchScreen.storyboard in Resources */,
-				9999E0E323F9F3B7007EB718 /* .gitignore in Resources */,
+				9979B45523FFC2A5005421D9 /* Colors.xcassets in Resources */,
+				9979B44E23FFC1DB005421D9 /* .gitignore in Resources */,
 				9999E0D823F9F37A007EB718 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -247,9 +362,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9979B45F23FFC666005421D9 /* MWTabBarViewController.swift in Sources */,
+				9979B46523FFD0D5005421D9 /* MWViewController.swift in Sources */,
 				994E3D0023FAA0170034B4D2 /* MWContentView.swift in Sources */,
-				9999E0D323F9F378007EB718 /* MWFirstTabViewController.swift in Sources */,
+				9979B46723FFDB51005421D9 /* MWNavigationBar.swift in Sources */,
+				9979B46123FFCEF4005421D9 /* MWCategoryViewController.swift in Sources */,
+				9999E0D323F9F378007EB718 /* MWMainTabViewController.swift in Sources */,
 				9999E0CF23F9F378007EB718 /* AppDelegate.swift in Sources */,
+				9979B46323FFCF19005421D9 /* MWSearchViewController.swift in Sources */,
 				994E3CFA23FA9C8B0034B4D2 /* MWInterface.swift in Sources */,
 				994E3CFC23FA9D990034B4D2 /* MWNavigationController.swift in Sources */,
 				994E3D0323FAA18E0034B4D2 /* MWFilm.swift in Sources */,

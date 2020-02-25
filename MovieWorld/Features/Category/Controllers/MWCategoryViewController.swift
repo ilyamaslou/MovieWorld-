@@ -15,13 +15,16 @@ class MWCategoryViewController: MWViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+    }
+    
+    private lazy var tableView: UITableView = {
+        let tableView = UITableView()
         tableView.delegate = self
         tableView.dataSource = self
         tableView.separatorStyle = .none
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "categoryCellId")
-    }
-    
-    private lazy var tableView = UITableView()
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: Constants.categoryCellId)
+        return tableView
+    }()
     
     override func initController() {
         super.initController()
@@ -45,7 +48,7 @@ extension MWCategoryViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(
-        withIdentifier: "categoryCellId",
+        withIdentifier: Constants.categoryCellId,
         for: indexPath)
         
         cell.textLabel?.text = categories[indexPath.row]

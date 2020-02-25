@@ -21,6 +21,14 @@ struct MWFilm {
     }
     
     init(filmName: String,
+         releaseYear: Int,
+         filmCountry: String) {
+        self.filmName = filmName
+        self.releaseYear = releaseYear
+        self.filmCountry = filmCountry
+    }
+    
+    init(filmName: String,
          filmGenres: [String],
          releaseYear: Int,
          filmCountry: String,

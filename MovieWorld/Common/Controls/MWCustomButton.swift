@@ -9,13 +9,13 @@
 import UIKit
 
 class MWCustomButton: UIButton {
-     
+    
     override init(frame: CGRect) {
         super.init(frame: frame )
         self.setUpButton()
         self.addTarget(self, action: #selector(buttonDidTapped), for: .touchDown)
         self.addTarget(self, action: #selector(buttonDidUntapped), for: .touchUpInside)
-
+        
     }
     
     required init?(coder: NSCoder) {
@@ -23,17 +23,23 @@ class MWCustomButton: UIButton {
         self.setUpButton()
     }
     
-    func setUpButton(title: String = "All", haveArrow: Bool = true) {
-        contentEdgeInsets = UIEdgeInsets(top: 4, left: 12, bottom: 4, right: 12)
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        let imageWidth = self.imageView?.frame.size.width
+        let titleLabelWidth = self.titleLabel?.frame.size.width
         
-        //MARK: This line is temp solution!!!
-        semanticContentAttribute = .forceRightToLeft
+        contentEdgeInsets = UIEdgeInsets(top: 4, left: 12, bottom: 4, right: 12)
+        titleEdgeInsets = UIEdgeInsets(top: .zero, left: -(imageWidth! + 4) , bottom: .zero, right: imageWidth!)
+        imageEdgeInsets = UIEdgeInsets(top: .zero, left: titleLabelWidth! , bottom: .zero, right: -titleLabelWidth! - 4)
+    }
+    
+    func setUpButton(title: String = "All", haveArrow: Bool = true) {
         
         layer.cornerRadius = 5
         backgroundColor = UIColor(named: "accentColor")
         setTitleColor(.white, for: .normal)
         setTitleColor(.white, for: .highlighted)
-
+        
         setTitle(title, for: .normal)
         titleLabel?.font = .systemFont(ofSize: 13)
         

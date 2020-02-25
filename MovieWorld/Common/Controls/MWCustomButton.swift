@@ -25,11 +25,18 @@ class MWCustomButton: UIButton {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        let imageWidth = self.imageView?.frame.size.width
+        
+        var imageWidth = self.imageView?.frame.size.width
+        
+        if imageWidth == 0.0 {
+            imageWidth = -4
+        }
+        
         let titleLabelWidth = self.titleLabel?.frame.size.width
         
+        //MARK: is there better solution?
         contentEdgeInsets = UIEdgeInsets(top: 4, left: 12, bottom: 4, right: 12)
-        titleEdgeInsets = UIEdgeInsets(top: .zero, left: -(imageWidth! + 4) , bottom: .zero, right: imageWidth!)
+        titleEdgeInsets = UIEdgeInsets(top: .zero, left: -((imageWidth ?? -4) + 4) , bottom: .zero, right: (imageWidth ?? -4) + 4)
         imageEdgeInsets = UIEdgeInsets(top: .zero, left: titleLabelWidth! , bottom: .zero, right: -titleLabelWidth! - 4)
     }
     

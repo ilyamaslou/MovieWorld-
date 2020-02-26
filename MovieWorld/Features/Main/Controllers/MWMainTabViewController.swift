@@ -54,6 +54,9 @@ class MWMainTabViewController: MWViewController {
 
 extension MWMainTabViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
+    }
+    func numberOfSections(in tableView: UITableView) -> Int {
         return moviesByCategories.count
     }
     
@@ -67,6 +70,16 @@ extension MWMainTabViewController: UITableViewDataSource, UITableViewDelegate {
         return cell
     }
     
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let view  = UIView()
+        view.backgroundColor = .white
+        
+        return view
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 24
+    }
     
 }
 

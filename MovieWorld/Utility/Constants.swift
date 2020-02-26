@@ -11,4 +11,7 @@ import Foundation
 class Constants {
     static var categoryCellId: String = "categoryCellId"
     static var mainScreenTableViewCellId: String = "mainScreenTableViewCellId"
+    static var mainScreenCollectionViewCellId: String = "mainScreenCollectionViewCellId"
+    static var tableViewHeaderId: String = "tableViewHeaderViewId"
+
 }

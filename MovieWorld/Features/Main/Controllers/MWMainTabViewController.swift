@@ -11,19 +11,24 @@ import SnapKit
 
 class MWMainTabViewController: MWViewController {
     
-    
     //MARK: Hardcoded values
     
     private lazy var repeatingFilms: [MWFilm] = {
-        let singleFilm = MWFilm(filmName: "21 Bridges", releaseYear: 2018, filmCountry: "USA")
-        let films = Array(repeating: singleFilm, count: 6)
+        let singleFilm = MWFilm(filmName: "21 Bridges", releaseYear: 2019, filmGenres: ["Drama", "Comedy", "Foreign"])
+        let films = Array(repeating: singleFilm, count: 10)
         return films
     }()
-   
+    
+    private lazy var repeatingFilms2: [MWFilm] = {
+        let singleFilm = MWFilm(filmName: "The Good Liar", releaseYear: 2019, filmGenres: ["Drama", "Comedy", "Foreign"])
+        let films = Array(repeating: singleFilm, count: 10)
+        return films
+    }()
+    
     private lazy var moviesByCategories: [String: [MWFilm]] = ["New": repeatingFilms,
-                                                           "Movies": repeatingFilms,
-                                                           "Series and Shows": repeatingFilms,
-                                                           "Animated Movies": repeatingFilms]
+                                                               "Movies": repeatingFilms2,
+                                                               "Series and Shows": repeatingFilms,
+                                                               "Animated Movies": repeatingFilms2 + repeatingFilms]
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -33,11 +38,6 @@ class MWMainTabViewController: MWViewController {
         tableView.register(MWMainTableViewCell.self, forCellReuseIdentifier: Constants.mainScreenTableViewCellId)
         return tableView
     }()
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view.
-    }
     
     override func initController() {
         super.initController()
@@ -62,9 +62,14 @@ extension MWMainTabViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(
-        withIdentifier: Constants.mainScreenTableViewCellId) as! MWMainTableViewCell
+            withIdentifier: Constants.mainScreenTableViewCellId) as! MWMainTableViewCell
         
-        cell.set(categoryName: Array(self.moviesByCategories.keys)[indexPath.row])
+        let category = Array(self.moviesByCategories.keys)[indexPath.section]
+        if let films = moviesByCategories[category] {
+            cell.films = films
+        }
+        
+        cell.set(categoryName: category)
         cell.selectionStyle = .none
         
         return cell

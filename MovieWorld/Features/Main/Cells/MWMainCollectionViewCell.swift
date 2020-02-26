@@ -65,7 +65,10 @@ class MWMainCollectionViewCell: UICollectionViewCell {
     }
     
     func set(film: MWFilm){
-        
+        self.nameLabel.text = film.filmName
+        if let mainGenre = film.filmGenres.first {
+            self.infoLabel.text = "\(film.releaseYear), \(mainGenre)"
+        }
     }
     
     required init?(coder: NSCoder) {

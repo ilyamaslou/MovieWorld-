@@ -11,8 +11,8 @@ import UIKit
 struct MWFilm {
     let id: UUID = UUID()
     var filmName: String = "Green Book"
-    var filmGenres: [String] = ["Comedy", "Drama", "Foreign"]
-    var releaseYear: Int = 2018
+    var filmGenres: [String] = ["Drama", "Comedy", "Foreign"]
+    var releaseYear: Int = 2019
     var filmCountry: String = "USA"
     var imbdRating: Double = 8.2
     var kpRating: Double = 8.3
@@ -22,10 +22,10 @@ struct MWFilm {
     
     init(filmName: String,
          releaseYear: Int,
-         filmCountry: String) {
+         filmGenres: [String]) {
         self.filmName = filmName
         self.releaseYear = releaseYear
-        self.filmCountry = filmCountry
+        self.filmGenres = filmGenres
     }
     
     init(filmName: String,

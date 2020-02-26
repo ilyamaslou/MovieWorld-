@@ -11,6 +11,14 @@ import SnapKit
 
 class MWMainTableViewCell: UITableViewCell {
     
+    var films: [MWFilm] = [] {
+        willSet {
+            self.films = newValue
+            self.collectionView.reloadData()
+            setNeedsUpdateConstraints()
+        }
+    }
+    
     private lazy var showAllButton = MWCustomButton()
     private lazy var categoryLabel: UILabel = {
         let label = UILabel()
@@ -94,12 +102,17 @@ class MWMainTableViewCell: UITableViewCell {
 extension MWMainTableViewCell: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 21
+        return films.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.mainScreenCollectionViewCellId, for: indexPath) as! MWMainCollectionViewCell
+        
+        if self.films.count > 0 {
+            let singleFilm = self.films[indexPath.item]
+            cell.set(film: singleFilm)
+        }
         
         return cell
     }

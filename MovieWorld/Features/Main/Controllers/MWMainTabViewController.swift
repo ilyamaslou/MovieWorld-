@@ -13,19 +13,19 @@ class MWMainTabViewController: MWViewController {
     
     //MARK: Hardcoded values
     
-    private lazy var repeatingFilms: [MWFilm] = {
-        let singleFilm = MWFilm(filmName: "21 Bridges", releaseYear: 2019, filmGenres: ["Drama", "Comedy", "Foreign"])
+    private lazy var repeatingFilms: [MWPopularMovie] = {
+        let singleFilm = MWPopularMovie(filmName: "21 Bridges", releaseYear: "2019", filmGenresIds : [1,2,3])
         let films = Array(repeating: singleFilm, count: 10)
         return films
     }()
     
-    private lazy var repeatingFilms2: [MWFilm] = {
-        let singleFilm = MWFilm(filmName: "The Good Liar", releaseYear: 2019, filmGenres: ["Drama", "Comedy", "Foreign"])
+    private lazy var repeatingFilms2: [MWPopularMovie] = {
+        let singleFilm = MWPopularMovie(filmName: "The Good Liar", releaseYear: "2019", filmGenresIds: [3,2,1])
         let films = Array(repeating: singleFilm, count: 10)
         return films
     }()
     
-    private lazy var moviesByCategories: [String: [MWFilm]] = ["New": repeatingFilms,
+    private lazy var moviesByCategories: [String: [MWPopularMovie]] = ["New": repeatingFilms,
                                                                "Movies": repeatingFilms2,
                                                                "Series and Shows": repeatingFilms,
                                                                "Animated Movies": repeatingFilms2 + repeatingFilms]
@@ -49,6 +49,40 @@ class MWMainTabViewController: MWViewController {
         }
         
         self.title = "Season"
+        self.loadPopularMovies()
+    }
+    
+    private func loadPopularMovies() {
+        MWNet.sh.request(urlPath: URLPaths.popularMovies,
+                         querryParameters: MWNet.sh.parameters,
+                         succesHandler: { [weak self] (movie: MWPopularMoviesResponse)  in
+                            print(movie)
+                            
+        },
+                         errorHandler: { () in
+
+        })
+    }
+    
+    private func errorAlert(title: String, message: String) {
+        
+        let alert = UIAlertController(title: title,
+                                      message: message,
+                                      preferredStyle: .alert)
+        
+        alert.setValue(NSAttributedString(string: title,
+                                          attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 17),
+                                                       NSAttributedString.Key.foregroundColor : UIColor.red])
+            , forKey: "attributedTitle")
+
+        
+        let alertAction = UIAlertAction(title: "OK",
+                                  style: .cancel,
+                                  handler: nil)
+        
+        alert.addAction(alertAction)
+        
+        present(alert,animated: true)
     }
 }
 

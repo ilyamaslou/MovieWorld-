@@ -14,7 +14,7 @@ class MWContentView: UIView {
     private let insets = UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16)
     private let contentInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
     private let imageSize = CGSize(width: 80, height: 120)
-    private let film = MWFilm()
+    private let film = MWPopularMovie()
     
     private let containerView: UIView = {
         let view = UIView()
@@ -34,14 +34,14 @@ class MWContentView: UIView {
     private lazy var filmNameLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 17,  weight: .semibold)
-        label.text = film.filmName
+        label.text = film.title
         return label
     }()
     
     private lazy var releaseYearAndCountryLable: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 15)
-        var releaseYearAndCountry = "\(film.releaseYear), \(film.filmCountry)"
+        var releaseYearAndCountry = "\(film.release_date), \(film.original_language)"
         label.text = releaseYearAndCountry
         return label
     }()
@@ -52,7 +52,7 @@ class MWContentView: UIView {
         label.textColor = .gray
         
         var genres = ""
-        for genre in film.filmGenres {
+        for genre in film.genre_ids! {
             genres += "\(genre), "
         }
         let range = genres.index(genres.endIndex, offsetBy: -2)..<genres.endIndex
@@ -65,7 +65,7 @@ class MWContentView: UIView {
     private lazy var ratingsLable: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 15)
-        var ratings = "IMBD \(film.imbdRating), KP \(film.kpRating)"
+        var ratings = "IMBD , KP "
         label.text = ratings
         return label
     }()

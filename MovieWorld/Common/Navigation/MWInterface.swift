@@ -53,6 +53,12 @@ class MWInterface {
     public func popVC(animated: Bool = true) {
         guard let navigationController = self.tabBarViewController.selectedViewController as? MWNavigationController else { return }
         navigationController.popViewController(animated: animated)
+    }
+    
+    //MARK: TODO - present
+    public func pullToRefresh() {
+         guard let navigationController = self.tabBarViewController.selectedViewController as? MWNavigationController else { return }
         
+        navigationController.reloadInputViews()
     }
 }

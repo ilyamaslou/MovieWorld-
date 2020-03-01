@@ -64,11 +64,11 @@ class MWMainCollectionViewCell: UICollectionViewCell {
         
     }
     
-    func set(film: MWFilm){
-        self.nameLabel.text = film.filmName
-        if let mainGenre = film.filmGenres.first {
-            self.infoLabel.text = "\(film.releaseYear), \(mainGenre)"
-        }
+    func set(film: MWPopularMovie){
+        self.nameLabel.text = film.title
+        // MARK: TO FIX
+        let genre = MWGenres.getGenres(genresIds: film.genre_ids).first!
+        self.infoLabel.text = "\(film.release_date), \(genre)"
     }
     
     required init?(coder: NSCoder) {

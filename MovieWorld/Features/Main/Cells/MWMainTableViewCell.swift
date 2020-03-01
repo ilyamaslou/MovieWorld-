@@ -11,7 +11,7 @@ import SnapKit
 
 class MWMainTableViewCell: UITableViewCell {
     
-    var films: [MWFilm] = [] {
+    var films: [MWPopularMovie] = [] {
         willSet {
             self.films = newValue
             self.collectionView.reloadData()

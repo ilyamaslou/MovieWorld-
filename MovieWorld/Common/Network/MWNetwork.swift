@@ -22,6 +22,7 @@ class MWNetwork {
     
     private init() {}
     
+    // MARK: FIXME Divide into parts
     func request<T: Decodable>(urlPath: String,
                                querryParameters: [String : String],
                                succesHandler: @escaping ((T) -> Void),
@@ -33,7 +34,7 @@ class MWNetwork {
         
         guard let requestUrl = URL(string: url)
             else { return }
-                
+        
         let request = URLRequest(url: requestUrl)
         
         let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
@@ -53,33 +54,37 @@ class MWNetwork {
                     return
             }
             
-            switch response.statusCode {
-            case 200...300:
-                if let data = data {
-                    do {
+            if let data = data {
+                do {
+                    switch response.statusCode {
+                    case 200...300:
                         let values = try JSONDecoder().decode(T.self, from: data)
                         DispatchQueue.main.async {
                             succesHandler(values)
                         }
-                    } catch {
+                    case 401:
+                        let value = try JSONDecoder().decode(MWSpecialError.self, from: data)
                         DispatchQueue.main.async {
-                            errorHandler(.jsonDecodingFailed(text: "JSON Decoding Failed"))
+                            errorHandler(.error401(error: value))
                         }
+                    case 404 :
+                        let value = try JSONDecoder().decode(MWSpecialError.self, from: data)
+                        DispatchQueue.main.async {
+                            errorHandler(.error404(error: value))
+                        }
+                    default:
+                        break
+                    }
+                } catch {
+                    DispatchQueue.main.async {
+                        errorHandler(.jsonDecodingFailed(text: "JSON Decoding Failed"))
                     }
                 }
-            case 401:
-                print("401 error")
-            case 404 :
-                DispatchQueue.main.async {
-                    errorHandler(.incorrectUrl(url: url))
-                }
-            default:
-                break
             }
         }
-        
         task.resume()
     }
+    
     
 }
 

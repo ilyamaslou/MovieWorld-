@@ -15,6 +15,9 @@ enum MWNetError {
     case serverError(statusCode: Int)
     case parsingError(error: Error)
     case jsonDecodingFailed(text: String)
+    case error401(error: MWSpecialError)
+    case error404(error: MWSpecialError)
+
     
     case unknown
     
@@ -32,7 +35,10 @@ enum MWNetError {
             return text
         case .unknown:
             return "Unknown error"
+        case .error401(let error):
+            return error.statusMessage ?? "error 401"
+        case .error404(let error):
+            return error.statusMessage ?? "error 404"
         }
     }
-    //MARK: Realise 401 and 404 error
 }

@@ -120,12 +120,11 @@ class MWMainTabViewController: MWViewController {
     @objc private func pullToRefresh() {
         
         //MARK:Later wiil be in queue
+        self.loadGenres()
         self.loadMovies(category: .popularMovies)
         self.loadMovies(category: .nowPlayingMovies)
         self.loadMovies(category: .topRatedMovies)
         self.loadMovies(category: .upcomingMovies)
-        
-        self.tableView.reloadData()
         self.refreshControl.endRefreshing()
     }
     

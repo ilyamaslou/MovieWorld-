@@ -55,6 +55,7 @@ class MWMainCollectionViewCell: UICollectionViewCell {
         self.nameLabel.snp.updateConstraints { (make) in
             make.top.equalTo(filmImageView.snp.bottom).inset(-12)
             make.left.equalToSuperview()
+            
         }
         
         self.infoLabel.snp.updateConstraints { (make) in
@@ -66,9 +67,15 @@ class MWMainCollectionViewCell: UICollectionViewCell {
     
     func set(film: MWPopularMovie){
         self.nameLabel.text = film.title
-        // MARK: TO FIX
-        let genre = MWGenres.getGenres(genresIds: film.genre_ids).first!
-        self.infoLabel.text = "\(film.release_date), \(genre)"
+        
+        // MARK:  FIX THIS TEMP Solution
+        let genre = MWGenres.getGenres(genresIds: film.genre_ids).first ?? ""
+        var releaseDate = film.release_date ?? ""
+        if genre != "" && releaseDate != ""{
+            releaseDate.append(",")
+        }
+        
+        self.infoLabel.text = "\(releaseDate) \(genre)"
     }
     
     required init?(coder: NSCoder) {

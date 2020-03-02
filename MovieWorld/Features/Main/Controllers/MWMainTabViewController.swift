@@ -11,30 +11,27 @@ import SnapKit
 
 class MWMainTabViewController: MWViewController {
     
-    //MARK: Hardcoded values
+    enum MWCategories: String {
+        case popularMovies = "Popular Movies"
+        case newMovies = "New"
+        case topRatedMovies = "Top Rated"
+        case popularTVShows = "Popular TV Shows"
+    }
     
-    private lazy var repeatingFilms: [MWPopularMovie] = {
-        let singleFilm = MWPopularMovie(filmName: "21 Bridges", releaseYear: "2019", filmGenresIds : [1,2,3])
-        let films = Array(repeating: singleFilm, count: 10)
-        return films
+    private lazy var refreshControl: UIRefreshControl = {
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(pullToRefresh), for: .valueChanged)
+        return refreshControl
     }()
     
-    private lazy var repeatingFilms2: [MWPopularMovie] = {
-        let singleFilm = MWPopularMovie(filmName: "The Good Liar", releaseYear: "2019", filmGenresIds: [3,2,1])
-        let films = Array(repeating: singleFilm, count: 10)
-        return films
-    }()
-    
-    private lazy var moviesByCategories: [String: [MWPopularMovie]] = ["New": repeatingFilms,
-                                                               "Movies": repeatingFilms2,
-                                                               "Series and Shows": repeatingFilms,
-                                                               "Animated Movies": repeatingFilms2 + repeatingFilms]
+    private lazy var moviesByCategories: [MWCategories: [MWPopularMovie]] = [:]
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.delegate = self
         tableView.dataSource = self
         tableView.separatorStyle = .none
+        tableView.refreshControl = self.refreshControl
         tableView.register(MWMainTableViewCell.self, forCellReuseIdentifier: Constants.mainScreenTableViewCellId)
         return tableView
     }()
@@ -55,30 +52,40 @@ class MWMainTabViewController: MWViewController {
     private func loadPopularMovies() {
         MWNet.sh.request(urlPath: URLPaths.popularMovies,
                          querryParameters: MWNet.sh.parameters,
-                         succesHandler: { [weak self] (movie: MWPopularMoviesResponse)  in
-                            print(movie)
+                         succesHandler: { [weak self] (movies: MWPopularMoviesResponse)  in
                             
-        },
-                         errorHandler: { () in
-
+                            guard let self = self else { return }
+                            self.moviesByCategories[MWCategories.popularMovies] = movies.results
+                            self.tableView.reloadData()
+                            
+            },
+                         errorHandler: { [weak self] (error) in
+                            let message = MWNetError.getError(error: error)
+                            self?.errorAlert(message: message)
+                            
         })
     }
     
-    private func errorAlert(title: String, message: String) {
+    @objc private func pullToRefresh() {
+        self.loadPopularMovies()
+        self.tableView.reloadData()
+        self.refreshControl.endRefreshing()
+    }
+    
+    private func errorAlert( message: String) {
         
-        let alert = UIAlertController(title: title,
+        let alert = UIAlertController(title: nil,
                                       message: message,
                                       preferredStyle: .alert)
         
-        alert.setValue(NSAttributedString(string: title,
+        alert.setValue(NSAttributedString(string: message,
                                           attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 17),
                                                        NSAttributedString.Key.foregroundColor : UIColor.red])
-            , forKey: "attributedTitle")
-
+            , forKey: "attributedMessage")
         
         let alertAction = UIAlertAction(title: "OK",
-                                  style: .cancel,
-                                  handler: nil)
+                                        style: .cancel,
+                                        handler: nil)
         
         alert.addAction(alertAction)
         
@@ -103,7 +110,7 @@ extension MWMainTabViewController: UITableViewDataSource, UITableViewDelegate {
             cell.films = films
         }
         
-        cell.set(categoryName: category)
+        cell.set(categoryName: category.rawValue)
         cell.selectionStyle = .none
         
         return cell

@@ -25,45 +25,58 @@ class MWNetwork {
     func request<T: Decodable>(urlPath: String,
                                querryParameters: [String : String],
                                succesHandler: @escaping ((T) -> Void),
-                               errorHandler: @escaping (() -> Void)) {
+                               errorHandler: @escaping ((MWNetError) -> Void)) {
         
         let fullPath = baseUrl + urlPath
         
         let url = getUrlWithParams(fullPath: fullPath, params: querryParameters)
-        guard let requestUrl = URL(string: url) else { fatalError() }
         
+        guard let requestUrl = URL(string: url)
+            else { return }
+                
         let request = URLRequest(url: requestUrl)
         
         let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
             
             if let error = error {
-                print("Error took place \(error)")
+                DispatchQueue.main.async {
+                    errorHandler(.networkError(error: error))
+                }
                 return
             }
             
-            guard let response = response as? HTTPURLResponse else { fatalError() }
+            guard let response = response as? HTTPURLResponse
+                else {
+                    DispatchQueue.main.async {
+                        errorHandler(.unknown)
+                    }
+                    return
+            }
             
             switch response.statusCode {
             case 200...300:
-                print("all fine")
                 if let data = data {
                     do {
                         let values = try JSONDecoder().decode(T.self, from: data)
-                        succesHandler(values)
+                        DispatchQueue.main.async {
+                            succesHandler(values)
+                        }
                     } catch {
-                        print("FATAL ERROR")
+                        DispatchQueue.main.async {
+                            errorHandler(.jsonDecodingFailed(text: "JSON Decoding Failed"))
+                        }
                     }
                 }
             case 401:
                 print("401 error")
             case 404 :
-                print("404 error")
+                DispatchQueue.main.async {
+                    errorHandler(.incorrectUrl(url: url))
+                }
             default:
                 break
             }
         }
-        
-        
         
         task.resume()
     }

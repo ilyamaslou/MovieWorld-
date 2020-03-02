@@ -14,8 +14,25 @@ enum MWNetError {
     case networkError(error: Error)
     case serverError(statusCode: Int)
     case parsingError(error: Error)
+    case jsonDecodingFailed(text: String)
     
     case unknown
     
+    static func getError(error: MWNetError) -> String {
+        switch error {
+        case .incorrectUrl(let url):
+         return "Incorrect url: \(url)"
+        case .networkError(let error):
+            return error.localizedDescription
+        case .serverError(let statusCode):
+            return "Error with: \(statusCode) statusCode"
+        case .parsingError(let error):
+           return error.localizedDescription
+        case .jsonDecodingFailed(let text):
+            return text
+        case .unknown:
+            return "Unknown error"
+        }
+    }
     //MARK: Realise 401 and 404 error
 }

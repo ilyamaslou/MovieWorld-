@@ -21,6 +21,8 @@ class MWMainCollectionViewCell: UICollectionViewCell {
         label.text = "Film Name"
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 17,  weight: .bold)
+        label.adjustsFontSizeToFitWidth = false
+        label.lineBreakMode = .byTruncatingTail
         return label
     }()
     
@@ -29,6 +31,8 @@ class MWMainCollectionViewCell: UICollectionViewCell {
         label.text = "Year + Country"
         label.font = .systemFont(ofSize: 13,  weight: .regular)
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.adjustsFontSizeToFitWidth = false
+        label.lineBreakMode = .byTruncatingTail
         return label
     }()
     
@@ -55,12 +59,14 @@ class MWMainCollectionViewCell: UICollectionViewCell {
         self.nameLabel.snp.updateConstraints { (make) in
             make.top.equalTo(filmImageView.snp.bottom).inset(-12)
             make.left.equalToSuperview()
+            make.width.equalTo(130)
             
         }
         
         self.infoLabel.snp.updateConstraints { (make) in
             make.top.equalTo(nameLabel.snp.bottom)
             make.left.bottom.equalToSuperview()
+            make.width.equalTo(130)
         }
         
     }

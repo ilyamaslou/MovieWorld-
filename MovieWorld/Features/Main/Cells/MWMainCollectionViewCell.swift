@@ -65,11 +65,11 @@ class MWMainCollectionViewCell: UICollectionViewCell {
         
     }
     
-    func set(film: MWPopularMovie){
+    func set(film: MWMovie){
         self.nameLabel.text = film.title
         
         // MARK:  FIX THIS TEMP Solution
-        let genre = MWGenres.getGenres(genresIds: film.genre_ids).first ?? ""
+        let genre = "\(film.filmGenres?.first ?? "")" 
         var releaseDate = film.release_date ?? ""
         if genre != "" && releaseDate != ""{
             releaseDate.append(",")

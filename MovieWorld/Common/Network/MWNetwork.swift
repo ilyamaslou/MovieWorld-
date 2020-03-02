@@ -85,5 +85,8 @@ class MWNetwork {
 
 struct URLPaths {
     static let popularMovies: String = "movie/popular"
-    static let topMovies: String = "movie/top_rated"
+    static let topRatedMovies: String = "movie/top_rated"
+    static let nowPlayingMovies: String = "movie/now_playing"
+    static let upcomingMovies: String = "movie/upcoming"
+    static let getGenres: String = "genre/movie/list"
 }

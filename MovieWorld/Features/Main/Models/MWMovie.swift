@@ -10,12 +10,12 @@
 
 import UIKit
 
-struct MWPopularMoviesResponse: Decodable {
+struct MWMoviesResponse: Decodable {
     let page: Int
-    let results: [MWPopularMovie]
+    let results: [MWMovie]
 }
 
-struct MWPopularMovie: Decodable {
+struct MWMovie: Decodable {
     
     var id: Int?
     var poster_path: String?
@@ -23,6 +23,20 @@ struct MWPopularMovie: Decodable {
     var genre_ids: [Int]?
     var release_date: String?
     var original_language: String?
+    var filmGenres: [String]?
+    
+    mutating func setFilmGenres(genres: [Int : String]) {
+        var tempGenres: [String] = []
+        if let genreIds = genre_ids {
+            for id in genreIds {
+                if let genre = genres[id] {
+                    tempGenres.append(genre)
+                }
+            }
+        }
+        filmGenres = tempGenres
+    }
+    
     
     init() {
     }

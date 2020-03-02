@@ -13,9 +13,9 @@ class MWMainTabViewController: MWViewController {
     
     enum MWCategories: String {
         case popularMovies = "Popular Movies"
-        case newMovies = "New"
+        case nowPlayingMovies = "Now Playing Movies"
         case topRatedMovies = "Top Rated"
-        case popularTVShows = "Popular TV Shows"
+        case upcomingMovies = "Upcoming Movies"
     }
     
     private lazy var refreshControl: UIRefreshControl = {
@@ -24,7 +24,8 @@ class MWMainTabViewController: MWViewController {
         return refreshControl
     }()
     
-    private lazy var moviesByCategories: [MWCategories: [MWPopularMovie]] = [:]
+    private lazy var moviesByCategories: [MWCategories: [MWMovie]] = [:]
+    private lazy var genres: [Int: String] = [:]
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -46,16 +47,49 @@ class MWMainTabViewController: MWViewController {
         }
         
         self.title = "Season"
-        self.loadPopularMovies()
+        
+        //MARK:Later wiil be in queue
+        self.loadGenres()
+        self.loadMovies(category: .popularMovies)
+        self.loadMovies(category: .nowPlayingMovies)
+        self.loadMovies(category: .topRatedMovies)
+        self.loadMovies(category: .upcomingMovies)
     }
     
-    private func loadPopularMovies() {
-        MWNet.sh.request(urlPath: URLPaths.popularMovies,
+    private func loadGenres() {
+        MWNet.sh.request(urlPath: URLPaths.getGenres ,
                          querryParameters: MWNet.sh.parameters,
-                         succesHandler: { [weak self] (movies: MWPopularMoviesResponse)  in
-                            
+                         succesHandler: { [weak self] (genres: MWGenreResponse)  in
                             guard let self = self else { return }
-                            self.moviesByCategories[MWCategories.popularMovies] = movies.results
+                            for genre in genres.genres{
+                                self.genres[genre.id] = genre.name
+                            }
+                            self.tableView.reloadData()
+                            
+            },
+                         errorHandler: { [weak self] (error) in
+                            let message = MWNetError.getError(error: error)
+                            self?.errorAlert(message: message)
+        })
+    }
+    
+    private func loadMovies(category: MWCategories) {
+        
+        let urlPath = getUrlPath(by: category)
+        
+        MWNet.sh.request(urlPath: urlPath ,
+                         querryParameters: MWNet.sh.parameters,
+                         succesHandler: { [weak self] (movies: MWMoviesResponse)  in
+                            guard let self = self else { return }
+                            
+                            var movies = movies.results
+                            for (id, movie) in movies.enumerated() {
+                                var tempMovie = movie
+                                tempMovie.setFilmGenres(genres: self.genres)
+                                movies[id] = tempMovie
+                            }
+                            self.moviesByCategories[category] = movies
+                            
                             self.tableView.reloadData()
                             
             },
@@ -66,8 +100,31 @@ class MWMainTabViewController: MWViewController {
         })
     }
     
+    private func getUrlPath(by category: MWCategories) -> String {
+        var urlPath = ""
+        switch category {
+        case .popularMovies:
+            urlPath = URLPaths.popularMovies
+        case .nowPlayingMovies:
+            urlPath = URLPaths.nowPlayingMovies
+        case .topRatedMovies:
+            urlPath = URLPaths.topRatedMovies
+        case .upcomingMovies:
+            urlPath = URLPaths.upcomingMovies
+        }
+        
+        return urlPath
+    }
+    
+    
     @objc private func pullToRefresh() {
-        self.loadPopularMovies()
+        
+        //MARK:Later wiil be in queue
+        self.loadMovies(category: .popularMovies)
+        self.loadMovies(category: .nowPlayingMovies)
+        self.loadMovies(category: .topRatedMovies)
+        self.loadMovies(category: .upcomingMovies)
+        
         self.tableView.reloadData()
         self.refreshControl.endRefreshing()
     }

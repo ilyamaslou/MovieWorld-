@@ -14,7 +14,7 @@ class MWContentView: UIView {
     private let insets = UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16)
     private let contentInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
     private let imageSize = CGSize(width: 80, height: 120)
-    private let film = MWPopularMovie()
+    private let film = MWMovie()
     
     private let containerView: UIView = {
         let view = UIView()
@@ -41,7 +41,7 @@ class MWContentView: UIView {
     private lazy var releaseYearAndCountryLable: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 15)
-        var releaseYearAndCountry = "\(film.release_date), \(film.original_language)"
+        var releaseYearAndCountry = "\(film.release_date ?? ""), \(film.original_language ?? "")"
         label.text = releaseYearAndCountry
         return label
     }()

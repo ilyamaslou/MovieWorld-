@@ -65,16 +65,23 @@ class MWMainCollectionViewCell: UICollectionViewCell {
         
     }
     
+    //MARK: CHECK HOW FIX YEAR
+    
     func set(film: MWMovie){
         self.nameLabel.text = film.title
+        var releaseYear = ""
         
+        if let releaseDate = film.release_date {
+            let dividedDate = releaseDate.split(separator: "-")
+            releaseYear = String(dividedDate.first ?? "")
+        }
+    
         let genre = "\(film.filmGenres?.first ?? "")" 
-        var releaseDate = film.release_date ?? ""
-        if genre != "" && releaseDate != ""{
-            releaseDate.append(",")
+        if genre != "" && film.release_date != ""{
+            releaseYear.append(",")
         }
         
-        self.infoLabel.text = "\(releaseDate) \(genre)"
+        self.infoLabel.text = "\(releaseYear) \(genre)"
     }
     
     required init?(coder: NSCoder) {

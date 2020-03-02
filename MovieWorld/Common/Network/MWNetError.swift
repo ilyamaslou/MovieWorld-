@@ -17,20 +17,20 @@ enum MWNetError {
     case jsonDecodingFailed(text: String)
     case error401(error: MWSpecialError)
     case error404(error: MWSpecialError)
-
+    
     
     case unknown
     
     static func getError(error: MWNetError) -> String {
         switch error {
         case .incorrectUrl(let url):
-         return "Incorrect url: \(url)"
+            return "Incorrect url: \(url)"
         case .networkError(let error):
             return error.localizedDescription
         case .serverError(let statusCode):
             return "Error with: \(statusCode) statusCode"
         case .parsingError(let error):
-           return error.localizedDescription
+            return error.localizedDescription
         case .jsonDecodingFailed(let text):
             return text
         case .unknown:

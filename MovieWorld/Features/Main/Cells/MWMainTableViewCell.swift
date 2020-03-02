@@ -43,7 +43,6 @@ class MWMainTableViewCell: UITableViewCell {
         return collectionView
     }()
     
-    //MARK: SetupInsets
     private lazy var collectionViewLayout: UICollectionViewFlowLayout = {
         
         let collectionViewLayout = UICollectionViewFlowLayout()

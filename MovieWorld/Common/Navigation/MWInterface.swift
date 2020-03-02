@@ -17,7 +17,7 @@ class MWInterface {
     private(set) weak var window: UIWindow?
     
     private lazy var tabBarViewController = MWTabBarViewController()
-        
+    
     private init() {}
     
     public func setup(window: UIWindow) {
@@ -38,10 +38,10 @@ class MWInterface {
         
         if #available(iOS 13.0, *) {
             let newNavBar = UINavigationBarAppearance()
-             newNavBar.configureWithDefaultBackground()
+            newNavBar.configureWithDefaultBackground()
             standartNavBar.scrollEdgeAppearance = newNavBar
         }
-       
+        
     }
     
     public func pushVC(_ vc: UIViewController, animated: Bool = true) {
@@ -55,10 +55,4 @@ class MWInterface {
         navigationController.popViewController(animated: animated)
     }
     
-    //MARK: TODO - present
-    public func pullToRefresh() {
-         guard let navigationController = self.tabBarViewController.selectedViewController as? MWNavigationController else { return }
-        
-        navigationController.reloadInputViews()
-    }
 }

@@ -51,7 +51,7 @@ class MWMainCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(self.nameLabel)
         contentView.addSubview(self.infoLabel)
         contentView.addSubview(self.filmImageView)
-
+        
         self.filmImageView.snp.updateConstraints { (make) in
             make.top.left.right.equalToSuperview()
         }
@@ -68,22 +68,19 @@ class MWMainCollectionViewCell: UICollectionViewCell {
             make.left.bottom.equalToSuperview()
             make.width.equalTo(130)
         }
-        
     }
-    
-    //MARK: CHECK HOW FIX YEAR
     
     func set(film: MWMovie){
         self.nameLabel.text = film.title
-        var releaseYear = ""
         
-        if let releaseDate = film.release_date {
+        var releaseYear = ""
+        if let releaseDate = film.releaseDate {
             let dividedDate = releaseDate.split(separator: "-")
             releaseYear = String(dividedDate.first ?? "")
         }
-    
+        
         let genre = "\(film.filmGenres?.first ?? "")" 
-        if genre != "" && film.release_date != ""{
+        if genre != "" && film.releaseDate != ""{
             releaseYear.append(",")
         }
         

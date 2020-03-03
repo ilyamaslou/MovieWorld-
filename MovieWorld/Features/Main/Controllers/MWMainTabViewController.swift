@@ -24,8 +24,16 @@ class MWMainTabViewController: MWViewController {
         return refreshControl
     }()
     
-    private lazy var moviesByCategories: [MWCategories: [MWMovie]] = [:]
-    private lazy var genres: [Int: String] = [:]
+    private var moviesByCategories: [MWCategories: [MWMovie]] = [:] {
+        didSet {
+            self.tableView.reloadData()
+        }
+    }
+    private var genres: [Int: String] = [:] {
+        didSet {
+            self.tableView.reloadData()
+        }
+    }
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -70,6 +78,7 @@ class MWMainTabViewController: MWViewController {
                          errorHandler: { [weak self] (error) in
                             let message = MWNetError.getError(error: error)
                             self?.errorAlert(message: message)
+                            self?.genres = [:]
         })
     }
     
@@ -96,6 +105,7 @@ class MWMainTabViewController: MWViewController {
                          errorHandler: { [weak self] (error) in
                             let message = MWNetError.getError(error: error)
                             self?.errorAlert(message: message)
+                            self?.moviesByCategories = [:]
                             
         })
     }

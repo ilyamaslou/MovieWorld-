@@ -38,6 +38,8 @@ class MWInitController: MWViewController {
         loadingIndicator.startAnimating()
         
         loadGenres()
+        loadConfiguration()
+        
         group.notify(queue: .main, execute: MWI.s.setUpTabBar)
     }
     
@@ -54,9 +56,47 @@ class MWInitController: MWViewController {
                          errorHandler: { [weak self] (error) in
                             guard let self = self else { return }
                             let message = MWNetError.getError(error: error)
-                            print(message)
+                            self.errorAlert(message: message)
                             self.group.leave()
         })
+    }
+    
+    private func loadConfiguration() {
+        group.enter()
+        MWNet.sh.request(urlPath: URLPaths.getConfiguration ,
+                         querryParameters: MWNet.sh.parameters,
+                         succesHandler: { [weak self] (configuration: MWConfiguration)  in
+                            guard let self = self else { return }
+                            MWSys.sh.configuration = configuration
+                            self.group.leave()
+                            
+            },
+                         errorHandler: { [weak self] (error) in
+                            guard let self = self else { return }
+                            let message = MWNetError.getError(error: error)
+                            self.errorAlert(message: message)
+                            self.group.leave()
+        })
+    }
+    
+    private func errorAlert( message: String) {
+        
+        let alert = UIAlertController(title: nil,
+                                      message: message,
+                                      preferredStyle: .alert)
+        
+        alert.setValue(NSAttributedString(string: message,
+                                          attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 17),
+                                                       NSAttributedString.Key.foregroundColor : UIColor.red])
+            , forKey: "attributedMessage")
+        
+        let alertAction = UIAlertAction(title: "OK",
+                                        style: .cancel,
+                                        handler: nil)
+        
+        alert.addAction(alertAction)
+        
+        present(alert,animated: true)
     }
     
 }

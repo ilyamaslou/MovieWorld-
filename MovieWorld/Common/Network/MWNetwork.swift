@@ -21,8 +21,68 @@ class MWNetwork {
     lazy var parameters: [String: String] = ["api_key" : apiKey]
     
     private init() {}
+
     
-    // MARK: FIXME Divide into parts
+    func imageRequest<T: Decodable>(urlPath: String,
+                               querryParameters: [String : String],
+                               succesHandler: @escaping ((T) -> Void),
+                               errorHandler: @escaping ((MWNetError) -> Void)) {
+        
+        let url = getUrlWithParams(fullPath: urlPath, params: querryParameters)
+        
+        guard let requestUrl = URL(string: url)
+            else { return }
+        
+        let request = URLRequest(url: requestUrl)
+        
+        let task = session.dataTask(with: request) { (data, response, error) in
+            
+            if let error = error {
+                DispatchQueue.main.async {
+                    errorHandler(.networkError(error: error))
+                }
+                return
+            }
+            
+            guard let response = response as? HTTPURLResponse
+                else {
+                    DispatchQueue.main.async {
+                        errorHandler(.unknown)
+                    }
+                    return
+            }
+            
+            if let data = data {
+                do {
+                    switch response.statusCode {
+                    case 200...300:
+                        let values = try JSONDecoder().decode(T.self, from: data)
+                        DispatchQueue.main.async {
+                            succesHandler(values)
+                        }
+                    case 401:
+                        let value = try JSONDecoder().decode(MWSpecialError.self, from: data)
+                        DispatchQueue.main.async {
+                            errorHandler(.error401(error: value))
+                        }
+                    case 404 :
+                        let value = try JSONDecoder().decode(MWSpecialError.self, from: data)
+                        DispatchQueue.main.async {
+                            errorHandler(.error404(error: value))
+                        }
+                    default:
+                        break
+                    }
+                } catch {
+                    DispatchQueue.main.async {
+                        errorHandler(.jsonDecodingFailed(text: "JSON Decoding Failed"))
+                    }
+                }
+            }
+        }
+        task.resume()
+    }
+    
     func request<T: Decodable>(urlPath: String,
                                querryParameters: [String : String],
                                succesHandler: @escaping ((T) -> Void),
@@ -94,4 +154,6 @@ struct URLPaths {
     static let nowPlayingMovies: String = "movie/now_playing"
     static let upcomingMovies: String = "movie/upcoming"
     static let getGenres: String = "genre/movie/list"
+    static let getConfiguration: String = "configuration"
+    
 }

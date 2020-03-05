@@ -55,6 +55,10 @@ class MWMainTabViewController: MWViewController {
         }
         
         self.title = "Season"
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         
         //MARK:Later wiil be in queue
         self.loadGenres()

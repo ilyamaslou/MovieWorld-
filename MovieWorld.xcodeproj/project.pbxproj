@@ -30,6 +30,8 @@
 		9999E0D323F9F378007EB718 /* MWMainTabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9999E0D223F9F378007EB718 /* MWMainTabViewController.swift */; };
 		9999E0D823F9F37A007EB718 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9999E0D723F9F37A007EB718 /* Assets.xcassets */; };
 		9999E0DB23F9F37A007EB718 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9999E0D923F9F37A007EB718 /* LaunchScreen.storyboard */; };
+		99BAE46A241194AD00F45B11 /* MWInitController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BAE469241194AD00F45B11 /* MWInitController.swift */; };
+		99BAE46C2411A22600F45B11 /* MWSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BAE46B2411A22600F45B11 /* MWSystem.swift */; };
 		99F910F124053EE000E4F4DB /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F910F024053EE000E4F4DB /* Constants.swift */; };
 		EA7F3466F643D84D46128BE3 /* Pods_MovieWorld.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C871CBC05AFA2A873B51B459 /* Pods_MovieWorld.framework */; };
 /* End PBXBuildFile section */
@@ -62,6 +64,8 @@
 		9999E0D723F9F37A007EB718 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9999E0DA23F9F37A007EB718 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9999E0DC23F9F37A007EB718 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		99BAE469241194AD00F45B11 /* MWInitController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWInitController.swift; sourceTree = "<group>"; };
+		99BAE46B2411A22600F45B11 /* MWSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWSystem.swift; sourceTree = "<group>"; };
 		99F910F024053EE000E4F4DB /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		C871CBC05AFA2A873B51B459 /* Pods_MovieWorld.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MovieWorld.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -189,6 +193,7 @@
 				994E3CFB23FA9D990034B4D2 /* MWNavigationController.swift */,
 				9979B45E23FFC666005421D9 /* MWTabBarViewController.swift */,
 				9979B46423FFD0D5005421D9 /* MWViewController.swift */,
+				99BAE469241194AD00F45B11 /* MWInitController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -285,6 +290,7 @@
 				996F79E7240BEBB4006FF3C0 /* MWNetError.swift */,
 				996F79E9240C0374006FF3C0 /* MWGenre.swift */,
 				99915F87240D254800E39CE0 /* MWSpecialError.swift */,
+				99BAE46B2411A22600F45B11 /* MWSystem.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -425,8 +431,10 @@
 				9999E0CF23F9F378007EB718 /* AppDelegate.swift in Sources */,
 				9979B46323FFCF19005421D9 /* MWSearchViewController.swift in Sources */,
 				996F79E4240BEACF006FF3C0 /* String+Ex.swift in Sources */,
+				99BAE46C2411A22600F45B11 /* MWSystem.swift in Sources */,
 				992CF937240549E200301BC5 /* MWMainTableViewCell.swift in Sources */,
 				996F79E8240BEBB4006FF3C0 /* MWNetError.swift in Sources */,
+				99BAE46A241194AD00F45B11 /* MWInitController.swift in Sources */,
 				99915F88240D254800E39CE0 /* MWSpecialError.swift in Sources */,
 				996F79E3240BEACF006FF3C0 /* MWNetwork+ExUtility.swift in Sources */,
 				994E3CFA23FA9C8B0034B4D2 /* MWInterface.swift in Sources */,

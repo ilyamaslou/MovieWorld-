@@ -17,6 +17,7 @@ class MWInterface {
     private(set) weak var window: UIWindow?
     
     private lazy var tabBarViewController = MWTabBarViewController()
+    private lazy var initController = MWInitController()
     
     private init() {}
     
@@ -26,8 +27,8 @@ class MWInterface {
         
         self.setUpNavigationBarStyle()
         
-        window.rootViewController = tabBarViewController
-        window.makeKeyAndVisible()
+        self.window?.rootViewController = initController
+        self.window?.makeKeyAndVisible()
     }
     
     private func setUpNavigationBarStyle() {
@@ -53,6 +54,10 @@ class MWInterface {
     public func popVC(animated: Bool = true) {
         guard let navigationController = self.tabBarViewController.selectedViewController as? MWNavigationController else { return }
         navigationController.popViewController(animated: animated)
+    }
+    
+    public func setUpTabBar() {
+        self.window?.rootViewController = tabBarViewController
     }
     
 }

@@ -29,11 +29,6 @@ class MWMainTabViewController: MWViewController {
             self.tableView.reloadData()
         }
     }
-    private var genres: [Int: String] = [:] {
-        didSet {
-            self.tableView.reloadData()
-        }
-    }
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -61,29 +56,10 @@ class MWMainTabViewController: MWViewController {
         super.viewDidAppear(animated)
         
         //MARK:Later wiil be in queue
-        self.loadGenres()
         self.loadMovies(category: .popularMovies)
         self.loadMovies(category: .nowPlayingMovies)
         self.loadMovies(category: .topRatedMovies)
         self.loadMovies(category: .upcomingMovies)
-    }
-    
-    private func loadGenres() {
-        MWNet.sh.request(urlPath: URLPaths.getGenres ,
-                         querryParameters: MWNet.sh.parameters,
-                         succesHandler: { [weak self] (genres: MWGenreResponse)  in
-                            guard let self = self else { return }
-                            for genre in genres.genres{
-                                self.genres[genre.id] = genre.name
-                            }
-                            self.tableView.reloadData()
-                            
-            },
-                         errorHandler: { [weak self] (error) in
-                            let message = MWNetError.getError(error: error)
-                            self?.errorAlert(message: message)
-                            self?.genres = [:]
-        })
     }
     
     private func loadMovies(category: MWCategories) {
@@ -98,7 +74,7 @@ class MWMainTabViewController: MWViewController {
                             var movies = movies.results
                             for (id, movie) in movies.enumerated() {
                                 var tempMovie = movie
-                                tempMovie.setFilmGenres(genres: self.genres)
+                                tempMovie.setFilmGenres(genres: MWSys.sh.genres)
                                 movies[id] = tempMovie
                             }
                             self.moviesByCategories[category] = movies
@@ -134,7 +110,6 @@ class MWMainTabViewController: MWViewController {
     @objc private func pullToRefresh() {
         
         //MARK:Later wiil be in queue
-        self.loadGenres()
         self.loadMovies(category: .popularMovies)
         self.loadMovies(category: .nowPlayingMovies)
         self.loadMovies(category: .topRatedMovies)

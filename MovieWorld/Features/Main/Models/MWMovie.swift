@@ -34,12 +34,14 @@ struct MWMovie: Decodable {
     var originalLanguage: String?
     var filmGenres: [String]?
     
-    mutating func setFilmGenres(genres: [Int : String]) {
+    mutating func setFilmGenres(genres: [MWGenre]) {
         var tempGenres: [String] = []
         if let genreIds = genreIds {
             for id in genreIds {
-                if let genre = genres[id] {
-                    tempGenres.append(genre)
+                for genre in genres {
+                    if genre.id == id {
+                        tempGenres.append(genre.name)
+                    }
                 }
             }
         }

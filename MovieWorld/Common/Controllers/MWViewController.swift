@@ -12,7 +12,7 @@ class MWViewController: UIViewController {
     
     private(set) lazy var contentView: UIView = {
         let view = UIView()
-        view.backgroundColor = .clear
+        view.backgroundColor = .white
         
         return view
     }()

@@ -24,21 +24,21 @@ enum MWNetError {
     static func getError(error: MWNetError) -> String {
         switch error {
         case .incorrectUrl(let url):
-            return "Incorrect url: \(url)"
+            return "Incorrect url: \(url)".local(args: url)
         case .networkError(let error):
             return error.localizedDescription
         case .serverError(let statusCode):
-            return "Error with: \(statusCode) statusCode"
+            return "Error with: \(statusCode) statusCode".local(args: statusCode)
         case .parsingError(let error):
             return error.localizedDescription
         case .jsonDecodingFailed(let text):
             return text
         case .unknown:
-            return "Unknown error"
+            return "Unknown error".local()
         case .error401(let error):
-            return error.statusMessage ?? "error 401"
+            return error.statusMessage ?? "error 401".local()
         case .error404(let error):
-            return error.statusMessage ?? "error 404"
+            return error.statusMessage ?? "error 404".local()
         }
     }
 }

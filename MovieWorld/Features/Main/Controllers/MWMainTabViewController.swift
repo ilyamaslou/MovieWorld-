@@ -24,11 +24,16 @@ class MWMainTabViewController: MWViewController {
         return refreshControl
     }()
     
+    private lazy var group = DispatchGroup()
+
     private var moviesByCategories: [MWCategories: [MWMovie]] = [:] {
         didSet {
             self.tableView.reloadData()
         }
     }
+    
+    //MARK: FIXME tempImage
+    private lazy var tempImage = UIImage()
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -49,7 +54,7 @@ class MWMainTabViewController: MWViewController {
             make.edges.equalToSuperview()
         }
         
-        self.title = "Season"
+        self.title = "Season".local()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -63,7 +68,7 @@ class MWMainTabViewController: MWViewController {
     }
     
     private func loadMovies(category: MWCategories) {
-        
+        group.enter()
         let urlPath = getUrlPath(by: category)
         
         MWNet.sh.request(urlPath: urlPath ,
@@ -76,18 +81,51 @@ class MWMainTabViewController: MWViewController {
                                 var tempMovie = movie
                                 tempMovie.setFilmGenres(genres: MWSys.sh.genres)
                                 movies[id] = tempMovie
+                                self.loadImage(for: movies[id])
+                                movies[id].filmImage = self.tempImage
                             }
                             self.moviesByCategories[category] = movies
                             
+                            self.group.leave()
                             self.tableView.reloadData()
+                            
                             
             },
                          errorHandler: { [weak self] (error) in
+                            guard let self = self else { return }
+                            
                             let message = MWNetError.getError(error: error)
-                            self?.errorAlert(message: message)
-                            self?.moviesByCategories = [:]
+                            self.errorAlert(message: message)
+                            self.moviesByCategories = [:]
+                            self.group.leave()
                             
         })
+    }
+    
+    private func loadImage(for forMovie: MWMovie) {
+        group.enter()
+        if let imagePath = forMovie.posterPath,
+            let baseUrl = MWSys.sh.configuration?.images?.secureBaseUrl,
+            let size = MWSys.sh.configuration?.images?.posterSizes?.first {
+            MWNet.sh.imageRequest(baseUrl: baseUrl,
+                                  size: size,
+                                  filePath: imagePath,
+                                  succesHandler: { [weak self] (image: UIImage)  in
+                                    guard let self = self else { return }
+                                    self.tempImage = image
+                                    self.group.leave()
+                                    
+                },
+                                  errorHandler: { [weak self] (error) in
+                                    guard let self = self else { return }
+                                    
+                                    let message = MWNetError.getError(error: error)
+                                    self.errorAlert(message: message)
+                                    self.moviesByCategories = [:]
+                                    self.group.leave()
+                }
+            )
+        }
     }
     
     private func getUrlPath(by category: MWCategories) -> String {

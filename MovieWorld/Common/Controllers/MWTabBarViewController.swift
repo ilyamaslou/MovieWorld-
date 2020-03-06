@@ -12,21 +12,21 @@ class MWTabBarViewController: UITabBarController {
     
     lazy var mainTabBarItem: UITabBarItem = {
         let view: UITabBarItem = UITabBarItem(
-            title: "Main",
+            title: "Main".local(),
             image: UIImage(named:"mainTabIcon"), selectedImage: UIImage(named:"mainTabIcon"))
         return view
     }()
     
     lazy var categoryTabBarItem: UITabBarItem = {
         let view: UITabBarItem =  UITabBarItem(
-            title: "Category",
+            title: "Category".local(),
             image: UIImage(named:"categoryTabIcon"), selectedImage: UIImage(named:"categoryTabIcon"))
         return view
     }()
     
     lazy var searchTabBarItem: UITabBarItem = {
         let view: UITabBarItem = UITabBarItem(
-            title: "Search",
+            title: "Search".local(),
             image: UIImage(named:"searchTabIcon"), selectedImage: UIImage(named:"searchTabIcon"))
         return view
     }()

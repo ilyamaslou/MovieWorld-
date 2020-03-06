@@ -56,7 +56,7 @@ class MWInitController: MWViewController {
                          errorHandler: { [weak self] (error) in
                             guard let self = self else { return }
                             let message = MWNetError.getError(error: error)
-                            self.errorAlert(message: message)
+                            print(message)
                             self.group.leave()
         })
     }
@@ -74,29 +74,11 @@ class MWInitController: MWViewController {
                          errorHandler: { [weak self] (error) in
                             guard let self = self else { return }
                             let message = MWNetError.getError(error: error)
-                            self.errorAlert(message: message)
+                            print(message)
                             self.group.leave()
         })
     }
     
-    private func errorAlert( message: String) {
-        
-        let alert = UIAlertController(title: nil,
-                                      message: message,
-                                      preferredStyle: .alert)
-        
-        alert.setValue(NSAttributedString(string: message,
-                                          attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 17),
-                                                       NSAttributedString.Key.foregroundColor : UIColor.red])
-            , forKey: "attributedMessage")
-        
-        let alertAction = UIAlertAction(title: "OK",
-                                        style: .cancel,
-                                        handler: nil)
-        
-        alert.addAction(alertAction)
-        
-        present(alert,animated: true)
-    }
+
     
 }

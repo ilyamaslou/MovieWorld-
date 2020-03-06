@@ -19,7 +19,7 @@ struct MWMovie: Decodable {
     
     enum CodingKeys: String, CodingKey {
         case id = "status_code"
-        case poster_path = "poster_path"
+        case posterPath = "poster_path"
         case title = "title"
         case genreIds = "genre_ids"
         case releaseDate = "release_date"
@@ -27,12 +27,13 @@ struct MWMovie: Decodable {
     }
     
     var id: Int?
-    var poster_path: String?
+    var posterPath: String?
     var title: String?
     var genreIds: [Int]?
     var releaseDate: String?
     var originalLanguage: String?
     var filmGenres: [String]?
+    var filmImage: UIImage?
     
     mutating func setFilmGenres(genres: [MWGenre]) {
         var tempGenres: [String] = []
@@ -68,7 +69,7 @@ struct MWMovie: Decodable {
          original_language: String
     ) {
         self.id = id
-        self.poster_path = poster_path
+        self.posterPath = poster_path
         self.title = title
         self.releaseDate = releaseYear
         self.genreIds = filmGenresIds

@@ -1,0 +1,22 @@
+/* 
+  Localizable.strings
+  MovieWorld
+
+  Created by Ilya Maslou on 3/6/20.
+  Copyright © 2020 Ilya Maslou. All rights reserved.
+*/
+
+"Main" = "Main";
+"Season" = "Season";
+"Category" = "Category";
+"Search" = "Search";
+"All" = "All";
+"Popular Movies" = "Popular Movies";
+"Now Playing Movies" = "Now Playing Movies";
+"Top Rated" = "Top Rated";
+"Upcoming Movies" = "Upcoming Movies";
+"Incorrect url: %@" = "Incorrect url: %@";
+"Error with: %d statusCode" = "Error with: %d statusCode";
+"Unknown error" = "Unknown error";
+"401 Error" = "401 Error";
+"404 Error" = "404 Error";

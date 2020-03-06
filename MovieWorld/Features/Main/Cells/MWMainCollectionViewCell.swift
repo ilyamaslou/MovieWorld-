@@ -18,7 +18,6 @@ class MWMainCollectionViewCell: UICollectionViewCell {
     
     private lazy var nameLabel: UILabel = {
         let label = UILabel()
-        label.text = "Film Name"
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 17,  weight: .bold)
         label.adjustsFontSizeToFitWidth = false
@@ -28,7 +27,6 @@ class MWMainCollectionViewCell: UICollectionViewCell {
     
     private lazy var infoLabel: UILabel = {
         let label = UILabel()
-        label.text = "Year + Country"
         label.font = .systemFont(ofSize: 13,  weight: .regular)
         label.translatesAutoresizingMaskIntoConstraints = false
         label.adjustsFontSizeToFitWidth = false
@@ -38,7 +36,6 @@ class MWMainCollectionViewCell: UICollectionViewCell {
     
     private lazy var filmImageView: UIImageView = {
         let view = UIImageView()
-        view.image = UIImage(named: "bridgesFilmImage")
         view.clipsToBounds = true
         view.layer.cornerRadius = 5
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -85,6 +82,7 @@ class MWMainCollectionViewCell: UICollectionViewCell {
         }
         
         self.infoLabel.text = "\(releaseYear) \(genre)"
+        self.filmImageView.image = film.filmImage
     }
     
     required init?(coder: NSCoder) {

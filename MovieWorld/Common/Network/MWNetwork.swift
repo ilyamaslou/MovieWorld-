@@ -23,13 +23,14 @@ class MWNetwork {
     private init() {}
 
     
-    func imageRequest<T: Decodable>(urlPath: String,
-                               querryParameters: [String : String],
-                               succesHandler: @escaping ((T) -> Void),
+    func imageRequest(baseUrl: String,
+                               size: String,
+                               filePath: String,
+                               succesHandler: @escaping ((UIImage) -> Void),
                                errorHandler: @escaping ((MWNetError) -> Void)) {
         
-        let url = getUrlWithParams(fullPath: urlPath, params: querryParameters)
-        
+
+        let url = baseUrl + size + filePath
         guard let requestUrl = URL(string: url)
             else { return }
         
@@ -56,10 +57,12 @@ class MWNetwork {
                 do {
                     switch response.statusCode {
                     case 200...300:
-                        let values = try JSONDecoder().decode(T.self, from: data)
+                        //MARK:work with image
+                        if let image = UIImage(data: data){
                         DispatchQueue.main.async {
-                            succesHandler(values)
+                            succesHandler(image)
                         }
+                    }
                     case 401:
                         let value = try JSONDecoder().decode(MWSpecialError.self, from: data)
                         DispatchQueue.main.async {

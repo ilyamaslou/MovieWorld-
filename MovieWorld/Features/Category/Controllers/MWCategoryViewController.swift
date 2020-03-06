@@ -35,7 +35,7 @@ class MWCategoryViewController: MWViewController {
         }
         
         view.backgroundColor = .green
-        self.title = "Category"
+        self.title = "Category".local()
     }
     
 }

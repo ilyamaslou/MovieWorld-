@@ -74,19 +74,18 @@ class MWMainTableViewCell: UITableViewCell {
     }
     
     override func updateConstraints() {
-        
         self.categoryLabel.snp.updateConstraints { (make) in
             make.top.equalToSuperview()
             make.left.equalToSuperview().inset(16)
             make.bottom.equalTo(self.collectionView.snp.top).inset(-12)
-            
+            make.right.equalTo(self.showAllButton.snp.left)
         }
         
         self.showAllButton.snp.updateConstraints { (make) in
             make.top.equalToSuperview()
             make.right.equalToSuperview().inset(7)
             make.bottom.equalTo(self.collectionView.snp.top).inset(-12)
-            
+            make.left.equalTo(self.categoryLabel.snp.right)
         }
         
         self.collectionView.snp.updateConstraints { (make) in
@@ -114,7 +113,10 @@ extension MWMainTableViewCell: UICollectionViewDelegate, UICollectionViewDataSou
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.mainScreenCollectionViewCellId, for: indexPath) as! MWMainCollectionViewCell
+        
+       guard let cell = collectionView.dequeueReusableCell(
+        withReuseIdentifier: Constants.mainScreenCollectionViewCellId,
+        for: indexPath) as? MWMainCollectionViewCell else { fatalError("The registered type for the cell does not match the casting") }
         
         if self.films.count > 0 {
             var singleFilm = self.films[indexPath.item]

@@ -56,11 +56,8 @@ class MWMainTabViewController: MWViewController {
         }
         
         self.title = "Season".local()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
         
+        //MARK: put it in array of argument
         self.loadMovies(category: .popularMovies)
         self.loadMovies(category: .nowPlayingMovies)
         self.loadMovies(category: .topRatedMovies)
@@ -68,6 +65,7 @@ class MWMainTabViewController: MWViewController {
         
         self.group.notify(queue: .main,execute: self.tableView.reloadData)
     }
+    
     
     private func loadMovies(category: MWCategories) {
         self.images = []
@@ -107,7 +105,7 @@ class MWMainTabViewController: MWViewController {
         self.group.enter()
           if let imagePath = forMovie.posterPath,
               let baseUrl = MWSys.sh.configuration?.images?.secureBaseUrl,
-              let size = MWSys.sh.configuration?.images?.posterSizes?.first {
+            let size = MWSys.sh.configuration?.images?.posterSizes?.first {
               MWNet.sh.imageRequest(baseUrl: baseUrl,
                                     size: size,
                                     filePath: imagePath,
@@ -157,7 +155,6 @@ class MWMainTabViewController: MWViewController {
     }
     
     @objc private func pullToRefresh() {
-        //MARK:Later wiil be in queue
         self.loadMovies(category: .popularMovies)
         self.loadMovies(category: .nowPlayingMovies)
         self.loadMovies(category: .topRatedMovies)
@@ -177,8 +174,9 @@ extension MWMainTabViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(
-            withIdentifier: Constants.mainScreenTableViewCellId) as! MWMainTableViewCell
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: Constants.mainScreenTableViewCellId) as? MWMainTableViewCell
+            else { fatalError("The registered type for the cell does not match the casting") }
         
         let category = Array(self.moviesByCategories.keys)[indexPath.section]
         if let films = self.moviesByCategories[category], self.images.count > 0 {

@@ -42,6 +42,10 @@ class MWMainCollectionViewCell: UICollectionViewCell {
         self.setUpCell()
     }
     
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     func set(film: MWMovie){
         self.nameLabel.text = film.title
         
@@ -52,16 +56,12 @@ class MWMainCollectionViewCell: UICollectionViewCell {
         }
         
         let genre = "\(film.filmGenres?.first ?? "")" 
-        if genre != "" && film.releaseDate != ""{
+        if (genre.isEmpty  && film.releaseDate?.isEmpty ?? false) == false {
             releaseYear.append(",")
         }
         
         self.infoLabel.text = "\(releaseYear) \(genre)"
         self.filmImageView.image = film.filmImage
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
     
     private func setUpCell() {
@@ -73,19 +73,19 @@ class MWMainCollectionViewCell: UICollectionViewCell {
         
         self.filmImageView.snp.updateConstraints { (make) in
             make.top.left.right.equalToSuperview()
+            make.width.equalTo(130)
         }
         
         self.nameLabel.snp.updateConstraints { (make) in
             make.top.equalTo(self.filmImageView.snp.bottom).inset(-12)
             make.left.equalToSuperview()
-            make.width.equalTo(130)
-            
+            make.right.equalTo(self.filmImageView.snp.right)
         }
         
         self.infoLabel.snp.updateConstraints { (make) in
             make.top.equalTo(self.nameLabel.snp.bottom)
             make.left.bottom.equalToSuperview()
-            make.width.equalTo(130)
+            make.right.equalTo(self.filmImageView.snp.right)
         }
     }
 }

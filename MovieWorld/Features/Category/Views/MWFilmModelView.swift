@@ -116,10 +116,10 @@ class MWFilmModelView: UIView {
     }
     
     private func setUpGenres() -> String {
-        //MARK: FIX Don't forget to remove force unwrap
         var genres = ""
         
-        for genre in self.film.genreIds! {
+        guard let genreIds = self.film.genreIds else { return "" }
+        for genre in genreIds {
             genres += "\(genre), "
         }
         

@@ -12,9 +12,8 @@ class MWCustomButton: UIButton {
     
     override init(frame: CGRect) {
         super.init(frame: frame )
+        
         self.setUpButton()
-        self.addTarget(self, action: #selector(buttonDidTapped), for: .touchDown)
-        self.addTarget(self, action: #selector(buttonDidUntapped), for: .touchUpInside)
     }
     
     required init?(coder: NSCoder) {
@@ -25,19 +24,18 @@ class MWCustomButton: UIButton {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        var imageWidth = self.imageView?.frame.size.width
-        
-        //MARK: Fix later
-        if imageWidth == 0.0 {
-            imageWidth = -4
-        }
-        
+        let imageWidth = self.imageView?.frame.size.width
         let titleLabelWidth = self.titleLabel?.frame.size.width
         
-        //MARK: FIX
         contentEdgeInsets = UIEdgeInsets(top: 4, left: 12, bottom: 4, right: 12)
         titleEdgeInsets = UIEdgeInsets(top: .zero, left: -((imageWidth ?? -4) + 4) , bottom: .zero, right: (imageWidth ?? -4) + 4)
-        imageEdgeInsets = UIEdgeInsets(top: .zero, left: titleLabelWidth! , bottom: .zero, right: -titleLabelWidth! - 4)
+        imageEdgeInsets = UIEdgeInsets(top: .zero, left: titleLabelWidth ?? .zero , bottom: .zero, right: -(titleLabelWidth ?? .zero) - 4)
+    }
+    
+    override var isHighlighted: Bool {
+        didSet {
+            layer.opacity = isHighlighted ? 0.5 : 1
+        }
     }
     
     func setUpButton(title: String = "All", haveArrow: Bool = true) {
@@ -49,7 +47,6 @@ class MWCustomButton: UIButton {
         setTitle(title, for: .normal)
         titleLabel?.font = .systemFont(ofSize: 13)
         
-        //MARK: Fix remake for isHighlighted
         if haveArrow {
             setImage(UIImage(named: "nextIcon"), for: .normal)
             setImage(UIImage(named: "nextIcon"), for: .highlighted)
@@ -58,11 +55,4 @@ class MWCustomButton: UIButton {
         self.layoutIfNeeded()
     }
     
-    @objc private func buttonDidTapped() {
-        layer.opacity = 0.5
-    }
-    
-    @objc private func buttonDidUntapped() {
-        layer.opacity = 1
-    }
 }

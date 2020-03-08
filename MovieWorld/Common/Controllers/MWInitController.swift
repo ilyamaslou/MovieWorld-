@@ -25,26 +25,25 @@ class MWInitController: MWViewController {
     
     private lazy var group = DispatchGroup()
 
-    
     override func initController() {
         super.initController()
         
-        contentView.addSubview(loadingIndicator)
+        contentView.addSubview(self.loadingIndicator)
         
-        loadingIndicator.snp.makeConstraints { (make) in
+        self.loadingIndicator.snp.makeConstraints { (make) in
             make.center.equalToSuperview()
         }
         
-        loadingIndicator.startAnimating()
+        self.loadingIndicator.startAnimating()
         
-        loadGenres()
-        loadConfiguration()
+        self.loadGenres()
+        self.loadConfiguration()
         
-        group.notify(queue: .main, execute: MWI.s.setUpTabBar)
+        self.group.notify(queue: .main, execute: MWI.s.setUpTabBar)
     }
     
     private func loadGenres() {
-        group.enter()
+        self.group.enter()
         MWNet.sh.request(urlPath: URLPaths.getGenres ,
                          querryParameters: MWNet.sh.parameters,
                          succesHandler: { [weak self] (genres: MWGenreResponse)  in
@@ -55,14 +54,14 @@ class MWInitController: MWViewController {
             },
                          errorHandler: { [weak self] (error) in
                             guard let self = self else { return }
-                            let message = MWNetError.getError(error: error)
+                            let message = error.getErrorDesription()
                             print(message)
                             self.group.leave()
         })
     }
     
     private func loadConfiguration() {
-        group.enter()
+        self.group.enter()
         MWNet.sh.request(urlPath: URLPaths.getConfiguration ,
                          querryParameters: MWNet.sh.parameters,
                          succesHandler: { [weak self] (configuration: MWConfiguration)  in
@@ -73,12 +72,9 @@ class MWInitController: MWViewController {
             },
                          errorHandler: { [weak self] (error) in
                             guard let self = self else { return }
-                            let message = MWNetError.getError(error: error)
+                            let message = error.getErrorDesription()
                             print(message)
                             self.group.leave()
         })
     }
-    
-
-    
 }

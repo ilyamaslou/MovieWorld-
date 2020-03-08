@@ -10,21 +10,21 @@ import UIKit
 
 class MWTabBarViewController: UITabBarController {
     
-    lazy var mainTabBarItem: UITabBarItem = {
+    private lazy var mainTabBarItem: UITabBarItem = {
         let view: UITabBarItem = UITabBarItem(
             title: "Main".local(),
             image: UIImage(named:"mainTabIcon"), selectedImage: UIImage(named:"mainTabIcon"))
         return view
     }()
     
-    lazy var categoryTabBarItem: UITabBarItem = {
+    private lazy var categoryTabBarItem: UITabBarItem = {
         let view: UITabBarItem =  UITabBarItem(
             title: "Category".local(),
             image: UIImage(named:"categoryTabIcon"), selectedImage: UIImage(named:"categoryTabIcon"))
         return view
     }()
     
-    lazy var searchTabBarItem: UITabBarItem = {
+    private lazy var searchTabBarItem: UITabBarItem = {
         let view: UITabBarItem = UITabBarItem(
             title: "Search".local(),
             image: UIImage(named:"searchTabIcon"), selectedImage: UIImage(named:"searchTabIcon"))
@@ -33,7 +33,7 @@ class MWTabBarViewController: UITabBarController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupVC()
+        self.setupVC()
     }
     
     private func setupVC() {
@@ -46,8 +46,12 @@ class MWTabBarViewController: UITabBarController {
         searchVC.tabBarItem = self.searchTabBarItem
         
          self.viewControllers = [mainVC, categoryVC , searchVC]
-            .map{MWNavigationController(rootViewController: $0)}
+            .map{ MWNavigationController(rootViewController: $0) }
         
+        self.setUpTabBarStyle()
+    }
+    
+    private func setUpTabBarStyle() {
         self.tabBar.isTranslucent = false
         self.tabBar.layer.masksToBounds = false
         self.tabBar.tintColor = UIColor(named: "accentColor")

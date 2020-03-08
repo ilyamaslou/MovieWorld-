@@ -5,9 +5,6 @@
 //  Created by Ilya Maslou on 2/17/20.
 //  Copyright © 2020 Ilya Maslou. All rights reserved.
 //
-
-
-
 import UIKit
 
 struct MWMoviesResponse: Decodable {
@@ -37,21 +34,18 @@ struct MWMovie: Decodable {
     
     mutating func setFilmGenres(genres: [MWGenre]) {
         var tempGenres: [String] = []
-        if let genreIds = genreIds {
-            for id in genreIds {
-                for genre in genres {
-                    if genre.id == id {
-                        tempGenres.append(genre.name)
-                    }
+        guard let genreIds = genreIds  else { return }
+        for id in genreIds {
+            for genre in genres {
+                if genre.id == id {
+                    tempGenres.append(genre.name)
                 }
             }
         }
         filmGenres = tempGenres
     }
     
-    
-    init() {
-    }
+    init() {}
     
     init(filmName: String,
          releaseYear: String,
@@ -66,8 +60,7 @@ struct MWMovie: Decodable {
          title: String,
          filmGenresIds: [Int],
          releaseYear: String,
-         original_language: String
-    ) {
+         original_language: String) {
         self.id = id
         self.posterPath = poster_path
         self.title = title
@@ -75,7 +68,4 @@ struct MWMovie: Decodable {
         self.genreIds = filmGenresIds
         self.originalLanguage = original_language
     }
-    
-    
 }
-

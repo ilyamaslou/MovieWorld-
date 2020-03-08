@@ -15,7 +15,6 @@ class MWCustomButton: UIButton {
         self.setUpButton()
         self.addTarget(self, action: #selector(buttonDidTapped), for: .touchDown)
         self.addTarget(self, action: #selector(buttonDidUntapped), for: .touchUpInside)
-        
     }
     
     required init?(coder: NSCoder) {
@@ -28,20 +27,20 @@ class MWCustomButton: UIButton {
         
         var imageWidth = self.imageView?.frame.size.width
         
+        //MARK: Fix later
         if imageWidth == 0.0 {
             imageWidth = -4
         }
         
         let titleLabelWidth = self.titleLabel?.frame.size.width
         
-        //MARK: is there better solution?
+        //MARK: FIX
         contentEdgeInsets = UIEdgeInsets(top: 4, left: 12, bottom: 4, right: 12)
         titleEdgeInsets = UIEdgeInsets(top: .zero, left: -((imageWidth ?? -4) + 4) , bottom: .zero, right: (imageWidth ?? -4) + 4)
         imageEdgeInsets = UIEdgeInsets(top: .zero, left: titleLabelWidth! , bottom: .zero, right: -titleLabelWidth! - 4)
     }
     
     func setUpButton(title: String = "All", haveArrow: Bool = true) {
-        
         layer.cornerRadius = 5
         backgroundColor = UIColor(named: "accentColor")
         setTitleColor(.white, for: .normal)
@@ -50,6 +49,7 @@ class MWCustomButton: UIButton {
         setTitle(title, for: .normal)
         titleLabel?.font = .systemFont(ofSize: 13)
         
+        //MARK: Fix remake for isHighlighted
         if haveArrow {
             setImage(UIImage(named: "nextIcon"), for: .normal)
             setImage(UIImage(named: "nextIcon"), for: .highlighted)

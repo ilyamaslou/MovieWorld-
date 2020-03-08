@@ -18,6 +18,15 @@ class MWMainTabViewController: MWViewController {
         case upcomingMovies = "Upcoming Movies"
     }
     
+    //MARK: FIXME
+    private var images: [UIImage] = []
+
+    private var moviesByCategories: [MWCategories: [MWMovie]] = [:] {
+           didSet {
+               self.tableView.reloadData()
+           }
+       }
+    
     private lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(pullToRefresh), for: .valueChanged)
@@ -25,15 +34,6 @@ class MWMainTabViewController: MWViewController {
     }()
     
     private lazy var group = DispatchGroup()
-
-    private var moviesByCategories: [MWCategories: [MWMovie]] = [:] {
-        didSet {
-            self.tableView.reloadData()
-        }
-    }
-    
-    //MARK: FIXME tempImage
-    private lazy var tempImage = UIImage()
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -47,7 +47,8 @@ class MWMainTabViewController: MWViewController {
     
     override func initController() {
         super.initController()
-        let view = tableView
+        
+        let view = self.tableView
         contentView.addSubview(view)
         
         view.snp.makeConstraints { (make) in
@@ -60,16 +61,19 @@ class MWMainTabViewController: MWViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        //MARK:Later wiil be in queue
         self.loadMovies(category: .popularMovies)
         self.loadMovies(category: .nowPlayingMovies)
         self.loadMovies(category: .topRatedMovies)
         self.loadMovies(category: .upcomingMovies)
+        
+        self.group.notify(queue: .main,execute: self.tableView.reloadData)
     }
     
     private func loadMovies(category: MWCategories) {
-        group.enter()
-        let urlPath = getUrlPath(by: category)
+        self.images = []
+        
+        self.group.enter()
+        let urlPath = self.getUrlPath(by: category)
         
         MWNet.sh.request(urlPath: urlPath ,
                          querryParameters: MWNet.sh.parameters,
@@ -80,21 +84,18 @@ class MWMainTabViewController: MWViewController {
                             for (id, movie) in movies.enumerated() {
                                 var tempMovie = movie
                                 tempMovie.setFilmGenres(genres: MWSys.sh.genres)
+                                self.loadImage(for: tempMovie)
                                 movies[id] = tempMovie
-                                self.loadImage(for: movies[id])
-                                movies[id].filmImage = self.tempImage
                             }
                             self.moviesByCategories[category] = movies
                             
                             self.group.leave()
-                            self.tableView.reloadData()
-                            
                             
             },
                          errorHandler: { [weak self] (error) in
                             guard let self = self else { return }
                             
-                            let message = MWNetError.getError(error: error)
+                            let message = error.getErrorDesription()
                             self.errorAlert(message: message)
                             self.moviesByCategories = [:]
                             self.group.leave()
@@ -103,30 +104,22 @@ class MWMainTabViewController: MWViewController {
     }
     
     private func loadImage(for forMovie: MWMovie) {
-        group.enter()
-        if let imagePath = forMovie.posterPath,
-            let baseUrl = MWSys.sh.configuration?.images?.secureBaseUrl,
-            let size = MWSys.sh.configuration?.images?.posterSizes?.first {
-            MWNet.sh.imageRequest(baseUrl: baseUrl,
-                                  size: size,
-                                  filePath: imagePath,
-                                  succesHandler: { [weak self] (image: UIImage)  in
-                                    guard let self = self else { return }
-                                    self.tempImage = image
-                                    self.group.leave()
-                                    
-                },
-                                  errorHandler: { [weak self] (error) in
-                                    guard let self = self else { return }
-                                    
-                                    let message = MWNetError.getError(error: error)
-                                    self.errorAlert(message: message)
-                                    self.moviesByCategories = [:]
-                                    self.group.leave()
-                }
-            )
-        }
-    }
+        self.group.enter()
+          if let imagePath = forMovie.posterPath,
+              let baseUrl = MWSys.sh.configuration?.images?.secureBaseUrl,
+              let size = MWSys.sh.configuration?.images?.posterSizes?.first {
+              MWNet.sh.imageRequest(baseUrl: baseUrl,
+                                    size: size,
+                                    filePath: imagePath,
+                                    succesHandler: { [weak self] (image: UIImage)  in
+                                      guard let self = self else { return }
+                                      //MARK: Fix this
+                                        self.images.append(image)
+                                        self.group.leave()
+                  }
+              )
+          }
+      }
     
     private func getUrlPath(by category: MWCategories) -> String {
         var urlPath = ""
@@ -144,19 +137,7 @@ class MWMainTabViewController: MWViewController {
         return urlPath
     }
     
-    
-    @objc private func pullToRefresh() {
-        
-        //MARK:Later wiil be in queue
-        self.loadMovies(category: .popularMovies)
-        self.loadMovies(category: .nowPlayingMovies)
-        self.loadMovies(category: .topRatedMovies)
-        self.loadMovies(category: .upcomingMovies)
-        self.refreshControl.endRefreshing()
-    }
-    
     private func errorAlert( message: String) {
-        
         let alert = UIAlertController(title: nil,
                                       message: message,
                                       preferredStyle: .alert)
@@ -174,6 +155,17 @@ class MWMainTabViewController: MWViewController {
         
         present(alert,animated: true)
     }
+    
+    @objc private func pullToRefresh() {
+        //MARK:Later wiil be in queue
+        self.loadMovies(category: .popularMovies)
+        self.loadMovies(category: .nowPlayingMovies)
+        self.loadMovies(category: .topRatedMovies)
+        self.loadMovies(category: .upcomingMovies)
+        self.group.notify(queue: .main,execute: self.tableView.reloadData)
+
+        self.refreshControl.endRefreshing()
+    }
 }
 
 extension MWMainTabViewController: UITableViewDataSource, UITableViewDelegate {
@@ -181,7 +173,7 @@ extension MWMainTabViewController: UITableViewDataSource, UITableViewDelegate {
         return 1
     }
     func numberOfSections(in tableView: UITableView) -> Int {
-        return moviesByCategories.count
+        return self.moviesByCategories.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -189,11 +181,11 @@ extension MWMainTabViewController: UITableViewDataSource, UITableViewDelegate {
             withIdentifier: Constants.mainScreenTableViewCellId) as! MWMainTableViewCell
         
         let category = Array(self.moviesByCategories.keys)[indexPath.section]
-        if let films = moviesByCategories[category] {
+        if let films = self.moviesByCategories[category], self.images.count > 0 {
             cell.films = films
+            cell.set(categoryName: category.rawValue, images: self.images)
         }
         
-        cell.set(categoryName: category.rawValue)
         cell.selectionStyle = .none
         
         return cell
@@ -209,6 +201,4 @@ extension MWMainTabViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 24
     }
-    
 }
-

@@ -8,7 +8,6 @@
 
 import UIKit
 
-
 enum MWNetError {
     case incorrectUrl(url: String)
     case networkError(error: Error)
@@ -17,12 +16,10 @@ enum MWNetError {
     case jsonDecodingFailed(text: String)
     case error401(error: MWSpecialError)
     case error404(error: MWSpecialError)
-    
-    
     case unknown
     
-    static func getError(error: MWNetError) -> String {
-        switch error {
+    func getErrorDesription() -> String {
+        switch self {
         case .incorrectUrl(let url):
             return "Incorrect url: \(url)".local(args: url)
         case .networkError(let error):

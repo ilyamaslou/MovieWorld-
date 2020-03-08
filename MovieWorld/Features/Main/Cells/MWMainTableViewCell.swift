@@ -12,13 +12,20 @@ import SnapKit
 class MWMainTableViewCell: UITableViewCell {
     
     var films: [MWMovie] = [] {
-        willSet {
-            self.films = newValue
+        didSet {
             self.collectionView.reloadData()
             setNeedsUpdateConstraints()
         }
     }
     
+    //MARK: should update data
+    var images: [UIImage] = [] {
+        didSet {
+            self.collectionView.reloadData()
+            setNeedsUpdateConstraints()
+        }
+    }
+        
     private lazy var showAllButton = MWCustomButton()
     private lazy var categoryLabel: UILabel = {
         let label = UILabel()
@@ -28,7 +35,6 @@ class MWMainTableViewCell: UITableViewCell {
     }()
     
     private lazy var collectionView: UICollectionView = {
-        
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: self.collectionViewLayout)
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -44,7 +50,6 @@ class MWMainTableViewCell: UITableViewCell {
     }()
     
     private lazy var collectionViewLayout: UICollectionViewFlowLayout = {
-        
         let collectionViewLayout = UICollectionViewFlowLayout()
         collectionViewLayout.scrollDirection = .horizontal
         collectionViewLayout.minimumLineSpacing = 8
@@ -57,10 +62,11 @@ class MWMainTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
         backgroundColor = .white
-        self.contentView.addSubview(categoryLabel)
-        self.contentView.addSubview(showAllButton)
-        self.contentView.addSubview(collectionView)
+        self.contentView.addSubview(self.categoryLabel)
+        self.contentView.addSubview(self.showAllButton)
+        self.contentView.addSubview(self.collectionView)
     }
     
     required init?(coder: NSCoder) {
@@ -72,14 +78,14 @@ class MWMainTableViewCell: UITableViewCell {
         self.categoryLabel.snp.updateConstraints { (make) in
             make.top.equalToSuperview()
             make.left.equalToSuperview().inset(16)
-            make.bottom.equalTo(collectionView.snp.top).inset(-12)
+            make.bottom.equalTo(self.collectionView.snp.top).inset(-12)
             
         }
         
         self.showAllButton.snp.updateConstraints { (make) in
             make.top.equalToSuperview()
             make.right.equalToSuperview().inset(7)
-            make.bottom.equalTo(collectionView.snp.top).inset(-12)
+            make.bottom.equalTo(self.collectionView.snp.top).inset(-12)
             
         }
         
@@ -91,8 +97,11 @@ class MWMainTableViewCell: UITableViewCell {
         super.updateConstraints()
     }
     
-    func set(categoryName: String) {
-        categoryLabel.text = categoryName
+    func set(categoryName: String, images: [UIImage]) {
+        self.images = []
+        self.images = images
+        print(images)
+        self.categoryLabel.text = categoryName
         setNeedsUpdateConstraints()
     }
     
@@ -101,23 +110,23 @@ class MWMainTableViewCell: UITableViewCell {
 extension MWMainTableViewCell: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return films.count
+        return self.films.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.mainScreenCollectionViewCellId, for: indexPath) as! MWMainCollectionViewCell
         
         if self.films.count > 0 {
-            let singleFilm = self.films[indexPath.item]
+            var singleFilm = self.films[indexPath.item]
+            singleFilm.filmImage = self.images[indexPath.item]
+            
             cell.set(film: singleFilm)
         }
-        
+
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: collectionView.bounds.width, height: collectionView.bounds.height)
     }
-    
 }

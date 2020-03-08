@@ -17,6 +17,5 @@ struct MWSpecialError: Decodable {
     var statusCode: Int?
     var statusMessage: String?
     
-    init() {
-    }
+    init() {}
 }

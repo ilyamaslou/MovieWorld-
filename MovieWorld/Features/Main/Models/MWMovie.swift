@@ -12,7 +12,7 @@ struct MWMoviesResponse: Decodable {
     let results: [MWMovie]
 }
 
-struct MWMovie: Decodable {
+class MWMovie: Decodable {
     
     enum CodingKeys: String, CodingKey {
         case id = "status_code"
@@ -29,10 +29,10 @@ struct MWMovie: Decodable {
     var genreIds: [Int]?
     var releaseDate: String?
     var originalLanguage: String?
-    var filmGenres: [String]?
-    var filmImage: UIImage?
+    var movieGenres: [String]?
+    var movieImage: UIImage?
     
-    mutating func setFilmGenres(genres: [MWGenre]) {
+    func setFilmGenres(genres: [MWGenre]) {
         var tempGenres: [String] = []
         guard let genreIds = genreIds  else { return }
         for id in genreIds {
@@ -42,7 +42,7 @@ struct MWMovie: Decodable {
                 }
             }
         }
-        filmGenres = tempGenres
+        movieGenres = tempGenres
     }
     
     init() {}

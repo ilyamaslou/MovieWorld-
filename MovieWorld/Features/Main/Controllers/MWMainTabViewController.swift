@@ -11,21 +11,21 @@ import SnapKit
 
 class MWMainTabViewController: MWViewController {
     
-    enum MWCategories: String {
+    enum MWCategories: String, CaseIterable {
         case popularMovies = "Popular Movies"
         case nowPlayingMovies = "Now Playing Movies"
         case topRatedMovies = "Top Rated"
         case upcomingMovies = "Upcoming Movies"
     }
     
-    //MARK: FIXME
-    private var images: [UIImage] = []
-
+//    //MARK: FIXME
+//    private var images: [UIImage] = []
+    
     private var moviesByCategories: [MWCategories: [MWMovie]] = [:] {
-           didSet {
-               self.tableView.reloadData()
-           }
-       }
+        didSet {
+            self.tableView.reloadData()
+        }
+    }
     
     private lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
@@ -57,67 +57,44 @@ class MWMainTabViewController: MWViewController {
         
         self.title = "Season".local()
         
-        //MARK: put it in array of argument
-        self.loadMovies(category: .popularMovies)
-        self.loadMovies(category: .nowPlayingMovies)
-        self.loadMovies(category: .topRatedMovies)
-        self.loadMovies(category: .upcomingMovies)
-        
+        self.loadMovies()
         self.group.notify(queue: .main,execute: self.tableView.reloadData)
     }
     
     
-    private func loadMovies(category: MWCategories) {
-        self.images = []
+    private func loadMovies() {
         
-        self.group.enter()
-        let urlPath = self.getUrlPath(by: category)
+        var urlPath = ""
         
-        MWNet.sh.request(urlPath: urlPath ,
-                         querryParameters: MWNet.sh.parameters,
-                         succesHandler: { [weak self] (movies: MWMoviesResponse)  in
-                            guard let self = self else { return }
-                            
-                            var movies = movies.results
-                            for (id, movie) in movies.enumerated() {
-                                var tempMovie = movie
-                                tempMovie.setFilmGenres(genres: MWSys.sh.genres)
-                                self.loadImage(for: tempMovie)
-                                movies[id] = tempMovie
-                            }
-                            self.moviesByCategories[category] = movies
-                            
-                            self.group.leave()
-                            
-            },
-                         errorHandler: { [weak self] (error) in
-                            guard let self = self else { return }
-                            
-                            let message = error.getErrorDesription()
-                            self.errorAlert(message: message)
-                            self.moviesByCategories = [:]
-                            self.group.leave()
-                            
-        })
+        for category in MWCategories.allCases {
+            urlPath = self.getUrlPath(by: category)
+            
+            self.group.enter()
+            MWNet.sh.request(urlPath: urlPath ,
+                             querryParameters: MWNet.sh.parameters,
+                             succesHandler: { [weak self] (movies: MWMoviesResponse)  in
+                                guard let self = self else { return }
+                                
+                                var movies = movies.results
+                                for (id, movie) in movies.enumerated() {
+                                    let tempMovie = movie
+                                    tempMovie.setFilmGenres(genres: MWSys.sh.genres)
+                                    movies[id] = tempMovie
+                                }
+                                self.moviesByCategories[category] = movies
+                                self.group.leave()
+                },
+                             errorHandler: { [weak self] (error) in
+                                guard let self = self else { return }
+                                
+                                let message = error.getErrorDesription()
+                                self.errorAlert(message: message)
+                                self.moviesByCategories = [:]
+                                self.group.leave()
+                                
+            })
+        }
     }
-    
-    private func loadImage(for forMovie: MWMovie) {
-        self.group.enter()
-          if let imagePath = forMovie.posterPath,
-              let baseUrl = MWSys.sh.configuration?.images?.secureBaseUrl,
-            let size = MWSys.sh.configuration?.images?.posterSizes?.first {
-              MWNet.sh.imageRequest(baseUrl: baseUrl,
-                                    size: size,
-                                    filePath: imagePath,
-                                    succesHandler: { [weak self] (image: UIImage)  in
-                                      guard let self = self else { return }
-                                      //MARK: Fix this
-                                        self.images.append(image)
-                                        self.group.leave()
-                  }
-              )
-          }
-      }
     
     private func getUrlPath(by category: MWCategories) -> String {
         var urlPath = ""
@@ -155,12 +132,9 @@ class MWMainTabViewController: MWViewController {
     }
     
     @objc private func pullToRefresh() {
-        self.loadMovies(category: .popularMovies)
-        self.loadMovies(category: .nowPlayingMovies)
-        self.loadMovies(category: .topRatedMovies)
-        self.loadMovies(category: .upcomingMovies)
+        self.loadMovies()
         self.group.notify(queue: .main,execute: self.tableView.reloadData)
-
+        
         self.refreshControl.endRefreshing()
     }
 }
@@ -179,9 +153,9 @@ extension MWMainTabViewController: UITableViewDataSource, UITableViewDelegate {
             else { fatalError("The registered type for the cell does not match the casting") }
         
         let category = Array(self.moviesByCategories.keys)[indexPath.section]
-        if let films = self.moviesByCategories[category], self.images.count > 0 {
-            cell.films = films
-            cell.set(categoryName: category.rawValue, images: self.images)
+        if let films = self.moviesByCategories[category] {
+            cell.movies = films
+            cell.set(categoryName: category.rawValue)
         }
         
         cell.selectionStyle = .none

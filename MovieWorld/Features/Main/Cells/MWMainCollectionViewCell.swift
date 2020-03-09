@@ -29,7 +29,7 @@ class MWMainCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
-    private lazy var filmImageView: UIImageView = {
+    private lazy var movieImageView: UIImageView = {
         let view = UIImageView()
         view.clipsToBounds = true
         view.layer.cornerRadius = 5
@@ -46,46 +46,73 @@ class MWMainCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func set(film: MWMovie){
-        self.nameLabel.text = film.title
+    func set(movie: MWMovie){
+        self.nameLabel.text = movie.title
         
         var releaseYear = ""
-        if let releaseDate = film.releaseDate {
+        if let releaseDate = movie.releaseDate {
             let dividedDate = releaseDate.split(separator: "-")
             releaseYear = String(dividedDate.first ?? "")
         }
         
-        let genre = "\(film.filmGenres?.first ?? "")" 
-        if (genre.isEmpty  && film.releaseDate?.isEmpty ?? false) == false {
+        let genre = "\(movie.movieGenres?.first ?? "")"
+        if (genre.isEmpty  && movie.releaseDate?.isEmpty ?? false) == false {
             releaseYear.append(",")
         }
         
         self.infoLabel.text = "\(releaseYear) \(genre)"
-        self.filmImageView.image = film.filmImage
+        
+        self.setUpImageView(movie: movie)
+    }
+    
+    private func setUpImageView(movie: MWMovie) {
+        if movie.movieImage == nil {
+            loadImage(for: movie)
+            self.movieImageView.image = movie.movieImage
+        } else {
+            self.movieImageView.image = movie.movieImage
+        }
     }
     
     private func setUpCell() {
         backgroundColor = .white
-        
+
         contentView.addSubview(self.nameLabel)
         contentView.addSubview(self.infoLabel)
-        contentView.addSubview(self.filmImageView)
-        
-        self.filmImageView.snp.updateConstraints { (make) in
+        contentView.addSubview(self.movieImageView)
+
+        self.movieImageView.snp.updateConstraints { (make) in
             make.top.left.right.equalToSuperview()
+            //how set fixed size for image without reveal warnings?
             make.width.equalTo(130)
+            make.height.equalTo(185)
         }
-        
+
         self.nameLabel.snp.updateConstraints { (make) in
-            make.top.equalTo(self.filmImageView.snp.bottom).inset(-12)
+            make.top.equalTo(self.movieImageView.snp.bottom).inset(-12)
             make.left.equalToSuperview()
-            make.right.equalTo(self.filmImageView.snp.right)
+            make.right.equalTo(self.movieImageView.snp.right)
         }
-        
+
         self.infoLabel.snp.updateConstraints { (make) in
             make.top.equalTo(self.nameLabel.snp.bottom)
             make.left.bottom.equalToSuperview()
-            make.right.equalTo(self.filmImageView.snp.right)
+            make.right.equalTo(self.movieImageView.snp.right)
+        }
+    }
+    
+    private func loadImage(for forMovie: MWMovie) {
+        if let imagePath = forMovie.posterPath,
+            let baseUrl = MWSys.sh.configuration?.images?.secureBaseUrl,
+            let size = MWSys.sh.configuration?.images?.posterSizes?.first {
+            MWNet.sh.imageRequest(baseUrl: baseUrl,
+                                  size: size,
+                                  filePath: imagePath,
+                                  succesHandler: { [weak self] (image: UIImage)  in
+                                    forMovie.movieImage = image
+                                    self?.movieImageView.image = image
+                }
+            )
         }
     }
 }

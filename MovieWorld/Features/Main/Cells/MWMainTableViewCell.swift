@@ -11,7 +11,7 @@ import SnapKit
 
 class MWMainTableViewCell: UITableViewCell {
     
-    var films: [MWMovie] = [] {
+    var movies: [MWMovie] = [] {
         didSet {
             self.collectionView.reloadData()
             setNeedsUpdateConstraints()
@@ -19,12 +19,12 @@ class MWMainTableViewCell: UITableViewCell {
     }
     
     //MARK: should update data
-    var images: [UIImage] = [] {
-        didSet {
-            self.collectionView.reloadData()
-            setNeedsUpdateConstraints()
-        }
-    }
+//    var images: [UIImage] = [] {
+//        didSet {
+//            self.collectionView.reloadData()
+//            setNeedsUpdateConstraints()
+//        }
+//    }
         
     private lazy var showAllButton = MWCustomButton()
     private lazy var categoryLabel: UILabel = {
@@ -96,20 +96,17 @@ class MWMainTableViewCell: UITableViewCell {
         super.updateConstraints()
     }
     
-    func set(categoryName: String, images: [UIImage]) {
-        self.images = []
-        self.images = images
-        print(images)
+    func set(categoryName: String) {
         self.categoryLabel.text = categoryName
+        
         setNeedsUpdateConstraints()
     }
-    
 }
 
 extension MWMainTableViewCell: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.films.count
+        return self.movies.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -118,11 +115,9 @@ extension MWMainTableViewCell: UICollectionViewDelegate, UICollectionViewDataSou
         withReuseIdentifier: Constants.mainScreenCollectionViewCellId,
         for: indexPath) as? MWMainCollectionViewCell else { fatalError("The registered type for the cell does not match the casting") }
         
-        if self.films.count > 0 {
-            var singleFilm = self.films[indexPath.item]
-            singleFilm.filmImage = self.images[indexPath.item]
-            
-            cell.set(film: singleFilm)
+        if self.movies.count > 0 {
+            let singleFilm = self.movies[indexPath.item]
+            cell.set(movie: singleFilm)
         }
 
         return cell

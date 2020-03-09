@@ -76,24 +76,22 @@ class MWMainCollectionViewCell: UICollectionViewCell {
     
     private func setUpCell() {
         backgroundColor = .white
-
-        contentView.addSubview(self.nameLabel)
-        contentView.addSubview(self.infoLabel)
-        contentView.addSubview(self.movieImageView)
-
+        self.translatesAutoresizingMaskIntoConstraints = false
+        
+        self.contentView.addSubview(self.nameLabel)
+        self.contentView.addSubview(self.infoLabel)
+        self.contentView.addSubview(self.movieImageView)
+        
         self.movieImageView.snp.updateConstraints { (make) in
             make.top.left.right.equalToSuperview()
-            //how set fixed size for image without reveal warnings?
-            make.width.equalTo(130)
-            make.height.equalTo(185)
         }
-
+        
         self.nameLabel.snp.updateConstraints { (make) in
             make.top.equalTo(self.movieImageView.snp.bottom).inset(-12)
             make.left.equalToSuperview()
             make.right.equalTo(self.movieImageView.snp.right)
         }
-
+        
         self.infoLabel.snp.updateConstraints { (make) in
             make.top.equalTo(self.nameLabel.snp.bottom)
             make.left.bottom.equalToSuperview()

@@ -18,9 +18,6 @@ class MWMainTabViewController: MWViewController {
         case upcomingMovies = "Upcoming Movies"
     }
     
-//    //MARK: FIXME
-//    private var images: [UIImage] = []
-    
     private var moviesByCategories: [MWCategories: [MWMovie]] = [:] {
         didSet {
             self.tableView.reloadData()

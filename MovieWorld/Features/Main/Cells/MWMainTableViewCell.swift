@@ -18,14 +18,6 @@ class MWMainTableViewCell: UITableViewCell {
         }
     }
     
-    //MARK: should update data
-//    var images: [UIImage] = [] {
-//        didSet {
-//            self.collectionView.reloadData()
-//            setNeedsUpdateConstraints()
-//        }
-//    }
-        
     private lazy var showAllButton = MWCustomButton()
     private lazy var categoryLabel: UILabel = {
         let label = UILabel()
@@ -55,8 +47,6 @@ class MWMainTableViewCell: UITableViewCell {
         collectionViewLayout.minimumLineSpacing = 8
         collectionViewLayout.minimumInteritemSpacing = 8
         collectionViewLayout.sectionInset = UIEdgeInsets(top: .zero, left: 16, bottom: .zero, right: 16)
-        collectionViewLayout.estimatedItemSize = CGSize(width: .zero ,height: 305)
-        
         return collectionViewLayout
     }()
     
@@ -111,19 +101,19 @@ extension MWMainTableViewCell: UICollectionViewDelegate, UICollectionViewDataSou
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-       guard let cell = collectionView.dequeueReusableCell(
-        withReuseIdentifier: Constants.mainScreenCollectionViewCellId,
-        for: indexPath) as? MWMainCollectionViewCell else { fatalError("The registered type for the cell does not match the casting") }
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: Constants.mainScreenCollectionViewCellId,
+            for: indexPath) as? MWMainCollectionViewCell else { fatalError("The registered type for the cell does not match the casting") }
         
         if self.movies.count > 0 {
             let singleFilm = self.movies[indexPath.item]
             cell.set(movie: singleFilm)
         }
-
+        
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: collectionView.bounds.width, height: collectionView.bounds.height)
+        return CGSize(width: 130, height: 237)
     }
 }

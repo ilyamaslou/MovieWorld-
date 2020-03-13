@@ -7,8 +7,11 @@
 //
 
 import UIKit
+import CoreData
 
 class MWInitController: MWViewController {
+    
+    private var genres: [MWGenre] = []
     
     private lazy var loadingIndicator: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView()
@@ -24,7 +27,7 @@ class MWInitController: MWViewController {
     }()
     
     private lazy var group = DispatchGroup()
-
+    
     override func initController() {
         super.initController()
         
@@ -36,6 +39,7 @@ class MWInitController: MWViewController {
         
         self.loadingIndicator.startAnimating()
         
+        self.fetchGenres()
         self.loadGenres()
         self.loadConfiguration()
         
@@ -48,14 +52,19 @@ class MWInitController: MWViewController {
                          querryParameters: MWNet.sh.parameters,
                          succesHandler: { [weak self] (genres: MWGenreResponse)  in
                             guard let self = self else { return }
-                            MWSys.sh.genres = genres.genres
-                            self.group.leave()
+                            self.save(genres: genres.genres)
+                            MWSys.sh.genres = self.genres
                             
+                            self.group.leave()
             },
                          errorHandler: { [weak self] (error) in
                             guard let self = self else { return }
                             let message = error.getErrorDesription()
                             print(message)
+                            
+                            self.fetchGenres()
+                            MWSys.sh.genres = self.genres
+                            
                             self.group.leave()
         })
     }
@@ -76,5 +85,38 @@ class MWInitController: MWViewController {
                             print(message)
                             self.group.leave()
         })
+    }
+    
+    private func fetchGenres() {
+        let managedContext = CoreDataManager.s.persistentContainer.viewContext
+        let fetch: NSFetchRequest<Genre> = Genre.fetchRequest()
+        do {
+            let genres = try managedContext.fetch(fetch)
+            
+            for genre in genres {
+                let mwGenre = MWGenre(id: Int(genre.id), name: genre.name)
+                self.genres.append(mwGenre)
+            }
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
+    private func save (genres: [MWGenre]) {
+        let managedContext = CoreDataManager.s.persistentContainer.viewContext
+        
+        for genre in genres {
+            let newGenre = Genre(context: managedContext)
+            newGenre.id = Int32(genre.id)
+            newGenre.name = genre.name
+        }
+        
+        do {
+            try managedContext.save()
+        } catch {
+            print(error.localizedDescription)
+        }
+        
+        self.fetchGenres()
     }
 }

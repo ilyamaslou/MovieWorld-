@@ -33,6 +33,10 @@
 		9999E0D323F9F378007EB718 /* MWMainTabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9999E0D223F9F378007EB718 /* MWMainTabViewController.swift */; };
 		9999E0D823F9F37A007EB718 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9999E0D723F9F37A007EB718 /* Assets.xcassets */; };
 		9999E0DB23F9F37A007EB718 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9999E0D923F9F37A007EB718 /* LaunchScreen.storyboard */; };
+		999E6002241B7B6800F3103F /* MWModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 999E6000241B7B6800F3103F /* MWModel.xcdatamodeld */; };
+		999E6004241B7B7500F3103F /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999E6003241B7B7500F3103F /* CoreDataManager.swift */; };
+		999E6007241B7C1200F3103F /* Genre+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999E6006241B7C1200F3103F /* Genre+CoreDataClass.swift */; };
+		999E6009241B7C1E00F3103F /* Genre+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999E6008241B7C1E00F3103F /* Genre+CoreDataProperties.swift */; };
 		99BAE46A241194AD00F45B11 /* MWInitController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BAE469241194AD00F45B11 /* MWInitController.swift */; };
 		99BAE46C2411A22600F45B11 /* MWSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BAE46B2411A22600F45B11 /* MWSystem.swift */; };
 		99BAE46E2411A6DC00F45B11 /* MWConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BAE46D2411A6DC00F45B11 /* MWConfiguration.swift */; };
@@ -73,6 +77,10 @@
 		9999E0D723F9F37A007EB718 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9999E0DA23F9F37A007EB718 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9999E0DC23F9F37A007EB718 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		999E6001241B7B6800F3103F /* MWModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MWModel.xcdatamodel; sourceTree = "<group>"; };
+		999E6003241B7B7500F3103F /* CoreDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CoreDataManager.swift; path = ../../../../Downloads/CourceCoreData/CourceCoreData/CoreData/CoreDataManager.swift; sourceTree = "<group>"; };
+		999E6006241B7C1200F3103F /* Genre+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Genre+CoreDataClass.swift"; sourceTree = "<group>"; };
+		999E6008241B7C1E00F3103F /* Genre+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Genre+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		99BAE469241194AD00F45B11 /* MWInitController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWInitController.swift; sourceTree = "<group>"; };
 		99BAE46B2411A22600F45B11 /* MWSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWSystem.swift; sourceTree = "<group>"; };
 		99BAE46D2411A6DC00F45B11 /* MWConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWConfiguration.swift; sourceTree = "<group>"; };
@@ -292,6 +300,7 @@
 			children = (
 				9999E0CE23F9F378007EB718 /* AppDelegate.swift */,
 				9999E0DC23F9F37A007EB718 /* Info.plist */,
+				999E5FFF241B7B4E00F3103F /* CoreData */,
 				9979B44F23FFC1F2005421D9 /* Common */,
 				9979B45023FFC20C005421D9 /* Features */,
 				9979B45323FFC243005421D9 /* Resourses */,
@@ -300,6 +309,25 @@
 				9979B44D23FFC1DB005421D9 /* .gitignore */,
 			);
 			path = MovieWorld;
+			sourceTree = "<group>";
+		};
+		999E5FFF241B7B4E00F3103F /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				999E6005241B7BFE00F3103F /* DataClasses */,
+				999E6000241B7B6800F3103F /* MWModel.xcdatamodeld */,
+				999E6003241B7B7500F3103F /* CoreDataManager.swift */,
+			);
+			path = CoreData;
+			sourceTree = "<group>";
+		};
+		999E6005241B7BFE00F3103F /* DataClasses */ = {
+			isa = PBXGroup;
+			children = (
+				999E6006241B7C1200F3103F /* Genre+CoreDataClass.swift */,
+				999E6008241B7C1E00F3103F /* Genre+CoreDataProperties.swift */,
+			);
+			path = DataClasses;
 			sourceTree = "<group>";
 		};
 		99C5C13824091B6F003935F2 /* Network */ = {
@@ -449,13 +477,16 @@
 				996F79EA240C0374006FF3C0 /* MWGenre.swift in Sources */,
 				99F910F124053EE000E4F4DB /* Constants.swift in Sources */,
 				9979B46523FFD0D5005421D9 /* MWViewController.swift in Sources */,
+				999E6004241B7B7500F3103F /* CoreDataManager.swift in Sources */,
 				994E3D0023FAA0170034B4D2 /* MWFilmModelView.swift in Sources */,
 				9979B46123FFCEF4005421D9 /* MWCategoryViewController.swift in Sources */,
+				999E6009241B7C1E00F3103F /* Genre+CoreDataProperties.swift in Sources */,
 				9999E0D323F9F378007EB718 /* MWMainTabViewController.swift in Sources */,
 				9999E0CF23F9F378007EB718 /* AppDelegate.swift in Sources */,
 				99BAE46E2411A6DC00F45B11 /* MWConfiguration.swift in Sources */,
 				9979B46323FFCF19005421D9 /* MWSearchViewController.swift in Sources */,
 				995F405724153868005DC65F /* MWImageConfiguration.swift in Sources */,
+				999E6002241B7B6800F3103F /* MWModel.xcdatamodeld in Sources */,
 				996F79E4240BEACF006FF3C0 /* String+Ex.swift in Sources */,
 				99BAE46C2411A22600F45B11 /* MWSystem.swift in Sources */,
 				992CF937240549E200301BC5 /* MWMainTableViewCell.swift in Sources */,
@@ -467,6 +498,7 @@
 				994E3CFA23FA9C8B0034B4D2 /* MWInterface.swift in Sources */,
 				994E3CFC23FA9D990034B4D2 /* MWNavigationController.swift in Sources */,
 				994E3D0323FAA18E0034B4D2 /* MWMovie.swift in Sources */,
+				999E6007241B7C1200F3103F /* Genre+CoreDataClass.swift in Sources */,
 				992CF93B240687B700301BC5 /* MWMainCollectionViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -673,6 +705,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		999E6000241B7B6800F3103F /* MWModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				999E6001241B7B6800F3103F /* MWModel.xcdatamodel */,
+			);
+			currentVersion = 999E6001241B7B6800F3103F /* MWModel.xcdatamodel */;
+			path = MWModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 9999E0C323F9F378007EB718 /* Project object */;
 }

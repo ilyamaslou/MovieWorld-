@@ -36,7 +36,25 @@ struct MWImageConfiguration: Decodable {
     var posterSizes: [Sizes.RawValue]?
     var profileSizes: [Sizes.RawValue]?
     var stillSizes: [Sizes.RawValue]?
+    
+    init() { }
 
+    init(baseUrl: String?,
+         secureBaseUrl: String?,
+         backdropSizes: [String]?,
+         logoSizes: [String]?,
+         posterSizes: [String]?,
+         profileSizes: [String]?,
+         stillSizes: [String]?) {
+        self.baseUrl = baseUrl
+        self.secureBaseUrl = secureBaseUrl
+        self.backdropSizes = backdropSizes
+        self.logoSizes = logoSizes
+        self.posterSizes = posterSizes
+        self.profileSizes = profileSizes
+        self.stillSizes = stillSizes
+    }
+    
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.baseUrl = (try? container.decode(String.self, forKey: .baseUrl)) ?? ""

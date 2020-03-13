@@ -16,7 +16,7 @@ extension Genre {
         return NSFetchRequest<Genre>(entityName: "Genre")
     }
 
-    @NSManaged public var id: Int32
+    @NSManaged public var id: Int64
     @NSManaged public var name: String
 
 }

@@ -1,12 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="15702" systemVersion="19D76" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Genre" representedClassName="Genre" syncable="YES">
-        <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="name" optional="YES" attributeType="String"/>
     </entity>
-    <entity name="None" representedClassName="None" syncable="YES" codeGenerationType="class"/>
+    <entity name="ImageConfiguration" representedClassName=".ImageConfiguration" syncable="YES">
+        <attribute name="backdropSizes" optional="YES" attributeType="Transformable" customClassName="[String]"/>
+        <attribute name="baseUrl" optional="YES" attributeType="String"/>
+        <attribute name="logoSizes" optional="YES" attributeType="Transformable" customClassName="[String]"/>
+        <attribute name="posterSizes" optional="YES" attributeType="Transformable" customClassName="[String]"/>
+        <attribute name="profileSizes" optional="YES" attributeType="Transformable" customClassName="[String]"/>
+        <attribute name="secureBaseUrl" optional="YES" attributeType="String"/>
+        <attribute name="stillSizes" optional="YES" attributeType="Transformable" customClassName="[String]"/>
+    </entity>
     <elements>
         <element name="Genre" positionX="-54" positionY="-9" width="128" height="73"/>
-        <element name="None" positionX="-36" positionY="27" width="128" height="43"/>
+        <element name="ImageConfiguration" positionX="-36" positionY="27" width="128" height="148"/>
     </elements>
 </model>

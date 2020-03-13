@@ -9,12 +9,5 @@
 import UIKit
 
 struct MWConfiguration: Decodable {
-    
-    enum CodingKeys: String, CodingKey {
-        case images
-        case changeKeys = "change_keys"
-    }
-    
     let images: MWImageConfiguration?
-    let changeKeys: [String]?
 }

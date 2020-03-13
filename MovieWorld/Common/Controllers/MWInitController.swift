@@ -12,6 +12,7 @@ import CoreData
 class MWInitController: MWViewController {
     
     private var genres: [MWGenre] = []
+    private var imageConfiguration: MWImageConfiguration = MWImageConfiguration()
     
     private lazy var loadingIndicator: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView()
@@ -40,6 +41,7 @@ class MWInitController: MWViewController {
         self.loadingIndicator.startAnimating()
         
         self.fetchGenres()
+        self.fetchImageConfiguration()
         self.loadGenres()
         self.loadConfiguration()
         
@@ -52,7 +54,7 @@ class MWInitController: MWViewController {
                          querryParameters: MWNet.sh.parameters,
                          succesHandler: { [weak self] (genres: MWGenreResponse)  in
                             guard let self = self else { return }
-                            self.save(genres: genres.genres)
+                            self.saveGenres(genres: genres.genres)
                             MWSys.sh.genres = self.genres
                             
                             self.group.leave()
@@ -75,17 +77,26 @@ class MWInitController: MWViewController {
                          querryParameters: MWNet.sh.parameters,
                          succesHandler: { [weak self] (configuration: MWConfiguration)  in
                             guard let self = self else { return }
-                            MWSys.sh.configuration = configuration
-                            self.group.leave()
+                            self.saveImageConfiguration(imageConfiguration: configuration.images ?? MWImageConfiguration())
+                            MWSys.sh.configuration = MWConfiguration(images: self.imageConfiguration)
                             
+                            self.group.leave()
             },
                          errorHandler: { [weak self] (error) in
                             guard let self = self else { return }
                             let message = error.getErrorDesription()
                             print(message)
+                            
+                            self.fetchImageConfiguration()
+                            MWSys.sh.configuration = MWConfiguration(images: self.imageConfiguration)
+                            
                             self.group.leave()
         })
     }
+}
+
+//MARK: CoreData actions
+extension MWInitController {
     
     private func fetchGenres() {
         let managedContext = CoreDataManager.s.persistentContainer.viewContext
@@ -102,21 +113,60 @@ class MWInitController: MWViewController {
         }
     }
     
-    private func save (genres: [MWGenre]) {
+    private func fetchImageConfiguration() {
+        let managedContext = CoreDataManager.s.persistentContainer.viewContext
+        let fetch: NSFetchRequest<ImageConfiguration> = ImageConfiguration.fetchRequest()
+        do {
+            let imageConfiguration = try managedContext.fetch(fetch).last
+            
+            self.imageConfiguration = MWImageConfiguration(
+                baseUrl: imageConfiguration?.baseUrl,
+                secureBaseUrl: imageConfiguration?.secureBaseUrl,
+                backdropSizes: imageConfiguration?.backdropSizes,
+                logoSizes: imageConfiguration?.logoSizes,
+                posterSizes: imageConfiguration?.posterSizes,
+                profileSizes: imageConfiguration?.profileSizes,
+                stillSizes: imageConfiguration?.stillSizes)
+            
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
+    private func saveGenres (genres: [MWGenre]) {
         let managedContext = CoreDataManager.s.persistentContainer.viewContext
         
         for genre in genres {
             let newGenre = Genre(context: managedContext)
-            newGenre.id = Int32(genre.id)
+            newGenre.id = Int64(genre.id)
             newGenre.name = genre.name
         }
         
+        self.save(managedContext: managedContext)
+        self.fetchGenres()
+    }
+    
+    private func saveImageConfiguration (imageConfiguration: MWImageConfiguration) {
+        let managedContext = CoreDataManager.s.persistentContainer.viewContext
+        
+        let newConfiguration = ImageConfiguration(context: managedContext)
+        newConfiguration.baseUrl = imageConfiguration.baseUrl
+        newConfiguration.secureBaseUrl = imageConfiguration.secureBaseUrl
+        newConfiguration.backdropSizes = imageConfiguration.backdropSizes
+        newConfiguration.logoSizes = imageConfiguration.logoSizes
+        newConfiguration.posterSizes = imageConfiguration.posterSizes
+        newConfiguration.profileSizes = imageConfiguration.profileSizes
+        newConfiguration.stillSizes = imageConfiguration.stillSizes
+        
+        self.save(managedContext: managedContext)
+        self.fetchGenres()
+    }
+    
+    private func save (managedContext: NSManagedObjectContext) {
         do {
             try managedContext.save()
         } catch {
             print(error.localizedDescription)
         }
-        
-        self.fetchGenres()
     }
 }

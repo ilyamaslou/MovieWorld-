@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		99130756241C2E4F006C184E /* ImageConfiguration+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99130754241C2E4F006C184E /* ImageConfiguration+CoreDataClass.swift */; };
+		99130757241C2E4F006C184E /* ImageConfiguration+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99130755241C2E4F006C184E /* ImageConfiguration+CoreDataProperties.swift */; };
 		992CF937240549E200301BC5 /* MWMainTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 992CF936240549E200301BC5 /* MWMainTableViewCell.swift */; };
 		992CF93924054B3A00301BC5 /* MWCustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 992CF93824054B3A00301BC5 /* MWCustomButton.swift */; };
 		992CF93B240687B700301BC5 /* MWMainCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 992CF93A240687B700301BC5 /* MWMainCollectionViewCell.swift */; };
@@ -47,6 +49,8 @@
 /* Begin PBXFileReference section */
 		0BE71B7BC15D4D1921BA2AA9 /* Pods-MovieWorld.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MovieWorld.debug.xcconfig"; path = "Target Support Files/Pods-MovieWorld/Pods-MovieWorld.debug.xcconfig"; sourceTree = "<group>"; };
 		4EA3DE178F6AFCF3BA8474BC /* Pods-MovieWorld.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MovieWorld.release.xcconfig"; path = "Target Support Files/Pods-MovieWorld/Pods-MovieWorld.release.xcconfig"; sourceTree = "<group>"; };
+		99130754241C2E4F006C184E /* ImageConfiguration+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ImageConfiguration+CoreDataClass.swift"; path = "/Users/ilyamaslou/dev/MovieWorld/MovieWorld/CoreData/DataClasses/ImageConfiguration+CoreDataClass.swift"; sourceTree = "<absolute>"; };
+		99130755241C2E4F006C184E /* ImageConfiguration+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ImageConfiguration+CoreDataProperties.swift"; path = "/Users/ilyamaslou/dev/MovieWorld/MovieWorld/CoreData/DataClasses/ImageConfiguration+CoreDataProperties.swift"; sourceTree = "<absolute>"; };
 		992CF936240549E200301BC5 /* MWMainTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWMainTableViewCell.swift; sourceTree = "<group>"; };
 		992CF93824054B3A00301BC5 /* MWCustomButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWCustomButton.swift; sourceTree = "<group>"; };
 		992CF93A240687B700301BC5 /* MWMainCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWMainCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -326,6 +330,8 @@
 			children = (
 				999E6006241B7C1200F3103F /* Genre+CoreDataClass.swift */,
 				999E6008241B7C1E00F3103F /* Genre+CoreDataProperties.swift */,
+				99130754241C2E4F006C184E /* ImageConfiguration+CoreDataClass.swift */,
+				99130755241C2E4F006C184E /* ImageConfiguration+CoreDataProperties.swift */,
 			);
 			path = DataClasses;
 			sourceTree = "<group>";
@@ -471,6 +477,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				99130757241C2E4F006C184E /* ImageConfiguration+CoreDataProperties.swift in Sources */,
 				992CF93924054B3A00301BC5 /* MWCustomButton.swift in Sources */,
 				9979B45F23FFC666005421D9 /* MWTabBarViewController.swift in Sources */,
 				996F79E6240BEAE8006FF3C0 /* MWNetwork.swift in Sources */,
@@ -487,6 +494,7 @@
 				9979B46323FFCF19005421D9 /* MWSearchViewController.swift in Sources */,
 				995F405724153868005DC65F /* MWImageConfiguration.swift in Sources */,
 				999E6002241B7B6800F3103F /* MWModel.xcdatamodeld in Sources */,
+				99130756241C2E4F006C184E /* ImageConfiguration+CoreDataClass.swift in Sources */,
 				996F79E4240BEACF006FF3C0 /* String+Ex.swift in Sources */,
 				99BAE46C2411A22600F45B11 /* MWSystem.swift in Sources */,
 				992CF937240549E200301BC5 /* MWMainTableViewCell.swift in Sources */,

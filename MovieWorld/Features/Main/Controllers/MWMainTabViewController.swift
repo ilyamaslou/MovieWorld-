@@ -25,8 +25,6 @@ class MWMainTabViewController: MWViewController {
         }
     }
     
-//    private var categories: [MovieCategory] = []
-
     private lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(pullToRefresh), for: .valueChanged)
@@ -75,15 +73,9 @@ class MWMainTabViewController: MWViewController {
                              succesHandler: { [weak self] (movies: MWMoviesResponse)  in
                                 guard let self = self else { return }
                                 
-                                var movies = movies.results
-                                for (id, movie) in movies.enumerated() {
-                                    let tempMovie = movie
-                                    tempMovie.setFilmGenres(genres: MWSys.sh.genres)
-                                    movies[id] = tempMovie
-                                }
-                                
-                                self.moviesByCategories[category] = movies
-                                self.save(mwCategory: category, movies: movies)
+                                let moviesWithGenres = self.setGenres(to: movies.results)
+                                self.moviesByCategories[category] = moviesWithGenres
+                                self.save(mwCategory: category, movies: moviesWithGenres)
                                 self.group.leave()
                 },
                              errorHandler: { [weak self] (error) in
@@ -94,9 +86,18 @@ class MWMainTabViewController: MWViewController {
                                 
                                 self.fetchMoviesByCategory(by: category)
                                 self.group.leave()
-                                
             })
         }
+    }
+    
+    private func setGenres(to movies: [MWMovie]) -> [MWMovie] {
+        var moviesWithGenres = movies
+        for (id, movie) in movies.enumerated() {
+            let tempMovie = movie
+            tempMovie.setFilmGenres(genres: MWSys.sh.genres)
+            moviesWithGenres[id] = tempMovie
+        }
+        return moviesWithGenres
     }
     
     private func getUrlPath(by category: MWCategories) -> String {
@@ -192,7 +193,7 @@ extension MWMainTabViewController {
     private func fetchMoviesByCategory(by category: MWCategories) {
         let managedContext = CoreDataManager.s.persistentContainer.viewContext
         let fetch: NSFetchRequest<Movie> = Movie.fetchRequest()
-        fetch.predicate = NSPredicate(format: "ANY category.movieCategory == %@", category.rawValue)
+        fetch.predicate = NSPredicate(format: "ANY category.movieCategory = %@", category.rawValue)
         
         do {
             let result = try managedContext.fetch(fetch)
@@ -204,20 +205,33 @@ extension MWMainTabViewController {
     
     private func save(mwCategory: MWCategories, movies: [MWMovie]) {
         let managedContext = CoreDataManager.s.persistentContainer.viewContext
+        let fetch: NSFetchRequest<Movie> = Movie.fetchRequest()
+        fetch.predicate = NSPredicate(format: "ANY category.movieCategory = %@", mwCategory.rawValue)
         
-        let category = MovieCategory(context: managedContext)
-        category.movieCategory = mwCategory.rawValue
-        
-        for movie in movies {
-            let newMovie = Movie(context: managedContext)
-            newMovie.posterPath = movie.posterPath
-            newMovie.genreIds = movie.genreIds
-            newMovie.title = movie.title
-            newMovie.originalLanguage = movie.originalLanguage
-            newMovie.releaseDate = movie.releaseDate
-            newMovie.movieImage = movie.movieImage?.pngData()
-            category.addToMovies(newMovie)
+        do {
+            let result = try managedContext.fetch(fetch)
+            if result.isEmpty {
+                let category = MovieCategory(context: managedContext)
+                category.movieCategory = mwCategory.rawValue
+                
+                for movie in movies {
+                    let newMovie = Movie(context: managedContext)
+                    newMovie.posterPath = movie.posterPath
+                    newMovie.genreIds = movie.genreIds
+                    newMovie.title = movie.title
+                    newMovie.originalLanguage = movie.originalLanguage
+                    newMovie.releaseDate = movie.releaseDate
+                    newMovie.movieImage = movie.movieImage?.pngData()
+                    category.addToMovies(newMovie)
+                }
+            } else {
+                print("Update movies in CoreData  there")
+            }
+        } catch {
+            print(error.localizedDescription)
         }
+        
+        
         self.saveAndReload(context: managedContext)
     }
     
@@ -236,6 +250,8 @@ extension MWMainTabViewController {
             } else {
                 newMovie.movieImage = UIImage()
             }
+            
+            newMovie.setFilmGenres(genres: MWSys.sh.genres)
             
             mwMovies.append(newMovie)
         }

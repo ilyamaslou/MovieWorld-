@@ -127,7 +127,6 @@ extension MWInitController {
                 posterSizes: imageConfiguration?.posterSizes,
                 profileSizes: imageConfiguration?.profileSizes,
                 stillSizes: imageConfiguration?.stillSizes)
-            
         } catch {
             print(error.localizedDescription)
         }

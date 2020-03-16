@@ -18,6 +18,7 @@ class MWMainTableViewCell: UITableViewCell {
         }
     }
     
+    private var category: String = ""
     private lazy var showAllButton = MWCustomButton()
     private lazy var categoryLabel: UILabel = {
         let label = UILabel()
@@ -87,6 +88,7 @@ class MWMainTableViewCell: UITableViewCell {
     }
     
     func set(categoryName: String) {
+        self.category = categoryName
         self.categoryLabel.text = categoryName
         
         setNeedsUpdateConstraints()
@@ -107,7 +109,7 @@ extension MWMainTableViewCell: UICollectionViewDelegate, UICollectionViewDataSou
         
         if self.movies.count > 0 {
             let singleFilm = self.movies[indexPath.item]
-            cell.set(movie: singleFilm)
+            cell.set(movie: singleFilm, category: self.category )
         }
         
         return cell

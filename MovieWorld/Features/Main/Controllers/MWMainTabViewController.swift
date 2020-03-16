@@ -61,7 +61,6 @@ class MWMainTabViewController: MWViewController {
     
     
     private func loadMovies() {
-        
         var urlPath = ""
         
         for category in MWCategories.allCases {
@@ -84,7 +83,8 @@ class MWMainTabViewController: MWViewController {
                                 let message = error.getErrorDesription()
                                 self.errorAlert(message: message)
                                 
-                                self.fetchMoviesByCategory(by: category)
+                                let movies = self.fetchMoviesByCategory(by: category)
+                                self.setMoviesToCategory(category: category, movies: movies)
                                 self.group.leave()
             })
         }
@@ -190,53 +190,46 @@ extension MWMainTabViewController {
         self.tableView.reloadData()
     }
     
-    private func fetchMoviesByCategory(by category: MWCategories) {
+    private func fetchMoviesByCategory(by category: MWCategories) -> [Movie] {
         let managedContext = CoreDataManager.s.persistentContainer.viewContext
         let fetch: NSFetchRequest<Movie> = Movie.fetchRequest()
         fetch.predicate = NSPredicate(format: "ANY category.movieCategory = %@", category.rawValue)
         
+        var result: [Movie] = []
         do {
-            let result = try managedContext.fetch(fetch)
-            self.setMoviesToCategory(category: category, movies: result)
+            result = try managedContext.fetch(fetch)
         } catch {
             print(error.localizedDescription)
         }
+        return result
     }
     
     private func save(mwCategory: MWCategories, movies: [MWMovie]) {
+        let result = self.fetchMoviesByCategory(by: mwCategory)
         let managedContext = CoreDataManager.s.persistentContainer.viewContext
-        let fetch: NSFetchRequest<Movie> = Movie.fetchRequest()
-        fetch.predicate = NSPredicate(format: "ANY category.movieCategory = %@", mwCategory.rawValue)
         
-        do {
-            let result = try managedContext.fetch(fetch)
-            if result.isEmpty {
-                let category = MovieCategory(context: managedContext)
-                category.movieCategory = mwCategory.rawValue
-                
-                for movie in movies {
-                    let newMovie = Movie(context: managedContext)
-                    newMovie.posterPath = movie.posterPath
-                    newMovie.genreIds = movie.genreIds
-                    newMovie.title = movie.title
-                    newMovie.originalLanguage = movie.originalLanguage
-                    newMovie.releaseDate = movie.releaseDate
-                    newMovie.movieImage = movie.movieImage?.pngData()
-                    category.addToMovies(newMovie)
-                }
-            } else {
-                for (id, movie) in movies.enumerated() {
-                    let movieToUpdate = result[id]
-                    movieToUpdate.posterPath = movie.posterPath
-                    movieToUpdate.genreIds = movie.genreIds
-                    movieToUpdate.title = movie.title
-                    movieToUpdate.originalLanguage = movie.originalLanguage
-                    movieToUpdate.releaseDate = movie.releaseDate
-                    movieToUpdate.movieImage = movie.movieImage?.pngData()
-                }
+        if result.isEmpty {
+            let category = MovieCategory(context: managedContext)
+            category.movieCategory = mwCategory.rawValue
+            
+            for movie in movies {
+                let newMovie = Movie(context: managedContext)
+                newMovie.posterPath = movie.posterPath
+                newMovie.genreIds = movie.genreIds
+                newMovie.title = movie.title
+                newMovie.originalLanguage = movie.originalLanguage
+                newMovie.releaseDate = movie.releaseDate
+                category.addToMovies(newMovie)
             }
-        } catch {
-            print(error.localizedDescription)
+        } else {
+            for (id, movie) in movies.enumerated() {
+                let movieToUpdate = result[id]
+                movieToUpdate.posterPath = movie.posterPath
+                movieToUpdate.genreIds = movie.genreIds
+                movieToUpdate.title = movie.title
+                movieToUpdate.originalLanguage = movie.originalLanguage
+                movieToUpdate.releaseDate = movie.releaseDate
+            }
         }
         
         self.saveAndReload(context: managedContext)
@@ -255,7 +248,7 @@ extension MWMainTabViewController {
             if let imageData = movie.movieImage {
                 newMovie.movieImage = UIImage(data: imageData)
             } else {
-                newMovie.movieImage = UIImage()
+                newMovie.movieImage = UIImage(named: "imageNotFound")
             }
             
             newMovie.setFilmGenres(genres: MWSys.sh.genres)

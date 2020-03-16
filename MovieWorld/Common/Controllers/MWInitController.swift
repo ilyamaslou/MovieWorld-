@@ -40,8 +40,8 @@ class MWInitController: MWViewController {
         
         self.loadingIndicator.startAnimating()
         
-        self.fetchGenres()
-        self.fetchImageConfiguration()
+        let _ = self.fetchGenres()
+        let _ = self.fetchImageConfiguration()
         self.loadGenres()
         self.loadConfiguration()
         
@@ -64,7 +64,7 @@ class MWInitController: MWViewController {
                             let message = error.getErrorDesription()
                             print(message)
                             
-                            self.fetchGenres()
+                            let _ = self.fetchGenres()
                             MWSys.sh.genres = self.genres
                             
                             self.group.leave()
@@ -87,7 +87,7 @@ class MWInitController: MWViewController {
                             let message = error.getErrorDesription()
                             print(message)
                             
-                            self.fetchImageConfiguration()
+                            let _ = self.fetchImageConfiguration()
                             MWSys.sh.configuration = MWConfiguration(images: self.imageConfiguration)
                             
                             self.group.leave()
@@ -98,11 +98,13 @@ class MWInitController: MWViewController {
 //MARK: CoreData actions
 extension MWInitController {
     
-    private func fetchGenres() {
+    private func fetchGenres() -> [Genre] {
         let managedContext = CoreDataManager.s.persistentContainer.viewContext
         let fetch: NSFetchRequest<Genre> = Genre.fetchRequest()
+        
+        var genres: [Genre] = []
         do {
-            let genres = try managedContext.fetch(fetch)
+            genres = try managedContext.fetch(fetch)
             
             for genre in genres {
                 let mwGenre = MWGenre(id: Int(genre.id), name: genre.name)
@@ -111,13 +113,16 @@ extension MWInitController {
         } catch {
             print(error.localizedDescription)
         }
+        
+        return genres
     }
     
-    private func fetchImageConfiguration() {
+    private func fetchImageConfiguration() -> ImageConfiguration? {
         let managedContext = CoreDataManager.s.persistentContainer.viewContext
         let fetch: NSFetchRequest<ImageConfiguration> = ImageConfiguration.fetchRequest()
+        var imageConfiguration: ImageConfiguration? = ImageConfiguration()
         do {
-            let imageConfiguration = try managedContext.fetch(fetch).last
+            imageConfiguration = try managedContext.fetch(fetch).last
             
             self.imageConfiguration = MWImageConfiguration(
                 baseUrl: imageConfiguration?.baseUrl,
@@ -130,35 +135,55 @@ extension MWInitController {
         } catch {
             print(error.localizedDescription)
         }
+        
+        return imageConfiguration
     }
     
     private func saveGenres (genres: [MWGenre]) {
-        let managedContext = CoreDataManager.s.persistentContainer.viewContext
+        let fetchedGenres = self.fetchGenres()
         
-        for genre in genres {
-            let newGenre = Genre(context: managedContext)
-            newGenre.id = Int64(genre.id)
-            newGenre.name = genre.name
+        let managedContext = CoreDataManager.s.persistentContainer.viewContext
+        if fetchedGenres.isEmpty {
+            for genre in genres {
+                let newGenre = Genre(context: managedContext)
+                newGenre.id = Int64(genre.id)
+                newGenre.name = genre.name
+            }
+        } else {
+            for (id,genre) in genres.enumerated() {
+                fetchedGenres[id].id = Int64(genre.id)
+                fetchedGenres[id].name = genre.name
+            }
         }
         
         self.save(managedContext: managedContext)
-        self.fetchGenres()
     }
     
     private func saveImageConfiguration (imageConfiguration: MWImageConfiguration) {
+        let fetchedImageConfiguration = self.fetchImageConfiguration()
+
         let managedContext = CoreDataManager.s.persistentContainer.viewContext
         
-        let newConfiguration = ImageConfiguration(context: managedContext)
-        newConfiguration.baseUrl = imageConfiguration.baseUrl
-        newConfiguration.secureBaseUrl = imageConfiguration.secureBaseUrl
-        newConfiguration.backdropSizes = imageConfiguration.backdropSizes
-        newConfiguration.logoSizes = imageConfiguration.logoSizes
-        newConfiguration.posterSizes = imageConfiguration.posterSizes
-        newConfiguration.profileSizes = imageConfiguration.profileSizes
-        newConfiguration.stillSizes = imageConfiguration.stillSizes
+        if fetchedImageConfiguration != nil {
+            let newConfiguration = ImageConfiguration(context: managedContext)
+            self.didSaveOrUpdateImageConfiguration(configuration: newConfiguration)
+            
+        } else {
+            guard let configuration = fetchedImageConfiguration else { return }
+            self.didSaveOrUpdateImageConfiguration(configuration: configuration)
+        }
         
         self.save(managedContext: managedContext)
-        self.fetchImageConfiguration()
+    }
+    
+    private func didSaveOrUpdateImageConfiguration(configuration : ImageConfiguration) {
+        configuration.baseUrl = imageConfiguration.baseUrl
+        configuration.secureBaseUrl = imageConfiguration.secureBaseUrl
+        configuration.backdropSizes = imageConfiguration.backdropSizes
+        configuration.logoSizes = imageConfiguration.logoSizes
+        configuration.posterSizes = imageConfiguration.posterSizes
+        configuration.profileSizes = imageConfiguration.profileSizes
+        configuration.stillSizes = imageConfiguration.stillSizes
     }
     
     private func save (managedContext: NSManagedObjectContext) {

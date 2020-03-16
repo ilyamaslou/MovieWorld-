@@ -225,12 +225,19 @@ extension MWMainTabViewController {
                     category.addToMovies(newMovie)
                 }
             } else {
-                print("Update movies in CoreData  there")
+                for (id, movie) in movies.enumerated() {
+                    let movieToUpdate = result[id]
+                    movieToUpdate.posterPath = movie.posterPath
+                    movieToUpdate.genreIds = movie.genreIds
+                    movieToUpdate.title = movie.title
+                    movieToUpdate.originalLanguage = movie.originalLanguage
+                    movieToUpdate.releaseDate = movie.releaseDate
+                    movieToUpdate.movieImage = movie.movieImage?.pngData()
+                }
             }
         } catch {
             print(error.localizedDescription)
         }
-        
         
         self.saveAndReload(context: managedContext)
     }

@@ -8,6 +8,7 @@
 
 import UIKit
 import SnapKit
+import CoreData
 
 class MWMainTabViewController: MWViewController {
     
@@ -24,6 +25,8 @@ class MWMainTabViewController: MWViewController {
         }
     }
     
+//    private var categories: [MovieCategory] = []
+
     private lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(pullToRefresh), for: .valueChanged)
@@ -78,7 +81,9 @@ class MWMainTabViewController: MWViewController {
                                     tempMovie.setFilmGenres(genres: MWSys.sh.genres)
                                     movies[id] = tempMovie
                                 }
+                                
                                 self.moviesByCategories[category] = movies
+                                self.save(mwCategory: category, movies: movies)
                                 self.group.leave()
                 },
                              errorHandler: { [weak self] (error) in
@@ -86,7 +91,8 @@ class MWMainTabViewController: MWViewController {
                                 
                                 let message = error.getErrorDesription()
                                 self.errorAlert(message: message)
-                                self.moviesByCategories = [:]
+                                
+                                self.fetchMoviesByCategory(by: category)
                                 self.group.leave()
                                 
             })
@@ -169,5 +175,71 @@ extension MWMainTabViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 24
+    }
+}
+
+//MARK: CoreData
+extension MWMainTabViewController {
+    private func saveAndReload(context: NSManagedObjectContext) {
+        do {
+            try context.save()
+        } catch {
+            print(error.localizedDescription)
+        }
+        self.tableView.reloadData()
+    }
+    
+    private func fetchMoviesByCategory(by category: MWCategories) {
+        let managedContext = CoreDataManager.s.persistentContainer.viewContext
+        let fetch: NSFetchRequest<Movie> = Movie.fetchRequest()
+        fetch.predicate = NSPredicate(format: "ANY category.movieCategory == %@", category.rawValue)
+        
+        do {
+            let result = try managedContext.fetch(fetch)
+            self.setMoviesToCategory(category: category, movies: result)
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
+    private func save(mwCategory: MWCategories, movies: [MWMovie]) {
+        let managedContext = CoreDataManager.s.persistentContainer.viewContext
+        
+        let category = MovieCategory(context: managedContext)
+        category.movieCategory = mwCategory.rawValue
+        
+        for movie in movies {
+            let newMovie = Movie(context: managedContext)
+            newMovie.posterPath = movie.posterPath
+            newMovie.genreIds = movie.genreIds
+            newMovie.title = movie.title
+            newMovie.originalLanguage = movie.originalLanguage
+            newMovie.releaseDate = movie.releaseDate
+            newMovie.movieImage = movie.movieImage?.pngData()
+            category.addToMovies(newMovie)
+        }
+        self.saveAndReload(context: managedContext)
+    }
+    
+    private func setMoviesToCategory(category: MWCategories, movies: [Movie]) {
+        var mwMovies: [MWMovie] = []
+        for movie in movies {
+            let newMovie = MWMovie()
+            newMovie.posterPath = movie.posterPath
+            newMovie.genreIds = movie.genreIds
+            newMovie.title = movie.title
+            newMovie.originalLanguage = movie.originalLanguage
+            newMovie.releaseDate = movie.releaseDate
+            
+            if let imageData = movie.movieImage {
+                newMovie.movieImage = UIImage(data: imageData)
+            } else {
+                newMovie.movieImage = UIImage()
+            }
+            
+            mwMovies.append(newMovie)
+        }
+        self.moviesByCategories[category] = mwMovies
+        self.tableView.reloadData()
     }
 }

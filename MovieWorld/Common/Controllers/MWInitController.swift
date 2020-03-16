@@ -159,7 +159,7 @@ extension MWInitController {
         newConfiguration.stillSizes = imageConfiguration.stillSizes
         
         self.save(managedContext: managedContext)
-        self.fetchGenres()
+        self.fetchImageConfiguration()
     }
     
     private func save (managedContext: NSManagedObjectContext) {

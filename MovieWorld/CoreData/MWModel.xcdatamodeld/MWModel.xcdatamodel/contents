@@ -13,8 +13,24 @@
         <attribute name="secureBaseUrl" optional="YES" attributeType="String"/>
         <attribute name="stillSizes" optional="YES" attributeType="Transformable" customClassName="[String]"/>
     </entity>
+    <entity name="Movie" representedClassName=".Movie" syncable="YES">
+        <attribute name="genreIds" optional="YES" attributeType="Transformable" customClassName="[Int]"/>
+        <attribute name="movieGenres" optional="YES" attributeType="Transformable" customClassName="[String]"/>
+        <attribute name="movieImage" optional="YES" attributeType="Binary"/>
+        <attribute name="originalLanguage" optional="YES" attributeType="String"/>
+        <attribute name="posterPath" optional="YES" attributeType="String"/>
+        <attribute name="releaseDate" optional="YES" attributeType="String"/>
+        <attribute name="title" optional="YES" attributeType="String"/>
+        <relationship name="category" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MovieCategory" inverseName="movies" inverseEntity="MovieCategory"/>
+    </entity>
+    <entity name="MovieCategory" representedClassName=".MovieCategory" syncable="YES">
+        <attribute name="movieCategory" optional="YES" attributeType="String"/>
+        <relationship name="movies" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Movie" inverseName="category" inverseEntity="Movie"/>
+    </entity>
     <elements>
         <element name="Genre" positionX="-54" positionY="-9" width="128" height="73"/>
         <element name="ImageConfiguration" positionX="-36" positionY="27" width="128" height="148"/>
+        <element name="Movie" positionX="-45" positionY="63" width="128" height="163"/>
+        <element name="MovieCategory" positionX="-36" positionY="72" width="128" height="73"/>
     </elements>
 </model>

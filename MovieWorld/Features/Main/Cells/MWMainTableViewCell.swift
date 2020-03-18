@@ -19,7 +19,13 @@ class MWMainTableViewCell: UITableViewCell {
     }
     
     private var category: String = ""
-    private lazy var showAllButton = MWCustomButton()
+    
+    private lazy var showAllButton: MWCustomButton = {
+        let button = MWCustomButton()
+        button.addTarget(self, action: #selector(showAllButtonDidTapped), for: .touchUpInside)
+        return button
+    }()
+    
     private lazy var categoryLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -53,7 +59,6 @@ class MWMainTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
         backgroundColor = .white
         self.contentView.addSubview(self.categoryLabel)
         self.contentView.addSubview(self.showAllButton)
@@ -92,6 +97,11 @@ class MWMainTableViewCell: UITableViewCell {
         self.categoryLabel.text = categoryName
         
         setNeedsUpdateConstraints()
+    }
+    
+    @objc private func showAllButtonDidTapped() {
+        print(self.movies)
+        MWI.s.pushVC(MWSingleCategoryViewController(movies: movies))
     }
 }
 

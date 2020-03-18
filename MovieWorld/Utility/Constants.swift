@@ -13,5 +13,6 @@ class Constants {
     static var mainScreenTableViewCellId: String = "mainScreenTableViewCellId"
     static var mainScreenCollectionViewCellId: String = "mainScreenCollectionViewCellId"
     static var tableViewHeaderId: String = "tableViewHeaderViewId"
+    static var singleCategoryTableViewCellId: String = "singleCategoryTableViewCellId"
 
 }

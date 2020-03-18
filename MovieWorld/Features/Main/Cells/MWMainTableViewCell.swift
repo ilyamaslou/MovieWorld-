@@ -100,7 +100,6 @@ class MWMainTableViewCell: UITableViewCell {
     }
     
     @objc private func showAllButtonDidTapped() {
-        print(self.movies)
         MWI.s.pushVC(MWSingleCategoryViewController(movies: movies))
     }
 }

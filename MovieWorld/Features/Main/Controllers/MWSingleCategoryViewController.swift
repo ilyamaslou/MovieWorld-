@@ -17,13 +17,13 @@ class MWSingleCategoryViewController: MWViewController {
     }
     
     private lazy var tableView: UITableView = {
-           let tableView = UITableView()
-           tableView.delegate = self
-           tableView.dataSource = self
-           tableView.separatorStyle = .none
-           tableView.register(MWSingleMovieInCategoryCell.self, forCellReuseIdentifier: Constants.singleCategoryTableViewCellId)
-           return tableView
-       }()
+        let tableView = UITableView()
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.separatorStyle = .none
+        tableView.register(MWSingleMovieInCategoryCell.self, forCellReuseIdentifier: Constants.singleCategoryTableViewCellId)
+        return tableView
+    }()
     
     init(movies: [MWMovie]) {
         super.init()
@@ -35,15 +35,15 @@ class MWSingleCategoryViewController: MWViewController {
     }
     
     override func initController() {
-           super.initController()
-           
-           let view = self.tableView
-           contentView.addSubview(view)
-           
-           view.snp.makeConstraints { (make) in
-               make.edges.equalToSuperview()
-           }
-       }
+        super.initController()
+        
+        let view = self.tableView
+        contentView.addSubview(view)
+        
+        view.snp.makeConstraints { (make) in
+            make.edges.equalToSuperview()
+        }
+    }
 }
 
 extension MWSingleCategoryViewController: UITableViewDataSource, UITableViewDelegate {
@@ -60,16 +60,5 @@ extension MWSingleCategoryViewController: UITableViewDataSource, UITableViewDele
         cell.selectionStyle = .none
         
         return cell
-    }
-    
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let view  = UIView()
-        view.backgroundColor = .white
-        
-        return view
-    }
-    
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 24
     }
 }

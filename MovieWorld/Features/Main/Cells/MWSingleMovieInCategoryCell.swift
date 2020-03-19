@@ -11,45 +11,45 @@ import SnapKit
 
 class MWSingleMovieInCategoryCell: UITableViewCell {
     
-    private let insets = UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16)
+    private let offsets = UIEdgeInsets(top: 10, left: 16, bottom: 8, right: -16)
     private let contentInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
-    private let imageSize = CGSize(width: 80, height: 120)
     private var movie = MWMovie()
-    
-    private let containerView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .white
-        return view
-    }()
     
     private lazy var filmImageView: UIImageView = {
         let view = UIImageView()
+        view.translatesAutoresizingMaskIntoConstraints = false
         view.clipsToBounds = true
-        view.layer.cornerRadius = 10
+        view.layer.cornerRadius = 5
+        setNeedsUpdateConstraints()
         return view
     }()
     
     private lazy var filmNameLabel: UILabel = {
         let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 17,  weight: .semibold)
         return label
     }()
     
     private lazy var releaseYearAndCountryLable: UILabel = {
         let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 15)
         return label
     }()
     
     private lazy var genresLable: UILabel = {
         let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 15, weight: .light)
         label.textColor = .gray
+        label.numberOfLines = 2
         return label
     }()
     
     private lazy var ratingsLable: UILabel = {
         let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 15)
         var ratings = "IMBD , KP "
         label.text = ratings
@@ -60,11 +60,10 @@ class MWSingleMovieInCategoryCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         self.contentView.addSubview(self.filmImageView)
-        self.contentView.addSubview(self.containerView)
-        self.containerView.addSubview(self.filmNameLabel)
-        self.containerView.addSubview(self.releaseYearAndCountryLable)
-        self.containerView.addSubview(self.genresLable)
-        self.containerView.addSubview(self.ratingsLable)
+        self.contentView.addSubview(self.filmNameLabel)
+        self.contentView.addSubview(self.releaseYearAndCountryLable)
+        self.contentView.addSubview(self.genresLable)
+        self.contentView.addSubview(self.ratingsLable)
     }
     
     required init?(coder: NSCoder) {
@@ -74,34 +73,35 @@ class MWSingleMovieInCategoryCell: UITableViewCell {
     override func updateConstraints() {
         
         self.filmImageView.snp.updateConstraints { (make) in
-            make.top.left.equalToSuperview().inset(self.insets)
-            make.size.equalTo(self.imageSize)
-        }
-        
-        self.containerView.snp.updateConstraints { (make) in
-            make.left.equalTo(self.filmImageView.snp.right).inset(-16)
-            make.top.equalToSuperview().inset(self.insets)
-            make.bottom.equalTo(self.filmImageView.snp.bottom)
-            
+            make.left.equalToSuperview().offset(self.offsets.left)
+            make.top.equalToSuperview().offset(self.offsets.top)
+            make.bottom.equalToSuperview().inset(10)
+            make.width.equalTo(80)
         }
         
         self.filmNameLabel.snp.updateConstraints { (make) in
-            make.top.left.equalToSuperview().inset(self.contentInsets)
+            make.top.equalToSuperview().offset(self.offsets.top)
+            make.left.equalTo(filmImageView.snp.right).offset(self.offsets.left)
+            make.right.equalToSuperview()
         }
         
         self.releaseYearAndCountryLable.snp.updateConstraints { (make) in
-            make.top.equalTo(self.filmNameLabel.snp.bottom).offset(8)
-            make.left.equalTo(self.filmNameLabel.snp.left)
+            make.top.equalTo(self.filmNameLabel.snp.bottom).offset(3)
+            make.left.equalTo(filmImageView.snp.right).offset(self.offsets.left)
+            make.right.equalToSuperview()
         }
         
         self.genresLable.snp.updateConstraints { (make) in
-            make.top.equalTo(self.releaseYearAndCountryLable.snp.bottom).offset(6)
-            make.left.equalTo(self.releaseYearAndCountryLable.snp.left)
+            make.top.equalTo(self.releaseYearAndCountryLable.snp.bottom).offset(1)
+            make.left.equalTo(filmImageView.snp.right).offset(self.offsets.left)
+            make.right.equalToSuperview()
         }
         
         self.ratingsLable.snp.updateConstraints { (make) in
-            make.left.equalTo(self.genresLable.snp.left)
-            make.bottom.equalToSuperview()
+            make.top.equalTo(genresLable.snp.bottom).offset(8)
+            make.left.equalTo(filmImageView.snp.right).offset(self.offsets.left)
+            make.bottom.equalToSuperview().inset(self.offsets.bottom)
+            make.right.equalToSuperview()
         }
         
         super.updateConstraints()

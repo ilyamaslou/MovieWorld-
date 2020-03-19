@@ -238,7 +238,6 @@
 				9979B45E23FFC666005421D9 /* MWTabBarViewController.swift */,
 				9979B46423FFD0D5005421D9 /* MWViewController.swift */,
 				99BAE469241194AD00F45B11 /* MWInitController.swift */,
-				99FB9699242389CB00812329 /* MWImageLoadingHelper.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -365,6 +364,7 @@
 				99BAE46D2411A6DC00F45B11 /* MWConfiguration.swift */,
 				995F405624153868005DC65F /* MWImageConfiguration.swift */,
 				995F405824153DA8005DC65F /* URLPaths.swift */,
+				99FB9699242389CB00812329 /* MWImageLoadingHelper.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";

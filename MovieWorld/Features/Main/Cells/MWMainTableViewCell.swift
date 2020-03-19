@@ -17,9 +17,8 @@ class MWMainTableViewCell: UITableViewCell {
             setNeedsUpdateConstraints()
         }
     }
-    
+        
     private var category: String = ""
-    
     private lazy var showAllButton: MWCustomButton = {
         let button = MWCustomButton()
         button.addTarget(self, action: #selector(showAllButtonDidTapped), for: .touchUpInside)
@@ -95,11 +94,6 @@ class MWMainTableViewCell: UITableViewCell {
     func set(categoryName: String) {
         self.category = categoryName
         self.categoryLabel.text = categoryName
-        
-        for movie in self.movies {
-            MWImageLoadingHelper.sh.loadImage(for: movie, in: categoryName)
-        }
-        
         setNeedsUpdateConstraints()
     }
     

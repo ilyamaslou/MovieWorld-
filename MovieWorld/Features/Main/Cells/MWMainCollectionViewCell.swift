@@ -12,6 +12,8 @@ import CoreData
 
 class MWMainCollectionViewCell: UICollectionViewCell {
     
+    private var movie: MWMovie = MWMovie()
+    
     private lazy var nameLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -48,26 +50,10 @@ class MWMainCollectionViewCell: UICollectionViewCell {
     }
     
     func set(movie: MWMovie) {
+        self.movie = movie
         self.nameLabel.text = movie.title
-        
-        var releaseYear = ""
-        if let releaseDate = movie.releaseDate {
-            let dividedDate = releaseDate.split(separator: "-")
-            releaseYear = String(dividedDate.first ?? "")
-        }
-        
-        let genre = "\(movie.movieGenres?.first ?? "")"
-        if (genre.isEmpty  && movie.releaseDate?.isEmpty ?? false) == false {
-            releaseYear.append(",")
-        }
-        
-        self.infoLabel.text = "\(releaseYear) \(genre)"
-        
-        if let imageData = movie.movieImage {
-            self.movieImageView.image = UIImage(data: imageData)
-        } else {
-            self.movieImageView.image = UIImage(named: "imageNotFound")
-        }
+        self.movieImageView.image = self.setImageView()
+        self.infoLabel.text = self.setInfoLabelText()
     }
     
     private func setUpCell() {
@@ -93,6 +79,26 @@ class MWMainCollectionViewCell: UICollectionViewCell {
             make.left.bottom.equalToSuperview()
             make.right.equalTo(self.movieImageView.snp.right)
         }
+    }
+    
+    private func setInfoLabelText() -> String {
+        var releaseYear = ""
+        if let releaseDate = self.movie.releaseDate {
+            let dividedDate = releaseDate.split(separator: "-")
+            releaseYear = String(dividedDate.first ?? "")
+        }
+        
+        let genre = "\(self.movie.movieGenres?.first ?? "")"
+        if (genre.isEmpty  && self.movie.releaseDate?.isEmpty ?? false) == false {
+            releaseYear.append(",")
+        }
+        
+        return "\(releaseYear) \(genre)"
+    }
+    
+    private func setImageView() -> UIImage? {
+        guard  let imageData = movie.movieImage else { return UIImage(named: "imageNotFound") }
+        return  UIImage(data: imageData)
     }
 }
 

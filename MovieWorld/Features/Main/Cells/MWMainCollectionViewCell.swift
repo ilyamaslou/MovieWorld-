@@ -12,8 +12,6 @@ import CoreData
 
 class MWMainCollectionViewCell: UICollectionViewCell {
     
-    private var category: String = ""
-    
     private lazy var nameLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -49,8 +47,7 @@ class MWMainCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func set(movie: MWMovie, category: String){
-        self.category = category
+    func set(movie: MWMovie) {
         self.nameLabel.text = movie.title
         
         var releaseYear = ""
@@ -66,15 +63,10 @@ class MWMainCollectionViewCell: UICollectionViewCell {
         
         self.infoLabel.text = "\(releaseYear) \(genre)"
         
-        self.setUpImageView(movie: movie)
-    }
-    
-    private func setUpImageView(movie: MWMovie) {
-        if movie.movieImage == nil {
-            loadImage(for: movie)
-            self.movieImageView.image = movie.movieImage
+        if let imageData = movie.movieImage {
+            self.movieImageView.image = UIImage(data: imageData)
         } else {
-            self.movieImageView.image = movie.movieImage
+            self.movieImageView.image = UIImage(named: "imageNotFound")
         }
     }
     
@@ -102,52 +94,8 @@ class MWMainCollectionViewCell: UICollectionViewCell {
             make.right.equalTo(self.movieImageView.snp.right)
         }
     }
-    
-    private func loadImage(for forMovie: MWMovie) {
-        if let imagePath = forMovie.posterPath,
-            let baseUrl = MWSys.sh.configuration?.images?.secureBaseUrl,
-            let size = MWSys.sh.configuration?.images?.posterSizes?.first {
-            MWNet.sh.imageRequest(baseUrl: baseUrl,
-                                  size: size,
-                                  filePath: imagePath,
-                                  succesHandler: { [weak self] (image: UIImage)  in
-                                    guard let self = self else { return }
-                                    
-                                    forMovie.movieImage = image
-                                    self.movieImageView.image = image
-                                    self.saveImage(for: forMovie, image: image)
-                }
-            )
-        }
-    }
 }
 
-extension MWMainCollectionViewCell {
-    private func fetchMovie(for movie: MWMovie) -> Movie? {
-        let managedContext = CoreDataManager.s.persistentContainer.viewContext
-        let fetch: NSFetchRequest<Movie> = Movie.fetchRequest()
-        fetch.predicate = NSPredicate(format: "ANY title = %@ and category.movieCategory = %@", movie.title ?? "", category)
-        
-        var movie: Movie? = Movie()
-        do {
-            movie = try managedContext.fetch(fetch).first
-        } catch {
-            print(error.localizedDescription)
-        }
-        return movie
-    }
-    
-    private func saveImage(for movie: MWMovie, image: UIImage) {
-        let result = self.fetchMovie(for: movie)
-        result?.movieImage = image.pngData()
-        
-        let managedContext = CoreDataManager.s.persistentContainer.viewContext
-        do {
-            try managedContext.save()
-        } catch {
-            print(error.localizedDescription)
-        }
-    }
-}
+
 
 

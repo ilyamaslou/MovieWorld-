@@ -158,8 +158,8 @@ extension MWMainTabViewController: UITableViewDataSource, UITableViewDelegate {
             else { fatalError("The registered type for the cell does not match the casting") }
         
         let category = Array(self.moviesByCategories.keys)[indexPath.section]
-        if let films = self.moviesByCategories[category] {
-            cell.movies = films
+        if let movies = self.moviesByCategories[category] {
+            cell.movies = movies
             cell.set(categoryName: category.rawValue)
         }
         
@@ -247,10 +247,8 @@ extension MWMainTabViewController {
             newMovie.releaseDate = movie.releaseDate
             
             if let imageData = movie.movieImage {
-                newMovie.movieImage = UIImage(data: imageData)
-            } else {
-                newMovie.movieImage = UIImage(named: "imageNotFound")
-            }
+                newMovie.movieImage = imageData
+            } 
             
             newMovie.setFilmGenres(genres: MWSys.sh.genres)
             

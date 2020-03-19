@@ -24,7 +24,7 @@ class MWNetwork {
     func imageRequest(baseUrl: String,
                       size: String,
                       filePath: String,
-                      succesHandler: @escaping ((UIImage) -> Void)) {
+                      succesHandler: @escaping ((Data) -> Void)) {
         let url = baseUrl + size + filePath
         
         guard let requestUrl = URL(string: url) else { return }
@@ -34,10 +34,8 @@ class MWNetwork {
         let task = self.session.dataTask(with: request) { (data, _, error) in
             
             if let data = data, error == nil {
-                if let image = UIImage(data: data) {
                     DispatchQueue.main.async {
-                        succesHandler(image)
-                    }
+                        succesHandler(data)
                 }
             }
         }

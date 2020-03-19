@@ -108,8 +108,13 @@ class MWSingleMovieInCategoryCell: UITableViewCell {
     }
     
     func set(movie: MWMovie) {
-        self.filmImageView.image = movie.movieImage
         self.filmNameLabel.text = movie.title
+        
+        if let imageData = movie.movieImage {
+            self.filmImageView.image = UIImage(data: imageData)
+        } else {
+            self.filmImageView.image = UIImage(named: "imageNotFound")
+        }
         
         var releaseYear = ""
         if let releaseDate = movie.releaseDate {

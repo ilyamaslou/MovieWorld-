@@ -96,6 +96,10 @@ class MWMainTableViewCell: UITableViewCell {
         self.category = categoryName
         self.categoryLabel.text = categoryName
         
+        for movie in self.movies {
+            MWImageLoadingHelper.sh.loadImage(for: movie, in: categoryName)
+        }
+        
         setNeedsUpdateConstraints()
     }
     
@@ -118,9 +122,8 @@ extension MWMainTableViewCell: UICollectionViewDelegate, UICollectionViewDataSou
         
         if self.movies.count > 0 {
             let singleFilm = self.movies[indexPath.item]
-            cell.set(movie: singleFilm, category: self.category )
+            cell.set(movie: singleFilm)
         }
-        
         return cell
     }
     

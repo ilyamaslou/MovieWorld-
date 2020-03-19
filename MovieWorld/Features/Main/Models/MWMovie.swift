@@ -30,7 +30,7 @@ class MWMovie: Decodable {
     var releaseDate: String?
     var originalLanguage: String?
     var movieGenres: [String]?
-    var movieImage: UIImage?
+    var movieImage: Data?
     
     func setFilmGenres(genres: [MWGenre]) {
         var tempGenres: [String] = []

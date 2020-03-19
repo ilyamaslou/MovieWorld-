@@ -27,6 +27,7 @@ class MWImageLoadingHelper{
                                     
                                     movie.movieImage = imageData
                                     self.saveImage(for: movie, imageData: imageData, in: category)
+                                    NotificationCenter.default.post(name: .movieImagesUpdated, object: nil)
                 }
             )
         }

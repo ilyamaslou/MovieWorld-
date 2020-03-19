@@ -72,10 +72,10 @@ class MWMainTabViewController: MWViewController {
                              succesHandler: { [weak self] (movies: MWMoviesResponse)  in
                                 guard let self = self else { return }
                                 
-                                let moviesWithGenresAndImages = self.setGenresAndImages(to: movies.results,
-                                                                                        in: category.rawValue)
-                                self.moviesByCategories[category] = moviesWithGenresAndImages
-                                self.save(mwCategory: category, movies: moviesWithGenresAndImages)
+                                let moviesWithGenres = self.setGenres(to: movies.results)
+                                self.setImages(to: moviesWithGenres, in: category.rawValue)
+                                self.moviesByCategories[category] = moviesWithGenres
+                                self.save(mwCategory: category, movies: moviesWithGenres)
                                 self.group.leave()
                 },
                              errorHandler: { [weak self] (error) in
@@ -91,14 +91,19 @@ class MWMainTabViewController: MWViewController {
         }
     }
     
-    private func setGenresAndImages(to movies: [MWMovie], in category: String) -> [MWMovie] {
+    private func setGenres(to movies: [MWMovie]) -> [MWMovie] {
         var moviesWithGenres = movies
         for (id, movie) in movies.enumerated() {
             movie.setFilmGenres(genres: MWSys.sh.genres)
-            MWImageLoadingHelper.sh.loadImage(for: movie, in: category)
             moviesWithGenres[id] = movie
         }
         return moviesWithGenres
+    }
+    
+    private func setImages(to movies: [MWMovie], in category: String) {
+        for movie in movies {
+            MWImageLoadingHelper.sh.loadImage(for: movie, in: category)
+        }
     }
     
     private func getUrlPath(by category: MWCategories) -> String {

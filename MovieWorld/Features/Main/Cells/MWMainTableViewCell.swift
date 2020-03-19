@@ -14,10 +14,9 @@ class MWMainTableViewCell: UITableViewCell {
     var movies: [MWMovie] = [] {
         didSet {
             self.collectionView.reloadData()
-            setNeedsUpdateConstraints()
         }
     }
-        
+    
     private var category: String = ""
     private lazy var showAllButton: MWCustomButton = {
         let button = MWCustomButton()
@@ -58,6 +57,11 @@ class MWMainTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(movieImagesUpdated),
+                                               name: .movieImagesUpdated, object: nil)
+        
         backgroundColor = .white
         self.contentView.addSubview(self.categoryLabel)
         self.contentView.addSubview(self.showAllButton)
@@ -100,6 +104,10 @@ class MWMainTableViewCell: UITableViewCell {
     @objc private func showAllButtonDidTapped() {
         MWI.s.pushVC(MWSingleCategoryViewController(movies: movies))
     }
+    
+    @objc private func movieImagesUpdated() {
+        self.collectionView.reloadData()
+    }
 }
 
 extension MWMainTableViewCell: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
@@ -124,4 +132,8 @@ extension MWMainTableViewCell: UICollectionViewDelegate, UICollectionViewDataSou
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 130, height: 237)
     }
+}
+
+extension Notification.Name {
+    static let movieImagesUpdated = Notification.Name("movieImagesUpdated")
 }

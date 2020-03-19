@@ -40,8 +40,6 @@ class MWInitController: MWViewController {
         
         self.loadingIndicator.startAnimating()
         
-        let _ = self.fetchGenres()
-        let _ = self.fetchImageConfiguration()
         self.loadGenres()
         self.loadConfiguration()
         
@@ -55,7 +53,6 @@ class MWInitController: MWViewController {
                          succesHandler: { [weak self] (genres: MWGenreResponse)  in
                             guard let self = self else { return }
                             self.saveGenres(genres: genres.genres)
-                            let _ = self.fetchGenres()
                             MWSys.sh.genres = self.genres
                             
                             self.group.leave()
@@ -65,7 +62,7 @@ class MWInitController: MWViewController {
                             let message = error.getErrorDesription()
                             print(message)
                             
-                            let _ = self.fetchGenres()
+                            self.fetchGenres()
                             MWSys.sh.genres = self.genres
                             
                             self.group.leave()
@@ -79,8 +76,7 @@ class MWInitController: MWViewController {
                          succesHandler: { [weak self] (configuration: MWConfiguration)  in
                             guard let self = self else { return }
                             self.saveImageConfiguration(imageConfiguration: configuration.images ?? MWImageConfiguration())
-                            let _ = self.fetchImageConfiguration()
-                            MWSys.sh.configuration = MWConfiguration(images: self.imageConfiguration)
+                            MWSys.sh.configuration = configuration
                             
                             self.group.leave()
             },
@@ -89,7 +85,7 @@ class MWInitController: MWViewController {
                             let message = error.getErrorDesription()
                             print(message)
                             
-                            let _ = self.fetchImageConfiguration()
+                            self.fetchImageConfiguration()
                             MWSys.sh.configuration = MWConfiguration(images: self.imageConfiguration)
                             
                             self.group.leave()
@@ -100,7 +96,7 @@ class MWInitController: MWViewController {
 //MARK: CoreData actions
 extension MWInitController {
     
-    private func fetchGenres() -> [Genre] {
+    @discardableResult  private func fetchGenres() -> [Genre] {
         self.genres = []
         
         let managedContext = CoreDataManager.s.persistentContainer.viewContext
@@ -121,7 +117,7 @@ extension MWInitController {
         return genres
     }
     
-    private func fetchImageConfiguration() -> ImageConfiguration? {
+   @discardableResult private func fetchImageConfiguration() -> ImageConfiguration? {
         let managedContext = CoreDataManager.s.persistentContainer.viewContext
         let fetch: NSFetchRequest<ImageConfiguration> = ImageConfiguration.fetchRequest()
         var configuration: ImageConfiguration? = ImageConfiguration()
@@ -189,7 +185,7 @@ extension MWInitController {
         self.save(managedContext: context)
     }
     
-    private func save (managedContext: NSManagedObjectContext) {
+    private func save(managedContext: NSManagedObjectContext) {
         do {
             try managedContext.save()
         } catch {

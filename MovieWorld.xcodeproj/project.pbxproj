@@ -137,7 +137,6 @@
 			children = (
 				992CF936240549E200301BC5 /* MWMainTableViewCell.swift */,
 				992CF93A240687B700301BC5 /* MWMainCollectionViewCell.swift */,
-				994E3CFF23FAA0170034B4D2 /* MWSingleMovieInCategoryCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -146,7 +145,6 @@
 			isa = PBXGroup;
 			children = (
 				9999E0D223F9F378007EB718 /* MWMainTabViewController.swift */,
-				99AA6E00242254820087BB44 /* MWSingleCategoryViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -270,6 +268,7 @@
 		9979B45B23FFC322005421D9 /* Main */ = {
 			isa = PBXGroup;
 			children = (
+				99F1765A2424240500969F1D /* SingleCategory */,
 				992CF935240549C700301BC5 /* Cells */,
 				994E3D0123FAA1780034B4D2 /* Models */,
 				994E3CFD23FA9FE10034B4D2 /* Controllers */,
@@ -367,6 +366,31 @@
 				99FB9699242389CB00812329 /* MWImageLoadingHelper.swift */,
 			);
 			path = Network;
+			sourceTree = "<group>";
+		};
+		99F1765A2424240500969F1D /* SingleCategory */ = {
+			isa = PBXGroup;
+			children = (
+				99F1765C2424242100969F1D /* Controllers */,
+				99F1765B2424241800969F1D /* Cells */,
+			);
+			path = SingleCategory;
+			sourceTree = "<group>";
+		};
+		99F1765B2424241800969F1D /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				994E3CFF23FAA0170034B4D2 /* MWSingleMovieInCategoryCell.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		99F1765C2424242100969F1D /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				99AA6E00242254820087BB44 /* MWSingleCategoryViewController.swift */,
+			);
+			path = Controllers;
 			sourceTree = "<group>";
 		};
 		A935E3FE0F167EC493A175EB /* Frameworks */ = {

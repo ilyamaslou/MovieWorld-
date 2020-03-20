@@ -16,8 +16,14 @@ class MWSingleCategoryViewController: MWViewController {
         }
     }
     
+    private var filteredMovies: [MWMovie] = [] {
+        didSet {
+            self.tableView.reloadData()
+        }
+    }
+    
     private var movieGenres: [String] = []
-    private var genresFilter: Set<String> = []
+    private var filteredGenres: Set<String> = []
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -54,6 +60,7 @@ class MWSingleCategoryViewController: MWViewController {
     init(movies: [MWMovie]) {
         super.init()
         self.movies = movies
+        self.filteredMovies = movies
         self.setUpGenres()
     }
     
@@ -90,11 +97,32 @@ class MWSingleCategoryViewController: MWViewController {
         }
         self.movieGenres = Array(uniqueGenres)
     }
+    
+    private func updateTableByGenres() {
+        var tempFilteredMovies: Set<MWMovie> = []
+        
+        if self.filteredGenres.isEmpty {
+            self.filteredMovies = self.movies
+            return
+        }
+        
+        for movie in self.movies {
+            for genre in self.filteredGenres {
+                guard let movieGenres = movie.movieGenres else { return }
+                for movieGenre in movieGenres {
+                    if movieGenre == genre {
+                        tempFilteredMovies.insert(movie)
+                    }
+                }
+            }
+        }
+        self.filteredMovies = Array(tempFilteredMovies)
+    }
 }
 
 extension MWSingleCategoryViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return movies.count
+        return filteredMovies.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -102,7 +130,7 @@ extension MWSingleCategoryViewController: UITableViewDataSource, UITableViewDele
             withIdentifier: Constants.singleCategoryTableViewCellId) as? MWSingleMovieInCategoryCell
             else { fatalError("The registered type for the cell does not match the casting") }
         
-        cell.set(movie: movies[indexPath.row])
+        cell.set(movie: filteredMovies[indexPath.row])
         cell.selectionStyle = .none
         
         return cell
@@ -130,13 +158,14 @@ extension MWSingleCategoryViewController: UICollectionViewDelegate, UICollection
             for: indexPath) as? MWGenreCollectionViewCell else { fatalError("The registered type for the cell does not match the casting") }
         
         cell.set(genre: self.movieGenres[indexPath.item])
-        
         cell.selectedGenre = { [weak self] genre in
-            self?.genresFilter.insert(genre)
+            self?.filteredGenres.insert(genre)
+            self?.updateTableByGenres()
         }
         
         cell.unselectedGenre = { [weak self] genre in
-            self?.genresFilter.remove(genre)
+            self?.filteredGenres.remove(genre)
+            self?.updateTableByGenres()
         }
         return cell
     }

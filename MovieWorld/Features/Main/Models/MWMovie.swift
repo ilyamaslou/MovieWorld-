@@ -12,7 +12,7 @@ struct MWMoviesResponse: Decodable {
     let results: [MWMovie]
 }
 
-class MWMovie: Decodable {
+class MWMovie: Decodable, Hashable {
     
     enum CodingKeys: String, CodingKey {
         case id = "status_code"
@@ -67,5 +67,23 @@ class MWMovie: Decodable {
         self.releaseDate = releaseYear
         self.genreIds = filmGenresIds
         self.originalLanguage = original_language
+    }
+    
+    static func == (lhs: MWMovie, rhs: MWMovie) -> Bool {
+        return lhs.id == rhs.id &&
+            lhs.title == rhs.title &&
+            lhs.releaseDate == rhs.releaseDate &&
+            lhs.posterPath == rhs.posterPath &&
+            lhs.originalLanguage == rhs.originalLanguage &&
+            lhs.genreIds == rhs.genreIds
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+        hasher.combine(title)
+        hasher.combine(releaseDate)
+        hasher.combine(posterPath)
+        hasher.combine(originalLanguage)
+        hasher.combine(genreIds)
     }
 }

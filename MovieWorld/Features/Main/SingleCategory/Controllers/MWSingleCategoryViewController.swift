@@ -16,6 +16,9 @@ class MWSingleCategoryViewController: MWViewController {
         }
     }
     
+    private var movieGenres: [String] = []
+    private var genresFilter: Set<String> = []
+    
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.delegate = self
@@ -29,14 +32,13 @@ class MWSingleCategoryViewController: MWViewController {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: self.collectionViewLayout)
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: Constants.singleCategoryGenresCollectionViewCellId)
+        collectionView.register(MWGenreCollectionViewCell.self, forCellWithReuseIdentifier: Constants.singleCategoryGenresCollectionViewCellId)
         
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.backgroundColor = .white
         collectionView.contentInsetAdjustmentBehavior = .never
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
-        
         return collectionView
     }()
     
@@ -44,14 +46,15 @@ class MWSingleCategoryViewController: MWViewController {
         let collectionViewLayout = UICollectionViewFlowLayout()
         collectionViewLayout.scrollDirection = .horizontal
         collectionViewLayout.minimumLineSpacing = 8
-        collectionViewLayout.minimumInteritemSpacing = 10
         collectionViewLayout.sectionInset = UIEdgeInsets(top: .zero, left: 16, bottom: .zero, right: 16)
+        collectionViewLayout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
         return collectionViewLayout
     }()
     
     init(movies: [MWMovie]) {
         super.init()
         self.movies = movies
+        self.setUpGenres()
     }
     
     required init?(coder: NSCoder) {
@@ -75,6 +78,17 @@ class MWSingleCategoryViewController: MWViewController {
             make.bottom.equalToSuperview()
             make.top.equalTo(collectionView.snp.bottom)
         }
+    }
+    
+    private func setUpGenres() {
+        var uniqueGenres: Set<String> = []
+        for movie in movies {
+            guard let genres = movie.movieGenres else { return }
+            for genre in genres {
+                uniqueGenres.insert(genre)
+            }
+        }
+        self.movieGenres = Array(uniqueGenres)
     }
 }
 
@@ -106,22 +120,25 @@ extension MWSingleCategoryViewController: UITableViewDataSource, UITableViewDele
 extension MWSingleCategoryViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.movies.count
+        return self.movieGenres.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         guard let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: Constants.singleCategoryGenresCollectionViewCellId,
-            for: indexPath) as? UICollectionViewCell else { fatalError("The registered type for the cell does not match the casting") }
-        cell.backgroundColor = .green
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+            for: indexPath) as? MWGenreCollectionViewCell else { fatalError("The registered type for the cell does not match the casting") }
         
-        let collectionViewSize = collectionView.frame.size.height - 10
-        return CGSize(width: 100, height: collectionViewSize/2)
+        cell.set(genre: self.movieGenres[indexPath.item])
+        
+        cell.selectedGenre = { [weak self] genre in
+            self?.genresFilter.insert(genre)
+        }
+        
+        cell.unselectedGenre = { [weak self] genre in
+            self?.genresFilter.remove(genre)
+        }
+        return cell
     }
 }
 

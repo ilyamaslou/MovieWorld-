@@ -50,9 +50,12 @@ class MWCustomButton: UIButton {
         if haveArrow {
             setImage(UIImage(named: "nextIcon"), for: .normal)
             setImage(UIImage(named: "nextIcon"), for: .highlighted)
+        } else {
+            setImage(nil, for: .normal)
+            setImage(nil, for: .highlighted)
         }
         
-        self.layoutIfNeeded()
+        self.setNeedsUpdateConstraints()
     }
     
 }

@@ -10,14 +10,17 @@ import UIKit
 
 class MWGenreCollectionViewCell: UICollectionViewCell {
     
-    var selectedGenre: ((String) -> ())?
-    var unselectedGenre: ((String) -> ())?
-    private var buttonIsSelected: Bool = false
+    var selectedGenre: ((String, Bool) -> ())?
+    var buttonIsSelected: Bool = false {
+        didSet {
+            self.singleGenreButton.backgroundColor = buttonIsSelected ? UIColor(named: "accentColor") : UIColor(named: "lightAccentColor")
+        }
+    }
     
     private lazy var singleGenreButton: MWCustomButton = {
         let button = MWCustomButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.layer.opacity = 0.5
+        button.backgroundColor = UIColor(named: "lightAccentColor")
         button.setUpButton(title: "", haveArrow: false)
         button.addTarget(self, action: #selector(singleGenreDidTapped), for: .touchUpInside)
         return button
@@ -26,9 +29,10 @@ class MWGenreCollectionViewCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        contentView.translatesAutoresizingMaskIntoConstraints = false
         
+        contentView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(self.singleGenreButton)
+        
         self.singleGenreButton.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
@@ -39,24 +43,17 @@ class MWGenreCollectionViewCell: UICollectionViewCell {
     }
     
     
-    func set(genre: String) {
-        self.singleGenreButton.setUpButton(title: genre, haveArrow: false)
+    func set(genreWithSelection: (String, Bool)) {
+        self.singleGenreButton.setUpButton(title: genreWithSelection.0, haveArrow: false)
+        self.buttonIsSelected = genreWithSelection.1
         layoutIfNeeded()
     }
     
     @objc private func singleGenreDidTapped() {
-        buttonIsSelected = !buttonIsSelected
-        self.singleGenreButton.backgroundColor = buttonIsSelected ? UIColor(named: "accentColor") : UIColor(named: "lightAccentColor")
+        self.buttonIsSelected = !self.buttonIsSelected
         
-        guard let selectedGenre = self.selectedGenre,
-            let titleGenre = self.singleGenreButton.titleLabel?.text,
-            let unselectedGenre = self.unselectedGenre
+        guard let selectedGenre = self.selectedGenre, let titleGenre = self.singleGenreButton.titleLabel?.text
             else { return }
-        
-        if buttonIsSelected {
-            selectedGenre(titleGenre)
-        } else {
-            unselectedGenre(titleGenre)
-        }
+        selectedGenre(titleGenre, self.buttonIsSelected)
     }
 }

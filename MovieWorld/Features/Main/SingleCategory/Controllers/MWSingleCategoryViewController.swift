@@ -22,7 +22,7 @@ class MWSingleCategoryViewController: MWViewController {
         }
     }
     
-    private var movieGenres: [String] = []
+    private var movieGenres: [(String, Bool)] = []
     private var filteredGenres: Set<String> = []
     
     private lazy var tableView: UITableView = {
@@ -95,7 +95,8 @@ class MWSingleCategoryViewController: MWViewController {
                 uniqueGenres.insert(genre)
             }
         }
-        self.movieGenres = Array(uniqueGenres)
+        
+        uniqueGenres.forEach { movieGenres.append(($0, false)) }
     }
     
     private func updateTableByGenres() {
@@ -116,7 +117,16 @@ class MWSingleCategoryViewController: MWViewController {
                 }
             }
         }
+        
         self.filteredMovies = Array(tempFilteredMovies)
+    }
+    
+    private func selectUnselectGenre(genreToChange: String) {
+        for (id,(genre, isSelected)) in movieGenres.enumerated() {
+            if genreToChange == genre {
+                movieGenres[id].1 = !isSelected
+            }
+        }
     }
 }
 
@@ -157,18 +167,24 @@ extension MWSingleCategoryViewController: UICollectionViewDelegate, UICollection
             withReuseIdentifier: Constants.singleCategoryGenresCollectionViewCellId,
             for: indexPath) as? MWGenreCollectionViewCell else { fatalError("The registered type for the cell does not match the casting") }
         
-        cell.set(genre: self.movieGenres[indexPath.item])
-        cell.selectedGenre = { [weak self] genre in
-            self?.filteredGenres.insert(genre)
-            self?.updateTableByGenres()
+        cell.set(genreWithSelection: self.movieGenres[indexPath.item])
+        
+        cell.selectedGenre = { [weak self] genre, isSelected in
+            guard let self = self else { return }
+            
+            if isSelected {
+                self.filteredGenres.insert(genre)
+            } else {
+                self.filteredGenres.remove(genre)
+            }
+            
+            self.selectUnselectGenre(genreToChange: genre)
+            self.updateTableByGenres()
         }
         
-        cell.unselectedGenre = { [weak self] genre in
-            self?.filteredGenres.remove(genre)
-            self?.updateTableByGenres()
-        }
         return cell
     }
 }
+
 
 

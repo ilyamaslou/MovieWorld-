@@ -15,7 +15,7 @@ struct MWMoviesResponse: Decodable {
 class MWMovie: Decodable, Hashable {
     
     enum CodingKeys: String, CodingKey {
-        case id = "status_code"
+        case id = "id"
         case posterPath = "poster_path"
         case title = "title"
         case genreIds = "genre_ids"

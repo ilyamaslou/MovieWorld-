@@ -146,6 +146,10 @@ extension MWSingleCategoryViewController: UITableViewDataSource, UITableViewDele
         return cell
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        MWI.s.pushVC(MWSingelMovieViewController(movie: self.movies[indexPath.row]))
+    }
+    
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         return UIView()
     }

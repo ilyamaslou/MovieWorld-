@@ -42,4 +42,23 @@ class MWViewController: UIViewController {
 
         }
     }
+    
+    func errorAlert( message: String) {
+        let alert = UIAlertController(title: nil,
+                                      message: message,
+                                      preferredStyle: .alert)
+        
+        alert.setValue(NSAttributedString(string: message,
+                                          attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 17),
+                                                       NSAttributedString.Key.foregroundColor : UIColor.red])
+            , forKey: "attributedMessage")
+        
+        let alertAction = UIAlertAction(title: "OK",
+                                        style: .cancel,
+                                        handler: nil)
+        
+        alert.addAction(alertAction)
+        
+        present(alert,animated: true)
+    }
 }

@@ -122,25 +122,6 @@ class MWMainTabViewController: MWViewController {
         return urlPath
     }
     
-    private func errorAlert( message: String) {
-        let alert = UIAlertController(title: nil,
-                                      message: message,
-                                      preferredStyle: .alert)
-        
-        alert.setValue(NSAttributedString(string: message,
-                                          attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 17),
-                                                       NSAttributedString.Key.foregroundColor : UIColor.red])
-            , forKey: "attributedMessage")
-        
-        let alertAction = UIAlertAction(title: "OK",
-                                        style: .cancel,
-                                        handler: nil)
-        
-        alert.addAction(alertAction)
-        
-        present(alert,animated: true)
-    }
-    
     @objc private func pullToRefresh() {
         self.loadMovies()
         self.group.notify(queue: .main,execute: self.tableView.reloadData)
@@ -221,6 +202,7 @@ extension MWMainTabViewController {
             
             for movie in movies {
                 let newMovie = Movie(context: managedContext)
+                newMovie.id = Int64(movie.id ?? 0)
                 newMovie.posterPath = movie.posterPath
                 newMovie.genreIds = movie.genreIds
                 newMovie.title = movie.title
@@ -231,6 +213,7 @@ extension MWMainTabViewController {
         } else {
             for (id, movie) in movies.enumerated() {
                 let movieToUpdate = result[id]
+                movieToUpdate.id = Int64(movie.id ?? 0)
                 movieToUpdate.posterPath = movie.posterPath
                 movieToUpdate.genreIds = movie.genreIds
                 movieToUpdate.title = movie.title
@@ -246,6 +229,7 @@ extension MWMainTabViewController {
         var mwMovies: [MWMovie] = []
         for movie in movies {
             let newMovie = MWMovie()
+            newMovie.id = Int(movie.id)
             newMovie.posterPath = movie.posterPath
             newMovie.genreIds = movie.genreIds
             newMovie.title = movie.title

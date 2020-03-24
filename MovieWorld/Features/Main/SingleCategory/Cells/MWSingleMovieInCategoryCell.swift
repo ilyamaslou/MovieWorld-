@@ -110,7 +110,7 @@ class MWSingleMovieInCategoryCell: UITableViewCell {
     func set(movie: MWMovie) {
         self.filmNameLabel.text = movie.title
         
-        if let imageData = movie.movieImage {
+        if let imageData = movie.image {
             self.filmImageView.image = UIImage(data: imageData)
         } else {
             self.filmImageView.image = UIImage(named: "imageNotFound")

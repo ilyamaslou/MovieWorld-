@@ -1,18 +1,15 @@
 //
-//  MWMainCollectionViewCell.swift
+//  MWCastMemberCollectionViewCell.swift
 //  MovieWorld
 //
-//  Created by Ilya Maslou on 2/26/20.
+//  Created by Ilya Maslou on 3/25/20.
 //  Copyright © 2020 Ilya Maslou. All rights reserved.
 //
 
 import UIKit
-import SnapKit
-import CoreData
 
-class MWMainCollectionViewCell: UICollectionViewCell {
-    
-    private var movie: MWMovie = MWMovie()
+class MWCastMemberCollectionViewCell: UICollectionViewCell {
+    private var memberOfCast: MWMovieCastMember?
     
     private lazy var nameLabel: UILabel = {
         let label = UILabel()
@@ -49,11 +46,11 @@ class MWMainCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func set(movie: MWMovie) {
-        self.movie = movie
-        self.nameLabel.text = movie.title
+    func set(actor: MWMovieCastMember) {
+        self.memberOfCast = actor
+        self.nameLabel.text = actor.name
         self.movieImageView.image = self.setImageView()
-        self.infoLabel.text = self.setInfoLabelText()
+        self.infoLabel.text = actor.character
     }
     
     private func setUpCell() {
@@ -81,27 +78,9 @@ class MWMainCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    private func setInfoLabelText() -> String {
-        var releaseYear = ""
-        if let releaseDate = self.movie.releaseDate {
-            let dividedDate = releaseDate.split(separator: "-")
-            releaseYear = String(dividedDate.first ?? "")
-        }
-        
-        let genre = "\(self.movie.movieGenres?.first ?? "")"
-        if (genre.isEmpty  && self.movie.releaseDate?.isEmpty ?? false) == false {
-            releaseYear.append(",")
-        }
-        
-        return "\(releaseYear) \(genre)"
-    }
     
     private func setImageView() -> UIImage? {
-        guard  let imageData = movie.image else { return UIImage(named: "imageNotFound") }
+        guard  let imageData = memberOfCast?.image else { return UIImage(named: "imageNotFound") }
         return  UIImage(data: imageData)
     }
 }
-
-
-
-

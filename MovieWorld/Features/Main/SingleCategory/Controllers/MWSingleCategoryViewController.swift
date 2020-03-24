@@ -77,6 +77,7 @@ class MWSingleCategoryViewController: MWViewController {
         self.collectionView.snp.makeConstraints {(make) in
             make.left.right.equalToSuperview()
             make.top.equalToSuperview().offset(16)
+            //TODO: change this later
             make.height.equalTo(70)
         }
         

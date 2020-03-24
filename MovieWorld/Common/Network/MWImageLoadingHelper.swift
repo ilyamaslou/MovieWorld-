@@ -15,7 +15,8 @@ class MWImageLoadingHelper{
     
     private init() {}
     
-    func loadImage(for movie: MWMovie, in category: String) {
+    func loadMovieImage(for movie: MWMovie, in category: String) {
+        //TODO: change poster size later by providing getNextSize() in Sizes
         if let imagePath = movie.posterPath,
             let baseUrl = MWSys.sh.configuration?.images?.secureBaseUrl,
             let size = MWSys.sh.configuration?.images?.posterSizes?.first {
@@ -25,11 +26,36 @@ class MWImageLoadingHelper{
                                   succesHandler: { [weak self] (imageData: Data)  in
                                     guard let self = self else { return }
                                     
-                                    movie.movieImage = imageData
+                                    movie.image = imageData
                                     self.saveImage(for: movie, imageData: imageData, in: category)
-                                    NotificationCenter.default.post(name: .movieImagesUpdated, object: nil)
+                                    NotificationCenter.default.post(name: .movieImageUpdated, object: nil)
                 }
             )
+        }
+    }
+    
+    func loadPersonImage<T>(for person: T, path: String?) {
+        if let imagePath = path,
+            let baseUrl = MWSys.sh.configuration?.images?.secureBaseUrl,
+            let size = MWSys.sh.configuration?.images?.posterSizes?.first {
+            MWNet.sh.imageRequest(baseUrl: baseUrl,
+                                  size: size,
+                                  filePath: imagePath,
+                                  succesHandler: { [weak self] (imageData: Data)  in
+                                    self?.setImageToPerson(person: person, imageData: imageData)
+                                    NotificationCenter.default.post(name: .memberImageUpdated, object: nil)
+                }
+            )
+        }
+    }
+    
+    func setImageToPerson<T>(person: T, imageData: Data) {
+        if let imageForCastMember = person as? MWMovieCastMember {
+            imageForCastMember.image = imageData
+        } else if let imageForCrewMember = person as? MWMovieCrewMember {
+            imageForCrewMember.image = imageData
+        } else {
+            return
         }
     }
     

@@ -102,7 +102,7 @@ class MWMainTabViewController: MWViewController {
     
     private func setImages(to movies: [MWMovie], in category: String) {
         for movie in movies {
-            MWImageLoadingHelper.sh.loadImage(for: movie, in: category)
+            MWImageLoadingHelper.sh.loadMovieImage(for: movie, in: category)
         }
     }
     
@@ -237,7 +237,7 @@ extension MWMainTabViewController {
             newMovie.releaseDate = movie.releaseDate
             
             if let imageData = movie.movieImage {
-                newMovie.movieImage = imageData
+                newMovie.image = imageData
             } 
             
             newMovie.setFilmGenres(genres: MWSys.sh.genres)

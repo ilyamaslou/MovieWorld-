@@ -59,8 +59,8 @@ class MWMainTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(movieImagesUpdated),
-                                               name: .movieImagesUpdated, object: nil)
+                                               selector: #selector(movieImageUpdated),
+                                               name: .movieImageUpdated, object: nil)
         
         backgroundColor = .white
         self.contentView.addSubview(self.categoryLabel)
@@ -105,7 +105,7 @@ class MWMainTableViewCell: UITableViewCell {
         MWI.s.pushVC(MWSingleCategoryViewController(movies: movies))
     }
     
-    @objc private func movieImagesUpdated() {
+    @objc private func movieImageUpdated() {
         self.collectionView.reloadData()
     }
 }
@@ -136,8 +136,4 @@ extension MWMainTableViewCell: UICollectionViewDelegate, UICollectionViewDataSou
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 130, height: 237)
     }
-}
-
-extension Notification.Name {
-    static let movieImagesUpdated = Notification.Name("movieImagesUpdated")
 }

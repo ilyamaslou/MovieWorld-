@@ -16,11 +16,14 @@ class MWSingelMovieViewController: MWViewController {
             self.collectionView.reloadData()
         }
     }
+    
     private var movieFullCast: MWMovieCastResponse? {
         didSet {
             self.collectionView.reloadData()
         }
     }
+    
+    private var movieDetails: MWMovieDetails?
     
     private lazy var scrollView: UIScrollView = {
         let view = UIScrollView()
@@ -28,9 +31,60 @@ class MWSingelMovieViewController: MWViewController {
         return view
     }()
     
+    private lazy var contentViewContainer: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     private lazy var moviePlayer: YouTubePlayerView = YouTubePlayerView()
     
-    private lazy var containerView: UIView = {
+    private lazy var descriptionContainerView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .clear
+        return view
+    }()
+    
+    private lazy var descriptioContentContainerView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .clear
+        return view
+    }()
+    
+    private lazy var isAdultLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .systemFont(ofSize: 15,  weight: .light)
+        return label
+    }()
+    
+    private lazy var movieRuntimeLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .systemFont(ofSize: 15,  weight: .light)
+        return label
+    }()
+    
+    private lazy var descriptionLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = " Description"
+        label.font = .systemFont(ofSize: 17,  weight: .bold)
+        return label
+    }()
+    
+    private lazy var descriptionTextView: UITextView = {
+        let textView = UITextView()
+        textView.isEditable = false
+        textView.isScrollEnabled = false
+        textView.translatesAutoresizingMaskIntoConstraints = false
+        textView.font = .systemFont(ofSize: 17)
+        return textView
+    }()
+    
+    private lazy var buttonAndLabelContainerView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = .clear
@@ -79,36 +133,76 @@ class MWSingelMovieViewController: MWViewController {
     override func initController() {
         super.initController()
         
-        let contentViewContainer = UIView()
-
         self.contentView.addSubview(self.scrollView)
         self.scrollView.addSubview(contentViewContainer)
         
+        self.contentViewContainer.addSubview(self.moviePlayer)
+        self.contentViewContainer.addSubview(self.descriptionContainerView)
+        self.contentViewContainer.addSubview(self.buttonAndLabelContainerView)
+        self.contentViewContainer.addSubview(self.collectionView)
         
-        contentViewContainer.addSubview(self.moviePlayer)
-        contentViewContainer.addSubview(self.containerView)
-        contentViewContainer.addSubview(self.collectionView)
+        self.descriptionContainerView.addSubview(self.descriptionLabel)
+        self.descriptionContainerView.addSubview(self.descriptioContentContainerView)
+        self.descriptionContainerView.addSubview(self.descriptionTextView)
         
-        self.containerView.addSubview(self.labelOfCast)
-        self.containerView.addSubview(self.showAllButton)
+        self.descriptioContentContainerView.addSubview(self.isAdultLabel)
+        self.descriptioContentContainerView.addSubview(self.movieRuntimeLabel)
         
+        self.buttonAndLabelContainerView.addSubview(self.labelOfCast)
+        self.buttonAndLabelContainerView.addSubview(self.showAllButton)
+        
+        
+    }
+    
+    override func updateViewConstraints() {
         self.scrollView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
         
-        contentViewContainer.snp.makeConstraints { (make) in
-            make.top.bottom.equalTo(scrollView)
+        self.contentViewContainer.snp.makeConstraints { (make) in
+            make.top.bottom.equalTo(self.scrollView)
             make.left.right.equalTo(self.contentView)
         }
         
         self.moviePlayer.snp.makeConstraints { (make) in
             make.top.left.right.equalToSuperview()
-            make.height.equalTo(300)
             //TODO: change this later
+            make.height.equalTo(300)
         }
         
-        self.containerView.snp.makeConstraints { (make) in
+        self.descriptionContainerView.snp.makeConstraints { (make) in
+            make.left.equalToSuperview().offset(16)
+            make.right.equalToSuperview().offset(-16)
             make.top.equalTo(self.moviePlayer.snp.bottom).offset(24)
+        }
+        
+        self.descriptionLabel.snp.makeConstraints { (make) in
+            make.top.left.right.equalToSuperview()
+        }
+        
+        self.descriptioContentContainerView.snp.makeConstraints { (make) in
+            make.top.equalTo(self.descriptionLabel.snp.bottom).offset(16)
+            make.bottom.equalTo(self.descriptionTextView.snp.top).offset(-8)
+            make.left.right.equalToSuperview()
+            
+        }
+        
+        self.isAdultLabel.snp.makeConstraints { (make) in
+            make.top.bottom.left.equalToSuperview()
+            make.right.equalTo(self.movieRuntimeLabel.snp.left)
+        }
+        
+        self.movieRuntimeLabel.snp.makeConstraints { (make) in
+            make.right.top.bottom.equalToSuperview()
+        }
+        
+        self.descriptionTextView.snp.makeConstraints { (make) in
+            make.top.equalTo(self.descriptioContentContainerView.snp.bottom)
+            make.left.right.bottom.equalToSuperview()
+        }
+        
+        self.buttonAndLabelContainerView.snp.makeConstraints { (make) in
+            make.top.greaterThanOrEqualTo(self.descriptionContainerView.snp.bottom).offset(24)
             make.left.right.equalToSuperview()
         }
         
@@ -124,10 +218,13 @@ class MWSingelMovieViewController: MWViewController {
         }
         
         self.collectionView.snp.makeConstraints { (make) in
-            make.top.equalTo(self.containerView.snp.bottom)
+            make.top.equalTo(self.buttonAndLabelContainerView.snp.bottom)
             make.left.right.bottom.equalToSuperview()
+            //TODO: change this later
             make.height.equalTo(300)
         }
+        
+        super.updateViewConstraints()
     }
     
     init(movie: MWMovie) {
@@ -138,14 +235,16 @@ class MWSingelMovieViewController: MWViewController {
                                                name: .memberImageUpdated, object: nil)
         
         self.movie = movie
-        self.loadMovieVideo(for: self.movie)
-        self.loadMovieCast(for: self.movie)
+        self.loadMovieVideo()
+        self.loadMovieCast()
+        self.loadMovieDescription()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    //TODO: Not every time recieved videoPath -> hide player or check for teaser
     private func showLoadedVideo(videoUrlKey: String?) {
         guard let key = videoUrlKey else { return }
         let videoUrl = "https://www.youtube.com/watch?v=\(key)"
@@ -155,8 +254,8 @@ class MWSingelMovieViewController: MWViewController {
         }
     }
     
-    private func loadMovieVideo(for movie: MWMovie) {
-        guard let movieId = movie.id else { return }
+    private func loadMovieVideo() {
+        guard let movieId = self.movie.id else { return }
         let urlPath = "movie/\(movieId)/videos"
         
         MWNet.sh.request(urlPath: urlPath ,
@@ -178,8 +277,8 @@ class MWSingelMovieViewController: MWViewController {
         })
     }
     
-    private func loadMovieCast(for movie: MWMovie) {
-        guard let movieId = movie.id else { return }
+    private func loadMovieCast() {
+        guard let movieId = self.movie.id else { return }
         let urlPath = "movie/\(movieId)/credits"
         
         MWNet.sh.request(urlPath: urlPath ,
@@ -192,6 +291,25 @@ class MWSingelMovieViewController: MWViewController {
                                 let crewMembers = self.movieFullCast?.crew else { return }
                             self.setImages(to: castMembers)
                             self.setImages(to: crewMembers)
+            },
+                         errorHandler: { [weak self] (error) in
+                            guard let self = self else { return }
+                            
+                            let message = error.getErrorDesription()
+                            self.errorAlert(message: message)
+        })
+    }
+    
+    private func loadMovieDescription() {
+        guard let movieId = self.movie.id else { return }
+        let urlPath = "movie/\(movieId)"
+        
+        MWNet.sh.request(urlPath: urlPath ,
+                         querryParameters: MWNet.sh.parameters,
+                         succesHandler: { [weak self] (details: MWMovieDetails)  in
+                            guard let self = self else { return }
+                            self.movieDetails = details
+                            self.setDetails()
             },
                          errorHandler: { [weak self] (error) in
                             guard let self = self else { return }
@@ -215,13 +333,20 @@ class MWSingelMovieViewController: MWViewController {
         }
     }
     
+    private func setDetails() {
+        self.descriptionTextView.text = self.movieDetails?.overview ?? ""
+        self.isAdultLabel.text = (self.movieDetails?.adult ?? false) ? " 18+" : ""
+        guard let movieRuntime = self.movieDetails?.runtime else { return }
+        self.movieRuntimeLabel.text = " \(movieRuntime) minutes"
+    }
+    
     @objc private func memberImageUpdated() {
         self.collectionView.reloadData()
     }
     
     @objc private func showAllButtonDidTapped() {
-//           MWI.s.pushVC()
-       }
+        //           MWI.s.pushVC()
+    }
 }
 
 extension MWSingelMovieViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {

@@ -22,7 +22,35 @@ class MWSingelMovieViewController: MWViewController {
         }
     }
     
+    private lazy var scrollView: UIScrollView = {
+        let view = UIScrollView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     private lazy var moviePlayer: YouTubePlayerView = YouTubePlayerView()
+    
+    private lazy var containerView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .clear
+        return view
+    }()
+    
+    private lazy var labelOfCast: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "Cast"
+        label.font = .systemFont(ofSize: 17,  weight: .bold)
+        return label
+    }()
+    
+    private lazy var showAllButton: MWCustomButton = {
+        let button = MWCustomButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(showAllButtonDidTapped), for: .touchUpInside)
+        return button
+    }()
     
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: self.collectionViewLayout)
@@ -51,18 +79,54 @@ class MWSingelMovieViewController: MWViewController {
     override func initController() {
         super.initController()
         
-        self.contentView.addSubview(self.moviePlayer)
-        self.contentView.addSubview(self.collectionView)
+        let contentViewContainer = UIView()
+
+        self.contentView.addSubview(self.scrollView)
+        self.scrollView.addSubview(contentViewContainer)
+        
+        
+        contentViewContainer.addSubview(self.moviePlayer)
+        contentViewContainer.addSubview(self.containerView)
+        contentViewContainer.addSubview(self.collectionView)
+        
+        self.containerView.addSubview(self.labelOfCast)
+        self.containerView.addSubview(self.showAllButton)
+        
+        self.scrollView.snp.makeConstraints { (make) in
+            make.edges.equalToSuperview()
+        }
+        
+        contentViewContainer.snp.makeConstraints { (make) in
+            make.top.bottom.equalTo(scrollView)
+            make.left.right.equalTo(self.contentView)
+        }
         
         self.moviePlayer.snp.makeConstraints { (make) in
             make.top.left.right.equalToSuperview()
+            make.height.equalTo(300)
             //TODO: change this later
-            make.height.equalTo(200)
+        }
+        
+        self.containerView.snp.makeConstraints { (make) in
+            make.top.equalTo(self.moviePlayer.snp.bottom).offset(24)
+            make.left.right.equalToSuperview()
+        }
+        
+        self.labelOfCast.snp.makeConstraints { (make) in
+            make.top.bottom.equalToSuperview()
+            make.left.equalToSuperview().offset(16)
+        }
+        
+        self.showAllButton.snp.makeConstraints { (make) in
+            make.top.bottom.equalToSuperview()
+            make.left.greaterThanOrEqualTo(self.labelOfCast.snp.right)
+            make.right.equalToSuperview().offset(-26)
         }
         
         self.collectionView.snp.makeConstraints { (make) in
-            make.top.equalTo(self.moviePlayer.snp.bottom)
+            make.top.equalTo(self.containerView.snp.bottom)
             make.left.right.bottom.equalToSuperview()
+            make.height.equalTo(300)
         }
     }
     
@@ -154,6 +218,10 @@ class MWSingelMovieViewController: MWViewController {
     @objc private func memberImageUpdated() {
         self.collectionView.reloadData()
     }
+    
+    @objc private func showAllButtonDidTapped() {
+//           MWI.s.pushVC()
+       }
 }
 
 extension MWSingelMovieViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {

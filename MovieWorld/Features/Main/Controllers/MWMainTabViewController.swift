@@ -208,6 +208,9 @@ extension MWMainTabViewController {
                 newMovie.title = movie.title
                 newMovie.originalLanguage = movie.originalLanguage
                 newMovie.releaseDate = movie.releaseDate
+                if let movieRating = movie.voteAvarage {
+                    newMovie.voteAvarage = movieRating
+                }
                 category.addToMovies(newMovie)
             }
         } else {
@@ -219,6 +222,8 @@ extension MWMainTabViewController {
                 movieToUpdate.title = movie.title
                 movieToUpdate.originalLanguage = movie.originalLanguage
                 movieToUpdate.releaseDate = movie.releaseDate
+                guard let movieRating = movie.voteAvarage else { return }
+                movieToUpdate.voteAvarage = movieRating
             }
         }
         
@@ -235,6 +240,7 @@ extension MWMainTabViewController {
             newMovie.title = movie.title
             newMovie.originalLanguage = movie.originalLanguage
             newMovie.releaseDate = movie.releaseDate
+            newMovie.voteAvarage = movie.voteAvarage
             
             if let imageData = movie.movieImage {
                 newMovie.image = imageData

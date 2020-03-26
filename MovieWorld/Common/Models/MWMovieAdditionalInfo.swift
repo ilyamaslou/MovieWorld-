@@ -8,23 +8,17 @@
 
 import UIKit
 
-struct MWMovieDetails: Decodable {
+struct MWMovieAdditionalInfo: Decodable {
     
     enum CodingKeys: String, CodingKey {
         case adult = "adult"
         case overview = "overview"
-        case releaseDate = "release_date"
         case runtime = "runtime"
-        case voteAvarage = "vote_average"
-        case voteCount = "vote_count"
         case tagline = "tagline"
     }
     
-    let adult: Bool?
-    let overview: String?
-    let releaseDate: String?
-    let runtime: Int?
-    let voteAvarage: Double?
-    let voteCount: Int?
-    let tagline: String?
+    var adult: Bool?
+    var overview: String?
+    var runtime: Int?
+    var tagline: String?
 }

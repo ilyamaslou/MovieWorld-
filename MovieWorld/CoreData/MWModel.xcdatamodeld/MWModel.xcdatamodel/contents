@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="15702" systemVersion="19D76" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="Genre" representedClassName="Genre" syncable="YES">
+    <entity name="Genre" representedClassName=".Genre" syncable="YES">
         <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="name" attributeType="String"/>
     </entity>
     <entity name="ImageConfiguration" representedClassName=".ImageConfiguration" syncable="YES">
         <attribute name="backdropSizes" optional="YES" attributeType="Transformable" customClassName="[String]"/>
@@ -22,7 +22,14 @@
         <attribute name="posterPath" optional="YES" attributeType="String"/>
         <attribute name="releaseDate" optional="YES" attributeType="String"/>
         <attribute name="title" optional="YES" attributeType="String"/>
+        <attribute name="voteAvarage" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <relationship name="category" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MovieCategory" inverseName="movies" inverseEntity="MovieCategory"/>
+    </entity>
+    <entity name="MovieAdditionalInfo" representedClassName=".MovieAdditionalInfo" syncable="YES">
+        <attribute name="adult" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="overview" optional="YES" attributeType="String"/>
+        <attribute name="runtime" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="tagline" optional="YES" attributeType="String"/>
     </entity>
     <entity name="MovieCategory" representedClassName=".MovieCategory" syncable="YES">
         <attribute name="movieCategory" optional="YES" attributeType="String"/>
@@ -31,7 +38,8 @@
     <elements>
         <element name="Genre" positionX="-54" positionY="-9" width="128" height="73"/>
         <element name="ImageConfiguration" positionX="-36" positionY="27" width="128" height="148"/>
-        <element name="Movie" positionX="-45" positionY="63" width="128" height="178"/>
+        <element name="Movie" positionX="-45" positionY="63" width="128" height="193"/>
         <element name="MovieCategory" positionX="-36" positionY="72" width="128" height="73"/>
+        <element name="MovieAdditionalInfo" positionX="-27" positionY="117" width="128" height="103"/>
     </elements>
 </model>

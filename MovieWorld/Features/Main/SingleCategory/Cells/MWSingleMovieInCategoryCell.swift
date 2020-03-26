@@ -51,8 +51,6 @@ class MWSingleMovieInCategoryCell: UITableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 15)
-        var ratings = "IMBD , KP "
-        label.text = ratings
         return label
     }()
     
@@ -124,6 +122,9 @@ class MWSingleMovieInCategoryCell: UITableViewCell {
         
         self.releaseYearAndCountryLable.text = "\(releaseYear), \(movie.originalLanguage ?? "")"
         self.genresLable.text = self.setUpGenres(movieGenres: movie.movieGenres)
+        
+        guard let movieRating = movie.voteAvarage else { return }
+        self.ratingsLable.text = "Rating: \(movieRating)"
         setNeedsUpdateConstraints()
     }
     
@@ -134,7 +135,8 @@ class MWSingleMovieInCategoryCell: UITableViewCell {
         for genre in movieGenres {
             genres += "\(genre), "
         }
-        
+    
+        //TODO: this for new values
         let range = genres.index(genres.endIndex, offsetBy: -2)..<genres.endIndex
         genres.removeSubrange(range)
         

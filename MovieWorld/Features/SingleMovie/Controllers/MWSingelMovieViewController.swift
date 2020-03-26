@@ -8,6 +8,7 @@
 
 import UIKit
 import YouTubePlayer
+import CoreData
 
 class MWSingelMovieViewController: MWViewController {
     
@@ -23,7 +24,9 @@ class MWSingelMovieViewController: MWViewController {
         }
     }
     
-    private var movieDetails: MWMovieDetails?
+    private var addittionalMovieInfo: MovieAdditionalInfo?
+    
+    private var movieDetails: MWMovieAdditionalInfo?
     
     private lazy var scrollView: UIScrollView = {
         let view = UIScrollView()
@@ -237,7 +240,7 @@ class MWSingelMovieViewController: MWViewController {
         self.movie = movie
         self.loadMovieVideo()
         self.loadMovieCast()
-        self.loadMovieDescription()
+        self.loadMovieAdditionalInfo()
     }
     
     required init?(coder: NSCoder) {
@@ -300,15 +303,16 @@ class MWSingelMovieViewController: MWViewController {
         })
     }
     
-    private func loadMovieDescription() {
+    private func loadMovieAdditionalInfo() {
         guard let movieId = self.movie.id else { return }
         let urlPath = "movie/\(movieId)"
         
         MWNet.sh.request(urlPath: urlPath ,
                          querryParameters: MWNet.sh.parameters,
-                         succesHandler: { [weak self] (details: MWMovieDetails)  in
+                         succesHandler: { [weak self] (details: MWMovieAdditionalInfo)  in
                             guard let self = self else { return }
                             self.movieDetails = details
+                            self.saveAdditionalInfo(info: details)
                             self.setDetails()
             },
                          errorHandler: { [weak self] (error) in
@@ -316,6 +320,7 @@ class MWSingelMovieViewController: MWViewController {
                             
                             let message = error.getErrorDesription()
                             self.errorAlert(message: message)
+                            self.setFetchedAddittionalInfo()
         })
     }
     
@@ -370,5 +375,62 @@ extension MWSingelMovieViewController: UICollectionViewDelegate, UICollectionVie
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 130, height: 237)
+    }
+}
+
+extension MWSingelMovieViewController {
+    @discardableResult  private func fetchAdditionalInfo() -> MovieAdditionalInfo? {
+        
+        let managedContext = CoreDataManager.s.persistentContainer.viewContext
+        let fetch: NSFetchRequest<MovieAdditionalInfo> = MovieAdditionalInfo.fetchRequest()
+        
+        var additionalInfo: MovieAdditionalInfo?
+        do {
+            additionalInfo = try managedContext.fetch(fetch).last
+        } catch {
+            print(error.localizedDescription)
+        }
+        
+        return additionalInfo
+    }
+    
+    private func saveAdditionalInfo (info: MWMovieAdditionalInfo) {
+        let fetchedInfo = self.fetchAdditionalInfo()
+        
+        let managedContext = CoreDataManager.s.persistentContainer.viewContext
+        if fetchedInfo == nil {
+            let newAdditionalInfo = MovieAdditionalInfo(context: managedContext)
+            newAdditionalInfo.adult = info.adult ?? false
+            newAdditionalInfo.overview = info.overview
+            newAdditionalInfo.runtime = Int64(info.runtime ?? 0)
+            newAdditionalInfo.tagline = info.tagline
+        } else {
+            guard let fetchedInfo = fetchedInfo else { return }
+            fetchedInfo.adult = info.adult ?? false
+            fetchedInfo.overview = info.overview
+            fetchedInfo.runtime = Int64(info.runtime ?? 0)
+            fetchedInfo.tagline = info.tagline
+        }
+        self.save(managedContext: managedContext)
+    }
+    
+    private func setFetchedAddittionalInfo() {
+        var newInfo = MWMovieAdditionalInfo()
+        guard let fetchedInfo = self.fetchAdditionalInfo() else { return }
+        newInfo.adult = fetchedInfo.adult
+        newInfo.overview = fetchedInfo.overview
+        newInfo.runtime = Int(fetchedInfo.runtime)
+        newInfo.tagline = fetchedInfo.tagline
+        
+        self.movieDetails = newInfo
+        self.setDetails()
+    }
+    
+    private func save(managedContext: NSManagedObjectContext) {
+        do {
+            try managedContext.save()
+        } catch {
+            print(error.localizedDescription)
+        }
     }
 }

@@ -21,6 +21,7 @@ class MWMovie: Decodable, Hashable {
         case genreIds = "genre_ids"
         case releaseDate = "release_date"
         case originalLanguage = "original_language"
+        case voteAvarage = "vote_average"
     }
     
     var id: Int?
@@ -29,6 +30,7 @@ class MWMovie: Decodable, Hashable {
     var genreIds: [Int]?
     var releaseDate: String?
     var originalLanguage: String?
+    var voteAvarage: Double?
     var movieGenres: [String]?
     var image: Data?
     
@@ -56,17 +58,19 @@ class MWMovie: Decodable, Hashable {
     }
     
     init(id: Int,
-         poster_path: String,
+         posterPath: String,
          title: String,
          filmGenresIds: [Int],
          releaseYear: String,
-         original_language: String) {
+         originalLanguage: String,
+         voteAverage: Double) {
         self.id = id
-        self.posterPath = poster_path
+        self.posterPath = posterPath
         self.title = title
         self.releaseDate = releaseYear
         self.genreIds = filmGenresIds
-        self.originalLanguage = original_language
+        self.originalLanguage = originalLanguage
+        self.voteAvarage = voteAverage
     }
     
     static func == (lhs: MWMovie, rhs: MWMovie) -> Bool {

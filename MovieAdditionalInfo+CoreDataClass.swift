@@ -1,5 +1,5 @@
 //
-//  MovieCategory+CoreDataClass.swift
+//  MovieAdditionalInfo+CoreDataClass.swift
 //  MovieWorld
 //
 //  Created by Ilya Maslou on 3/26/20.
@@ -11,6 +11,6 @@ import Foundation
 import CoreData
 
 
-public class MovieCategory: NSManagedObject {
+public class MovieAdditionalInfo: NSManagedObject {
 
 }

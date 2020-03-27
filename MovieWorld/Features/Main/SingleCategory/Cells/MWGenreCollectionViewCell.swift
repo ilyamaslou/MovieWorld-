@@ -30,8 +30,8 @@ class MWGenreCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        contentView.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(self.singleGenreButton)
+        self.contentView.translatesAutoresizingMaskIntoConstraints = false
+        self.contentView.addSubview(self.singleGenreButton)
         
         self.singleGenreButton.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()

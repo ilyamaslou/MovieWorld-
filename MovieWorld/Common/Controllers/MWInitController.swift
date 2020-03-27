@@ -53,7 +53,7 @@ class MWInitController: MWViewController {
                          succesHandler: { [weak self] (genres: MWGenreResponse)  in
                             guard let self = self else { return }
                             self.saveGenres(genres: genres.genres)
-                            MWSys.sh.genres = self.genres
+                            MWSys.sh.genres = genres.genres
                             
                             self.group.leave()
             },
@@ -117,7 +117,7 @@ extension MWInitController {
         return genres
     }
     
-   @discardableResult private func fetchImageConfiguration() -> ImageConfiguration? {
+    @discardableResult private func fetchImageConfiguration() -> ImageConfiguration? {
         let managedContext = CoreDataManager.s.persistentContainer.viewContext
         let fetch: NSFetchRequest<ImageConfiguration> = ImageConfiguration.fetchRequest()
         var configuration: ImageConfiguration? = ImageConfiguration()

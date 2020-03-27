@@ -40,6 +40,7 @@ class MWSingelMovieViewController: MWViewController {
         return view
     }()
     
+    private lazy var movieCellView: MWSingleMovieCellView = MWSingleMovieCellView()
     private lazy var moviePlayer: YouTubePlayerView = YouTubePlayerView()
     
     private lazy var descriptionContainerView: UIView = {
@@ -139,6 +140,7 @@ class MWSingelMovieViewController: MWViewController {
         self.contentView.addSubview(self.scrollView)
         self.scrollView.addSubview(contentViewContainer)
         
+        self.contentViewContainer.addSubview(self.movieCellView)
         self.contentViewContainer.addSubview(self.moviePlayer)
         self.contentViewContainer.addSubview(self.descriptionContainerView)
         self.contentViewContainer.addSubview(self.buttonAndLabelContainerView)
@@ -167,8 +169,14 @@ class MWSingelMovieViewController: MWViewController {
             make.left.right.equalTo(self.contentView)
         }
         
+        self.movieCellView.snp.makeConstraints { (make) in
+            make.left.right.equalToSuperview()
+            make.top.equalToSuperview().offset(16)
+        }
+        
         self.moviePlayer.snp.makeConstraints { (make) in
-            make.top.left.right.equalToSuperview()
+            make.left.right.equalToSuperview()
+            make.top.equalTo(self.movieCellView.snp.bottom).offset(18)
             //TODO: change this later
             make.height.equalTo(300)
         }
@@ -238,6 +246,8 @@ class MWSingelMovieViewController: MWViewController {
                                                name: .memberImageUpdated, object: nil)
         
         self.movie = movie
+        self.movieCellView.setView(movie: movie)
+        
         self.loadMovieVideo()
         self.loadMovieCast()
         self.loadMovieAdditionalInfo()
@@ -266,7 +276,7 @@ class MWSingelMovieViewController: MWViewController {
                          succesHandler: { [weak self] (videos: MWMovieVideoResponse)  in
                             guard let self = self else { return }
                             for video in videos.results {
-                                if video.type == "Trailer" && video.site == "YouTube"{
+                                if video.site == "YouTube"{
                                     self.showLoadedVideo(videoUrlKey: video.key)
                                 }
                                 break

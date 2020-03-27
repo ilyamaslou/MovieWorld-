@@ -18,6 +18,7 @@ class MWMainTableViewCell: UITableViewCell {
     }
     
     private var category: String = ""
+    
     private lazy var showAllButton: MWCustomButton = {
         let button = MWCustomButton()
         button.addTarget(self, action: #selector(showAllButtonDidTapped), for: .touchUpInside)

@@ -66,7 +66,7 @@ class MWCastMemberCollectionViewCell: UICollectionViewCell {
         }
         
         self.nameLabel.snp.updateConstraints { (make) in
-            make.top.equalTo(self.movieImageView.snp.bottom).inset(-12)
+            make.top.equalTo(self.movieImageView.snp.bottom).offset(12)
             make.left.equalToSuperview()
             make.right.equalTo(self.movieImageView.snp.right)
         }

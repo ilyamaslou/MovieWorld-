@@ -84,7 +84,7 @@ class MWSingleCategoryViewController: MWViewController {
         self.tableView.snp.makeConstraints { (make) in
             make.left.right.equalToSuperview()
             make.bottom.equalToSuperview()
-            make.top.equalTo(collectionView.snp.bottom)
+            make.top.equalTo(collectionView.snp.bottom).offset(16)
         }
     }
     

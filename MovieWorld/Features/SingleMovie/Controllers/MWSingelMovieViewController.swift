@@ -12,6 +12,8 @@ import CoreData
 
 class MWSingelMovieViewController: MWViewController {
     
+    private let offsets = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
+    
     private var movie: MWMovie = MWMovie() {
         didSet {
             self.collectionView.reloadData()
@@ -31,6 +33,8 @@ class MWSingelMovieViewController: MWViewController {
     private lazy var scrollView: UIScrollView = {
         let view = UIScrollView()
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.showsVerticalScrollIndicator = false
+        view.showsHorizontalScrollIndicator = false
         return view
     }()
     
@@ -48,20 +52,6 @@ class MWSingelMovieViewController: MWViewController {
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = .clear
         return view
-    }()
-    
-    private lazy var descriptioContentContainerView: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .clear
-        return view
-    }()
-    
-    private lazy var isAdultLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = .systemFont(ofSize: 15,  weight: .light)
-        return label
     }()
     
     private lazy var movieRuntimeLabel: UILabel = {
@@ -128,10 +118,19 @@ class MWSingelMovieViewController: MWViewController {
     private lazy var collectionViewLayout: UICollectionViewFlowLayout = {
         let collectionViewLayout = UICollectionViewFlowLayout()
         collectionViewLayout.scrollDirection = .horizontal
-        collectionViewLayout.minimumLineSpacing = 8
+        collectionViewLayout.minimumLineSpacing = 16
         collectionViewLayout.minimumInteritemSpacing = 16
-        collectionViewLayout.sectionInset = UIEdgeInsets(top: .zero, left: 16, bottom: .zero, right: 16)
+        collectionViewLayout.sectionInset = UIEdgeInsets(top: .zero, left: self.offsets.left, bottom: .zero, right: self.offsets.right)
+        collectionViewLayout.itemSize = CGSize(width: 130, height: 237)
         return collectionViewLayout
+    }()
+    
+    private lazy var bottomLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "Trailers and gallery"
+        label.font = .systemFont(ofSize: 17,  weight: .bold)
+        return label
     }()
     
     override func initController() {
@@ -145,13 +144,11 @@ class MWSingelMovieViewController: MWViewController {
         self.contentViewContainer.addSubview(self.descriptionContainerView)
         self.contentViewContainer.addSubview(self.buttonAndLabelContainerView)
         self.contentViewContainer.addSubview(self.collectionView)
+        self.contentViewContainer.addSubview(self.bottomLabel)
         
         self.descriptionContainerView.addSubview(self.descriptionLabel)
-        self.descriptionContainerView.addSubview(self.descriptioContentContainerView)
+        self.descriptionContainerView.addSubview(self.movieRuntimeLabel)
         self.descriptionContainerView.addSubview(self.descriptionTextView)
-        
-        self.descriptioContentContainerView.addSubview(self.isAdultLabel)
-        self.descriptioContentContainerView.addSubview(self.movieRuntimeLabel)
         
         self.buttonAndLabelContainerView.addSubview(self.labelOfCast)
         self.buttonAndLabelContainerView.addSubview(self.showAllButton)
@@ -171,19 +168,20 @@ class MWSingelMovieViewController: MWViewController {
         
         self.movieCellView.snp.makeConstraints { (make) in
             make.left.right.equalToSuperview()
-            make.top.equalToSuperview().offset(16)
+            make.top.equalToSuperview().offset(self.offsets.top)
         }
         
         self.moviePlayer.snp.makeConstraints { (make) in
-            make.left.right.equalToSuperview()
+            make.left.equalToSuperview().offset(self.offsets.left)
+            make.right.equalToSuperview().inset(self.offsets)
             make.top.equalTo(self.movieCellView.snp.bottom).offset(18)
+            make.height.equalTo(180)
             //TODO: change this later
-            make.height.equalTo(300)
         }
         
         self.descriptionContainerView.snp.makeConstraints { (make) in
-            make.left.equalToSuperview().offset(16)
-            make.right.equalToSuperview().offset(-16)
+            make.left.equalToSuperview().offset(self.offsets.left)
+            make.right.equalToSuperview().inset(self.offsets)
             make.top.equalTo(self.moviePlayer.snp.bottom).offset(24)
         }
         
@@ -191,24 +189,13 @@ class MWSingelMovieViewController: MWViewController {
             make.top.left.right.equalToSuperview()
         }
         
-        self.descriptioContentContainerView.snp.makeConstraints { (make) in
-            make.top.equalTo(self.descriptionLabel.snp.bottom).offset(16)
-            make.bottom.equalTo(self.descriptionTextView.snp.top).offset(-8)
-            make.left.right.equalToSuperview()
-            
-        }
-        
-        self.isAdultLabel.snp.makeConstraints { (make) in
-            make.top.bottom.left.equalToSuperview()
-            make.right.equalTo(self.movieRuntimeLabel.snp.left)
-        }
-        
         self.movieRuntimeLabel.snp.makeConstraints { (make) in
-            make.right.top.bottom.equalToSuperview()
+            make.left.right.equalToSuperview()
+            make.top.equalTo(self.descriptionLabel.snp.bottom).offset(16)
         }
         
         self.descriptionTextView.snp.makeConstraints { (make) in
-            make.top.equalTo(self.descriptioContentContainerView.snp.bottom)
+            make.top.equalTo(self.movieRuntimeLabel.snp.bottom).offset(8)
             make.left.right.bottom.equalToSuperview()
         }
         
@@ -219,20 +206,25 @@ class MWSingelMovieViewController: MWViewController {
         
         self.labelOfCast.snp.makeConstraints { (make) in
             make.top.bottom.equalToSuperview()
-            make.left.equalToSuperview().offset(16)
+            make.left.equalToSuperview().offset(self.offsets.left)
         }
         
         self.showAllButton.snp.makeConstraints { (make) in
             make.top.bottom.equalToSuperview()
             make.left.greaterThanOrEqualTo(self.labelOfCast.snp.right)
-            make.right.equalToSuperview().offset(-26)
+            make.right.equalToSuperview().inset(26)
         }
         
         self.collectionView.snp.makeConstraints { (make) in
-            make.top.equalTo(self.buttonAndLabelContainerView.snp.bottom)
-            make.left.right.bottom.equalToSuperview()
+            make.top.equalTo(self.buttonAndLabelContainerView.snp.bottom).offset(16)
+            make.left.right.equalToSuperview()
             //TODO: change this later
-            make.height.equalTo(300)
+            make.height.equalTo(237)
+        }
+        
+        self.bottomLabel.snp.makeConstraints { (make) in
+            make.top.equalTo(self.collectionView.snp.bottom).offset(16)
+            make.left.right.bottom.equalToSuperview()
         }
         
         super.updateViewConstraints()
@@ -350,7 +342,6 @@ class MWSingelMovieViewController: MWViewController {
     
     private func setDetails() {
         self.descriptionTextView.text = self.movieDetails?.overview ?? ""
-        self.isAdultLabel.text = (self.movieDetails?.adult ?? false) ? " 18+" : ""
         guard let movieRuntime = self.movieDetails?.runtime else { return }
         self.movieRuntimeLabel.text = " \(movieRuntime) minutes"
     }
@@ -367,7 +358,11 @@ class MWSingelMovieViewController: MWViewController {
 extension MWSingelMovieViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.movieFullCast?.cast.count ?? 0
+        guard let movieCastCount = self.movieFullCast?.cast.count, movieCastCount >= 10
+            else {
+                return self.movieFullCast?.cast.count ?? 0
+        }
+        return 10
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -382,15 +377,10 @@ extension MWSingelMovieViewController: UICollectionViewDelegate, UICollectionVie
         
         return cell
     }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 130, height: 237)
-    }
 }
 
 extension MWSingelMovieViewController {
     @discardableResult  private func fetchAdditionalInfo() -> MovieAdditionalInfo? {
-        
         let managedContext = CoreDataManager.s.persistentContainer.viewContext
         let fetch: NSFetchRequest<MovieAdditionalInfo> = MovieAdditionalInfo.fetchRequest()
         

@@ -126,12 +126,37 @@ class MWSingelMovieViewController: MWViewController {
         return collectionViewLayout
     }()
     
-    private lazy var bottomLabel: UILabel = {
+    private lazy var galleryLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Trailers and gallery"
         label.font = .systemFont(ofSize: 17,  weight: .bold)
         return label
+    }()
+    
+    private lazy var galleryCollectionView: UICollectionView = {
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: self.galleryViewLayout)
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.register(MWMovieGalleryCollectionViewCell.self, forCellWithReuseIdentifier: Constants.singleMovieGalleryCollectionViewCellId)
+        
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.backgroundColor = .white
+        collectionView.contentInsetAdjustmentBehavior = .never
+        collectionView.showsVerticalScrollIndicator = false
+        collectionView.showsHorizontalScrollIndicator = false
+        
+        return collectionView
+    }()
+    
+    private lazy var galleryViewLayout: UICollectionViewFlowLayout = {
+        let collectionViewLayout = UICollectionViewFlowLayout()
+        collectionViewLayout.scrollDirection = .horizontal
+        collectionViewLayout.minimumLineSpacing = 16
+        collectionViewLayout.minimumInteritemSpacing = 16
+        collectionViewLayout.sectionInset = UIEdgeInsets(top: .zero, left: self.offsets.left, bottom: .zero, right: self.offsets.right)
+        collectionViewLayout.itemSize = CGSize(width: 500, height: 200)
+        return collectionViewLayout
     }()
     
     override func initController() {
@@ -145,7 +170,8 @@ class MWSingelMovieViewController: MWViewController {
         self.contentViewContainer.addSubview(self.descriptionContainerView)
         self.contentViewContainer.addSubview(self.buttonAndLabelContainerView)
         self.contentViewContainer.addSubview(self.castCollectionView)
-        self.contentViewContainer.addSubview(self.bottomLabel)
+        self.contentViewContainer.addSubview(self.galleryLabel)
+        self.contentViewContainer.addSubview(self.galleryCollectionView)
         
         self.descriptionContainerView.addSubview(self.descriptionLabel)
         self.descriptionContainerView.addSubview(self.movieRuntimeLabel)
@@ -223,11 +249,17 @@ class MWSingelMovieViewController: MWViewController {
             make.height.equalTo(237)
         }
         
-        self.bottomLabel.snp.makeConstraints { (make) in
+        self.galleryLabel.snp.makeConstraints { (make) in
             make.top.equalTo(self.castCollectionView.snp.bottom).offset(16)
-            make.left.right.bottom.equalToSuperview()
+            make.left.right.equalToSuperview()
         }
         
+        self.galleryCollectionView.snp.makeConstraints { (make) in
+            make.top.equalTo(self.galleryLabel.snp.bottom).offset(16)
+            make.left.right.bottom.equalToSuperview()
+            make.height.equalTo(200)
+        }
+
         super.updateViewConstraints()
     }
     
@@ -377,6 +409,7 @@ class MWSingelMovieViewController: MWViewController {
     @objc private func movieImagesCollectionUpdated() {
         guard let response = self.imagesResponse?.movieImages else { return }
         self.movieImages = response
+        self.galleryCollectionView.reloadData()
     }
     
     @objc private func showAllButtonDidTapped() {
@@ -387,6 +420,11 @@ class MWSingelMovieViewController: MWViewController {
 extension MWSingelMovieViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        
+        if collectionView == galleryCollectionView {
+            return self.movieImages.count
+        }
+        
         guard let movieCastCount = self.movieFullCast?.cast.count, movieCastCount >= 10
             else {
                 return self.movieFullCast?.cast.count ?? 0
@@ -395,6 +433,16 @@ extension MWSingelMovieViewController: UICollectionViewDelegate, UICollectionVie
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        if collectionView == galleryCollectionView {
+            guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: Constants.singleMovieGalleryCollectionViewCellId,
+                for: indexPath) as? MWMovieGalleryCollectionViewCell else { fatalError("The registered type for the cell does not match the casting") }
+            
+            cell.set(image: self.movieImages[indexPath.item])
+            
+            return cell
+        }
         
         guard let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: Constants.singleCastMemberCollectionViewCellId,

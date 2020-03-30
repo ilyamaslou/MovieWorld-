@@ -51,7 +51,7 @@ class MWImageLoadingHelper{
     
     //TODO: fix problems with sizes and make this less hardcoded
     func loadMovieImages(for imagesToLoad: MWMovieImagesResponse?) {
-        guard let posters = imagesToLoad?.posters else { return }
+        guard let posters = imagesToLoad?.backdrops else { return }
         
         if imagesToLoad?.movieImages == nil {
             imagesToLoad?.movieImages = []

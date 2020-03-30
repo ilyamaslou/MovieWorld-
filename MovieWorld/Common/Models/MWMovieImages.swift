@@ -11,7 +11,6 @@ import UIKit
 class MWMovieImagesResponse: Decodable {
     var id: Int?
     var backdrops: [MWMovieImages]?
-    var posters: [MWMovieImages]?
     var movieImages: [Data]?
 }
 

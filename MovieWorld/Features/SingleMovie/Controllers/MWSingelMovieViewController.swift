@@ -28,7 +28,8 @@ class MWSingelMovieViewController: MWViewController {
     
     private var addittionalMovieInfo: MovieAdditionalInfo?
     private var movieDetails: MWMovieAdditionalInfo?
-    private var movieImages: [Data] = []
+    private var gallery: MWMovieGallery = MWMovieGallery()
+    private var galleryItems: [Any] = []
     private var imagesResponse: MWMovieImagesResponse?
     
     private lazy var scrollView: UIScrollView = {
@@ -259,7 +260,7 @@ class MWSingelMovieViewController: MWViewController {
             make.left.right.bottom.equalToSuperview()
             make.height.equalTo(200)
         }
-
+        
         super.updateViewConstraints()
     }
     
@@ -276,7 +277,7 @@ class MWSingelMovieViewController: MWViewController {
         self.movie = movie
         self.movieCellView.setView(movie: movie)
         
-        self.loadMovieVideo()
+        self.loadMovieVideos()
         self.loadMovieCast()
         self.loadMovieAdditionalInfo()
         self.loadMovieImages()
@@ -296,7 +297,7 @@ class MWSingelMovieViewController: MWViewController {
         }
     }
     
-    private func loadMovieVideo() {
+    private func loadMovieVideos() {
         guard let movieId = self.movie.id else { return }
         let urlPath = "movie/\(movieId)/videos"
         
@@ -306,10 +307,12 @@ class MWSingelMovieViewController: MWViewController {
                             guard let self = self else { return }
                             for video in videos.results {
                                 if video.site == "YouTube"{
-                                    self.showLoadedVideo(videoUrlKey: video.key)
+                                    guard let url = video.key else { return }
+                                    self.gallery.videos.append(url)
                                 }
-                                break
                             }
+                            self.showLoadedVideo(videoUrlKey: self.gallery.videos.first)
+                            self.reloadGalleryItems()
             },
                          errorHandler: { [weak self] (error) in
                             guard let self = self else { return }
@@ -408,7 +411,12 @@ class MWSingelMovieViewController: MWViewController {
     
     @objc private func movieImagesCollectionUpdated() {
         guard let response = self.imagesResponse?.movieImages else { return }
-        self.movieImages = response
+        self.gallery.images = response
+        self.reloadGalleryItems()
+    }
+    
+    private func reloadGalleryItems() {
+        self.galleryItems = self.gallery.getGalleryItems()
         self.galleryCollectionView.reloadData()
     }
     
@@ -422,7 +430,7 @@ extension MWSingelMovieViewController: UICollectionViewDelegate, UICollectionVie
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
         if collectionView == galleryCollectionView {
-            return self.movieImages.count
+            return self.galleryItems.count
         }
         
         guard let movieCastCount = self.movieFullCast?.cast.count, movieCastCount >= 10
@@ -439,7 +447,7 @@ extension MWSingelMovieViewController: UICollectionViewDelegate, UICollectionVie
                 withReuseIdentifier: Constants.singleMovieGalleryCollectionViewCellId,
                 for: indexPath) as? MWMovieGalleryCollectionViewCell else { fatalError("The registered type for the cell does not match the casting") }
             
-            cell.set(image: self.movieImages[indexPath.item])
+            cell.set(galleryItem: self.galleryItems[indexPath.item])
             
             return cell
         }

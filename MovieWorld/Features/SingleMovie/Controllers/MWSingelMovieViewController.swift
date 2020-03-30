@@ -16,19 +16,20 @@ class MWSingelMovieViewController: MWViewController {
     
     private var movie: MWMovie = MWMovie() {
         didSet {
-            self.collectionView.reloadData()
+            self.castCollectionView.reloadData()
         }
     }
     
     private var movieFullCast: MWMovieCastResponse? {
         didSet {
-            self.collectionView.reloadData()
+            self.castCollectionView.reloadData()
         }
     }
     
     private var addittionalMovieInfo: MovieAdditionalInfo?
-    
     private var movieDetails: MWMovieAdditionalInfo?
+    private var movieImages: [Data] = []
+    private var imagesResponse: MWMovieImagesResponse?
     
     private lazy var scrollView: UIScrollView = {
         let view = UIScrollView()
@@ -100,7 +101,7 @@ class MWSingelMovieViewController: MWViewController {
         return button
     }()
     
-    private lazy var collectionView: UICollectionView = {
+    private lazy var castCollectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: self.collectionViewLayout)
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -143,7 +144,7 @@ class MWSingelMovieViewController: MWViewController {
         self.contentViewContainer.addSubview(self.moviePlayer)
         self.contentViewContainer.addSubview(self.descriptionContainerView)
         self.contentViewContainer.addSubview(self.buttonAndLabelContainerView)
-        self.contentViewContainer.addSubview(self.collectionView)
+        self.contentViewContainer.addSubview(self.castCollectionView)
         self.contentViewContainer.addSubview(self.bottomLabel)
         
         self.descriptionContainerView.addSubview(self.descriptionLabel)
@@ -215,7 +216,7 @@ class MWSingelMovieViewController: MWViewController {
             make.right.equalToSuperview().inset(26)
         }
         
-        self.collectionView.snp.makeConstraints { (make) in
+        self.castCollectionView.snp.makeConstraints { (make) in
             make.top.equalTo(self.buttonAndLabelContainerView.snp.bottom).offset(16)
             make.left.right.equalToSuperview()
             //TODO: change this later
@@ -223,7 +224,7 @@ class MWSingelMovieViewController: MWViewController {
         }
         
         self.bottomLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(self.collectionView.snp.bottom).offset(16)
+            make.top.equalTo(self.castCollectionView.snp.bottom).offset(16)
             make.left.right.bottom.equalToSuperview()
         }
         
@@ -237,12 +238,16 @@ class MWSingelMovieViewController: MWViewController {
                                                selector: #selector(memberImageUpdated),
                                                name: .memberImageUpdated, object: nil)
         
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(movieImagesCollectionUpdated),
+                                               name: .movieImagesCollectionUpdated, object: nil)
         self.movie = movie
         self.movieCellView.setView(movie: movie)
         
         self.loadMovieVideo()
         self.loadMovieCast()
         self.loadMovieAdditionalInfo()
+        self.loadMovieImages()
     }
     
     required init?(coder: NSCoder) {
@@ -326,6 +331,25 @@ class MWSingelMovieViewController: MWViewController {
         })
     }
     
+    private func loadMovieImages() {
+        guard let movieId = self.movie.id else { return }
+        let urlPath = "movie/\(movieId)/images"
+        
+        MWNet.sh.request(urlPath: urlPath ,
+                         querryParameters: MWNet.sh.parameters,
+                         succesHandler: { [weak self] (images: MWMovieImagesResponse)  in
+                            guard let self = self else { return }
+                            self.imagesResponse = images
+                            MWImageLoadingHelper.sh.loadMovieImages(for: self.imagesResponse)
+            },
+                         errorHandler: { [weak self] (error) in
+                            guard let self = self else { return }
+                            
+                            let message = error.getErrorDesription()
+                            self.errorAlert(message: message)
+        })
+    }
+    
     private func setImages<T>(to peoples: [T]) {
         if let peoples = peoples as? [MWMovieCastMember] {
             for people in peoples {
@@ -347,7 +371,12 @@ class MWSingelMovieViewController: MWViewController {
     }
     
     @objc private func memberImageUpdated() {
-        self.collectionView.reloadData()
+        self.castCollectionView.reloadData()
+    }
+    
+    @objc private func movieImagesCollectionUpdated() {
+        guard let response = self.imagesResponse?.movieImages else { return }
+        self.movieImages = response
     }
     
     @objc private func showAllButtonDidTapped() {

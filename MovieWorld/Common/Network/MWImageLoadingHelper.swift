@@ -49,6 +49,31 @@ class MWImageLoadingHelper{
         }
     }
     
+    //TODO: fix problems with sizes and make this less hardcoded
+    func loadMovieImages(for imagesToLoad: MWMovieImagesResponse?) {
+        guard let posters = imagesToLoad?.posters else { return }
+        
+        if imagesToLoad?.movieImages == nil {
+            imagesToLoad?.movieImages = []
+        }
+        
+        for image in posters {
+            let size = "original"
+            guard let imagePath = image.filePath,
+                let imagesResponse = imagesToLoad,
+                let baseUrl = MWSys.sh.configuration?.images?.secureBaseUrl else  { break }
+            MWNet.sh.imageRequest(baseUrl: baseUrl,
+                                  size: size,
+                                  filePath: imagePath,
+                                  succesHandler: { (imageData: Data) in
+                                    imagesResponse.movieImages?.append(imageData)
+                                    NotificationCenter.default.post(name: .movieImagesCollectionUpdated, object: nil)
+            }
+            )
+        }
+    }
+    
+    //TODO: make this by protocol
     func setImageToPerson<T>(person: T, imageData: Data) {
         if let imageForCastMember = person as? MWMovieCastMember {
             imageForCastMember.image = imageData

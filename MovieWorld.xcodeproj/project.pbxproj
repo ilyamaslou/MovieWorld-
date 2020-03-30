@@ -23,6 +23,7 @@
 		994E3D0323FAA18E0034B4D2 /* MWMovie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994E3D0223FAA18E0034B4D2 /* MWMovie.swift */; };
 		995F405724153868005DC65F /* MWImageConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995F405624153868005DC65F /* MWImageConfiguration.swift */; };
 		995F405924153DA8005DC65F /* URLPaths.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995F405824153DA8005DC65F /* URLPaths.swift */; };
+		996AA821243142A30001B788 /* MWMovieImages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 996AA820243142A30001B788 /* MWMovieImages.swift */; };
 		996CB0A324124E2F00200EFE /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 996CB0A524124E2F00200EFE /* Localizable.strings */; };
 		996F79E3240BEACF006FF3C0 /* MWNetwork+ExUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 996F79E1240BEACE006FF3C0 /* MWNetwork+ExUtility.swift */; };
 		996F79E4240BEACF006FF3C0 /* String+Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 996F79E2240BEACE006FF3C0 /* String+Ex.swift */; };
@@ -81,6 +82,7 @@
 		994E3D0223FAA18E0034B4D2 /* MWMovie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWMovie.swift; sourceTree = "<group>"; };
 		995F405624153868005DC65F /* MWImageConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWImageConfiguration.swift; sourceTree = "<group>"; };
 		995F405824153DA8005DC65F /* URLPaths.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLPaths.swift; sourceTree = "<group>"; };
+		996AA820243142A30001B788 /* MWMovieImages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWMovieImages.swift; sourceTree = "<group>"; };
 		996CB0932412472500200EFE /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		996CB0A424124E2F00200EFE /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		996CB0A624124E3000200EFE /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -155,6 +157,7 @@
 				995F405624153868005DC65F /* MWImageConfiguration.swift */,
 				992A1D66242AA61E00D61D65 /* MWMovieCast.swift */,
 				992A1D6C242C053C00D61D65 /* MWMovieAdditionalInfo.swift */,
+				996AA820243142A30001B788 /* MWMovieImages.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -605,6 +608,7 @@
 				995F405724153868005DC65F /* MWImageConfiguration.swift in Sources */,
 				99C9CA6B242CE34A0022D7C1 /* Genre+CoreDataProperties.swift in Sources */,
 				999E6002241B7B6800F3103F /* MWModel.xcdatamodeld in Sources */,
+				996AA821243142A30001B788 /* MWMovieImages.swift in Sources */,
 				992A1D6D242C053C00D61D65 /* MWMovieAdditionalInfo.swift in Sources */,
 				99FB969A242389CB00812329 /* MWImageLoadingHelper.swift in Sources */,
 				996F79E4240BEACF006FF3C0 /* String+Ex.swift in Sources */,

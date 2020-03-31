@@ -49,13 +49,12 @@ class MWCastMemberCollectionViewCell: UICollectionViewCell {
     func set(actor: MWMovieCastMember) {
         self.memberOfCast = actor
         self.nameLabel.text = actor.name
-        self.movieImageView.image = self.setImageView()
         self.infoLabel.text = actor.character
+        self.movieImageView.image = self.setImageView()
     }
     
     private func setUpCell() {
         backgroundColor = .white
-        self.translatesAutoresizingMaskIntoConstraints = false
         
         self.contentView.addSubview(self.nameLabel)
         self.contentView.addSubview(self.infoLabel)
@@ -63,6 +62,7 @@ class MWCastMemberCollectionViewCell: UICollectionViewCell {
         
         self.movieImageView.snp.updateConstraints { (make) in
             make.top.left.right.equalToSuperview()
+            make.bottom.lessThanOrEqualTo(self.nameLabel.snp.top).offset(-12)
         }
         
         self.nameLabel.snp.updateConstraints { (make) in
@@ -78,8 +78,8 @@ class MWCastMemberCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    
     private func setImageView() -> UIImage? {
+        layoutIfNeeded()
         guard  let imageData = memberOfCast?.image else { return UIImage(named: "imageNotFound") }
         return  UIImage(data: imageData)
     }

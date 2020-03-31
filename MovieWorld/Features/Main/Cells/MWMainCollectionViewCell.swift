@@ -97,6 +97,7 @@ class MWMainCollectionViewCell: UICollectionViewCell {
     }
     
     private func setImageView() -> UIImage? {
+        layoutIfNeeded()
         guard  let imageData = movie.image else { return UIImage(named: "imageNotFound") }
         return  UIImage(data: imageData)
     }

@@ -59,6 +59,7 @@ class MWSingleCategoryViewController: MWViewController {
     
     init(movies: [MWMovie]) {
         super.init()
+        self.title = "Movies"
         self.movies = movies
         self.filteredMovies = movies
         self.setUpGenres()

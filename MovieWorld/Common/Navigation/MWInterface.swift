@@ -23,6 +23,7 @@ class MWInterface {
     
     public func setup(window: UIWindow) {
         self.window = window
+        self.window?.backgroundColor = .white
         
         self.setUpNavigationBarStyle()
         

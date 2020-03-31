@@ -103,7 +103,7 @@ class MWSingelMovieViewController: MWViewController {
     }()
     
     private lazy var castCollectionView: UICollectionView = {
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: self.collectionViewLayout)
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: self.castCollectionViewLayout)
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(MWCastMemberCollectionViewCell.self, forCellWithReuseIdentifier: Constants.singleCastMemberCollectionViewCellId)
@@ -117,7 +117,7 @@ class MWSingelMovieViewController: MWViewController {
         return collectionView
     }()
     
-    private lazy var collectionViewLayout: UICollectionViewFlowLayout = {
+    private lazy var castCollectionViewLayout: UICollectionViewFlowLayout = {
         let collectionViewLayout = UICollectionViewFlowLayout()
         collectionViewLayout.scrollDirection = .horizontal
         collectionViewLayout.minimumLineSpacing = 16
@@ -162,9 +162,10 @@ class MWSingelMovieViewController: MWViewController {
     
     override func initController() {
         super.initController()
+        navigationItem.largeTitleDisplayMode = .never
         
         self.contentView.addSubview(self.scrollView)
-        self.scrollView.addSubview(contentViewContainer)
+        self.scrollView.addSubview(self.contentViewContainer)
         
         self.contentViewContainer.addSubview(self.movieCellView)
         self.contentViewContainer.addSubview(self.moviePlayer)
@@ -190,8 +191,8 @@ class MWSingelMovieViewController: MWViewController {
         }
         
         self.contentViewContainer.snp.makeConstraints { (make) in
-            make.top.bottom.equalTo(self.scrollView)
-            make.left.right.equalTo(self.contentView)
+            make.edges.equalTo(self.scrollView)
+            make.width.equalTo(self.view.snp.width)
         }
         
         self.movieCellView.snp.makeConstraints { (make) in
@@ -219,7 +220,7 @@ class MWSingelMovieViewController: MWViewController {
         
         self.movieRuntimeLabel.snp.makeConstraints { (make) in
             make.left.right.equalToSuperview()
-            make.top.equalTo(self.descriptionLabel.snp.bottom).offset(16)
+            make.top.equalTo(self.descriptionLabel.snp.bottom).offset(self.offsets.top)
         }
         
         self.descriptionTextView.snp.makeConstraints { (make) in
@@ -229,35 +230,35 @@ class MWSingelMovieViewController: MWViewController {
         
         self.buttonAndLabelContainerView.snp.makeConstraints { (make) in
             make.top.greaterThanOrEqualTo(self.descriptionContainerView.snp.bottom).offset(24)
-            make.left.right.equalToSuperview()
-        }
-        
-        self.labelOfCast.snp.makeConstraints { (make) in
-            make.top.bottom.equalToSuperview()
             make.left.equalToSuperview().offset(self.offsets.left)
-        }
-        
-        self.showAllButton.snp.makeConstraints { (make) in
-            make.top.bottom.equalToSuperview()
-            make.left.greaterThanOrEqualTo(self.labelOfCast.snp.right)
             make.right.equalToSuperview().inset(26)
         }
         
+        self.labelOfCast.snp.makeConstraints { (make) in
+            make.top.bottom.left.equalToSuperview()
+        }
+        
+        self.showAllButton.snp.makeConstraints { (make) in
+            make.top.bottom.right.equalToSuperview()
+            make.left.greaterThanOrEqualTo(self.labelOfCast.snp.right)
+        }
+        
         self.castCollectionView.snp.makeConstraints { (make) in
-            make.top.equalTo(self.buttonAndLabelContainerView.snp.bottom).offset(16)
+            make.top.equalTo(self.buttonAndLabelContainerView.snp.bottom).offset(self.offsets.top)
             make.left.right.equalToSuperview()
-            //TODO: change this later
             make.height.equalTo(237)
         }
         
         self.galleryLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(self.castCollectionView.snp.bottom).offset(16)
-            make.left.right.equalToSuperview()
+            make.top.equalTo(self.castCollectionView.snp.bottom).offset(self.offsets.top)
+            make.right.equalToSuperview()
+            make.left.equalToSuperview().offset(self.offsets.left)
         }
         
         self.galleryCollectionView.snp.makeConstraints { (make) in
-            make.top.equalTo(self.galleryLabel.snp.bottom).offset(16)
-            make.left.right.bottom.equalToSuperview()
+            make.top.equalTo(self.galleryLabel.snp.bottom).offset(self.offsets.top)
+            make.left.right.equalToSuperview()
+            make.bottom.equalToSuperview().inset(10)
             make.height.equalTo(200)
         }
         
@@ -353,6 +354,7 @@ class MWSingelMovieViewController: MWViewController {
                          querryParameters: MWNet.sh.parameters,
                          succesHandler: { [weak self] (details: MWMovieAdditionalInfo)  in
                             guard let self = self else { return }
+                            
                             self.movieDetails = details
                             self.saveAdditionalInfo(info: details)
                             self.setDetails()
@@ -374,6 +376,7 @@ class MWSingelMovieViewController: MWViewController {
                          querryParameters: MWNet.sh.parameters,
                          succesHandler: { [weak self] (images: MWMovieImagesResponse)  in
                             guard let self = self else { return }
+                            
                             self.imagesResponse = images
                             MWImageLoadingHelper.sh.loadMovieImages(for: self.imagesResponse)
             },
@@ -405,6 +408,11 @@ class MWSingelMovieViewController: MWViewController {
         self.movieRuntimeLabel.text = " \(movieRuntime) minutes"
     }
     
+    private func reloadGalleryItems() {
+        self.galleryItems = self.gallery.getGalleryItems()
+        self.galleryCollectionView.reloadData()
+    }
+    
     @objc private func memberImageUpdated() {
         self.castCollectionView.reloadData()
     }
@@ -413,11 +421,6 @@ class MWSingelMovieViewController: MWViewController {
         guard let response = self.imagesResponse?.movieImages else { return }
         self.gallery.images = response
         self.reloadGalleryItems()
-    }
-    
-    private func reloadGalleryItems() {
-        self.galleryItems = self.gallery.getGalleryItems()
-        self.galleryCollectionView.reloadData()
     }
     
     @objc private func showAllButtonDidTapped() {

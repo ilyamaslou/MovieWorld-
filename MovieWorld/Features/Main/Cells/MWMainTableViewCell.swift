@@ -78,7 +78,7 @@ class MWMainTableViewCell: UITableViewCell {
             make.top.equalToSuperview()
             make.left.equalToSuperview().inset(16)
             make.bottom.equalTo(self.collectionView.snp.top).inset(-12)
-            make.right.equalTo(self.showAllButton.snp.left)
+            make.right.greaterThanOrEqualTo(self.showAllButton.snp.left)
         }
         
         self.showAllButton.snp.updateConstraints { (make) in

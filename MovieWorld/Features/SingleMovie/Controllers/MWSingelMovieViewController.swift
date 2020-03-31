@@ -43,6 +43,7 @@ class MWSingelMovieViewController: MWViewController {
     private lazy var contentViewContainer: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .clear
         return view
     }()
     
@@ -80,26 +81,11 @@ class MWSingelMovieViewController: MWViewController {
         return textView
     }()
     
-    private lazy var buttonAndLabelContainerView: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .clear
+    //FIXME: now hardcoded controller to pushing
+    private lazy var showAllView: MWTitleButtonView = {
+        let view = MWTitleButtonView()
+        view.title = "Cast"
         return view
-    }()
-    
-    private lazy var labelOfCast: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Cast"
-        label.font = .systemFont(ofSize: 17,  weight: .bold)
-        return label
-    }()
-    
-    private lazy var showAllButton: MWCustomButton = {
-        let button = MWCustomButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(showAllButtonDidTapped), for: .touchUpInside)
-        return button
     }()
     
     private lazy var castCollectionView: UICollectionView = {
@@ -170,7 +156,7 @@ class MWSingelMovieViewController: MWViewController {
         self.contentViewContainer.addSubview(self.movieCellView)
         self.contentViewContainer.addSubview(self.moviePlayer)
         self.contentViewContainer.addSubview(self.descriptionContainerView)
-        self.contentViewContainer.addSubview(self.buttonAndLabelContainerView)
+        self.contentViewContainer.addSubview(self.showAllView)
         self.contentViewContainer.addSubview(self.castCollectionView)
         self.contentViewContainer.addSubview(self.galleryLabel)
         self.contentViewContainer.addSubview(self.galleryCollectionView)
@@ -178,11 +164,6 @@ class MWSingelMovieViewController: MWViewController {
         self.descriptionContainerView.addSubview(self.descriptionLabel)
         self.descriptionContainerView.addSubview(self.movieRuntimeLabel)
         self.descriptionContainerView.addSubview(self.descriptionTextView)
-        
-        self.buttonAndLabelContainerView.addSubview(self.labelOfCast)
-        self.buttonAndLabelContainerView.addSubview(self.showAllButton)
-        
-        
     }
     
     override func updateViewConstraints() {
@@ -228,23 +209,14 @@ class MWSingelMovieViewController: MWViewController {
             make.left.right.bottom.equalToSuperview()
         }
         
-        self.buttonAndLabelContainerView.snp.makeConstraints { (make) in
+        self.showAllView.snp.makeConstraints { (make) in
             make.top.greaterThanOrEqualTo(self.descriptionContainerView.snp.bottom).offset(24)
             make.left.equalToSuperview().offset(self.offsets.left)
             make.right.equalToSuperview().inset(26)
         }
         
-        self.labelOfCast.snp.makeConstraints { (make) in
-            make.top.bottom.left.equalToSuperview()
-        }
-        
-        self.showAllButton.snp.makeConstraints { (make) in
-            make.top.bottom.right.equalToSuperview()
-            make.left.greaterThanOrEqualTo(self.labelOfCast.snp.right)
-        }
-        
         self.castCollectionView.snp.makeConstraints { (make) in
-            make.top.equalTo(self.buttonAndLabelContainerView.snp.bottom).offset(self.offsets.top)
+            make.top.equalTo(self.showAllView.snp.bottom).offset(self.offsets.top)
             make.left.right.equalToSuperview()
             make.height.equalTo(237)
         }
@@ -421,10 +393,6 @@ class MWSingelMovieViewController: MWViewController {
         guard let response = self.imagesResponse?.movieImages else { return }
         self.gallery.images = response
         self.reloadGalleryItems()
-    }
-    
-    @objc private func showAllButtonDidTapped() {
-        //           MWI.s.pushVC()
     }
 }
 

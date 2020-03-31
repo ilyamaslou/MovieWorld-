@@ -19,17 +19,10 @@ class MWMainTableViewCell: UITableViewCell {
     
     private var category: String = ""
     
-    private lazy var showAllButton: MWCustomButton = {
-        let button = MWCustomButton()
-        button.addTarget(self, action: #selector(showAllButtonDidTapped), for: .touchUpInside)
-        return button
-    }()
-    
-    private lazy var categoryLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = .systemFont(ofSize: 24,  weight: .bold)
-        return label
+    private lazy var showAllView: MWTitleButtonView = {
+        let view = MWTitleButtonView()
+        view.titleSize = 24
+        return view
     }()
     
     private lazy var collectionView: UICollectionView = {
@@ -64,8 +57,7 @@ class MWMainTableViewCell: UITableViewCell {
                                                name: .movieImageUpdated, object: nil)
         
         backgroundColor = .white
-        self.contentView.addSubview(self.categoryLabel)
-        self.contentView.addSubview(self.showAllButton)
+        self.contentView.addSubview(self.showAllView)
         self.contentView.addSubview(self.collectionView)
     }
     
@@ -74,18 +66,11 @@ class MWMainTableViewCell: UITableViewCell {
     }
     
     override func updateConstraints() {
-        self.categoryLabel.snp.updateConstraints { (make) in
-            make.top.equalToSuperview()
-            make.left.equalToSuperview().inset(16)
-            make.bottom.equalTo(self.collectionView.snp.top).inset(-12)
-            make.right.greaterThanOrEqualTo(self.showAllButton.snp.left)
-        }
-        
-        self.showAllButton.snp.updateConstraints { (make) in
-            make.top.equalToSuperview()
+        self.showAllView.snp.updateConstraints { (make) in
+            make.top.equalToSuperview().offset(24)
+            make.left.equalToSuperview().offset(16)
             make.right.equalToSuperview().inset(7)
-            make.bottom.equalTo(self.collectionView.snp.top).inset(-12)
-            make.left.equalTo(self.categoryLabel.snp.right)
+            make.bottom.equalTo(self.collectionView.snp.top).offset(-12)
         }
         
         self.collectionView.snp.updateConstraints { (make) in
@@ -98,12 +83,9 @@ class MWMainTableViewCell: UITableViewCell {
     
     func set(categoryName: String) {
         self.category = categoryName
-        self.categoryLabel.text = categoryName
+        self.showAllView.title = categoryName
+        self.showAllView.controllerToPushing = MWSingleCategoryViewController(movies: self.movies)
         setNeedsUpdateConstraints()
-    }
-    
-    @objc private func showAllButtonDidTapped() {
-        MWI.s.pushVC(MWSingleCategoryViewController(movies: movies))
     }
     
     @objc private func movieImageUpdated() {

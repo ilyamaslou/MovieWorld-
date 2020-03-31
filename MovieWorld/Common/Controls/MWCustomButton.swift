@@ -12,7 +12,6 @@ class MWCustomButton: UIButton {
     
     override init(frame: CGRect) {
         super.init(frame: frame )
-        
         self.setUpButton()
     }
     

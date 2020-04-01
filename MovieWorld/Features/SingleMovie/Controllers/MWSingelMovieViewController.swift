@@ -14,6 +14,8 @@ class MWSingelMovieViewController: MWViewController {
     
     private let offsets = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
     
+    private var cdMovie: Movie?
+    
     private var movie: MWMovie = MWMovie() {
         didSet {
             self.castCollectionView.reloadData()
@@ -37,7 +39,16 @@ class MWSingelMovieViewController: MWViewController {
         view.translatesAutoresizingMaskIntoConstraints = false
         view.showsVerticalScrollIndicator = false
         view.showsHorizontalScrollIndicator = false
+        view.alwaysBounceVertical = true
+        view.bounces  = true
         return view
+    }()
+    
+    private lazy var refreshControl: UIRefreshControl = {
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(pullToRefresh), for: .valueChanged)
+        refreshControl.tintColor = UIColor(named: "accentColor")
+        return refreshControl
     }()
     
     private lazy var contentViewContainer: UIView = {
@@ -49,6 +60,13 @@ class MWSingelMovieViewController: MWViewController {
     
     private lazy var movieCellView: MWSingleMovieCellView = MWSingleMovieCellView()
     private lazy var moviePlayer: YouTubePlayerView = YouTubePlayerView()
+    
+    private lazy var loadingIndicator: UIActivityIndicatorView = {
+        let view = UIActivityIndicatorView()
+        view.color = UIColor(named: "accentColor")
+        view.startAnimating()
+        return view
+    }()
     
     private lazy var descriptionContainerView: UIView = {
         let view = UIView()
@@ -81,7 +99,6 @@ class MWSingelMovieViewController: MWViewController {
         return textView
     }()
     
-    //FIXME: now hardcoded controller to pushing
     private lazy var showAllView: MWTitleButtonView = {
         let view = MWTitleButtonView()
         view.title = "Cast"
@@ -149,12 +166,15 @@ class MWSingelMovieViewController: MWViewController {
     override func initController() {
         super.initController()
         navigationItem.largeTitleDisplayMode = .never
+        self.loadingIndicator.startAnimating()
         
         self.contentView.addSubview(self.scrollView)
         self.scrollView.addSubview(self.contentViewContainer)
+        self.scrollView.addSubview(self.refreshControl)
         
         self.contentViewContainer.addSubview(self.movieCellView)
         self.contentViewContainer.addSubview(self.moviePlayer)
+        self.contentViewContainer.addSubview(self.loadingIndicator)
         self.contentViewContainer.addSubview(self.descriptionContainerView)
         self.contentViewContainer.addSubview(self.showAllView)
         self.contentViewContainer.addSubview(self.castCollectionView)
@@ -187,6 +207,10 @@ class MWSingelMovieViewController: MWViewController {
             make.top.equalTo(self.movieCellView.snp.bottom).offset(18)
             make.height.equalTo(180)
             //TODO: change this later
+        }
+        
+        self.loadingIndicator.snp.makeConstraints { (make) in
+            make.center.equalTo(self.moviePlayer.snp.center)
         }
         
         self.descriptionContainerView.snp.makeConstraints { (make) in
@@ -266,7 +290,7 @@ class MWSingelMovieViewController: MWViewController {
         let videoUrl = "https://www.youtube.com/watch?v=\(key)"
         let encodedURL = videoUrl.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
         if let url = URL(string: encodedURL) {
-            moviePlayer.loadVideoURL(url)
+            self.moviePlayer.loadVideoURL(url)
         }
     }
     
@@ -286,11 +310,13 @@ class MWSingelMovieViewController: MWViewController {
                             }
                             self.showLoadedVideo(videoUrlKey: self.gallery.videos.first)
                             self.reloadGalleryItems()
+                            self.loadingIndicator.stopAnimating()
             },
                          errorHandler: { [weak self] (error) in
                             guard let self = self else { return }
                             
                             let message = error.getErrorDesription()
+                            self.loadingIndicator.stopAnimating()
                             self.errorAlert(message: message)
         })
     }
@@ -394,6 +420,15 @@ class MWSingelMovieViewController: MWViewController {
         self.gallery.images = response
         self.reloadGalleryItems()
     }
+    
+    @objc private func pullToRefresh() {
+        self.loadMovieVideos()
+        self.loadMovieCast()
+        self.loadMovieAdditionalInfo()
+        self.loadMovieImages()
+        
+        self.refreshControl.endRefreshing()
+    }
 }
 
 extension MWSingelMovieViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
@@ -436,18 +471,22 @@ extension MWSingelMovieViewController: UICollectionViewDelegate, UICollectionVie
 }
 
 extension MWSingelMovieViewController {
-    @discardableResult  private func fetchAdditionalInfo() -> MovieAdditionalInfo? {
+    private func fetchMovie() {
         let managedContext = CoreDataManager.s.persistentContainer.viewContext
-        let fetch: NSFetchRequest<MovieAdditionalInfo> = MovieAdditionalInfo.fetchRequest()
-        
-        var additionalInfo: MovieAdditionalInfo?
+        let fetch: NSFetchRequest<Movie> = Movie.fetchRequest()
+        fetch.predicate = NSPredicate(format: "ANY id = %i and title = %@",
+                                      self.movie.id ?? 0,
+                                      self.movie.title ?? "")
         do {
-            additionalInfo = try managedContext.fetch(fetch).last
+            self.cdMovie = try managedContext.fetch(fetch).last
         } catch {
             print(error.localizedDescription)
         }
-        
-        return additionalInfo
+    }
+    
+    @discardableResult  private func fetchAdditionalInfo() -> MovieAdditionalInfo? {
+        self.fetchMovie()
+        return self.cdMovie?.additionalInfo
     }
     
     private func saveAdditionalInfo (info: MWMovieAdditionalInfo) {
@@ -460,6 +499,7 @@ extension MWSingelMovieViewController {
             newAdditionalInfo.overview = info.overview
             newAdditionalInfo.runtime = Int64(info.runtime ?? 0)
             newAdditionalInfo.tagline = info.tagline
+            self.cdMovie?.additionalInfo = newAdditionalInfo
         } else {
             guard let fetchedInfo = fetchedInfo else { return }
             fetchedInfo.adult = info.adult ?? false

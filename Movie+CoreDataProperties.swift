@@ -2,7 +2,7 @@
 //  Movie+CoreDataProperties.swift
 //  MovieWorld
 //
-//  Created by Ilya Maslou on 3/26/20.
+//  Created by Ilya Maslou on 4/1/20.
 //  Copyright © 2020 Ilya Maslou. All rights reserved.
 //
 //
@@ -27,5 +27,22 @@ extension Movie {
     @NSManaged public var title: String?
     @NSManaged public var voteAvarage: Double
     @NSManaged public var category: MovieCategory?
+    @NSManaged public var additionalInfo: MovieAdditionalInfo?
+
+}
+
+extension Movie {
+
+    @objc(addAdditionalInfoObject:)
+    @NSManaged public func addToAdditionalInfo(_ value: MovieAdditionalInfo)
+
+    @objc(removeAdditionalInfoObject:)
+    @NSManaged public func removeFromAdditionalInfo(_ value: MovieAdditionalInfo)
+
+    @objc(addAdditionalInfo:)
+    @NSManaged public func addToAdditionalInfo(_ values: NSSet)
+
+    @objc(removeAdditionalInfo:)
+    @NSManaged public func removeFromAdditionalInfo(_ values: NSSet)
 
 }

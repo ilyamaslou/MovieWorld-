@@ -28,6 +28,7 @@ class MWMainTabViewController: MWViewController {
     private lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(pullToRefresh), for: .valueChanged)
+        refreshControl.tintColor = UIColor(named: "accentColor")
         return refreshControl
     }()
     

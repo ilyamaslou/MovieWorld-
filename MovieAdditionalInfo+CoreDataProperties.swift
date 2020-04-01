@@ -2,7 +2,7 @@
 //  MovieAdditionalInfo+CoreDataProperties.swift
 //  MovieWorld
 //
-//  Created by Ilya Maslou on 3/26/20.
+//  Created by Ilya Maslou on 4/1/20.
 //  Copyright © 2020 Ilya Maslou. All rights reserved.
 //
 //
@@ -21,5 +21,6 @@ extension MovieAdditionalInfo {
     @NSManaged public var overview: String?
     @NSManaged public var runtime: Int64
     @NSManaged public var tagline: String?
+    @NSManaged public var movie: Movie?
 
 }

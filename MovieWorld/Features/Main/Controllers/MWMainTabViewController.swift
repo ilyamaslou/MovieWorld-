@@ -59,7 +59,7 @@ class MWMainTabViewController: MWViewController {
         self.title = "Season".local()
         
         self.loadMovies()
-        self.group.notify(queue: .main,execute: self.tableView.reloadData)
+        self.group.notify(queue: .main, execute: self.tableView.reloadData)
     }
     
     

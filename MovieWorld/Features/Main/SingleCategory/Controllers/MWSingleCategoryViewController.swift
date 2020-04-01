@@ -72,13 +72,12 @@ class MWSingleCategoryViewController: MWViewController {
     override func initController() {
         super.initController()
         
-        contentView.addSubview(self.collectionView)
-        contentView.addSubview(self.tableView)
+        self.contentView.addSubview(self.collectionView)
+        self.contentView.addSubview(self.tableView)
         
         self.collectionView.snp.makeConstraints {(make) in
             make.left.right.equalToSuperview()
             make.top.equalToSuperview().offset(16)
-            //TODO: change this later
             make.height.equalTo(70)
         }
         
@@ -91,14 +90,14 @@ class MWSingleCategoryViewController: MWViewController {
     
     private func setUpGenres() {
         var uniqueGenres: Set<String> = []
-        for movie in movies {
+        for movie in self.movies {
             guard let genres = movie.movieGenres else { return }
             for genre in genres {
                 uniqueGenres.insert(genre)
             }
         }
         
-        uniqueGenres.forEach { movieGenres.append(($0, false)) }
+        uniqueGenres.forEach { self.movieGenres.append(($0, false)) }
     }
     
     private func updateTableByGenres() {
@@ -124,9 +123,9 @@ class MWSingleCategoryViewController: MWViewController {
     }
     
     private func selectUnselectGenre(genreToChange: String) {
-        for (id,(genre, isSelected)) in movieGenres.enumerated() {
+        for (id,(genre, isSelected)) in self.movieGenres.enumerated() {
             if genreToChange == genre {
-                movieGenres[id].1 = !isSelected
+                self.movieGenres[id].1 = !isSelected
             }
         }
     }
@@ -134,7 +133,7 @@ class MWSingleCategoryViewController: MWViewController {
 
 extension MWSingleCategoryViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return filteredMovies.count
+        return self.filteredMovies.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -142,7 +141,7 @@ extension MWSingleCategoryViewController: UITableViewDataSource, UITableViewDele
             withIdentifier: Constants.singleCategoryTableViewCellId) as? MWSingleMovieInCategoryCell
             else { fatalError("The registered type for the cell does not match the casting") }
         
-        cell.set(movie: filteredMovies[indexPath.row])
+        cell.set(movie: self.filteredMovies[indexPath.row])
         cell.selectionStyle = .none
         
         return cell
@@ -191,6 +190,3 @@ extension MWSingleCategoryViewController: UICollectionViewDelegate, UICollection
         return cell
     }
 }
-
-
-

@@ -102,7 +102,3 @@ class MWMainCollectionViewCell: UICollectionViewCell {
         return  UIImage(data: imageData)
     }
 }
-
-
-
-

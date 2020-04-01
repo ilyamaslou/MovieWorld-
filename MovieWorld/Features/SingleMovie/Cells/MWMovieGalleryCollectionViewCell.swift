@@ -30,6 +30,20 @@ class MWMovieGalleryCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func set(galleryItem: Any) {
+        if let image = galleryItem as? Data {
+            self.movieImageView.image = UIImage(data: image)
+            self.movieVideoView.isHidden = true
+            self.movieImageView.isHidden = false
+        } else if let videoUrl = galleryItem as? String {
+            self.showLoadedVideo(videoUrlKey: videoUrl)
+            self.movieImageView.isHidden = true
+            self.movieVideoView.isHidden = false
+        } else {
+            return
+        }
+    }
+    
     private func setUpCell() {
         self.contentView.addSubview(movieImageView)
         self.contentView.addSubview(movieVideoView)
@@ -43,23 +57,6 @@ class MWMovieGalleryCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    func set(galleryItem: Any) {
-        
-        if let image = galleryItem as? Data {
-            self.movieImageView.image = UIImage(data: image)
-            self.movieVideoView.isHidden = true
-            self.movieImageView.isHidden = false
-        } else if let videoUrl = galleryItem as? String {
-            self.showLoadedVideo(videoUrlKey: videoUrl)
-            self.movieImageView.isHidden = true
-            self.movieVideoView.isHidden = false
-        } else {
-            return
-        }
-        
-    }
-    
-    //TODO: Not every time recieved videoPath -> hide player or check for teaser
     private func showLoadedVideo(videoUrlKey: String?) {
         guard let key = videoUrlKey else { return }
         let videoUrl = "https://www.youtube.com/watch?v=\(key)"

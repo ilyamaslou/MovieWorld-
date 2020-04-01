@@ -73,7 +73,6 @@ class MWImageLoadingHelper{
         }
     }
     
-    //TODO: make this by protocol
     func setImageToPerson<T>(person: T, imageData: Data) {
         if let imageForCastMember = person as? MWMovieCastMember {
             imageForCastMember.image = imageData

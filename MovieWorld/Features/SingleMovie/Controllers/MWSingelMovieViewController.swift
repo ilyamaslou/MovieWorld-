@@ -85,18 +85,17 @@ class MWSingelMovieViewController: MWViewController {
     private lazy var descriptionLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = " Description"
+        label.text = "Description"
         label.font = .systemFont(ofSize: 17,  weight: .bold)
         return label
     }()
     
-    private lazy var descriptionTextView: UITextView = {
-        let textView = UITextView()
-        textView.isEditable = false
-        textView.isScrollEnabled = false
-        textView.translatesAutoresizingMaskIntoConstraints = false
-        textView.font = .systemFont(ofSize: 17)
-        return textView
+    private lazy var descriptionTextLabel: UILabel = {
+        let textLabel = UILabel()
+        textLabel.numberOfLines = 0
+        textLabel.translatesAutoresizingMaskIntoConstraints = false
+        textLabel.font = .systemFont(ofSize: 17)
+        return textLabel
     }()
     
     private lazy var showAllView: MWTitleButtonView = {
@@ -183,7 +182,7 @@ class MWSingelMovieViewController: MWViewController {
         
         self.descriptionContainerView.addSubview(self.descriptionLabel)
         self.descriptionContainerView.addSubview(self.movieRuntimeLabel)
-        self.descriptionContainerView.addSubview(self.descriptionTextView)
+        self.descriptionContainerView.addSubview(self.descriptionTextLabel)
     }
     
     override func updateViewConstraints() {
@@ -206,7 +205,6 @@ class MWSingelMovieViewController: MWViewController {
             make.right.equalToSuperview().inset(self.offsets)
             make.top.equalTo(self.movieCellView.snp.bottom).offset(18)
             make.height.equalTo(180)
-            //TODO: change this later
         }
         
         self.loadingIndicator.snp.makeConstraints { (make) in
@@ -228,7 +226,7 @@ class MWSingelMovieViewController: MWViewController {
             make.top.equalTo(self.descriptionLabel.snp.bottom).offset(self.offsets.top)
         }
         
-        self.descriptionTextView.snp.makeConstraints { (make) in
+        self.descriptionTextLabel.snp.makeConstraints { (make) in
             make.top.equalTo(self.movieRuntimeLabel.snp.bottom).offset(8)
             make.left.right.bottom.equalToSuperview()
         }
@@ -284,7 +282,6 @@ class MWSingelMovieViewController: MWViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    //TODO: Not every time recieved videoPath -> hide player or check for teaser
     private func showLoadedVideo(videoUrlKey: String?) {
         guard let key = videoUrlKey else { return }
         let videoUrl = "https://www.youtube.com/watch?v=\(key)"
@@ -401,9 +398,9 @@ class MWSingelMovieViewController: MWViewController {
     }
     
     private func setDetails() {
-        self.descriptionTextView.text = self.movieDetails?.overview ?? ""
+        self.descriptionTextLabel.text = self.movieDetails?.overview ?? ""
         guard let movieRuntime = self.movieDetails?.runtime else { return }
-        self.movieRuntimeLabel.text = " \(movieRuntime) minutes"
+        self.movieRuntimeLabel.text = "\(movieRuntime) minutes"
     }
     
     private func reloadGalleryItems() {

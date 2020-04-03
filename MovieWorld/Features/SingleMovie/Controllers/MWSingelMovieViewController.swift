@@ -25,6 +25,7 @@ class MWSingelMovieViewController: MWViewController {
     private var movieFullCast: MWMovieCastResponse? {
         didSet {
             self.castCollectionView.reloadData()
+            self.showAllView.controllerToPushing = MWCastViewController(cast: self.movieFullCast)
         }
     }
     

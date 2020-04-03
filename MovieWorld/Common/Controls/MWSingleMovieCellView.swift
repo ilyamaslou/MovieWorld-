@@ -32,7 +32,7 @@ class MWSingleMovieCellView: UIView {
         return label
     }()
     
-    private lazy var releaseYearAndCountryLable: UILabel = {
+    private lazy var releaseYearAndCountryLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 15)
@@ -40,7 +40,7 @@ class MWSingleMovieCellView: UIView {
         return label
     }()
     
-    private lazy var genresLable: UILabel = {
+    private lazy var genresLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 15, weight: .light)
@@ -50,7 +50,7 @@ class MWSingleMovieCellView: UIView {
         return label
     }()
     
-    private lazy var ratingsLable: UILabel = {
+    private lazy var ratingsLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 15)
@@ -72,9 +72,9 @@ class MWSingleMovieCellView: UIView {
         
         self.addSubview(self.filmImageView)
         self.addSubview(self.filmNameLabel)
-        self.addSubview(self.releaseYearAndCountryLable)
-        self.addSubview(self.genresLable)
-        self.addSubview(self.ratingsLable)
+        self.addSubview(self.releaseYearAndCountryLabel)
+        self.addSubview(self.genresLabel)
+        self.addSubview(self.ratingsLabel)
     }
     
     override func updateConstraints() {
@@ -92,20 +92,20 @@ class MWSingleMovieCellView: UIView {
             make.right.equalToSuperview()
         }
         
-        self.releaseYearAndCountryLable.snp.updateConstraints { (make) in
+        self.releaseYearAndCountryLabel.snp.updateConstraints { (make) in
             make.top.equalTo(self.filmNameLabel.snp.bottom).offset(3)
             make.left.equalTo(filmImageView.snp.right).offset(self.offsets.left)
             make.right.equalToSuperview()
         }
         
-        self.genresLable.snp.updateConstraints { (make) in
-            make.top.equalTo(self.releaseYearAndCountryLable.snp.bottom).offset(1)
+        self.genresLabel.snp.updateConstraints { (make) in
+            make.top.equalTo(self.releaseYearAndCountryLabel.snp.bottom).offset(1)
             make.left.equalTo(filmImageView.snp.right).offset(self.offsets.left)
             make.right.equalToSuperview()
         }
         
-        self.ratingsLable.snp.updateConstraints { (make) in
-            make.top.equalTo(genresLable.snp.bottom).offset(8)
+        self.ratingsLabel.snp.updateConstraints { (make) in
+            make.top.equalTo(genresLabel.snp.bottom).offset(8)
             make.left.equalTo(filmImageView.snp.right).offset(self.offsets.left)
             make.bottom.equalToSuperview().inset(self.offsets.bottom)
             make.right.equalToSuperview()
@@ -129,11 +129,11 @@ class MWSingleMovieCellView: UIView {
             releaseYear = String(dividedDate.first ?? "")
         }
         
-        self.releaseYearAndCountryLable.text = "\(releaseYear), \(movie.originalLanguage ?? "")"
-        self.genresLable.text = self.setUpGenres(movieGenres: movie.movieGenres)
+        self.releaseYearAndCountryLabel.text = "\(releaseYear), \(movie.originalLanguage ?? "")"
+        self.genresLabel.text = self.setUpGenres(movieGenres: movie.movieGenres)
         
         guard let movieRating = movie.voteAvarage else { return }
-        self.ratingsLable.text = "Rating: \(movieRating)"
+        self.ratingsLabel.text = "Rating: \(movieRating)"
     }
     
     private func setUpGenres(movieGenres: [String]?) -> String {

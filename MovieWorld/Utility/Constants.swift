@@ -17,5 +17,7 @@ class Constants {
     static var singleCategoryGenresCollectionViewCellId: String = "singleCategoryGenresCollectionViewCellId"
     static var singleCastMemberCollectionViewCellId: String = "singleCastMemberCollectionViewCellId"
     static var singleMovieGalleryCollectionViewCellId: String = "singleMovieGalleryCollectionViewCellId"
+    static var singleCastMemberTableViewCellId: String = "singleCastMemberTableViewCellId"
+    static var singleCrewMemberTableViewCellId: String = "singleCrewMemberTableViewCellId"
     
 }

@@ -1,14 +1,14 @@
 //
-//  MWCastMemberTableViewCell.swift
+//  MWCastMemberCellView.swift
 //  MovieWorld
 //
-//  Created by Ilya Maslou on 4/3/20.
+//  Created by Ilya Maslou on 4/5/20.
 //  Copyright © 2020 Ilya Maslou. All rights reserved.
 //
 
 import UIKit
 
-class MWCastMemberTableViewCell: UITableViewCell {
+class MWCastMemberCellView: UIView {
     
     private var castMember: MWMovieCastMember?
     
@@ -47,18 +47,22 @@ class MWCastMemberTableViewCell: UITableViewCell {
         return label
     }()
     
-    
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-        self.contentView.addSubview(self.memberImageView)
-        self.contentView.addSubview(self.memberNameLabel)
-        self.contentView.addSubview(self.memberRoleLabel)
-        self.contentView.addSubview(self.memberBirthLabel)
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.setUpView()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func setUpView() {
+        self.translatesAutoresizingMaskIntoConstraints = false
+        
+        self.addSubview(self.memberImageView)
+        self.addSubview(self.memberNameLabel)
+        self.addSubview(self.memberRoleLabel)
+        self.addSubview(self.memberBirthLabel)
     }
     
     override func updateConstraints() {
@@ -89,12 +93,11 @@ class MWCastMemberTableViewCell: UITableViewCell {
         super.updateConstraints()
     }
     
-    func set(castMember: MWMovieCastMember?) {
+    func set(castMember: MWMovieCastMember?, birthday: String = "") {
 
         self.castMember = castMember
         self.memberNameLabel.text = castMember?.name
         self.memberRoleLabel.text = castMember?.character
-        self.memberBirthLabel.text = "Birthday?"
         
         if let image = castMember?.image {
             self.memberImageView.image = UIImage(data: image)
@@ -102,6 +105,19 @@ class MWCastMemberTableViewCell: UITableViewCell {
             self.memberImageView.image = UIImage(named: "imageNotFound")
         }
         
-        layoutIfNeeded()
+        self.setUpBirthday(birthday: birthday)
+    }
+    
+    func setUpBirthday(birthday: String) {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        
+        let stringFormatter = DateFormatter()
+        stringFormatter.dateFormat = "dd.MM.yyyy"
+        
+        guard let age = dateFormatter.date(from: birthday) else { return }
+        let formattedBirthday = stringFormatter.string(from: age)
+        
+        self.memberBirthLabel.text = "\(formattedBirthday) (\(age.toAge) years)"
     }
 }

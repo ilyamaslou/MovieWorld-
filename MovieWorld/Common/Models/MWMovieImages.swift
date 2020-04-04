@@ -9,22 +9,22 @@
 import UIKit
 
 class MWMovieImagesResponse: Decodable {
-    var id: Int?
-    var backdrops: [MWMovieImages]?
+    let id: Int?
+    let backdrops: [MWMovieImages]?
     var movieImages: [Data]?
 }
 
 struct MWMovieImages: Decodable {
     
     enum CodingKeys: String, CodingKey {
-           case filePath = "file_path"
-           case height = "height"
-           case width = "width"
-       }
+        case filePath = "file_path"
+        case height = "height"
+        case width = "width"
+    }
     
-    var filePath: String?
-    var height: Int?
-    var width: Int?
+    let filePath: String?
+    let height: Int?
+    let width: Int?
 }
 
 

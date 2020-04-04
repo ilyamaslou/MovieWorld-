@@ -35,9 +35,8 @@ struct MWMovieCastResponse: Decodable {
 class MWMovieCastMember: Decodable {
     
     enum CodingKeys: String, CodingKey {
-        case id = "cast_id"
+        case id = "id"
         case character = "character"
-        case creditId = "credit_id"
         case name = "name"
         case order = "order"
         case profilePath = "profile_path"
@@ -45,7 +44,6 @@ class MWMovieCastMember: Decodable {
     
     let id: Int?
     let character: String?
-    let creditId: String?
     let name: String?
     let order: Int?
     let profilePath: String?
@@ -56,7 +54,6 @@ class MWMovieCrewMember: Decodable {
     
     enum CodingKeys: String, CodingKey {
         case id = "id"
-        case creditId = "credit_id"
         case department = "department"
         case name = "name"
         case job = "job"
@@ -64,7 +61,6 @@ class MWMovieCrewMember: Decodable {
     }
     
     let id: Int?
-    let creditId: String?
     let department: String?
     let name: String?
     let job: String?

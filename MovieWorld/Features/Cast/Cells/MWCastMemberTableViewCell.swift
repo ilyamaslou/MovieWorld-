@@ -1,23 +1,20 @@
 //
-//  MWContentView.swift
+//  MWCastMemberTableViewCell.swift
 //  MovieWorld
 //
-//  Created by Ilya Maslou on 2/17/20.
+//  Created by Ilya Maslou on 4/3/20.
 //  Copyright © 2020 Ilya Maslou. All rights reserved.
 //
 
 import UIKit
-import SnapKit
 
-class MWSingleMovieInCategoryCell: UITableViewCell {
+class MWCastMemberTableViewCell: UITableViewCell {
     
-    private var movie = MWMovie()
-    
-    private lazy var movieView = MWSingleMovieCellView()
+    private lazy var castMemberView: MWCastMemberCellView = MWCastMemberCellView()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        self.contentView.addSubview(self.movieView)
+        self.contentView.addSubview(self.castMemberView)
     }
     
     required init?(coder: NSCoder) {
@@ -25,14 +22,14 @@ class MWSingleMovieInCategoryCell: UITableViewCell {
     }
     
     override func updateConstraints() {
-        self.movieView.snp.updateConstraints { (make) in
+        self.castMemberView.snp.updateConstraints { (make) in
             make.edges.equalToSuperview()
         }
         super.updateConstraints()
     }
     
-    func set(movie: MWMovie) {
-        self.movieView.setView(movie: movie)
+    func set(castMember: MWMovieCastMember?) {
+        self.castMemberView.set(castMember: castMember)
         setNeedsUpdateConstraints()
         layoutIfNeeded()
     }

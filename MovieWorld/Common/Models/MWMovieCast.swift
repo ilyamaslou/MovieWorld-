@@ -12,6 +12,24 @@ struct MWMovieCastResponse: Decodable {
     let id: Int?
     let cast: [MWMovieCastMember]
     let crew: [MWMovieCrewMember]
+    
+    func getFullCast() -> [[Any]] {
+        var fullCast: [[Any]] = []
+        
+        var cast: [MWMovieCastMember] = []
+        for memberOfCast in self.cast {
+            cast.append(memberOfCast)
+        }
+        fullCast.append(cast)
+        
+        let membersOfCrew: [String: [MWMovieCrewMember]] = Dictionary(grouping: self.crew,
+                                                                      by: { ($0.job ?? "") } )
+        for group in membersOfCrew {
+            fullCast.append(group.value)
+        }
+        
+        return fullCast
+    }
 }
 
 class MWMovieCastMember: Decodable {

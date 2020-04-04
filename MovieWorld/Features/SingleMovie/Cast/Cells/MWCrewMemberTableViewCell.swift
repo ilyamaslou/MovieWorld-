@@ -26,7 +26,7 @@ class MWCrewMemberTableViewCell: UITableViewCell {
     private lazy var memberNameLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = .systemFont(ofSize: 22)
+        label.font = .systemFont(ofSize: 17)
         label.numberOfLines = 0
         return label
     }()

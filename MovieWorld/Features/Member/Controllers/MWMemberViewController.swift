@@ -14,6 +14,11 @@ class MWMemberViewController: MWViewController {
     
     private var member: Any?
     private var memberInfo: MWPerson?
+    private var memberMovies: [MWMovie] = [] {
+        didSet {
+            self.collectionView.reloadData()
+        }
+    }
     
     private lazy var scrollView: UIScrollView = {
         let view = UIScrollView()
@@ -40,30 +45,29 @@ class MWMemberViewController: MWViewController {
         return view
     }()
     
-    //    private lazy var memberMoviesCollectionView: UICollectionView = {
-    //        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: self.memberMoviesCollectionViewLayout)
-    //        collectionView.delegate = self
-    //        collectionView.dataSource = self
-    //        collectionView.register(MWCastMemberCollectionViewCell.self, forCellWithReuseIdentifier: Constants.singleCastMemberCollectionViewCellId)
-    //
-    //        collectionView.translatesAutoresizingMaskIntoConstraints = false
-    //        collectionView.backgroundColor = .white
-    //        collectionView.contentInsetAdjustmentBehavior = .never
-    //        collectionView.showsVerticalScrollIndicator = false
-    //        collectionView.showsHorizontalScrollIndicator = false
-    //
-    //        return collectionView
-    //    }()
-    //
-    //    private lazy var memberMoviesCollectionViewLayout: UICollectionViewFlowLayout = {
-    //        let collectionViewLayout = UICollectionViewFlowLayout()
-    //        collectionViewLayout.scrollDirection = .horizontal
-    //        collectionViewLayout.minimumLineSpacing = 16
-    //        collectionViewLayout.minimumInteritemSpacing = 16
-    //        collectionViewLayout.sectionInset = UIEdgeInsets(top: .zero, left: self.offsets.left, bottom: .zero, right: self.offsets.right)
-    //        collectionViewLayout.itemSize = CGSize(width: 130, height: 237)
-    //        return collectionViewLayout
-    //    }()
+    private lazy var collectionView: UICollectionView = {
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: self.collectionViewLayout)
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.register(MWMainCollectionViewCell.self, forCellWithReuseIdentifier: Constants.mainScreenCollectionViewCellId)
+        
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.backgroundColor = .white
+        collectionView.contentInsetAdjustmentBehavior = .never
+        collectionView.showsVerticalScrollIndicator = false
+        collectionView.showsHorizontalScrollIndicator = false
+        
+        return collectionView
+    }()
+    
+    private lazy var collectionViewLayout: UICollectionViewFlowLayout = {
+        let collectionViewLayout = UICollectionViewFlowLayout()
+        collectionViewLayout.scrollDirection = .horizontal
+        collectionViewLayout.minimumLineSpacing = 8
+        collectionViewLayout.minimumInteritemSpacing = 8
+        collectionViewLayout.sectionInset = UIEdgeInsets(top: .zero, left: 16, bottom: .zero, right: 16)
+        return collectionViewLayout
+    }()
     
     private lazy var roleLabel: UILabel = {
         let label = UILabel()
@@ -85,6 +89,7 @@ class MWMemberViewController: MWViewController {
         super.init()
         self.member = member
         self.loadMemberInfo()
+        self.loadMemberMovies()
     }
     
     required init?(coder: NSCoder) {
@@ -98,6 +103,8 @@ class MWMemberViewController: MWViewController {
         self.contentView.addSubview(self.scrollView)
         self.scrollView.addSubview(self.contentViewContainer)
         self.contentViewContainer.addSubview(self.memberCellView)
+        self.contentViewContainer.addSubview(self.showAllView)
+        self.contentViewContainer.addSubview(self.collectionView)
         self.contentViewContainer.addSubview(self.roleLabel)
         self.contentViewContainer.addSubview(self.bioLabel)
         
@@ -115,10 +122,22 @@ class MWMemberViewController: MWViewController {
             make.top.equalToSuperview().offset(self.offsets.top)
         }
         
+        self.showAllView.snp.makeConstraints { (make) in
+            make.right.equalToSuperview().inset(7)
+            make.left.equalToSuperview().offset(self.offsets.left)
+            make.top.equalTo(self.memberCellView.snp.bottom).offset(24)
+        }
+        
+        self.collectionView.snp.makeConstraints { (make) in
+            make.right.equalToSuperview()
+            make.left.equalToSuperview().offset(self.offsets.left)
+            make.top.equalTo(self.showAllView.snp.bottom).offset(self.offsets.top)
+        }
+        
         self.roleLabel.snp.makeConstraints { (make) in
             make.right.equalToSuperview()
             make.left.equalToSuperview().offset(self.offsets.left)
-            make.top.equalTo(self.memberCellView.snp.bottom).offset(self.offsets.top)
+            make.top.equalTo(self.collectionView.snp.bottom).offset(self.offsets.top)
         }
         
         self.bioLabel.snp.makeConstraints { (make) in
@@ -132,14 +151,14 @@ class MWMemberViewController: MWViewController {
     private func loadMemberInfo() {
         if let castMember = self.member as? MWMovieCastMember,
             let id = castMember.id {
-            self.load(id: id)
+            self.loadInfo(id: id)
         } else if let crewMember = self.member as? MWMovieCrewMember,
             let id = crewMember.id {
-            self.load(id: id)
+            self.loadInfo(id: id)
         }
     }
     
-    private func load(id: Int) {
+    private func loadInfo(id: Int) {
         let urlPath = "person/\(id)"
         MWNet.sh.request(urlPath: urlPath ,
                          querryParameters: MWNet.sh.parameters,
@@ -156,6 +175,43 @@ class MWMemberViewController: MWViewController {
         })
     }
     
+    private func loadMemberMovies() {
+        let urlPath = getUrlForMemberMovies()
+        
+        MWNet.sh.request(urlPath: urlPath ,
+                         querryParameters: MWNet.sh.parameters,
+                         succesHandler: { [weak self] (moviesResponse: MWPersonMoviesResponse)  in
+                            guard let self = self,
+                                let results = moviesResponse.results else { return }
+                            for movies in results {
+                                guard let memberKnownForMovies = movies.knownFor else { return }
+                                self.memberMovies = memberKnownForMovies
+                            }
+            },
+                         errorHandler: { [weak self] (error) in
+                            guard let self = self else { return }
+                            
+                            let message = error.getErrorDesription()
+                            self.errorAlert(message: message)
+                            
+        })
+        
+    }
+    
+    private func getUrlForMemberMovies() -> String {
+        var urlPath = ""
+        
+        if let castMember = self.member as? MWMovieCastMember,
+            let name = castMember.name {
+            urlPath = "search/\(name)"
+        } else if let crewMember = self.member as? MWMovieCrewMember,
+            let name = crewMember.name {
+            urlPath = "search/\(name)"
+        }
+        
+        return urlPath
+    }
+    
     private func updateView() {
         self.roleLabel.text = self.memberInfo?.department
         self.bioLabel.text = self.memberInfo?.biography
@@ -164,16 +220,31 @@ class MWMemberViewController: MWViewController {
     }
 }
 
-//extension MWMemberViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-//
-//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        return 10
-//    }
-//
-//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//        guard let cell = collectionView.dequeueReusableCell(
-//            withReuseIdentifier: Constants.singleMovieGalleryCollectionViewCellId,
-//            for: indexPath) as? MWMovieGalleryCollectionViewCell else { fatalError("The registered type for the cell does not match the casting") }
-//        return cell
-//    }
-//}
+extension MWMemberViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return self.memberMovies.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: Constants.mainScreenCollectionViewCellId,
+            for: indexPath) as? MWMainCollectionViewCell else { fatalError("The registered type for the cell does not match the casting") }
+        
+        if self.memberMovies.count > 0 {
+            let singleFilm = self.memberMovies[indexPath.item]
+             cell.set(movie: singleFilm)
+        }
+        
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        MWI.s.pushVC(MWSingelMovieViewController(movie: self.memberMovies[indexPath.item]))
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: 130, height: 237)
+    }
+}

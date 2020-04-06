@@ -65,7 +65,7 @@ class MWMemberViewController: MWViewController {
         collectionViewLayout.scrollDirection = .horizontal
         collectionViewLayout.minimumLineSpacing = 8
         collectionViewLayout.minimumInteritemSpacing = 8
-        collectionViewLayout.sectionInset = UIEdgeInsets(top: .zero, left: 16, bottom: .zero, right: 16)
+        collectionViewLayout.sectionInset = UIEdgeInsets(top: .zero, left: 4, bottom: .zero, right: 4)
         return collectionViewLayout
     }()
     
@@ -129,9 +129,9 @@ class MWMemberViewController: MWViewController {
         }
         
         self.collectionView.snp.makeConstraints { (make) in
-            make.right.equalToSuperview()
-            make.left.equalToSuperview().offset(self.offsets.left)
+            make.right.left.equalToSuperview()
             make.top.equalTo(self.showAllView.snp.bottom).offset(self.offsets.top)
+            make.height.equalTo(237)
         }
         
         self.roleLabel.snp.makeConstraints { (make) in
@@ -176,17 +176,20 @@ class MWMemberViewController: MWViewController {
     }
     
     private func loadMemberMovies() {
-        let urlPath = getUrlForMemberMovies()
+        let urlPath = "search/person"
+        var querryParameters: [String: String] = MWNet.sh.parameters
+        querryParameters["query"] = self.getMemberName()
         
         MWNet.sh.request(urlPath: urlPath ,
-                         querryParameters: MWNet.sh.parameters,
+                         querryParameters: querryParameters,
                          succesHandler: { [weak self] (moviesResponse: MWPersonMoviesResponse)  in
+                            
                             guard let self = self,
-                                let results = moviesResponse.results else { return }
-                            for movies in results {
-                                guard let memberKnownForMovies = movies.knownFor else { return }
-                                self.memberMovies = memberKnownForMovies
-                            }
+                                let results = moviesResponse.results,
+                                let memberKnownForMovies = results.first?.knownFor
+                                else { return }
+                            
+                            self.memberMovies = memberKnownForMovies
             },
                          errorHandler: { [weak self] (error) in
                             guard let self = self else { return }
@@ -198,18 +201,18 @@ class MWMemberViewController: MWViewController {
         
     }
     
-    private func getUrlForMemberMovies() -> String {
-        var urlPath = ""
+    private func getMemberName() -> String {
+        var memberName: String = ""
         
         if let castMember = self.member as? MWMovieCastMember,
             let name = castMember.name {
-            urlPath = "search/\(name)"
+            memberName = name
         } else if let crewMember = self.member as? MWMovieCrewMember,
             let name = crewMember.name {
-            urlPath = "search/\(name)"
+            memberName = name
         }
         
-        return urlPath
+        return memberName
     }
     
     private func updateView() {
@@ -234,7 +237,7 @@ extension MWMemberViewController: UICollectionViewDelegate, UICollectionViewData
         
         if self.memberMovies.count > 0 {
             let singleFilm = self.memberMovies[indexPath.item]
-             cell.set(movie: singleFilm)
+            cell.set(movie: singleFilm)
         }
         
         return cell

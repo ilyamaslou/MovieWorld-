@@ -16,9 +16,9 @@ class MWCastViewController: MWViewController {
         let tableView = UITableView(frame: .zero, style: .grouped)
         tableView.backgroundColor = .white
         tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.separatorStyle = .none
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.separatorStyle = .singleLine
         tableView.showsVerticalScrollIndicator = false
         tableView.showsHorizontalScrollIndicator = false
         tableView.register(MWCastMemberTableViewCell.self,
@@ -79,7 +79,6 @@ extension MWCastViewController: UITableViewDelegate, UITableViewDataSource {
                 else { fatalError("The registered type for the cell does not match the casting") }
             
             cell.selectionStyle = .none
-            
             cell.set(castMember: castMember)
             
             return cell
@@ -89,8 +88,6 @@ extension MWCastViewController: UITableViewDelegate, UITableViewDataSource {
                 else { fatalError("The registered type for the cell does not match the casting") }
             
             cell.selectionStyle = .none
-            self.tableView.separatorStyle = .none
-            
             cell.set(crewMember: crewMember)
             
             return cell

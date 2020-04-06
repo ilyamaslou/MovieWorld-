@@ -47,6 +47,16 @@ class MWCastMemberCellView: UIView {
         return label
     }()
     
+    private lazy var sepparationLabel: UILabel = {
+        let label = UILabel()
+        label.layer.backgroundColor = UIColor.white.cgColor
+        label.layer.shadowRadius = 2
+        label.layer.shadowOpacity = 0.5
+        label.layer.shadowColor = UIColor(named: "shadowColor")?.cgColor
+        label.layer.shadowOffset = CGSize(width: 0, height: 4)
+        return label
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.setUpView()
@@ -63,6 +73,7 @@ class MWCastMemberCellView: UIView {
         self.addSubview(self.memberNameLabel)
         self.addSubview(self.memberRoleLabel)
         self.addSubview(self.memberBirthLabel)
+        self.addSubview(self.sepparationLabel)
     }
     
     override func updateConstraints() {
@@ -90,11 +101,16 @@ class MWCastMemberCellView: UIView {
             make.bottom.equalToSuperview().inset(4)
         }
         
+        self.sepparationLabel.snp.makeConstraints { (make) in
+            make.right.left.bottom.equalToSuperview()
+            make.height.equalTo(1)
+        }
+        
         super.updateConstraints()
     }
     
     func set(castMember: MWMovieCastMember?, birthday: String = "") {
-
+        
         self.castMember = castMember
         self.memberNameLabel.text = castMember?.name
         self.memberRoleLabel.text = castMember?.character

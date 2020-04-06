@@ -432,7 +432,6 @@ class MWSingelMovieViewController: MWViewController {
 extension MWSingelMovieViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        
         if collectionView == galleryCollectionView {
             return self.galleryItems.count
         }
@@ -445,7 +444,6 @@ extension MWSingelMovieViewController: UICollectionViewDelegate, UICollectionVie
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
         if collectionView == galleryCollectionView {
             guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: Constants.singleMovieGalleryCollectionViewCellId,
@@ -465,6 +463,10 @@ extension MWSingelMovieViewController: UICollectionViewDelegate, UICollectionVie
         }
         
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        MWI.s.pushVC(MWMemberViewController(member: self.movieFullCast?.cast[indexPath.item]))
     }
 }
 

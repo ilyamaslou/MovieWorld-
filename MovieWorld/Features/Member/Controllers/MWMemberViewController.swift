@@ -41,7 +41,7 @@ class MWMemberViewController: MWViewController {
     
     private lazy var showAllView: MWTitleButtonView = {
         let view = MWTitleButtonView()
-        view.title = "Cast"
+        view.title = "Filmography"
         return view
     }()
     

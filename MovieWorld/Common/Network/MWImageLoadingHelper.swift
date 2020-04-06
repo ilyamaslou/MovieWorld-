@@ -15,7 +15,7 @@ class MWImageLoadingHelper{
     
     private init() {}
     
-    func loadMovieImage(for movie: MWMovie, in category: String) {
+    func loadMovieImage(for movie: MWMovie, in category: String = "") {
         //TODO: change poster size later by providing getNextSize() in Sizes
         if let imagePath = movie.posterPath,
             let baseUrl = MWSys.sh.configuration?.images?.secureBaseUrl,
@@ -27,8 +27,10 @@ class MWImageLoadingHelper{
                                     guard let self = self else { return }
                                     
                                     movie.image = imageData
-                                    self.saveImage(for: movie, imageData: imageData, in: category)
                                     NotificationCenter.default.post(name: .movieImageUpdated, object: nil)
+                                    
+                                    guard !category.isEmpty else { return }
+                                    self.saveImage(for: movie, imageData: imageData, in: category)
                 }
             )
         }

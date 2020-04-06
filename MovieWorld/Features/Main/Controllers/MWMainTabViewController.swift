@@ -95,12 +95,10 @@ class MWMainTabViewController: MWViewController {
     }
     
     private func setGenres(to movies: [MWMovie]) -> [MWMovie] {
-        var moviesWithGenres = movies
-        for (id, movie) in movies.enumerated() {
+        for movie in movies {
             movie.setFilmGenres(genres: MWSys.sh.genres)
-            moviesWithGenres[id] = movie
         }
-        return moviesWithGenres
+        return movies
     }
     
     private func setImages(to movies: [MWMovie], in category: String) {

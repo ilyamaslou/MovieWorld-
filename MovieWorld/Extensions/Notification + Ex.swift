@@ -10,6 +10,7 @@ import Foundation
 
 extension Notification.Name {
     static let movieImageUpdated = Notification.Name("movieImagesUpdated")
+    static let memberMovieImageUpdated = Notification.Name("memberMovieImageUpdated")
     static let memberImageUpdated = Notification.Name("memberImagesUpdated")
     static let movieImagesCollectionUpdated = Notification.Name("movieImagesCollectionUpdated")
 }

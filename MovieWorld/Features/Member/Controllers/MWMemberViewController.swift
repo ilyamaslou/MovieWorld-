@@ -87,6 +87,10 @@ class MWMemberViewController: MWViewController {
     
     init(member: Any?) {
         super.init()
+        
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(imageLoaded),
+                                               name: .movieImageUpdated, object: nil)
         self.member = member
         self.loadMemberInfo()
         self.loadMemberMovies()
@@ -190,6 +194,8 @@ class MWMemberViewController: MWViewController {
                                 else { return }
                             
                             self.memberMovies = memberKnownForMovies
+                            self.setGenres()
+                            self.setImages()
             },
                          errorHandler: { [weak self] (error) in
                             guard let self = self else { return }
@@ -198,7 +204,6 @@ class MWMemberViewController: MWViewController {
                             self.errorAlert(message: message)
                             
         })
-        
     }
     
     private func getMemberName() -> String {
@@ -215,11 +220,27 @@ class MWMemberViewController: MWViewController {
         return memberName
     }
     
+    private func setGenres() {
+        for movie in self.memberMovies {
+            movie.setFilmGenres(genres: MWSys.sh.genres)
+        }
+    }
+    
+    private func setImages() {
+        for movie in self.memberMovies {
+            MWImageLoadingHelper.sh.loadMovieImage(for: movie)
+        }
+    }
+    
     private func updateView() {
         self.roleLabel.text = self.memberInfo?.department
         self.bioLabel.text = self.memberInfo?.biography
         guard let castMember = self.member as? MWMovieCastMember else { return }
         self.memberCellView.set(castMember: castMember, birthday: self.memberInfo?.birthday ?? "")
+    }
+    
+    @objc private func imageLoaded() {
+        self.collectionView.reloadData()
     }
 }
 

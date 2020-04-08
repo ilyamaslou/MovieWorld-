@@ -42,6 +42,7 @@
 		9981C573243924940079747B /* MWPerson.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9981C572243924940079747B /* MWPerson.swift */; };
 		9983A223243780F200810675 /* MWCrewMemberTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9983A222243780F200810675 /* MWCrewMemberTableViewCell.swift */; };
 		99915F88240D254800E39CE0 /* MWSpecialError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99915F87240D254800E39CE0 /* MWSpecialError.swift */; };
+		99937CAA243D52C700054731 /* UIImage + Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99937CA9243D52C700054731 /* UIImage + Ex.swift */; };
 		9999E0CF23F9F378007EB718 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9999E0CE23F9F378007EB718 /* AppDelegate.swift */; };
 		9999E0D323F9F378007EB718 /* MWMainTabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9999E0D223F9F378007EB718 /* MWMainTabViewController.swift */; };
 		9999E0D823F9F37A007EB718 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9999E0D723F9F37A007EB718 /* Assets.xcassets */; };
@@ -114,6 +115,7 @@
 		9981C572243924940079747B /* MWPerson.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWPerson.swift; sourceTree = "<group>"; };
 		9983A222243780F200810675 /* MWCrewMemberTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWCrewMemberTableViewCell.swift; sourceTree = "<group>"; };
 		99915F87240D254800E39CE0 /* MWSpecialError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWSpecialError.swift; sourceTree = "<group>"; };
+		99937CA9243D52C700054731 /* UIImage + Ex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage + Ex.swift"; sourceTree = "<group>"; };
 		9999E0CB23F9F378007EB718 /* MovieWorld.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MovieWorld.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9999E0CE23F9F378007EB718 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9999E0D223F9F378007EB718 /* MWMainTabViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWMainTabViewController.swift; sourceTree = "<group>"; };
@@ -300,6 +302,7 @@
 				996F79E2240BEACE006FF3C0 /* String+Ex.swift */,
 				992A1D68242AB81600D61D65 /* Notification + Ex.swift */,
 				99B481F72439501200017903 /* Date+Ex.swift */,
+				99937CA9243D52C700054731 /* UIImage + Ex.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -707,6 +710,7 @@
 				9999E0CF23F9F378007EB718 /* AppDelegate.swift in Sources */,
 				9981C573243924940079747B /* MWPerson.swift in Sources */,
 				99AB2D892434064000095464 /* Movie+CoreDataProperties.swift in Sources */,
+				99937CAA243D52C700054731 /* UIImage + Ex.swift in Sources */,
 				99BAE46E2411A6DC00F45B11 /* MWConfiguration.swift in Sources */,
 				9979B46323FFCF19005421D9 /* MWSearchViewController.swift in Sources */,
 				995F405724153868005DC65F /* MWImageConfiguration.swift in Sources */,

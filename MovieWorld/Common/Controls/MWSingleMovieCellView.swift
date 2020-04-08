@@ -120,7 +120,8 @@ class MWSingleMovieCellView: UIView {
         if let imageData = movie.image {
             self.filmImageView.image = UIImage(data: imageData)
         } else {
-            self.filmImageView.image = UIImage(named: "imageNotFound")
+            self.filmImageView.image = UIImage(named: "imageNotFound")?
+                .resizeImage(targetSize: CGSize(width: 80, height: 100))
         }
         
         var releaseYear = ""

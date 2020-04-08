@@ -119,6 +119,7 @@ extension MWCastViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard indexPath.section == 0 else { return }
         MWI.s.pushVC(MWMemberViewController(member: self.movieFullCast?[indexPath.section][indexPath.row]))
     }
     

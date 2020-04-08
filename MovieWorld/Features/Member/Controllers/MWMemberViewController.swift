@@ -39,10 +39,12 @@ class MWMemberViewController: MWViewController {
     
     private lazy var memberCellView: MWCastMemberCellView = MWCastMemberCellView()
     
-    private lazy var showAllView: MWTitleButtonView = {
-        let view = MWTitleButtonView()
-        view.title = "Filmography"
-        return view
+    private lazy var titleForCollectionView: UILabel = {
+        let label = UILabel()
+        label.text = "Filmography"
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .systemFont(ofSize: 17,  weight: .bold)
+        return label
     }()
     
     private lazy var collectionView: UICollectionView = {
@@ -65,7 +67,7 @@ class MWMemberViewController: MWViewController {
         collectionViewLayout.scrollDirection = .horizontal
         collectionViewLayout.minimumLineSpacing = 8
         collectionViewLayout.minimumInteritemSpacing = 8
-        collectionViewLayout.sectionInset = UIEdgeInsets(top: .zero, left: 4, bottom: .zero, right: 4)
+        collectionViewLayout.sectionInset = UIEdgeInsets(top: .zero, left: 16, bottom: .zero, right: 16)
         return collectionViewLayout
     }()
     
@@ -107,7 +109,7 @@ class MWMemberViewController: MWViewController {
         self.contentView.addSubview(self.scrollView)
         self.scrollView.addSubview(self.contentViewContainer)
         self.contentViewContainer.addSubview(self.memberCellView)
-        self.contentViewContainer.addSubview(self.showAllView)
+        self.contentViewContainer.addSubview(self.titleForCollectionView)
         self.contentViewContainer.addSubview(self.collectionView)
         self.contentViewContainer.addSubview(self.roleLabel)
         self.contentViewContainer.addSubview(self.bioLabel)
@@ -126,15 +128,15 @@ class MWMemberViewController: MWViewController {
             make.top.equalToSuperview().offset(self.offsets.top)
         }
         
-        self.showAllView.snp.makeConstraints { (make) in
-            make.right.equalToSuperview().inset(7)
+        self.titleForCollectionView.snp.makeConstraints { (make) in
+            make.right.equalToSuperview()
             make.left.equalToSuperview().offset(self.offsets.left)
             make.top.equalTo(self.memberCellView.snp.bottom).offset(24)
         }
         
         self.collectionView.snp.makeConstraints { (make) in
             make.right.left.equalToSuperview()
-            make.top.equalTo(self.showAllView.snp.bottom).offset(self.offsets.top)
+            make.top.equalTo(self.titleForCollectionView.snp.bottom).offset(self.offsets.top)
             make.height.equalTo(237)
         }
         
@@ -150,6 +152,10 @@ class MWMemberViewController: MWViewController {
             make.left.equalToSuperview().offset(self.offsets.left)
             make.bottom.equalToSuperview().inset(10)
         }
+    }
+    
+    override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
+        self.collectionViewLayout.invalidateLayout()
     }
     
     private func loadMemberInfo() {
@@ -269,6 +275,7 @@ extension MWMemberViewController: UICollectionViewDelegate, UICollectionViewData
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 130, height: 237)
+        let width = ((Int(self.view.frame.size.width) - 48) / 3)
+        return CGSize(width: width, height: 237)
     }
 }

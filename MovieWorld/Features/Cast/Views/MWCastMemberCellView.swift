@@ -48,6 +48,7 @@ class MWCastMemberCellView: UIView {
     
     private lazy var sepparationLabel: UILabel = {
         let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
         label.layer.backgroundColor = UIColor.white.cgColor
         label.layer.shadowRadius = 2
         label.layer.shadowOpacity = 0.5
@@ -90,13 +91,13 @@ class MWCastMemberCellView: UIView {
         self.memberRoleLabel.snp.makeConstraints { (make) in
             make.top.equalTo(self.memberNameLabel.snp.bottom).offset(3)
             make.right.equalToSuperview()
-            make.left.equalTo(self.memberImageView.snp.right).offset(self.offsets.left)
+            make.left.equalTo(self.memberNameLabel.snp.left)
         }
         
         self.memberBirthLabel.snp.makeConstraints { (make) in
             make.top.equalTo(self.memberRoleLabel.snp.bottom).offset(1)
             make.right.equalToSuperview()
-            make.left.equalTo(self.memberImageView.snp.right).offset(self.offsets.left)
+            make.left.equalTo(self.memberRoleLabel.snp.left)
             make.bottom.equalToSuperview().inset(4)
         }
         

@@ -36,17 +36,18 @@ class MWImageLoadingHelper{
         }
     }
     
-    func loadPersonImage<T>(for person: T, path: String?) {
+    func loadPersonImage<T:PersonImageble>(for person: T, path: String?) {
+        var personToChange = person
         if let imagePath = path,
             let baseUrl = MWSys.sh.configuration?.images?.secureBaseUrl,
             let size = MWSys.sh.configuration?.images?.posterSizes?.first {
             MWNet.sh.imageRequest(baseUrl: baseUrl,
                                   size: size,
                                   filePath: imagePath,
-                                  succesHandler: { [weak self] (imageData: Data)  in
-                                    self?.setImageToPerson(person: person, imageData: imageData)
+                                  succesHandler: { (imageData: Data)  in
+                                    personToChange.image = imageData
                                     NotificationCenter.default.post(name: .memberImageUpdated, object: nil)
-                }
+            }
             )
         }
     }
@@ -72,16 +73,6 @@ class MWImageLoadingHelper{
                                     NotificationCenter.default.post(name: .movieImagesCollectionUpdated, object: nil)
             }
             )
-        }
-    }
-    
-    func setImageToPerson<T>(person: T, imageData: Data) {
-        if let imageForCastMember = person as? MWMovieCastMember {
-            imageForCastMember.image = imageData
-        } else if let imageForCrewMember = person as? MWMovieCrewMember {
-            imageForCrewMember.image = imageData
-        } else {
-            return
         }
     }
     

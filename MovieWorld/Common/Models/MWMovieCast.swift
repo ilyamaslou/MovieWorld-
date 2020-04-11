@@ -10,7 +10,7 @@ import Foundation
 
 struct MWMovieCastResponse: Decodable {
     let id: Int?
-    let cast: [MWMovieCastMember]
+    var cast: [MWMovieCastMember]
     let crew: [MWMovieCrewMember]
     
     func getFullCast() -> [[Any]] {
@@ -32,7 +32,7 @@ struct MWMovieCastResponse: Decodable {
     }
 }
 
-class MWMovieCastMember: Decodable {
+class MWMovieCastMember: Decodable, PersonImageble {
     
     enum CodingKeys: String, CodingKey {
         case id = "id"
@@ -50,7 +50,7 @@ class MWMovieCastMember: Decodable {
     var image: Data?
 }
 
-class MWMovieCrewMember: Decodable {
+class MWMovieCrewMember: Decodable, PersonImageble {
     
     enum CodingKeys: String, CodingKey {
         case id = "id"
@@ -66,4 +66,8 @@ class MWMovieCrewMember: Decodable {
     let job: String?
     let profilePath: String?
     var image: Data?
+}
+
+protocol PersonImageble {
+    var image: Data? {get set}
 }

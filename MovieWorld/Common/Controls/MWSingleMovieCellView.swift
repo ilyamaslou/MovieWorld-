@@ -128,9 +128,10 @@ class MWSingleMovieCellView: UIView {
         if let releaseDate = movie.releaseDate {
             let dividedDate = releaseDate.split(separator: "-")
             releaseYear = String(dividedDate.first ?? "")
+            releaseYear = releaseYear.isEmpty ? "" : "\(releaseYear),"
         }
         
-        self.releaseYearAndCountryLabel.text = "\(releaseYear), \(movie.originalLanguage ?? "")"
+        self.releaseYearAndCountryLabel.text = "\(releaseYear) \(movie.originalLanguage ?? "")"
         self.genresLabel.text = self.setUpGenres(movieGenres: movie.movieGenres)
         
         guard let movieRating = movie.voteAvarage else { return }

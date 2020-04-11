@@ -326,20 +326,27 @@ class MWSingelMovieViewController: MWViewController {
         MWNet.sh.request(urlPath: urlPath ,
                          querryParameters: MWNet.sh.parameters,
                          succesHandler: { [weak self] (cast: MWMovieCastResponse)  in
-                            guard let self = self else { return }
-                            
-                            self.movieFullCast = cast
-                            guard let castMembers = self.movieFullCast?.cast,
-                                let crewMembers = self.movieFullCast?.crew else { return }
-                            self.setImages(to: castMembers)
-                            self.setImages(to: crewMembers)
+                            self?.setCast(cast: cast)
             },
                          errorHandler: { [weak self] (error) in
-                            guard let self = self else { return }
-                            
                             let message = error.getErrorDesription()
-                            self.errorAlert(message: message)
+                            self?.errorAlert(message: message)
         })
+    }
+    
+    private func setCast(cast: MWMovieCastResponse) {
+        self.movieFullCast = cast
+        
+        let sortedCast = cast.cast.sorted { (member1, member2: MWMovieCastMember) in
+            guard let order1 = member1.order, let order2 = member2.order else { return false }
+            return order1 < order2
+        }
+        self.movieFullCast?.cast = sortedCast
+        
+        guard let castMembers = self.movieFullCast?.cast,
+            let crewMembers = self.movieFullCast?.crew else { return }
+        self.setImages(to: castMembers)
+        self.setImages(to: crewMembers)
     }
     
     private func loadMovieAdditionalInfo() {

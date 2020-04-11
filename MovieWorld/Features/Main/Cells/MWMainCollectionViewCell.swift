@@ -86,12 +86,10 @@ class MWMainCollectionViewCell: UICollectionViewCell {
         if let releaseDate = self.movie.releaseDate {
             let dividedDate = releaseDate.split(separator: "-")
             releaseYear = String(dividedDate.first ?? "")
+            releaseYear = releaseYear.isEmpty ? "" : "\(releaseYear),"
         }
         
         let genre = "\(self.movie.movieGenres?.first ?? "")"
-        if (genre.isEmpty  && self.movie.releaseDate?.isEmpty ?? false) == false {
-            releaseYear.append(",")
-        }
         
         return "\(releaseYear) \(genre)"
     }

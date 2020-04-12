@@ -30,6 +30,13 @@ class MWTabBarViewController: UITabBarController {
             image: UIImage(named:"searchTabIcon"), selectedImage: UIImage(named:"searchTabIcon"))
         return view
     }()
+    
+    private lazy var profileTabBarItem: UITabBarItem = {
+        let view: UITabBarItem = UITabBarItem(
+            title: "Profile".local(),
+            image: UIImage(named:"profileTabBarIcon"), selectedImage: UIImage(named:"profileTabBarIcon"))
+        return view
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,12 +47,14 @@ class MWTabBarViewController: UITabBarController {
         let mainVC = MWMainTabViewController()
         let categoryVC = MWCategoryViewController()
         let searchVC = MWSearchViewController()
+        let profileVC = MWProfileViewController()
         
         mainVC.tabBarItem = self.mainTabBarItem
         categoryVC.tabBarItem = self.categoryTabBarItem
         searchVC.tabBarItem = self.searchTabBarItem
+        profileVC.tabBarItem = self.profileTabBarItem
         
-         self.viewControllers = [mainVC, categoryVC , searchVC]
+         self.viewControllers = [mainVC, categoryVC , searchVC, profileVC]
             .map{ MWNavigationController(rootViewController: $0) }
         
         self.setUpTabBarStyle()

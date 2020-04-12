@@ -607,15 +607,21 @@ extension MWSingelMovieViewController {
         
         let favoriteMovies = FavoriteMovies(context: managedContext)
         let newMovie = Movie(context: managedContext)
-        newMovie.id = Int64(movie.id ?? 0)
-        newMovie.posterPath = movie.posterPath
-        newMovie.genreIds = movie.genreIds
-        newMovie.title = movie.title
-        newMovie.originalLanguage = movie.originalLanguage
-        newMovie.releaseDate = movie.releaseDate
-        if let movieRating = movie.voteAvarage {
+        newMovie.id = Int64(self.movie.id ?? 0)
+        newMovie.posterPath = self.movie.posterPath
+        newMovie.genreIds = self.movie.genreIds
+        newMovie.title = self.movie.title
+        newMovie.originalLanguage = self.movie.originalLanguage
+        newMovie.releaseDate = self.movie.releaseDate
+        
+        if let movieRating = self.movie.voteAvarage {
             newMovie.voteAvarage = movieRating
         }
+        
+        if let imageData = self.movie.image {
+            newMovie.movieImage = imageData
+        }
+        
         favoriteMovies.addToMovies(newMovie)
         
         self.saveContext(context: managedContext)

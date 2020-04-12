@@ -57,9 +57,9 @@ class MWSingleCategoryViewController: MWViewController {
         return collectionViewLayout
     }()
     
-    init(movies: [MWMovie]) {
+    init(title:String = "Movies", movies: [MWMovie]) {
         super.init()
-        self.title = "Movies"
+        self.title = title
         self.movies = movies
         self.filteredMovies = movies
         self.setUpGenres()

@@ -1,5 +1,5 @@
 //
-//  MovieCategory+CoreDataClass.swift
+//  FavoriteMovies+CoreDataClass.swift
 //  MovieWorld
 //
 //  Created by Ilya Maslou on 4/12/20.
@@ -11,6 +11,6 @@ import Foundation
 import CoreData
 
 
-public class MovieCategory: NSManagedObject {
+public class FavoriteMovies: NSManagedObject {
 
 }

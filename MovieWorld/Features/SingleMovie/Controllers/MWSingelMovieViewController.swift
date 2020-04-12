@@ -16,6 +16,12 @@ class MWSingelMovieViewController: MWViewController {
     
     private var cdMovie: Movie?
     
+    private var isFavorite: Bool = false {
+        didSet {
+            self.navigationItem.rightBarButtonItem?.image = isFavorite ?  UIImage(named: "selectedFaovoriteIcon") : UIImage(named: "unselectedFavoriteIcon")
+        }
+    }
+    
     private var movie: MWMovie = MWMovie() {
         didSet {
             self.castCollectionView.reloadData()
@@ -34,6 +40,14 @@ class MWSingelMovieViewController: MWViewController {
     private var gallery: MWMovieGallery = MWMovieGallery()
     private var galleryItems: [Any] = []
     private var imagesResponse: MWMovieImagesResponse?
+    
+    private lazy var rightBarButtonDidFavoriteItem: UIBarButtonItem = {
+        let item = UIBarButtonItem(image: UIImage(named: "unselectedFavoriteIcon"),
+                                   style: .plain,
+                                   target: self,
+                                   action: #selector(self.didFavoriteButtonTapped))
+        return item
+    }()
     
     private lazy var scrollView: UIScrollView = {
         let view = UIScrollView()
@@ -262,7 +276,7 @@ class MWSingelMovieViewController: MWViewController {
     
     init(movie: MWMovie) {
         super.init()
-        
+        self.navigationItem.setRightBarButton(self.rightBarButtonDidFavoriteItem, animated: true)
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(memberImageUpdated),
                                                name: .memberImageUpdated, object: nil)
@@ -272,6 +286,8 @@ class MWSingelMovieViewController: MWViewController {
                                                name: .movieImagesCollectionUpdated, object: nil)
         self.movie = movie
         self.movieCellView.setView(movie: movie)
+        
+        self.fetchIsFavorite()
         
         self.loadMovieVideos()
         self.loadMovieCast()
@@ -434,6 +450,15 @@ class MWSingelMovieViewController: MWViewController {
         
         self.refreshControl.endRefreshing()
     }
+    
+    @objc private func didFavoriteButtonTapped() {
+        self.isFavorite = !self.isFavorite
+        if self.isFavorite {
+            self.save()
+        } else {
+            self.remove()
+        }
+    }
 }
 
 extension MWSingelMovieViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
@@ -477,6 +502,7 @@ extension MWSingelMovieViewController: UICollectionViewDelegate, UICollectionVie
     }
 }
 
+//MARK: CoreData Additional movie Info
 extension MWSingelMovieViewController {
     private func fetchMovie() {
         let managedContext = CoreDataManager.s.persistentContainer.viewContext
@@ -536,4 +562,75 @@ extension MWSingelMovieViewController {
             print(error.localizedDescription)
         }
     }
+}
+
+//MARK: CoreData FavoriteMovies
+extension MWSingelMovieViewController {
+    private func saveContext(context: NSManagedObjectContext) {
+        do {
+            try context.save()
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
+    @discardableResult private func fetchFavoriteMovie() -> Movie? {
+        let managedContext = CoreDataManager.s.persistentContainer.viewContext
+        let fetch: NSFetchRequest<Movie> = Movie.fetchRequest()
+        
+        guard let id = self.movie.id,
+            let title = self.movie.title,
+            let releaseDate = self.movie.releaseDate else { return Movie() }
+        fetch.predicate = NSPredicate(format: "ANY id = %i and title = %@ and releaseDate = %@ and favorite != nil", id, title, releaseDate)
+        
+        var result: [Movie] = []
+        do {
+            result = try managedContext.fetch(fetch)
+        } catch {
+            print(error.localizedDescription)
+        }
+        
+        return result.first
+    }
+    
+    private func fetchIsFavorite() {
+        let result = self.fetchFavoriteMovie()
+        if result != nil {
+            self.isFavorite = true
+        } else {
+            self.isFavorite = false
+        }
+    }
+    
+    private func save() {
+        let managedContext = CoreDataManager.s.persistentContainer.viewContext
+        
+        let favoriteMovies = FavoriteMovies(context: managedContext)
+        let newMovie = Movie(context: managedContext)
+        newMovie.id = Int64(movie.id ?? 0)
+        newMovie.posterPath = movie.posterPath
+        newMovie.genreIds = movie.genreIds
+        newMovie.title = movie.title
+        newMovie.originalLanguage = movie.originalLanguage
+        newMovie.releaseDate = movie.releaseDate
+        if let movieRating = movie.voteAvarage {
+            newMovie.voteAvarage = movieRating
+        }
+        favoriteMovies.addToMovies(newMovie)
+        
+        self.saveContext(context: managedContext)
+    }
+    
+    private func remove() {
+        let managedContext = CoreDataManager.s.persistentContainer.viewContext
+        
+        let favoriteMovies = FavoriteMovies(context: managedContext)
+        guard let movieToRemove = self.fetchFavoriteMovie() else { return }
+        favoriteMovies.removeFromMovies(movieToRemove)
+        movieToRemove.favorite = nil
+        
+        self.saveContext(context: managedContext)
+    }
+    
+    
 }

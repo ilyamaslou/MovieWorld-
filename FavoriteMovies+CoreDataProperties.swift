@@ -1,5 +1,5 @@
 //
-//  MovieCategory+CoreDataProperties.swift
+//  FavoriteMovies+CoreDataProperties.swift
 //  MovieWorld
 //
 //  Created by Ilya Maslou on 4/12/20.
@@ -11,19 +11,18 @@ import Foundation
 import CoreData
 
 
-extension MovieCategory {
+extension FavoriteMovies {
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<MovieCategory> {
-        return NSFetchRequest<MovieCategory>(entityName: "MovieCategory")
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<FavoriteMovies> {
+        return NSFetchRequest<FavoriteMovies>(entityName: "FavoriteMovies")
     }
 
-    @NSManaged public var movieCategory: String?
     @NSManaged public var movies: NSSet?
 
 }
 
 // MARK: Generated accessors for movies
-extension MovieCategory {
+extension FavoriteMovies {
 
     @objc(addMoviesObject:)
     @NSManaged public func addToMovies(_ value: Movie)

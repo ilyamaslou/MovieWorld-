@@ -107,7 +107,7 @@ extension MWInitController {
             genres = try managedContext.fetch(fetch)
             
             for genre in genres {
-                let mwGenre = MWGenre(id: Int(genre.id), name: genre.name)
+                let mwGenre = MWGenre(id: Int(genre.id), name: genre.name ?? "")
                 self.genres.append(mwGenre)
             }
         } catch {

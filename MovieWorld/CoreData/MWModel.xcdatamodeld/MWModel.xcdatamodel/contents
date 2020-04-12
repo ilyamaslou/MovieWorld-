@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="16119" systemVersion="19E266" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="16119" systemVersion="19E287" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="FavoriteMovies" representedClassName=".FavoriteMovies" syncable="YES">
+        <relationship name="movies" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Movie" inverseName="favorite" inverseEntity="Movie"/>
+    </entity>
     <entity name="Genre" representedClassName=".Genre" syncable="YES">
         <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="name" attributeType="String"/>
@@ -25,6 +28,7 @@
         <attribute name="voteAvarage" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <relationship name="additionalInfo" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="MovieAdditionalInfo" inverseName="movie" inverseEntity="MovieAdditionalInfo"/>
         <relationship name="category" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MovieCategory" inverseName="movies" inverseEntity="MovieCategory"/>
+        <relationship name="favorite" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FavoriteMovies" inverseName="movies" inverseEntity="FavoriteMovies"/>
     </entity>
     <entity name="MovieAdditionalInfo" representedClassName=".MovieAdditionalInfo" syncable="YES">
         <attribute name="adult" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
@@ -38,9 +42,10 @@
         <relationship name="movies" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Movie" inverseName="category" inverseEntity="Movie"/>
     </entity>
     <elements>
+        <element name="FavoriteMovies" positionX="-36" positionY="117" width="128" height="58"/>
         <element name="Genre" positionX="-54" positionY="-9" width="128" height="73"/>
         <element name="ImageConfiguration" positionX="-36" positionY="27" width="128" height="148"/>
-        <element name="Movie" positionX="-45" positionY="63" width="128" height="208"/>
+        <element name="Movie" positionX="-45" positionY="63" width="128" height="223"/>
         <element name="MovieAdditionalInfo" positionX="-27" positionY="117" width="128" height="118"/>
         <element name="MovieCategory" positionX="-36" positionY="72" width="128" height="73"/>
     </elements>

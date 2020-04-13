@@ -24,6 +24,7 @@ class MWProfileViewController: MWViewController {
     
     override func initController() {
         super.initController()
+        self.title = "Profile"
         
         let view = UIView()
         contentView.addSubview(view)
@@ -36,51 +37,9 @@ class MWProfileViewController: MWViewController {
         self.favoriteMovies.snp.makeConstraints { (make) in
             make.center.equalToSuperview()
         }
-        
-        self.title = "Profile"
     }
     
     @objc private func favoriteMoviesButtonDidPressed() {
-        MWI.s.pushVC(MWSingleCategoryViewController(title: "Favorites",
-                                                    movies: self.getFavoriteMovies()))
-    }
-    
-    @discardableResult private func fetchFavoriteMovies() -> [Movie] {
-        let managedContext = CoreDataManager.s.persistentContainer.viewContext
-        let fetch: NSFetchRequest<Movie> = Movie.fetchRequest()
-        fetch.predicate = NSPredicate(format: "ANY favorite != nil")
-        
-        var result: [Movie] = []
-        do {
-            result = try managedContext.fetch(fetch)
-        } catch {
-            print(error.localizedDescription)
-        }
-        
-        return result
-    }
-    
-    private func getFavoriteMovies() -> [MWMovie] {
-        let movies = self.fetchFavoriteMovies()
-        var mwMovies: [MWMovie] = []
-        for movie in movies {
-            let newMovie = MWMovie()
-            newMovie.id = Int(movie.id)
-            newMovie.posterPath = movie.posterPath
-            newMovie.genreIds = movie.genreIds
-            newMovie.title = movie.title
-            newMovie.originalLanguage = movie.originalLanguage
-            newMovie.releaseDate = movie.releaseDate
-            newMovie.voteAvarage = movie.voteAvarage
-            
-            if let imageData = movie.movieImage {
-                newMovie.image = imageData
-            }
-            
-            newMovie.setFilmGenres(genres: MWSys.sh.genres)
-            
-            mwMovies.append(newMovie)
-        }
-        return mwMovies
+        MWI.s.pushVC(MWFavoriteMoviesAndActorsViewController(title: "Favorites"))
     }
 }

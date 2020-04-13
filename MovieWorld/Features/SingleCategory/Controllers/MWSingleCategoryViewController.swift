@@ -22,8 +22,17 @@ class MWSingleCategoryViewController: MWViewController {
         }
     }
     
-    private var movieGenres: [(String, Bool)] = []
-    private var filteredGenres: Set<String> = []
+    private var movieGenres: [(String, Bool)] = [] {
+        didSet {
+            self.collectionView.reloadData()
+        }
+    }
+    
+    private var filteredGenres: Set<String> = [] {
+        didSet {
+            self.collectionView.reloadData()
+        }
+    }
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -60,9 +69,7 @@ class MWSingleCategoryViewController: MWViewController {
     init(title:String = "Movies", movies: [MWMovie]) {
         super.init()
         self.title = title
-        self.movies = movies
-        self.filteredMovies = movies
-        self.setUpGenres()
+        self.updateTableAndCollectionView(movies: movies)
     }
     
     required init?(coder: NSCoder) {
@@ -88,7 +95,14 @@ class MWSingleCategoryViewController: MWViewController {
         }
     }
     
+    func updateTableAndCollectionView(movies: [MWMovie]) {
+        self.movies = movies
+        self.filteredMovies = movies
+        self.setUpGenres()
+    }
+    
     private func setUpGenres() {
+        self.movieGenres = []
         var uniqueGenres: Set<String> = []
         for movie in self.movies {
             guard let genres = movie.movieGenres else { return }

@@ -1,5 +1,5 @@
 //
-//  MWPerson.swift
+//  MWPersonDetails.swift
 //  MovieWorld
 //
 //  Created by Ilya Maslou on 4/4/20.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-struct MWPerson: Decodable {
+struct MWMemberDetails: Decodable {
     
     enum CodingKeys: String, CodingKey {
         case birthday = "birthday"

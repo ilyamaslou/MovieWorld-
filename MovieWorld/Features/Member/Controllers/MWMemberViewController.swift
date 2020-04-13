@@ -7,18 +7,33 @@
 //
 
 import UIKit
+import CoreData
 
 class MWMemberViewController: MWViewController {
     
     private let offsets = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
     
     private var member: Any?
-    private var memberInfo: MWPerson?
+    private var memberInfo: MWMemberDetails?
     private var memberMovies: [MWMovie] = [] {
         didSet {
             self.collectionView.reloadData()
         }
     }
+    
+    private var isFavorite: Bool = false {
+        didSet {
+            self.navigationItem.rightBarButtonItem?.image = isFavorite ?  UIImage(named: "selectedFaovoriteIcon") : UIImage(named: "unselectedFavoriteIcon")
+        }
+    }
+    
+    private lazy var rightBarButtonDidFavoriteItem: UIBarButtonItem = {
+        let item = UIBarButtonItem(image: UIImage(named: "unselectedFavoriteIcon"),
+                                   style: .plain,
+                                   target: self,
+                                   action: #selector(self.didFavoriteButtonTapped))
+        return item
+    }()
     
     private lazy var scrollView: UIScrollView = {
         let view = UIScrollView()
@@ -89,11 +104,14 @@ class MWMemberViewController: MWViewController {
     
     init(member: Any?) {
         super.init()
+        self.navigationItem.setRightBarButton(self.rightBarButtonDidFavoriteItem, animated: true)
         
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(imageLoaded),
                                                name: .movieImageUpdated, object: nil)
         self.member = member
+        
+        self.fetchIsFavorite()
         self.loadMemberInfo()
         self.loadMemberMovies()
     }
@@ -172,7 +190,7 @@ class MWMemberViewController: MWViewController {
         let urlPath = "person/\(id)"
         MWNet.sh.request(urlPath: urlPath ,
                          querryParameters: MWNet.sh.parameters,
-                         succesHandler: { [weak self] (info: MWPerson)  in
+                         succesHandler: { [weak self] (info: MWMemberDetails)  in
                             guard let self = self else { return }
                             self.memberInfo = info
                             self.updateView()
@@ -248,6 +266,15 @@ class MWMemberViewController: MWViewController {
     @objc private func imageLoaded() {
         self.collectionView.reloadData()
     }
+    
+    @objc private func didFavoriteButtonTapped() {
+        self.isFavorite = !self.isFavorite
+        if self.isFavorite {
+            self.save()
+        } else {
+            self.remove()
+        }
+    }
 }
 
 extension MWMemberViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
@@ -277,5 +304,76 @@ extension MWMemberViewController: UICollectionViewDelegate, UICollectionViewData
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = ((Int(self.view.frame.size.width) - 48) / 3)
         return CGSize(width: width, height: 237)
+    }
+}
+
+//MARK: CoreData FavoriteActors
+extension MWMemberViewController {
+    private func saveContext(context: NSManagedObjectContext) {
+        do {
+            try context.save()
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
+    @discardableResult private func fetchFavoriteActor() -> CastMember? {
+        let managedContext = CoreDataManager.s.persistentContainer.viewContext
+        let fetch: NSFetchRequest<CastMember> = CastMember.fetchRequest()
+        
+        guard let member = self.member as? MWMovieCastMember,
+            let id = member.id,
+            let name = member.name else { return CastMember() }
+        fetch.predicate = NSPredicate(format: "ANY id = %i and name = %@ and favoriteActors != nil", id, name)
+        
+        var result: [CastMember] = []
+        do {
+            result = try managedContext.fetch(fetch)
+        } catch {
+            print(error.localizedDescription)
+        }
+        
+        return result.first
+    }
+    
+    private func fetchIsFavorite() {
+        let result = self.fetchFavoriteActor()
+        if result != nil {
+            self.isFavorite = true
+        } else {
+            self.isFavorite = false
+        }
+    }
+    
+    private func save() {
+        let managedContext = CoreDataManager.s.persistentContainer.viewContext
+        
+        let favoriteActors = FavoriteActors(context: managedContext)
+        let newMemmber = CastMember(context: managedContext)
+        guard let member = self.member as? MWMovieCastMember else { return }
+        newMemmber.id = Int64(member.id ?? 0)
+        newMemmber.profilePath = member.profilePath
+        newMemmber.character = member.character
+        newMemmber.order = Int64(member.order ?? 0)
+        newMemmber.name = member.name
+        
+        
+        if let imageData = member.image {
+            newMemmber.image = imageData
+        }
+        
+        favoriteActors.addToActors(newMemmber)
+        
+        self.saveContext(context: managedContext)
+    }
+    
+    private func remove() {
+        let managedContext = CoreDataManager.s.persistentContainer.viewContext
+        
+        let favoriteActors = FavoriteActors(context: managedContext)
+        guard let memberToRemove = self.fetchFavoriteActor() else { return }
+        favoriteActors.removeFromActors(memberToRemove)
+        memberToRemove.favoriteActors = nil
+        self.saveContext(context: managedContext)
     }
 }

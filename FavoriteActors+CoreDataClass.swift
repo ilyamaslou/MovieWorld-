@@ -1,5 +1,5 @@
 //
-//  ImageConfiguration+CoreDataClass.swift
+//  FavoriteActors+CoreDataClass.swift
 //  MovieWorld
 //
 //  Created by Ilya Maslou on 4/14/20.
@@ -11,6 +11,6 @@ import Foundation
 import CoreData
 
 
-public class ImageConfiguration: NSManagedObject {
+public class FavoriteActors: NSManagedObject {
 
 }

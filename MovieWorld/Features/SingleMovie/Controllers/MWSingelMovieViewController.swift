@@ -637,6 +637,4 @@ extension MWSingelMovieViewController {
         
         self.saveContext(context: managedContext)
     }
-    
-    
 }

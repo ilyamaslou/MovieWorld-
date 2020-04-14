@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class MWFavoriteMoviesAndActorsViewController: MWViewController {
+class MWFavoriteMoviesViewController: MWViewController {
     
     private var movies: [MWMovie] = []
     
@@ -33,7 +33,7 @@ class MWFavoriteMoviesAndActorsViewController: MWViewController {
     }
     
     private func setUpView() {
-        guard let moviesByGenresView = moviesByGenresController.view else { return }
+        guard let moviesByGenresView = self.moviesByGenresController.view else { return }
         
         self.contentView.addSubview(moviesByGenresView)
         moviesByGenresView.snp.makeConstraints { (make) in

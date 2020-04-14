@@ -10,7 +10,11 @@ import UIKit
 
 class MWCastViewController: MWViewController {
     
-    private var movieFullCast: [[Any]]? = []
+    private var movieFullCast: [[Any]]? = [] {
+        didSet {
+            self.tableView.reloadData()
+        }
+    }
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
@@ -57,8 +61,17 @@ class MWCastViewController: MWViewController {
         self.movieFullCast = cast?.getFullCast()
     }
     
+    init(castMembers: [[MWMovieCastMember]]) {
+        super.init()
+        self.movieFullCast = castMembers
+    }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func updateTableView(cast: [[MWMovieCastMember]]) {
+        self.movieFullCast = cast
     }
 }
 

@@ -42,12 +42,28 @@ class MWMovieCastMember: Decodable, PersonImageble {
         case profilePath = "profile_path"
     }
     
-    let id: Int?
-    let character: String?
-    let name: String?
-    let order: Int?
-    let profilePath: String?
+    var id: Int?
+    var character: String?
+    var name: String?
+    var order: Int?
+    var profilePath: String?
     var image: Data?
+    
+    init() {}
+    
+    init(id: Int?,
+         character: String?,
+         name: String?,
+         order: Int?,
+         profilePath: String?,
+         image: Data?) {
+        self.id = id
+        self.character = character
+        self.name = name
+        self.order = order
+        self.profilePath = profilePath
+        self.image = image
+    }
 }
 
 class MWMovieCrewMember: Decodable, PersonImageble {

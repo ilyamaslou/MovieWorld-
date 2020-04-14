@@ -22,6 +22,17 @@ class MWProfileViewController: MWViewController {
         return button
     }()
     
+    private lazy var favoriteActors: UIButton = {
+        var button = UIButton()
+        button.setTitle("Favorite actors", for: .normal)
+        button.setTitleColor(.black, for: .normal)
+        button.layer.borderColor = UIColor.black.cgColor
+        button.layer.borderWidth = 1
+        button.addTarget(self, action: #selector(favoriteActorsButtonDidPressed), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
     override func initController() {
         super.initController()
         self.title = "Profile"
@@ -29,17 +40,27 @@ class MWProfileViewController: MWViewController {
         let view = UIView()
         contentView.addSubview(view)
         view.addSubview(self.favoriteMovies)
+        view.addSubview(self.favoriteActors)
         
         view.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
         
         self.favoriteMovies.snp.makeConstraints { (make) in
-            make.center.equalToSuperview()
+            make.top.left.right.equalToSuperview()
+        }
+        
+        self.favoriteActors.snp.makeConstraints { (make) in
+            make.left.right.bottom.equalToSuperview()
+            make.top.equalTo(self.favoriteMovies.snp.bottom).offset(10)
         }
     }
     
     @objc private func favoriteMoviesButtonDidPressed() {
-        MWI.s.pushVC(MWFavoriteMoviesAndActorsViewController(title: "Favorites"))
+        MWI.s.pushVC(MWFavoriteMoviesViewController(title: "Favorites"))
+    }
+    
+    @objc private func favoriteActorsButtonDidPressed() {
+        MWI.s.pushVC(MWActorsViewController(title: "Favorites"))
     }
 }

@@ -144,7 +144,7 @@ extension MWCastViewController: UITableViewDelegate, UITableViewDataSource {
         return .leastNormalMagnitude
     }
     
-    func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if section == 0 {
             return 0
         } else {

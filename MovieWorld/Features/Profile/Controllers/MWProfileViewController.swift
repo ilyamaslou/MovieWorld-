@@ -57,10 +57,10 @@ class MWProfileViewController: MWViewController {
     }
     
     @objc private func favoriteMoviesButtonDidPressed() {
-        MWI.s.pushVC(MWFavoriteMoviesViewController(title: "Favorites"))
+        MWI.s.pushVC(MasterFavoriteViewController())
     }
     
     @objc private func favoriteActorsButtonDidPressed() {
-        MWI.s.pushVC(MWActorsViewController(title: "Favorites"))
+        MWI.s.pushVC(MWFavoriteActorsViewController())
     }
 }

@@ -29,7 +29,7 @@ class MWViewController: UIViewController {
     }
     
     private func _init() {
-        view.addSubview(self.contentView)
+        self.view.addSubview(self.contentView)
         self.makeConstraints()
         self.initController()
     }
@@ -37,8 +37,8 @@ class MWViewController: UIViewController {
     private func makeConstraints() {
         self.contentView.snp.makeConstraints { (make) in
             make.left.right.equalToSuperview()
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.topMargin)
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottomMargin)
+            make.top.equalTo(self.view.safeAreaLayoutGuide.snp.topMargin)
+            make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottomMargin)
 
         }
     }

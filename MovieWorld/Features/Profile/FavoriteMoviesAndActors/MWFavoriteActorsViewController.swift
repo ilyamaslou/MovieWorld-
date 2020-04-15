@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class MWActorsViewController: MWViewController {
+class MWFavoriteActorsViewController: MWViewController {
     
     private var cast: [[MWMovieCastMember]] = []
     
@@ -22,14 +22,9 @@ class MWActorsViewController: MWViewController {
         self.actorsController.updateTableView(cast: self.getFavoriteActors())
     }
     
-    init(title: String) {
-        super.init()
-        self.title = title
+    override func initController() {
+        super.initController()
         self.setUpView()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
     
     private func setUpView() {

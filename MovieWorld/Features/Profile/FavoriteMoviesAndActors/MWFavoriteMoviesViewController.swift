@@ -22,14 +22,9 @@ class MWFavoriteMoviesViewController: MWViewController {
         self.moviesByGenresController.updateTableAndCollectionView(movies: self.getFavoriteMovies())
     }
     
-    init(title: String) {
-        super.init()
-        self.title = title
+    override func initController() {
+        super.initController()
         self.setUpView()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
     
     private func setUpView() {

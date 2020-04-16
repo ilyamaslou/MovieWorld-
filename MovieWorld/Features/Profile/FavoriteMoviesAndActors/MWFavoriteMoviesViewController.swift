@@ -17,9 +17,24 @@ class MWFavoriteMoviesViewController: MWViewController {
         return MWSingleCategoryViewController(movies: self.movies)
     }()
     
+    private lazy var emptyListLabel: UILabel = {
+        let label = UILabel()
+        label.text = "The favorites movies list is empty"
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .systemFont(ofSize: 24, weight: .bold)
+        label.isHidden = true
+        return label
+    }()
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.navigationController?.removeBorder()
         self.moviesByGenresController.updateTableAndCollectionView(movies: self.getFavoriteMovies())
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationController?.setBorder()
     }
     
     override func initController() {
@@ -31,11 +46,24 @@ class MWFavoriteMoviesViewController: MWViewController {
         guard let moviesByGenresView = self.moviesByGenresController.view else { return }
         
         self.contentView.addSubview(moviesByGenresView)
+        self.contentView.addSubview(emptyListLabel)
+        
         moviesByGenresView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
+        
+        self.emptyListLabel.snp.makeConstraints { (make) in
+            make.center.equalToSuperview()
+        }
     }
+
     
+    private func setUpVisibleOfEmptyListLabel(listIsEmpty: Bool) {
+           self.emptyListLabel.isHidden = listIsEmpty ? false : true
+       }
+}
+
+extension MWFavoriteMoviesViewController {
     @discardableResult private func fetchFavoriteMovies() -> [Movie] {
         let managedContext = CoreDataManager.s.persistentContainer.viewContext
         let fetch: NSFetchRequest<Movie> = Movie.fetchRequest()
@@ -48,6 +76,7 @@ class MWFavoriteMoviesViewController: MWViewController {
             print(error.localizedDescription)
         }
         
+        self.setUpVisibleOfEmptyListLabel(listIsEmpty: result.isEmpty)
         return result
     }
     

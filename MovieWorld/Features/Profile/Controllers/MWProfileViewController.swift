@@ -27,7 +27,7 @@ class MWProfileViewController: MWViewController {
         self.title = "Profile"
         
         let view = UIView()
-        contentView.addSubview(view)
+        self.contentView.addSubview(view)
         view.addSubview(self.favoriteMovies)
         
         view.snp.makeConstraints { (make) in

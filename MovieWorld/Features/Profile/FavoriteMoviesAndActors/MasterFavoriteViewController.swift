@@ -47,7 +47,7 @@ class MasterFavoriteViewController: MWViewController {
     
     override func initController() {
         super.initController()
-        setupView()
+        self.setupView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -83,26 +83,26 @@ class MasterFavoriteViewController: MWViewController {
     }
     
     private func setupSegmentedControl() {
-        segmentedControl.removeAllSegments()
-        segmentedControl.insertSegment(withTitle: "Films", at: 0, animated: false)
-        segmentedControl.insertSegment(withTitle: "People", at: 1, animated: false)
-        segmentedControl.addTarget(self, action: #selector(selectionDidChange), for: .valueChanged)
+        self.segmentedControl.removeAllSegments()
+        self.segmentedControl.insertSegment(withTitle: "Films", at: 0, animated: false)
+        self.segmentedControl.insertSegment(withTitle: "People", at: 1, animated: false)
+        self.segmentedControl.addTarget(self, action: #selector(selectionDidChange), for: .valueChanged)
         
-        segmentedControl.selectedSegmentIndex = 0
+        self.segmentedControl.selectedSegmentIndex = 0
     }
     
     private func updateView() {
-        if segmentedControl.selectedSegmentIndex == 0 {
-            remove(asChildViewController: actorsViewController)
-            add(asChildViewController: moviesViewController)
+        if self.segmentedControl.selectedSegmentIndex == 0 {
+            remove(asChildViewController: self.actorsViewController)
+            add(asChildViewController: self.moviesViewController)
         } else {
-            remove(asChildViewController: moviesViewController)
-            add(asChildViewController: actorsViewController)
+            remove(asChildViewController: self.moviesViewController)
+            add(asChildViewController: self.actorsViewController)
         }
     }
     
     @objc private func selectionDidChange() {
-        updateView()
+        self.updateView()
     }
 }
 

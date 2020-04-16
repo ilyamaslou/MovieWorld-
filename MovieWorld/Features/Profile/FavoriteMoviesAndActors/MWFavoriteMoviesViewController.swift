@@ -28,13 +28,7 @@ class MWFavoriteMoviesViewController: MWViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationController?.removeBorder()
         self.moviesByGenresController.updateTableAndCollectionView(movies: self.getFavoriteMovies())
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        self.navigationController?.setBorder()
     }
     
     override func initController() {
@@ -56,11 +50,10 @@ class MWFavoriteMoviesViewController: MWViewController {
             make.center.equalToSuperview()
         }
     }
-
     
     private func setUpVisibleOfEmptyListLabel(listIsEmpty: Bool) {
-           self.emptyListLabel.isHidden = listIsEmpty ? false : true
-       }
+        self.emptyListLabel.isHidden = listIsEmpty ? false : true
+    }
 }
 
 extension MWFavoriteMoviesViewController {

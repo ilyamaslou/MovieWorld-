@@ -26,11 +26,8 @@ class MasterFavoriteViewController: MWViewController {
     private lazy var sepparationLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.layer.backgroundColor = UIColor.white.cgColor
-        label.layer.shadowRadius = 2
-        label.layer.shadowOpacity = 0.5
-        label.layer.shadowColor = UIColor(named: "shadowColor")?.cgColor
-        label.layer.shadowOffset = CGSize(width: 0, height: 4)
+        label.layer.backgroundColor = UIColor(named: "shadowColor")?.cgColor
+        label.layer.opacity = 0.3
         return label
     }()
     
@@ -53,6 +50,16 @@ class MasterFavoriteViewController: MWViewController {
         setupView()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.removeBorder()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationController?.setBorder()
+    }
+    
     private func setupView() {
         self.title = "Favorite"
         self.setupSegmentedControl()
@@ -67,8 +74,9 @@ class MasterFavoriteViewController: MWViewController {
         }
         
         self.sepparationLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(self.segmentedControl.snp.bottom)
+            make.top.equalTo(self.segmentedControl.snp.bottom).offset(10)
             make.left.right.equalToSuperview()
+            make.height.equalTo(1)
         }
         
         self.updateView()

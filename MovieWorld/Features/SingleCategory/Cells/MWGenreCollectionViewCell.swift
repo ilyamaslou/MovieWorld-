@@ -26,10 +26,8 @@ class MWGenreCollectionViewCell: UICollectionViewCell {
         return button
     }()
     
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
         self.contentView.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(self.singleGenreButton)
         
@@ -46,6 +44,7 @@ class MWGenreCollectionViewCell: UICollectionViewCell {
     func set(genreWithSelection: (String, Bool)) {
         self.singleGenreButton.setUpButton(title: genreWithSelection.0, haveArrow: false)
         self.buttonIsSelected = genreWithSelection.1
+        setNeedsUpdateConstraints()
         layoutIfNeeded()
     }
     

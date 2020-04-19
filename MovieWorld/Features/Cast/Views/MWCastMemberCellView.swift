@@ -46,7 +46,7 @@ class MWCastMemberCellView: UIView {
         return label
     }()
     
-    private lazy var sepparationLabel: UILabel = {
+    lazy var sepparationLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.layer.backgroundColor = UIColor.white.cgColor

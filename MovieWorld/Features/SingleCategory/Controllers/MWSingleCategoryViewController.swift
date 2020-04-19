@@ -38,7 +38,7 @@ class MWSingleCategoryViewController: MWViewController {
         let tableView = UITableView()
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.separatorStyle = .none
+        tableView.separatorStyle = .singleLine
         tableView.register(MWSingleMovieInCategoryCell.self, forCellReuseIdentifier: Constants.singleCategoryTableViewCellId)
         return tableView
     }()
@@ -54,15 +54,13 @@ class MWSingleCategoryViewController: MWViewController {
         collectionView.contentInsetAdjustmentBehavior = .never
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
+        collectionView.contentInset = UIEdgeInsets(top: .zero, left: 16, bottom: .zero, right: 16)
         return collectionView
     }()
     
-    private lazy var collectionViewLayout: UICollectionViewFlowLayout = {
-        let collectionViewLayout = UICollectionViewFlowLayout()
-        collectionViewLayout.scrollDirection = .horizontal
-        collectionViewLayout.minimumLineSpacing = 8
-        collectionViewLayout.sectionInset = UIEdgeInsets(top: .zero, left: 16, bottom: .zero, right: 16)
-        collectionViewLayout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
+    private lazy var collectionViewLayout: MWGroupsCollectionViewLayout = {
+        let collectionViewLayout = MWGroupsCollectionViewLayout()
+        collectionViewLayout.delegate = self
         return collectionViewLayout
     }()
     
@@ -170,6 +168,7 @@ extension MWSingleCategoryViewController: UITableViewDataSource, UITableViewDele
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        guard section != 0  else { return 0 }
         return 16
     }
 }
@@ -180,7 +179,18 @@ extension MWSingleCategoryViewController: UICollectionViewDelegate, UICollection
         return self.movieGenres.count
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        let itemSize = (collectionView.frame.width - (collectionView.contentInset.left + collectionView.contentInset.right)) / 2
+        return CGSize(width: itemSize, height: itemSize)
+    }
+    
+    func collectionView(
+        _ collectionView: UICollectionView,
+        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         guard let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: Constants.singleCategoryGenresCollectionViewCellId,
@@ -202,5 +212,14 @@ extension MWSingleCategoryViewController: UICollectionViewDelegate, UICollection
         }
         
         return cell
+    }
+}
+
+extension MWSingleCategoryViewController: MWGroupsLayoutDelegate {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        widthForLabelAtIndexPath indexPath:IndexPath) -> CGFloat {
+        
+        return self.movieGenres[indexPath.item].0.textWidth(font: .systemFont(ofSize: 13)) + 24
     }
 }

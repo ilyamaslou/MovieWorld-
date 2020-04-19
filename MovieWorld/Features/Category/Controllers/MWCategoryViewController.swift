@@ -48,9 +48,18 @@ extension MWCategoryViewController: UITableViewDelegate, UITableViewDataSource {
         for: indexPath)
         
         cell.textLabel?.text = self.categories[indexPath.row]
+        cell.textLabel?.font = .systemFont(ofSize: 17)
         cell.accessoryType = .disclosureIndicator
         cell.selectionStyle = .none
         
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        return UIView()
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 16
     }
 }

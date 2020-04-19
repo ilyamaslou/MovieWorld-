@@ -46,14 +46,17 @@ class MWCastMemberCellView: UIView {
         return label
     }()
     
-    lazy var sepparationLabel: UILabel = {
+    
+    //FIXME: Question ? (if i set shadow) Why after scroll shadow dissapear
+    private lazy var sepparationLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.layer.backgroundColor = UIColor.white.cgColor
-        label.layer.shadowRadius = 2
-        label.layer.shadowOpacity = 0.5
-        label.layer.shadowColor = UIColor(named: "shadowColor")?.cgColor
-        label.layer.shadowOffset = CGSize(width: 0, height: 4)
+        label.layer.backgroundColor = UIColor.lightGray.cgColor
+        label.layer.opacity = 0.2
+//        label.layer.shadowRadius = 2
+//        label.layer.shadowOpacity = 0.5
+//        label.layer.shadowColor = UIColor(named: "shadowColor")?.cgColor
+//        label.layer.shadowOffset = CGSize(width: 0, height: 4)
         return label
     }()
     
@@ -103,7 +106,7 @@ class MWCastMemberCellView: UIView {
         
         self.sepparationLabel.snp.makeConstraints { (make) in
             make.right.left.bottom.equalToSuperview()
-            make.height.equalTo(1)
+            make.height.equalTo(3)
         }
         
         super.updateConstraints()

@@ -46,7 +46,7 @@ class MWCastMemberCellView: UIView {
         return label
     }()
     
-    
+
     //FIXME: Question ? (if i set shadow) Why after scroll shadow dissapear
     private lazy var sepparationLabel: UILabel = {
         let label = UILabel()

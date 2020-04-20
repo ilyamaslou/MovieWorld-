@@ -81,10 +81,12 @@ class MWMainTableViewCell: UITableViewCell {
         super.updateConstraints()
     }
     
-    func set(categoryName: String) {
-        self.category = categoryName
-        self.showAllView.title = categoryName
-        self.showAllView.controllerToPushing = MWSingleCategoryViewController(movies: self.movies)
+    func set(categoryName: MWCategories, totalResults: (Int, Int)?) {
+        self.category = categoryName.rawValue
+        self.showAllView.title = categoryName.rawValue
+        self.showAllView.controllerToPushing = MWSingleCategoryViewController(movies: self.movies,
+                                                                              category: categoryName,
+                                                                              totalResultsInfo: totalResults)
         setNeedsUpdateConstraints()
     }
     

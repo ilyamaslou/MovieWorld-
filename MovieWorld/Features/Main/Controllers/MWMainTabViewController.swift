@@ -12,18 +12,13 @@ import CoreData
 
 class MWMainTabViewController: MWViewController {
     
-    enum MWCategories: String, CaseIterable {
-        case popularMovies = "Popular Movies"
-        case nowPlayingMovies = "Now Playing Movies"
-        case topRatedMovies = "Top Rated"
-        case upcomingMovies = "Upcoming Movies"
-    }
-    
     private var moviesByCategories: [MWCategories: [MWMovie]] = [:] {
         didSet {
             self.tableView.reloadData()
         }
     }
+    
+    private var moviesResultsInfoByCategories: [MWCategories: (totalResults: Int, totalPages: Int)] = [:]
     
     private lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
@@ -67,7 +62,7 @@ class MWMainTabViewController: MWViewController {
         var urlPath = ""
         
         for category in MWCategories.allCases {
-            urlPath = self.getUrlPath(by: category)
+            urlPath = category.getCategoryUrlPath()
             
             self.group.enter()
             MWNet.sh.request(urlPath: urlPath ,
@@ -75,10 +70,12 @@ class MWMainTabViewController: MWViewController {
                              succesHandler: { [weak self] (movies: MWMoviesResponse)  in
                                 guard let self = self else { return }
                                 
-                                let moviesWithGenres = self.setGenres(to: movies.results)
-                                self.setImages(to: moviesWithGenres, in: category.rawValue)
-                                self.moviesByCategories[category] = moviesWithGenres
-                                self.save(mwCategory: category, movies: moviesWithGenres)
+                                self.moviesResultsInfoByCategories[category] = (movies.totalResults,
+                                                                                movies.totalPages)
+                                self.setGenres(to: movies.results)
+                                self.setImages(to: movies.results, in: category.rawValue)
+                                self.moviesByCategories[category] = movies.results
+                                self.save(mwCategory: category, movies: movies.results)
                                 self.group.leave()
                 },
                              errorHandler: { [weak self] (error) in
@@ -94,33 +91,16 @@ class MWMainTabViewController: MWViewController {
         }
     }
     
-    private func setGenres(to movies: [MWMovie]) -> [MWMovie] {
+    private func setGenres(to movies: [MWMovie]) {
         for movie in movies {
             movie.setFilmGenres(genres: MWSys.sh.genres)
         }
-        return movies
     }
     
     private func setImages(to movies: [MWMovie], in category: String) {
         for movie in movies {
             MWImageLoadingHelper.sh.loadMovieImage(for: movie, in: category)
         }
-    }
-    
-    private func getUrlPath(by category: MWCategories) -> String {
-        var urlPath = ""
-        switch category {
-        case .popularMovies:
-            urlPath = URLPaths.popularMovies
-        case .nowPlayingMovies:
-            urlPath = URLPaths.nowPlayingMovies
-        case .topRatedMovies:
-            urlPath = URLPaths.topRatedMovies
-        case .upcomingMovies:
-            urlPath = URLPaths.upcomingMovies
-        }
-        
-        return urlPath
     }
     
     @objc private func pullToRefresh() {
@@ -148,7 +128,7 @@ extension MWMainTabViewController: UITableViewDataSource, UITableViewDelegate {
         let category = Array(self.moviesByCategories.keys)[indexPath.section]
         if let movies = self.moviesByCategories[category] {
             cell.movies = movies
-            cell.set(categoryName: category.rawValue)
+            cell.set(categoryName: category, totalResults: self.moviesResultsInfoByCategories[category])
         }
         
         cell.selectionStyle = .none

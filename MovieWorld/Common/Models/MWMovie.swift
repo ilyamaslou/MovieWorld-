@@ -8,8 +8,18 @@
 import UIKit
 
 struct MWMoviesResponse: Decodable {
+    
+    enum CodingKeys: String, CodingKey {
+        case page = "page"
+        case results = "results"
+        case totalResults = "total_results"
+        case totalPages = "total_pages"
+    }
+    
     let page: Int
     let results: [MWMovie]
+    let totalResults: Int
+    let totalPages: Int
 }
 
 class MWMovie: Decodable, Hashable {

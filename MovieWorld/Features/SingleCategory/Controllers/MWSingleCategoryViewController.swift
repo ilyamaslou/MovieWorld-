@@ -10,8 +10,16 @@ import UIKit
 
 class MWSingleCategoryViewController: MWViewController {
     
+    private var page: Int = 2
+    private var totalPages: Int = 0
+    private var totalItems: Int = 0
+    private var isRequestBusy: Bool = false
+    private var category: MWCategories?
+    
     private var movies: [MWMovie] = [] {
         didSet {
+            self.filteredMovies = self.movies
+            self.setUpGenres()
             self.tableView.reloadData()
         }
     }
@@ -64,9 +72,16 @@ class MWSingleCategoryViewController: MWViewController {
         return collectionViewLayout
     }()
     
-    init(title:String = "Movies", movies: [MWMovie]) {
+    init(title:String = "Movies",
+         movies: [MWMovie],
+         category: MWCategories? = nil,
+         totalResultsInfo: (totalResults: Int, totalPages: Int)? = (0, 0)) {
         super.init()
         self.title = title
+        self.category = category
+        self.totalPages = totalResultsInfo?.totalPages ?? 0
+        self.totalItems = totalResultsInfo?.totalResults ?? 0
+        
         self.updateTableAndCollectionView(movies: movies)
     }
     
@@ -95,7 +110,6 @@ class MWSingleCategoryViewController: MWViewController {
     
     func updateTableAndCollectionView(movies: [MWMovie]) {
         self.movies = movies
-        self.filteredMovies = movies
         self.setUpGenres()
     }
     
@@ -221,5 +235,69 @@ extension MWSingleCategoryViewController: MWGroupsLayoutDelegate {
         widthForLabelAtIndexPath indexPath:IndexPath) -> CGFloat {
         
         return self.movieGenres[indexPath.item].0.textWidth(font: .systemFont(ofSize: 13)) + 24
+    }
+}
+
+
+//MARK: Pagination
+extension MWSingleCategoryViewController {
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let rowUnit = self.movies[indexPath.row]
+        guard movies.count > 5 else { return }
+        let unit = self.movies[self.movies.count - 5]
+        if self.totalItems > self.movies.count,
+            rowUnit.id == unit.id {
+            self.loadUnits()
+        }
+    }
+    
+    private func loadUnits() {
+        guard !self.isRequestBusy,
+            self.movies.count != self.totalItems else { return }
+        self.isRequestBusy = true
+        
+        self.loadMovies() { [weak self] (movies) in
+            guard let self = self else { return }
+            self.isRequestBusy = false
+            self.movies += movies
+            self.page += 1
+        }
+    }
+    
+    private func loadMovies( completion: @escaping ([MWMovie]) -> Void) {
+        guard let category = self.category else { return }
+        let urlPath = category.getCategoryUrlPath()
+        var query = MWNet.sh.parameters
+        query["page"] = String(self.page)
+        MWNet.sh.request(urlPath: urlPath ,
+                         querryParameters: query,
+                         succesHandler: { [weak self] (movies: MWMoviesResponse)  in
+                            guard let self = self else { return }
+                            
+                            self.totalItems = movies.totalResults
+                            self.totalPages = movies.totalPages
+                            self.setGenres(to: movies.results)
+                            self.setImages(to: movies.results, in: category.rawValue)
+                            completion(movies.results)
+            },
+                         errorHandler: { [weak self] (error) in
+                            guard let self = self else { return }
+                            
+                            let message = error.getErrorDesription()
+                            self.errorAlert(message: message)
+        })
+    }
+    
+    private func setGenres(to movies: [MWMovie]){
+        for movie in movies {
+            movie.setFilmGenres(genres: MWSys.sh.genres)
+        }
+    }
+    
+    private func setImages(to movies: [MWMovie], in category: String) {
+        for movie in movies {
+            MWImageLoadingHelper.sh.loadMovieImage(for: movie, in: category)
+        }
     }
 }

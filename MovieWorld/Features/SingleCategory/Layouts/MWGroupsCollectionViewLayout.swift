@@ -15,7 +15,7 @@ class MWGroupsCollectionViewLayout: UICollectionViewLayout {
     private let numberOfColumns = 2
     private let cellPadding: CGFloat = 6
     
-    private var cache: [UICollectionViewLayoutAttributes] = []
+    var cache: [UICollectionViewLayoutAttributes] = []
     
     private var contentHeight: CGFloat {
         guard let collectionView = collectionView else { return 0 }

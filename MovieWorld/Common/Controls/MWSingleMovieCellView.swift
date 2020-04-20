@@ -58,6 +58,14 @@ class MWSingleMovieCellView: UIView {
         return label
     }()
     
+    private lazy var sepparationLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.layer.backgroundColor = UIColor.lightGray.cgColor
+        label.layer.opacity = 0.2
+        return label
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.setUpView()
@@ -75,6 +83,7 @@ class MWSingleMovieCellView: UIView {
         self.addSubview(self.releaseYearAndCountryLabel)
         self.addSubview(self.genresLabel)
         self.addSubview(self.ratingsLabel)
+        self.addSubview(self.sepparationLabel)
     }
     
     override func updateConstraints() {
@@ -109,6 +118,11 @@ class MWSingleMovieCellView: UIView {
             make.left.equalTo(filmImageView.snp.right).offset(self.offsets.left)
             make.bottom.equalToSuperview().inset(self.offsets.bottom)
             make.right.equalToSuperview()
+        }
+        
+        self.sepparationLabel.snp.makeConstraints { (make) in
+            make.left.right.bottom.equalToSuperview()
+            make.height.equalTo(3)
         }
         
         super.updateConstraints()

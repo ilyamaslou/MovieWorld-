@@ -19,7 +19,6 @@ class MWSingleCategoryViewController: MWViewController {
     private var movies: [MWMovie] = [] {
         didSet {
             self.filteredMovies = self.movies
-            self.setUpGenres()
             self.tableView.reloadData()
         }
     }
@@ -46,7 +45,7 @@ class MWSingleCategoryViewController: MWViewController {
         let tableView = UITableView()
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.separatorStyle = .singleLine
+        tableView.separatorStyle = .none
         tableView.register(MWSingleMovieInCategoryCell.self, forCellReuseIdentifier: Constants.singleCategoryTableViewCellId)
         return tableView
     }()
@@ -114,16 +113,20 @@ class MWSingleCategoryViewController: MWViewController {
     }
     
     private func setUpGenres() {
-        self.movieGenres = []
-        var uniqueGenres: Set<String> = []
+        var oldGenres: Set<String> = []
+        self.movieGenres.forEach { oldGenres.insert($0.0) }
+        
+        var oldAndNewGenres: Set<String> = []
         for movie in self.movies {
             guard let genres = movie.movieGenres else { return }
             for genre in genres {
-                uniqueGenres.insert(genre)
+                oldAndNewGenres.insert(genre)
             }
         }
+        let newGenres = oldAndNewGenres.subtracting(oldGenres)
+        newGenres.forEach { self.movieGenres.append(($0, false)) }
         
-        uniqueGenres.forEach { self.movieGenres.append(($0, false)) }
+        self.movieGenres.sort { $0.0 < $1.0 }
     }
     
     private func updateTableByGenres() {
@@ -259,8 +262,10 @@ extension MWSingleCategoryViewController {
         self.loadMovies() { [weak self] (movies) in
             guard let self = self else { return }
             self.isRequestBusy = false
-            self.movies += movies
             self.page += 1
+            self.collectionViewLayout.cache = []
+            self.movies += movies
+            self.setUpGenres()
         }
     }
     

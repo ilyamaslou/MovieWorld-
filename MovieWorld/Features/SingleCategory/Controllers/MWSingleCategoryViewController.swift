@@ -233,7 +233,6 @@ extension MWSingleCategoryViewController: MWGroupsLayoutDelegate {
     func collectionView(
         _ collectionView: UICollectionView,
         widthForLabelAtIndexPath indexPath:IndexPath) -> CGFloat {
-        
         return self.movieGenres[indexPath.item].0.textWidth(font: .systemFont(ofSize: 13)) + 24
     }
 }

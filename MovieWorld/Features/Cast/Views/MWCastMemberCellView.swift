@@ -10,9 +10,9 @@ import UIKit
 
 class MWCastMemberCellView: UIView {
     
-    private var castMember: MWMovieCastMember?
-    
     private let offsets = UIEdgeInsets(top: 10, left: 16, bottom: 10, right: 16)
+    
+    private var castMember: MWMovieCastMember?
     
     private lazy var memberImageView: UIImageView = {
         let view = UIImageView()
@@ -46,17 +46,17 @@ class MWCastMemberCellView: UIView {
         return label
     }()
     
-
+    
     //FIXME: Question ? (if i set shadow) Why after scroll shadow dissapear
     private lazy var sepparationLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.layer.backgroundColor = UIColor.lightGray.cgColor
         label.layer.opacity = 0.2
-//        label.layer.shadowRadius = 2
-//        label.layer.shadowOpacity = 0.5
-//        label.layer.shadowColor = UIColor(named: "shadowColor")?.cgColor
-//        label.layer.shadowOffset = CGSize(width: 0, height: 4)
+        //        label.layer.shadowRadius = 2
+        //        label.layer.shadowOpacity = 0.5
+        //        label.layer.shadowColor = UIColor(named: "shadowColor")?.cgColor
+        //        label.layer.shadowOffset = CGSize(width: 0, height: 4)
         return label
     }()
     
@@ -67,6 +67,34 @@ class MWCastMemberCellView: UIView {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func set(castMember: MWMovieCastMember?, birthday: String = "") {
+        
+        self.castMember = castMember
+        self.memberNameLabel.text = castMember?.name
+        self.memberRoleLabel.text = castMember?.character
+        
+        if let image = castMember?.image {
+            self.memberImageView.image = UIImage(data: image)
+        } else {
+            self.memberImageView.image = UIImage(named: "imageNotFound")
+        }
+        
+        self.setUpBirthday(birthday: birthday)
+    }
+    
+    func setUpBirthday(birthday: String) {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        
+        let stringFormatter = DateFormatter()
+        stringFormatter.dateFormat = "dd.MM.yyyy"
+        
+        guard let age = dateFormatter.date(from: birthday) else { return }
+        let formattedBirthday = stringFormatter.string(from: age)
+        
+        self.memberBirthLabel.text = "\(formattedBirthday) (\(age.toAge) years)"
     }
     
     private func setUpView() {
@@ -110,33 +138,5 @@ class MWCastMemberCellView: UIView {
         }
         
         super.updateConstraints()
-    }
-    
-    func set(castMember: MWMovieCastMember?, birthday: String = "") {
-        
-        self.castMember = castMember
-        self.memberNameLabel.text = castMember?.name
-        self.memberRoleLabel.text = castMember?.character
-        
-        if let image = castMember?.image {
-            self.memberImageView.image = UIImage(data: image)
-        } else {
-            self.memberImageView.image = UIImage(named: "imageNotFound")
-        }
-        
-        self.setUpBirthday(birthday: birthday)
-    }
-    
-    func setUpBirthday(birthday: String) {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        
-        let stringFormatter = DateFormatter()
-        stringFormatter.dateFormat = "dd.MM.yyyy"
-        
-        guard let age = dateFormatter.date(from: birthday) else { return }
-        let formattedBirthday = stringFormatter.string(from: age)
-        
-        self.memberBirthLabel.text = "\(formattedBirthday) (\(age.toAge) years)"
     }
 }

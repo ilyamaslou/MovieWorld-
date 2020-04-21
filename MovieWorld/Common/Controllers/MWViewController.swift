@@ -22,26 +22,11 @@ class MWViewController: UIViewController {
         self._init()
     }
     
-    func initController() {}
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func _init() {
-        self.view.addSubview(self.contentView)
-        self.makeConstraints()
-        self.initController()
-    }
-    
-    private func makeConstraints() {
-        self.contentView.snp.makeConstraints { (make) in
-            make.left.right.equalToSuperview()
-            make.top.equalTo(self.view.safeAreaLayoutGuide.snp.topMargin)
-            make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottomMargin)
-
-        }
-    }
+    func initController() {}
     
     func errorAlert( message: String) {
         let alert = UIAlertController(title: nil,
@@ -60,5 +45,20 @@ class MWViewController: UIViewController {
         alert.addAction(alertAction)
         
         present(alert,animated: true)
+    }
+    
+    private func _init() {
+        self.view.addSubview(self.contentView)
+        self.makeConstraints()
+        self.initController()
+    }
+    
+    private func makeConstraints() {
+        self.contentView.snp.makeConstraints { (make) in
+            make.left.right.equalToSuperview()
+            make.top.equalTo(self.view.safeAreaLayoutGuide.snp.topMargin)
+            make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottomMargin)
+            
+        }
     }
 }

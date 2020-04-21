@@ -9,6 +9,7 @@
 import UIKit
 
 class MWCastMemberCollectionViewCell: UICollectionViewCell {
+    
     private var memberOfCast: MWMovieCastMember?
     
     private lazy var nameLabel: UILabel = {

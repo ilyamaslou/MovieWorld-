@@ -10,6 +10,12 @@ import UIKit
 
 class MWCustomButton: UIButton {
     
+    override var isHighlighted: Bool {
+        didSet {
+            layer.opacity = isHighlighted ? 0.5 : 1
+        }
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame )
         self.setUpButton()
@@ -31,12 +37,6 @@ class MWCustomButton: UIButton {
         imageEdgeInsets = UIEdgeInsets(top: .zero, left: titleLabelWidth ?? .zero , bottom: .zero, right: -(titleLabelWidth ?? .zero) - 4)
     }
     
-    override var isHighlighted: Bool {
-        didSet {
-            layer.opacity = isHighlighted ? 0.5 : 1
-        }
-    }
-    
     func setUpButton(title: String = "All", haveArrow: Bool = true) {
         layer.cornerRadius = 5
         backgroundColor = UIColor(named: "accentColor")
@@ -56,5 +56,4 @@ class MWCustomButton: UIButton {
         
         self.setNeedsUpdateConstraints()
     }
-    
 }

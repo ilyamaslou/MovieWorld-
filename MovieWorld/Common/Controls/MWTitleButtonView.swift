@@ -66,5 +66,4 @@ class MWTitleButtonView: UIView {
         guard let controller = controllerToPushing else { return }
         MWI.s.pushVC(controller)
     }
-
 }

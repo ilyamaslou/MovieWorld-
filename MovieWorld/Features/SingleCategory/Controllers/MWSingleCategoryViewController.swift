@@ -71,6 +71,13 @@ class MWSingleCategoryViewController: MWViewController {
         return collectionViewLayout
     }()
     
+    private lazy var loadingSpinner: UIActivityIndicatorView = {
+        let view = UIActivityIndicatorView()
+        view.style = .whiteLarge
+        view.color = UIColor(named: "accentColor")
+        return view
+    }()
+    
     init(title:String = "Movies",
          movies: [MWMovie],
          category: MWCategories? = nil,
@@ -93,6 +100,7 @@ class MWSingleCategoryViewController: MWViewController {
         
         self.contentView.addSubview(self.collectionView)
         self.contentView.addSubview(self.tableView)
+        self.contentView.addSubview(self.loadingSpinner)
         
         self.collectionView.snp.makeConstraints {(make) in
             make.left.right.equalToSuperview()
@@ -104,6 +112,10 @@ class MWSingleCategoryViewController: MWViewController {
             make.left.right.equalToSuperview()
             make.bottom.equalToSuperview()
             make.top.equalTo(collectionView.snp.bottom).offset(16)
+        }
+        
+        self.loadingSpinner.snp.makeConstraints { (make) in
+            make.center.equalToSuperview()
         }
     }
     
@@ -251,6 +263,7 @@ extension MWSingleCategoryViewController {
         if self.totalItems > self.movies.count,
             rowUnit.id == unit.id {
             self.loadUnits()
+            self.loadingSpinner.startAnimating()
         }
     }
     
@@ -266,6 +279,7 @@ extension MWSingleCategoryViewController {
             self.collectionViewLayout.cache = []
             self.movies += movies
             self.setUpGenres()
+            self.loadingSpinner.stopAnimating()
         }
     }
     

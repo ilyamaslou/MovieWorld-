@@ -148,8 +148,11 @@ class MWSingleMovieCellView: UIView {
         self.releaseYearAndCountryLabel.text = "\(releaseYear) \(movie.originalLanguage ?? "")"
         self.genresLabel.text = self.setUpGenres(movieGenres: movie.movieGenres)
         
-        guard let movieRating = movie.voteAvarage else { return }
-        self.ratingsLabel.text = "Rating: \(movieRating)"
+        if let movieRating = movie.voteAvarage, movieRating != 0 {
+            self.ratingsLabel.text = "Rating: \(movieRating)"
+        } else {
+            self.ratingsLabel.text = "Not rated"
+        }
     }
     
     private func setUpGenres(movieGenres: [String]?) -> String {

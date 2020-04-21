@@ -41,9 +41,14 @@ class MWSearchViewController: MWViewController {
         super.initController()
         self.title = "Search"
         
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(movieImageUpdated),
+                                               name: .movieImageUpdated, object: nil)
+        
+        
         self.presettingSearchController()
         self.setUpView()
-        self.loadTrandingMovies()
+        self.loadMovies()
     }
     
     private func setUpView() {
@@ -60,6 +65,10 @@ class MWSearchViewController: MWViewController {
         self.searchController.obscuresBackgroundDuringPresentation = false
         navigationItem.searchController = self.searchController
         self.searchController.searchBar.delegate = self
+    }
+    
+    @objc func movieImageUpdated() {
+        self.tableView.reloadData()
     }
 }
 
@@ -94,33 +103,41 @@ extension MWSearchViewController: UITableViewDelegate, UITableViewDataSource {
 }
 
 extension MWSearchViewController {
-    private func loadTrandingMovies() {
-        let urlPath = URLPaths.trandingDayMovies
+    private func load(urlPath: String, querry: [String: String], completion: @escaping ([MWMovie]) -> Void) {
         MWNet.sh.request(urlPath: urlPath ,
-                         querryParameters: MWNet.sh.parameters,
-                         succesHandler: { [weak self] (movies: MWMoviesResponse)  in
-                            guard let self = self else { return }
-                            
-                            self.movies = movies.results
-                            self.setGenres()
-                            self.setImages()
-            },
+                         querryParameters: querry,
+                         succesHandler: { (movies: MWMoviesResponse)  in
+                            completion(movies.results)
+        },
                          errorHandler: { [weak self] (error) in
                             guard let self = self else { return }
-                            
                             let message = error.getErrorDesription()
                             self.errorAlert(message: message)
         })
     }
     
-    private func setGenres() {
-        for movie in self.movies {
-            movie.setFilmGenres(genres: MWSys.sh.genres)
+    private func loadMovies() {
+        let urlPath = URLPaths.trandingDayMovies
+        let query = MWNet.sh.parameters
+        self.load(urlPath: urlPath, querry: query) { (movies) in
+            self.movies = movies
+            self.setGenreAndImage(to: self.movies)
         }
     }
     
-    private func setImages() {
-        for movie in self.movies {
+    private func searchMovies(with title: String) {
+        let urlPath = URLPaths.searchMovies
+        var query = MWNet.sh.parameters
+        query["query"] = title
+        self.load(urlPath: urlPath, querry: query) { (movies) in
+            self.filteredMovies = movies
+            self.setGenreAndImage(to: self.filteredMovies)
+        }
+    }
+    
+    private func setGenreAndImage(to movies: [MWMovie]) {
+        for movie in movies {
+            movie.setFilmGenres(genres: MWSys.sh.genres)
             MWImageLoadingHelper.sh.loadMovieImage(for: movie)
         }
     }
@@ -132,6 +149,7 @@ extension MWSearchViewController: UISearchResultsUpdating, UISearchBarDelegate {
         if text.isEmpty {
             self.filteredMovies = self.movies
         } else {
+            self.searchMovies(with: text)
             self.filteredMovies = self.movies.filter { ($0.title?.contains(text) ?? false) }
         }
         

@@ -43,15 +43,13 @@ class MWMainTabViewController: MWViewController {
     
     override func initController() {
         super.initController()
+        self.title = "Season".local()
+
+        contentView.addSubview(self.tableView)
         
-        let view = self.tableView
-        contentView.addSubview(view)
-        
-        view.snp.makeConstraints { (make) in
+        self.tableView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
-        
-        self.title = "Season".local()
         
         self.loadMovies()
         self.group.notify(queue: .main, execute: self.tableView.reloadData)

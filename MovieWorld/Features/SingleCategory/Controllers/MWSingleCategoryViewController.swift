@@ -46,7 +46,10 @@ class MWSingleCategoryViewController: MWViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.separatorStyle = .none
-        tableView.register(MWSingleMovieInCategoryCell.self, forCellReuseIdentifier: Constants.singleCategoryTableViewCellId)
+        tableView.showsVerticalScrollIndicator = false
+        tableView.showsHorizontalScrollIndicator = false
+        tableView.register(MWSingleMovieInCategoryCell.self,
+                           forCellReuseIdentifier: Constants.singleCategoryTableViewCellId)
         return tableView
     }()
     
@@ -190,7 +193,7 @@ extension MWSingleCategoryViewController: UITableViewDataSource, UITableViewDele
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        MWI.s.pushVC(MWSingelMovieViewController(movie: self.movies[indexPath.row]))
+        MWI.s.pushVC(MWSingelMovieViewController(movie: self.filteredMovies[indexPath.row]))
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {

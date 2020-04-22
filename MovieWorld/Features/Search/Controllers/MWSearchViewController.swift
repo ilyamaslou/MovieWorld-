@@ -10,6 +10,15 @@ import SnapKit
 
 class MWSearchViewController: MWViewController {
     
+    private var page: Int = 1
+    private var totalPages: Int = 0
+    private var totalItems: Int = 0
+    private var filteredPage: Int = 1
+    private var filteredTotalPages: Int = 0
+    private var filteredTotalItems: Int = 0
+    private var isRequestBusy: Bool = false
+    private var searchTitle: String = ""
+    
     private var movies: [MWMovie] = [] {
         didSet {
             self.filteredMovies = self.movies
@@ -37,6 +46,13 @@ class MWSearchViewController: MWViewController {
     
     private lazy var searchController: UISearchController = UISearchController(searchResultsController: nil)
     
+    private lazy var loadingSpinner: UIActivityIndicatorView = {
+        let view = UIActivityIndicatorView()
+        view.style = .whiteLarge
+        view.color = UIColor(named: "accentColor")
+        return view
+    }()
+    
     override func initController() {
         super.initController()
         self.title = "Search"
@@ -52,10 +68,15 @@ class MWSearchViewController: MWViewController {
     }
     
     private func setUpView() {
-        contentView.addSubview(self.tableView)
+        self.contentView.addSubview(self.tableView)
+        self.contentView.addSubview(self.loadingSpinner)
         
         self.tableView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
+        }
+        
+        self.loadingSpinner.snp.makeConstraints { (make) in
+            make.center.equalToSuperview()
         }
     }
     
@@ -103,11 +124,11 @@ extension MWSearchViewController: UITableViewDelegate, UITableViewDataSource {
 }
 
 extension MWSearchViewController {
-    private func load(urlPath: String, querry: [String: String], completion: @escaping ([MWMovie]) -> Void) {
+    private func load(urlPath: String, querry: [String: String], completion: @escaping (MWMoviesResponse) -> Void) {
         MWNet.sh.request(urlPath: urlPath ,
                          querryParameters: querry,
                          succesHandler: { (movies: MWMoviesResponse)  in
-                            completion(movies.results)
+                            completion(movies)
         },
                          errorHandler: { [weak self] (error) in
                             guard let self = self else { return }
@@ -117,22 +138,52 @@ extension MWSearchViewController {
     }
     
     private func loadMovies() {
+        self.loadingSpinner.startAnimating()
         let urlPath = URLPaths.trandingDayMovies
-        let query = MWNet.sh.parameters
-        self.load(urlPath: urlPath, querry: query) { (movies) in
-            self.movies = movies
+        var query = MWNet.sh.parameters
+        query["page"] = "\(self.page)"
+        self.load(urlPath: urlPath, querry: query) { [weak self] (movies) in
+            guard let self = self else { return }
+            self.page += 1
+            self.isRequestBusy = false
+            self.totalItems = movies.totalResults
+            self.totalPages = movies.totalPages
+            self.movies += movies.results
             self.setGenreAndImage(to: self.movies)
+            self.loadingSpinner.stopAnimating()
         }
     }
     
-    private func searchMovies(with title: String) {
+    private func searchMovies() {
+        self.loadingSpinner.startAnimating()
         let urlPath = URLPaths.searchMovies
         var query = MWNet.sh.parameters
-        query["query"] = title
-        self.load(urlPath: urlPath, querry: query) { (movies) in
-            self.filteredMovies = movies
+        query["query"] = self.searchTitle
+        query["page"] = "\(self.filteredPage)"
+        self.load(urlPath: urlPath, querry: query) { [weak self] (movies) in
+            guard let self = self else { return }
+            self.filteredPage += 1
+            self.isRequestBusy = false
+            self.filteredTotalItems = movies.totalResults
+            self.filteredTotalPages = movies.totalPages
+            self.filteredMovies += movies.results
             self.setGenreAndImage(to: self.filteredMovies)
+            self.loadingSpinner.stopAnimating()
         }
+    }
+    
+    private func loadNextPage() {
+        guard !self.isRequestBusy,
+            self.movies.count != self.totalItems else { return }
+        self.isRequestBusy = true
+        self.loadMovies()
+    }
+    
+    private func loadNextSearchPage() {
+        guard !self.isRequestBusy,
+            self.filteredMovies.count != self.filteredTotalItems else { return }
+        self.isRequestBusy = true
+        self.searchMovies()
     }
     
     private func setGenreAndImage(to movies: [MWMovie]) {
@@ -149,10 +200,46 @@ extension MWSearchViewController: UISearchResultsUpdating, UISearchBarDelegate {
         if text.isEmpty {
             self.filteredMovies = self.movies
         } else {
-            self.searchMovies(with: text)
+            self.searchTitle = text
+            self.searchMovies()
             self.filteredMovies = self.movies.filter { ($0.title?.contains(text) ?? false) }
         }
         
         self.tableView.reloadData()
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.endEditing(true)
+        self.setFilteredValuesToDefault()
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText == "" {
+            self.setFilteredValuesToDefault()
+        }
+    }
+    
+    private func setFilteredValuesToDefault() {
+        self.filteredPage = 1
+        self.filteredTotalPages = 0
+        self.filteredTotalItems = 0
+    }
+}
+
+extension MWSearchViewController {
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let rowUnit = self.filteredMovies[indexPath.row]
+        guard filteredMovies.count > 5 else { return }
+        let unit = self.filteredMovies[self.filteredMovies.count - 5]
+        if self.filteredMovies == self.movies,
+            self.totalItems > self.filteredMovies.count,
+            rowUnit.id == unit.id {
+            self.loadNextPage()
+        } else if self.filteredMovies != self.movies,
+            !self.filteredMovies.isEmpty,
+            self.filteredTotalItems > self.filteredMovies.count,
+            rowUnit.id == unit.id {
+            self.loadNextSearchPage()
+        }
     }
 }

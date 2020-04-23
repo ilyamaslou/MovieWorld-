@@ -15,6 +15,7 @@ class MWSystem {
     
     var genres: [MWGenre] = []
     var configuration: MWConfiguration?
+    var languages: [MWLanguageConfiguration] = []
     
     private init() {}
 }

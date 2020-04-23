@@ -27,13 +27,10 @@ class MWMemberViewController: MWViewController {
         }
     }
     
-    private lazy var rightBarButtonDidFavoriteItem: UIBarButtonItem = {
-        let item = UIBarButtonItem(image: UIImage(named: "unselectedFavoriteIcon"),
-                                   style: .plain,
-                                   target: self,
-                                   action: #selector(self.didFavoriteButtonTapped))
-        return item
-    }()
+    private lazy var rightBarButtonDidFavoriteItem: UIBarButtonItem = UIBarButtonItem(image: UIImage(named: "unselectedFavoriteIcon"),
+                                                                                      style: .plain,
+                                                                                      target: self,
+                                                                                      action: #selector(self.didFavoriteButtonTapped))
     
     private lazy var scrollView: UIScrollView = {
         let view = UIScrollView()
@@ -122,7 +119,7 @@ class MWMemberViewController: MWViewController {
     
     override func initController() {
         super.initController()
-        navigationItem.largeTitleDisplayMode = .never
+        self.navigationItem.largeTitleDisplayMode = .never
         
         self.contentView.addSubview(self.scrollView)
         self.scrollView.addSubview(self.contentViewContainer)
@@ -170,6 +167,11 @@ class MWMemberViewController: MWViewController {
             make.left.equalToSuperview().offset(self.offsets.left)
             make.bottom.equalToSuperview().inset(10)
         }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationItem.largeTitleDisplayMode = .always
     }
     
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {

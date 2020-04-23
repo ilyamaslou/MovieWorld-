@@ -32,6 +32,11 @@ class MWSearchViewController: MWViewController {
         }
     }
     
+    private lazy var filterBarButton: UIBarButtonItem = UIBarButtonItem(image: UIImage(named: "filterIcon"),
+                                                                        style: .plain,
+                                                                        target: self,
+                                                                        action: #selector(filterButtonDidTapped))
+    
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.delegate = self
@@ -55,14 +60,11 @@ class MWSearchViewController: MWViewController {
     
     override func initController() {
         super.initController()
-        self.title = "Search"
-        
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(movieImageUpdated),
                                                name: .movieImageUpdated, object: nil)
         
-        
-        self.presettingSearchController()
+        self.presettingSearchControllerNavBar()
         self.setUpView()
         self.loadMovies()
     }
@@ -80,16 +82,22 @@ class MWSearchViewController: MWViewController {
         }
     }
     
-    private func presettingSearchController() {
-        navigationItem.hidesSearchBarWhenScrolling = false
+    private func presettingSearchControllerNavBar() {
+        self.title = "Search"
         self.searchController.searchResultsUpdater = self
         self.searchController.obscuresBackgroundDuringPresentation = false
-        navigationItem.searchController = self.searchController
         self.searchController.searchBar.delegate = self
+        self.navigationItem.searchController = self.searchController
+        self.navigationItem.setRightBarButton(self.filterBarButton, animated: true)
+        self.navigationItem.hidesSearchBarWhenScrolling = false
     }
     
-    @objc func movieImageUpdated() {
+    @objc private func movieImageUpdated() {
         self.tableView.reloadData()
+    }
+    
+    @objc private func filterButtonDidTapped() {
+        MWI.s.pushVC(MWFilterViewController())
     }
 }
 

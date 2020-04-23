@@ -78,6 +78,10 @@
 		99BAE46A241194AD00F45B11 /* MWInitController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BAE469241194AD00F45B11 /* MWInitController.swift */; };
 		99BAE46C2411A22600F45B11 /* MWSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BAE46B2411A22600F45B11 /* MWSystem.swift */; };
 		99BAE46E2411A6DC00F45B11 /* MWConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BAE46D2411A6DC00F45B11 /* MWConfiguration.swift */; };
+		99CAD4502450E8F700E88BBD /* MWFilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CAD44F2450E8F700E88BBD /* MWFilterViewController.swift */; };
+		99CAD4522450F22900E88BBD /* MWLanguageConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CAD4512450F22900E88BBD /* MWLanguageConfiguration.swift */; };
+		99CAD4542450F65900E88BBD /* FilterCountryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CAD4532450F65900E88BBD /* FilterCountryViewController.swift */; };
+		99CAD4562451007600E88BBD /* MWCountryFilterTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CAD4552451007600E88BBD /* MWCountryFilterTableViewCell.swift */; };
 		99CC6DBF242E30180078B63C /* MWSingleMovieCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CC6DBE242E30180078B63C /* MWSingleMovieCellView.swift */; };
 		99DAFEDF2443CBF200C74F8A /* MWFavoriteMoviesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DAFEDE2443CBF200C74F8A /* MWFavoriteMoviesViewController.swift */; };
 		99F15296244C9B1E008A1923 /* MWGroupsCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F15295244C9B1E008A1923 /* MWGroupsCollectionViewLayout.swift */; };
@@ -166,6 +170,10 @@
 		99BAE469241194AD00F45B11 /* MWInitController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWInitController.swift; sourceTree = "<group>"; };
 		99BAE46B2411A22600F45B11 /* MWSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWSystem.swift; sourceTree = "<group>"; };
 		99BAE46D2411A6DC00F45B11 /* MWConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWConfiguration.swift; sourceTree = "<group>"; };
+		99CAD44F2450E8F700E88BBD /* MWFilterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWFilterViewController.swift; sourceTree = "<group>"; };
+		99CAD4512450F22900E88BBD /* MWLanguageConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWLanguageConfiguration.swift; sourceTree = "<group>"; };
+		99CAD4532450F65900E88BBD /* FilterCountryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterCountryViewController.swift; sourceTree = "<group>"; };
+		99CAD4552451007600E88BBD /* MWCountryFilterTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWCountryFilterTableViewCell.swift; sourceTree = "<group>"; };
 		99CC6DBE242E30180078B63C /* MWSingleMovieCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWSingleMovieCellView.swift; sourceTree = "<group>"; };
 		99DAFEDE2443CBF200C74F8A /* MWFavoriteMoviesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWFavoriteMoviesViewController.swift; sourceTree = "<group>"; };
 		99F15295244C9B1E008A1923 /* MWGroupsCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWGroupsCollectionViewLayout.swift; sourceTree = "<group>"; };
@@ -211,6 +219,7 @@
 				9981C572243924940079747B /* MWMemberDetails.swift */,
 				994E3D0223FAA18E0034B4D2 /* MWMovie.swift */,
 				991420CE243A0FAB00A11F49 /* MWPersonMovies.swift */,
+				99CAD4512450F22900E88BBD /* MWLanguageConfiguration.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -379,6 +388,7 @@
 		9979B45923FFC311005421D9 /* Search */ = {
 			isa = PBXGroup;
 			children = (
+				99CAD457245100E500E88BBD /* Cells */,
 				9979B45C23FFC3D3005421D9 /* Controllers */,
 			);
 			path = Search;
@@ -409,6 +419,8 @@
 			isa = PBXGroup;
 			children = (
 				9979B46223FFCF19005421D9 /* MWSearchViewController.swift */,
+				99CAD44F2450E8F700E88BBD /* MWFilterViewController.swift */,
+				99CAD4532450F65900E88BBD /* FilterCountryViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -565,6 +577,14 @@
 				99FB9699242389CB00812329 /* MWImageLoadingHelper.swift */,
 			);
 			path = Network;
+			sourceTree = "<group>";
+		};
+		99CAD457245100E500E88BBD /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				99CAD4552451007600E88BBD /* MWCountryFilterTableViewCell.swift */,
+			);
+			path = Cells;
 			sourceTree = "<group>";
 		};
 		99DAFEDD2443CB8F00C74F8A /* FavoriteMoviesAndActors */ = {
@@ -777,6 +797,7 @@
 				99DAFEDF2443CBF200C74F8A /* MWFavoriteMoviesViewController.swift in Sources */,
 				9900669524452D0B0015C351 /* Genre+CoreDataProperties.swift in Sources */,
 				99AB2D8124321D1700095464 /* MWMovieGallery.swift in Sources */,
+				99CAD4522450F22900E88BBD /* MWLanguageConfiguration.swift in Sources */,
 				9900669F24452D0B0015C351 /* MovieCategory+CoreDataProperties.swift in Sources */,
 				99B481F82439501200017903 /* Date+Ex.swift in Sources */,
 				99F910F124053EE000E4F4DB /* Constants.swift in Sources */,
@@ -787,10 +808,12 @@
 				997BA63524393893007AA974 /* MWMemberViewController.swift in Sources */,
 				9900669B24452D0B0015C351 /* Movie+CoreDataProperties.swift in Sources */,
 				9979B46123FFCEF4005421D9 /* MWCategoryViewController.swift in Sources */,
+				99CAD4502450E8F700E88BBD /* MWFilterViewController.swift in Sources */,
 				9999E0D323F9F378007EB718 /* MWMainTabViewController.swift in Sources */,
 				9944CFBD24475F3F00C783CD /* MasterFavoriteViewController.swift in Sources */,
 				9900669824452D0B0015C351 /* ImageConfiguration+CoreDataClass.swift in Sources */,
 				992A1D6B242AC43200D61D65 /* MWCastMemberCollectionViewCell.swift in Sources */,
+				99CAD4562451007600E88BBD /* MWCountryFilterTableViewCell.swift in Sources */,
 				9999E0CF23F9F378007EB718 /* AppDelegate.swift in Sources */,
 				993D6DC32447C423000F5180 /* UINavigationController + ex.swift in Sources */,
 				9981C573243924940079747B /* MWMemberDetails.swift in Sources */,
@@ -800,6 +823,7 @@
 				99BAE46E2411A6DC00F45B11 /* MWConfiguration.swift in Sources */,
 				9979B46323FFCF19005421D9 /* MWSearchViewController.swift in Sources */,
 				9900669E24452D0B0015C351 /* MovieCategory+CoreDataClass.swift in Sources */,
+				99CAD4542450F65900E88BBD /* FilterCountryViewController.swift in Sources */,
 				995F405724153868005DC65F /* MWImageConfiguration.swift in Sources */,
 				999E6002241B7B6800F3103F /* MWModel.xcdatamodeld in Sources */,
 				99F15296244C9B1E008A1923 /* MWGroupsCollectionViewLayout.swift in Sources */,

@@ -33,11 +33,6 @@ class MWCastViewController: MWViewController {
         return tableView
     }()
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        navigationItem.largeTitleDisplayMode = .always
-    }
-    
     override func initController() {
         super.initController()
         self.title = "Cast"

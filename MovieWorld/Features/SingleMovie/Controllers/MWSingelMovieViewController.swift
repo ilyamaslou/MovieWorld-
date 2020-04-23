@@ -41,13 +41,10 @@ class MWSingelMovieViewController: MWViewController {
     private var galleryItems: [Any] = []
     private var imagesResponse: MWMovieImagesResponse?
     
-    private lazy var rightBarButtonDidFavoriteItem: UIBarButtonItem = {
-        let item = UIBarButtonItem(image: UIImage(named: "unselectedFavoriteIcon"),
-                                   style: .plain,
-                                   target: self,
-                                   action: #selector(self.didFavoriteButtonTapped))
-        return item
-    }()
+    private lazy var rightBarButtonDidFavoriteItem: UIBarButtonItem = UIBarButtonItem( image: UIImage(named: "unselectedFavoriteIcon"),
+                                                                                       style: .plain,
+                                                                                       target: self,
+                                                                                       action: #selector(self.didFavoriteButtonTapped))
     
     private lazy var scrollView: UIScrollView = {
         let view = UIScrollView()
@@ -179,7 +176,7 @@ class MWSingelMovieViewController: MWViewController {
     
     override func initController() {
         super.initController()
-        navigationItem.largeTitleDisplayMode = .never
+        self.navigationItem.largeTitleDisplayMode = .never
         self.loadingIndicator.startAnimating()
         
         self.contentView.addSubview(self.scrollView)
@@ -272,6 +269,11 @@ class MWSingelMovieViewController: MWViewController {
         }
         
         super.updateViewConstraints()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationItem.largeTitleDisplayMode = .always
     }
     
     init(movie: MWMovie) {

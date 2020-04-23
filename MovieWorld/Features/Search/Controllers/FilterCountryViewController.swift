@@ -10,10 +10,10 @@ import UIKit
 
 class FilterCountryViewController: MWViewController {
     
-    var recievedSelectedCountries: [String?] = []
     var choosenCountries: (([String?]) -> ())?
-    private var selectedCountryKey: Int = 0
     
+    private var recievedSelectedCountries: [String?] = []
+    private var selectedCountryKey: Int = 0
     private var languagesConfiguration: [MWLanguageConfiguration] = []
     
     private var countries: [(country: String?, isSelected: Bool)] = [] {
@@ -51,6 +51,7 @@ class FilterCountryViewController: MWViewController {
         super.init()
         self.recievedSelectedCountries = selectedCountries
         self.setSelectedCountries()
+        self.checkReset()
     }
     
     required init?(coder: NSCoder) {
@@ -128,12 +129,11 @@ class FilterCountryViewController: MWViewController {
             }
         }
         
-        if self.recievedSelectedCountries != selected {
+        if !selected.isEmpty {
             self.updateResetButton(hasNewValues: true)
         } else {
             self.updateResetButton(hasNewValues: false)
         }
-        
     }
     
     private func updateResetButton(hasNewValues: Bool) {
@@ -142,8 +142,9 @@ class FilterCountryViewController: MWViewController {
     }
     
     @objc private func resetButtonDidTapped() {
+        self.recievedSelectedCountries = []
         self.setUpLanguages()
-        self.setSelectedCountries()
+        self.didSendChoosedCountries()
         self.checkReset()
         self.tableView.reloadData()
     }

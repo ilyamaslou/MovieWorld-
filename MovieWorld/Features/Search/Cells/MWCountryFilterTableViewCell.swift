@@ -16,7 +16,7 @@ class MWCountryFilterTableViewCell: UITableViewCell {
         }
     }
     
-    private var offsets: UIEdgeInsets = UIEdgeInsets(top: 11, left: 16, bottom: 11, right: 15)
+    private let offsets: UIEdgeInsets = UIEdgeInsets(top: 11, left: 16, bottom: 11, right: 15)
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()

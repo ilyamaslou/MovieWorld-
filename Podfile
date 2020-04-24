@@ -8,4 +8,5 @@ target 'MovieWorld' do
   # Pods for MovieWorld
 pod 'SnapKit', '~> 5.0.0'
 pod 'YouTubePlayer'
+pod 'MultiSlider'
 end

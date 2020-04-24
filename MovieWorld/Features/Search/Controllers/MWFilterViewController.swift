@@ -7,8 +7,11 @@
 //
 
 import UIKit
+import MultiSlider
 
 class MWFilterViewController: MWViewController {
+    
+    private var offsets: UIEdgeInsets = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
     
     private var selectedCountries: [String?] = [] {
         didSet {
@@ -17,7 +20,7 @@ class MWFilterViewController: MWViewController {
         }
     }
     
-    private var selectedYear: String = Date().toYear {
+    private var selectedYear: String = "" {
         didSet {
             self.yearView.value = self.selectedYear
             self.checkReset()
@@ -25,6 +28,13 @@ class MWFilterViewController: MWViewController {
     }
     
     private var pickerData: [String] = []
+    
+    private var selectedRatingRange: (from: Float, to: Float)? {
+        didSet {
+            self.ratingView.value = "from \(self.selectedRatingRange?.from ?? 1.0) to \(self.selectedRatingRange?.to ?? 10.0)"
+            self.checkReset()
+        }
+    }
     
     private lazy var resetBarButton: UIBarButtonItem = {
         let button = UIBarButtonItem(title: "Reset",
@@ -67,6 +77,29 @@ class MWFilterViewController: MWViewController {
         return view
     }()
     
+    private lazy var ratingView: MWLabelsWithArrowView = {
+        let view: MWLabelsWithArrowView = MWLabelsWithArrowView()
+        view.hasArrow = false
+        view.title = "Rating"
+        view.value = "from \(self.selectedRatingRange?.from ?? 1.0) to \(self.selectedRatingRange?.to ?? 10.0)"
+        return view
+    }()
+    
+    private lazy var ratingSlider: MultiSlider = {
+        let slider = MultiSlider()
+        slider.minimumValue = 1
+        slider.maximumValue = 10
+        slider.value = [1, 10]
+        slider.hasRoundTrackEnds = true
+        slider.outerTrackColor = .lightGray
+        slider.tintColor = UIColor(named: "accentColor")
+        slider.orientation = .horizontal
+        slider.snapStepSize = 0.1
+        slider.addTarget(self, action: #selector(sliderChanged), for: .valueChanged)
+        slider.translatesAutoresizingMaskIntoConstraints = false
+        return slider
+    }()
+    
     override func initController() {
         self.checkReset()
         self.setUpView()
@@ -81,7 +114,19 @@ class MWFilterViewController: MWViewController {
         
         self.yearView.snp.makeConstraints { (make) in
             make.left.right.equalToSuperview()
-            make.top.equalTo(self.countryView.snp.bottom).offset(16)
+            make.top.equalTo(self.countryView.snp.bottom).offset(self.offsets.top)
+        }
+        
+        self.ratingView.snp.makeConstraints { (make) in
+            make.left.equalToSuperview()
+            make.right.equalToSuperview()
+            make.top.equalTo(self.yearView.snp.bottom).offset(self.offsets.top)
+        }
+        
+        self.ratingSlider.snp.makeConstraints { (make) in
+            make.left.equalToSuperview().offset(self.offsets.left)
+            make.right.equalToSuperview().inset(self.offsets.right)
+            make.top.equalTo(self.ratingView.snp.bottom)
         }
         super.updateViewConstraints()
     }
@@ -95,6 +140,8 @@ class MWFilterViewController: MWViewController {
         
         self.contentView.addSubview(self.countryView)
         self.contentView.addSubview(self.yearView)
+        self.contentView.addSubview(self.ratingView)
+        self.contentView.addSubview(self.ratingSlider)
     }
     
     private func setUpCountries() {
@@ -136,16 +183,21 @@ class MWFilterViewController: MWViewController {
     }
     
     private func setUpYear() {
+        if self.selectedYear.isEmpty {
+            self.selectedYear = Date().toYear
+        }
+        
         for (id, year) in self.pickerData.enumerated() {
             if year == self.selectedYear {
                 self.datePicker.selectRow(id, inComponent: 0, animated: true)
             }
         }
-        self.yearView.value = self.selectedYear
     }
     
     private func checkReset() {
-        if !self.selectedCountries.isEmpty || !self.selectedYear.isEmpty {
+        if !self.selectedCountries.isEmpty
+            || !self.selectedYear.isEmpty
+            || (self.selectedRatingRange != nil) {
             self.updateResetButton(hasNewValues: true)
         } else {
             self.updateResetButton(hasNewValues: false)
@@ -168,6 +220,8 @@ class MWFilterViewController: MWViewController {
     @objc private func resetButtonDidTapped() {
         self.selectedCountries = []
         self.selectedYear = ""
+        self.ratingSlider.value = [1, 10]
+        self.selectedRatingRange = nil
     }
     
     @objc private func countryViewDidTapped() {
@@ -191,7 +245,6 @@ class MWFilterViewController: MWViewController {
             make.top.equalTo(self.view.snp.top)
             make.left.right.equalToSuperview()
             make.bottom.equalTo(self.datePickerToolBar.snp.top)
-            
         }
         self.datePickerToolBar.snp.makeConstraints { (make) in
             make.left.right.equalToSuperview()
@@ -203,6 +256,12 @@ class MWFilterViewController: MWViewController {
         }
         
         self.setUpYear()
+    }
+    
+    @objc private func sliderChanged() {
+        let minSliderValue = Float(self.ratingSlider.value.first ?? 1.0)
+        let maxSliderValue = Float(self.ratingSlider.value.last ?? 10.0)
+        self.selectedRatingRange = (from: minSliderValue, to: maxSliderValue)
     }
 }
 

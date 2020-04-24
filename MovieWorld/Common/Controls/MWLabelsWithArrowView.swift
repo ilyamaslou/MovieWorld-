@@ -22,7 +22,14 @@ class MWLabelsWithArrowView: UIView {
         }
     }
     
-    var hasArrow:Bool = true
+    var hasArrow: Bool = true {
+        didSet {
+            self.arrowImage.isHidden = !self.hasArrow
+            self.valueLabel.snp.remakeConstraints { (make) in
+                make.right.equalToSuperview().inset(self.offsets.right)
+            }
+        }
+    }
     
     private let offsets: UIEdgeInsets = UIEdgeInsets(top: 11, left: 16, bottom: 11, right: 15)
     
@@ -52,7 +59,6 @@ class MWLabelsWithArrowView: UIView {
         view.image = UIImage(named: "nextArrow")
         view.translatesAutoresizingMaskIntoConstraints = false
         view.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
-        view.isHidden = !self.hasArrow
         return view
     }()
     

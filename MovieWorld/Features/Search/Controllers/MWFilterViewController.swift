@@ -20,6 +20,7 @@ class MWFilterViewController: MWViewController {
     private var selectedYear: String = Date().toYear {
         didSet {
             self.yearView.value = self.selectedYear
+            self.checkReset()
         }
     }
     
@@ -52,10 +53,19 @@ class MWFilterViewController: MWViewController {
         let picker = UIPickerView()
         picker.delegate = self
         picker.dataSource = self
+        picker.translatesAutoresizingMaskIntoConstraints = false
+        picker.backgroundColor = .clear
         return picker
     }()
     
     private lazy var datePickerToolBar: UIToolbar = UIToolbar()
+    
+    private lazy var viewWithLowAlpha: UIView = {
+        let view: UIView = UIView()
+        view.backgroundColor = UIColor.black.withAlphaComponent(0.6)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
     
     override func initController() {
         self.checkReset()
@@ -110,9 +120,11 @@ class MWFilterViewController: MWViewController {
         items.append(
             UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(tapGestureDone))
         )
-        datePickerToolBar.setItems(items, animated: true)
-        datePickerToolBar.tintColor = UIColor(named: "accentColor")
-        datePickerToolBar.sizeToFit()
+        
+        self.datePickerToolBar.translatesAutoresizingMaskIntoConstraints = false
+        self.datePickerToolBar.setItems(items, animated: true)
+        self.datePickerToolBar.tintColor = UIColor(named: "accentColor")
+        self.datePickerToolBar.sizeToFit()
     }
     
     private func setUpPickerData() {
@@ -129,10 +141,11 @@ class MWFilterViewController: MWViewController {
                 self.datePicker.selectRow(id, inComponent: 0, animated: true)
             }
         }
+        self.yearView.value = self.selectedYear
     }
     
     private func checkReset() {
-        if !self.selectedCountries.isEmpty {
+        if !self.selectedCountries.isEmpty || !self.selectedYear.isEmpty {
             self.updateResetButton(hasNewValues: true)
         } else {
             self.updateResetButton(hasNewValues: false)
@@ -145,13 +158,16 @@ class MWFilterViewController: MWViewController {
     }
     
     @objc func tapGestureDone() {
+        self.navigationController?.navigationBar.layer.zPosition = 0
         self.datePicker.removeFromSuperview()
         self.datePickerToolBar.removeFromSuperview()
+        self.viewWithLowAlpha.removeFromSuperview()
         self.updateViewConstraints()
     }
     
     @objc private func resetButtonDidTapped() {
         self.selectedCountries = []
+        self.selectedYear = ""
     }
     
     @objc private func countryViewDidTapped() {
@@ -165,9 +181,18 @@ class MWFilterViewController: MWViewController {
     }
     
     @objc private func yearViewDidTapped() {
+        self.navigationController?.navigationBar.layer.zPosition = -1
+        
+        self.contentView.addSubview(self.viewWithLowAlpha)
         self.contentView.addSubview(self.datePickerToolBar)
         self.contentView.addSubview(self.datePicker)
         
+        self.viewWithLowAlpha.snp.makeConstraints { (make) in
+            make.top.equalTo(self.view.snp.top)
+            make.left.right.equalToSuperview()
+            make.bottom.equalTo(self.datePickerToolBar.snp.top)
+            
+        }
         self.datePickerToolBar.snp.makeConstraints { (make) in
             make.left.right.equalToSuperview()
             make.bottom.equalTo(self.datePicker.snp.top)

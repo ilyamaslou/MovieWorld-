@@ -31,6 +31,7 @@ class MWLabelsWithArrowView: UIView {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 17)
         label.lineBreakMode = .byTruncatingTail
+        label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         label.text = self.title
         return label
     }()
@@ -41,6 +42,7 @@ class MWLabelsWithArrowView: UIView {
         label.font = .systemFont(ofSize: 17, weight: .light)
         label.textColor = .gray
         label.lineBreakMode = .byTruncatingTail
+        label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         label.text = self.value
         return label
     }()
@@ -49,6 +51,7 @@ class MWLabelsWithArrowView: UIView {
         let view: UIImageView = UIImageView()
         view.image = UIImage(named: "nextArrow")
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         view.isHidden = !self.hasArrow
         return view
     }()

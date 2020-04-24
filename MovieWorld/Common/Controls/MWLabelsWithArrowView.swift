@@ -49,7 +49,6 @@ class MWLabelsWithArrowView: UIView {
         let view: UIImageView = UIImageView()
         view.image = UIImage(named: "nextArrow")
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.setNeedsUpdateConstraints()
         view.isHidden = !self.hasArrow
         return view
     }()
@@ -70,11 +69,12 @@ class MWLabelsWithArrowView: UIView {
         self.addSubview(self.arrowImage)
     }
     
-     override func updateConstraints() {
+    override func updateConstraints() {
         self.titleLabel.snp.makeConstraints { (make) in
             make.top.equalToSuperview().offset(self.offsets.top)
             make.left.equalToSuperview().offset(self.offsets.left)
-            make.bottom.equalToSuperview().inset(self.offsets.bottom)        }
+            make.bottom.equalToSuperview().inset(self.offsets.bottom)
+        }
         
         self.valueLabel.snp.makeConstraints { (make) in
             make.top.equalToSuperview().offset(self.offsets.top)

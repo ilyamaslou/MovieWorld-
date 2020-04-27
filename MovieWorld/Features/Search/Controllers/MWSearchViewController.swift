@@ -243,8 +243,8 @@ extension MWSearchViewController: UISearchResultsUpdating, UISearchBarDelegate {
 extension MWSearchViewController {
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         let rowUnit = self.filteredMovies[indexPath.row]
-        guard filteredMovies.count > 5 else { return }
-        let unit = self.filteredMovies[self.filteredMovies.count - 5]
+        guard filteredMovies.count > 2 else { return }
+        let unit = self.filteredMovies[self.filteredMovies.count - 2]
         if self.filteredMovies == self.movies,
             self.totalItems > self.filteredMovies.count,
             rowUnit.id == unit.id {

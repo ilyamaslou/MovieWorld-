@@ -15,6 +15,7 @@ class MWSingleCategoryViewController: MWViewController {
     private var totalItems: Int = 0
     private var isRequestBusy: Bool = false
     private var category: MWCategories?
+    private var shouldUseLoadingMethods = true
     
     private var movies: [MWMovie] = [] {
         didSet {
@@ -60,7 +61,7 @@ class MWSingleCategoryViewController: MWViewController {
         self.totalPages = totalResultsInfo?.totalPages ?? 0
         self.totalItems = totalResultsInfo?.totalResults ?? 0
         
-        self.updateTableAndCollectionView(movies: movies)
+        self.setTableViewMovies(movies: movies, useLoading: true)
     }
     
     required init?(coder: NSCoder) {
@@ -95,13 +96,13 @@ class MWSingleCategoryViewController: MWViewController {
         }
     }
     
-    func updateTableAndCollectionView(movies: [MWMovie]) {
+    func setTableViewMovies(movies: [MWMovie], useLoading: Bool = false) {
         self.movies = movies
-        self.collectionView.setUpGenres()
+        self.shouldUseLoadingMethods = useLoading
     }
     
     @objc private func updateTableByGenres() {
-        var tempFilteredMovies: Set<MWMovie> = []
+        var tempFilteredMovies: [MWMovie] = []
         
         if self.collectionView.filteredGenres.isEmpty {
             self.filteredMovies = self.movies
@@ -113,13 +114,20 @@ class MWSingleCategoryViewController: MWViewController {
                 guard let movieGenres = movie.movieGenres else { return }
                 for movieGenre in movieGenres {
                     if movieGenre == genre {
-                        tempFilteredMovies.insert(movie)
+                        tempFilteredMovies.append(movie)
                     }
                 }
             }
         }
         
-        self.filteredMovies = Array(tempFilteredMovies)
+        self.filteredMovies = tempFilteredMovies
+        self.checkFilteredMoviesOnFillness()
+    }
+    
+    private func checkFilteredMoviesOnFillness() {
+        guard self.filteredMovies.count < 3,
+            self.shouldUseLoadingMethods else { return }
+        self.loadUnits()
     }
 }
 
@@ -156,19 +164,18 @@ extension MWSingleCategoryViewController: UITableViewDataSource, UITableViewDele
 
 //MARK: Pagination
 extension MWSingleCategoryViewController {
-    
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        let rowUnit = self.movies[indexPath.row]
-        guard movies.count > 5 else { return }
-        let unit = self.movies[self.movies.count - 5]
+        let rowUnit = self.filteredMovies[indexPath.row]
+        guard self.filteredMovies.count > 2 else { return }
+        let unit = self.filteredMovies[self.filteredMovies.count - 2]
         if self.totalItems > self.movies.count,
             rowUnit.id == unit.id {
             self.loadUnits()
-            self.loadingSpinner.startAnimating()
         }
     }
     
     private func loadUnits() {
+        self.loadingSpinner.startAnimating()
         guard !self.isRequestBusy,
             self.movies.count != self.totalItems else { return }
         self.isRequestBusy = true
@@ -177,15 +184,15 @@ extension MWSingleCategoryViewController {
             guard let self = self else { return }
             self.isRequestBusy = false
             self.page += 1
-            self.collectionView.collectionViewLayout.cache = []
             self.movies += movies
-            self.collectionView.setUpGenres()
+            self.updateTableByGenres()
             self.loadingSpinner.stopAnimating()
         }
     }
     
     private func loadMovies( completion: @escaping ([MWMovie]) -> Void) {
-        guard let category = self.category else { return }
+        guard let category = self.category,
+            self.page <= self.totalPages else { return }
         let urlPath = category.getCategoryUrlPath()
         var query = MWNet.sh.parameters
         query["page"] = String(self.page)
@@ -204,6 +211,7 @@ extension MWSingleCategoryViewController {
                             
                             let message = error.getErrorDesription()
                             self.errorAlert(message: message)
+                            self.loadingSpinner.stopAnimating()
         })
     }
     

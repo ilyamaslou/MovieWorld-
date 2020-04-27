@@ -28,7 +28,7 @@ class MWFavoriteMoviesViewController: MWViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.moviesByGenresController.updateTableAndCollectionView(movies: self.getFavoriteMovies())
+        self.moviesByGenresController.setTableViewMovies(movies: self.getFavoriteMovies())
     }
     
     override func initController() {

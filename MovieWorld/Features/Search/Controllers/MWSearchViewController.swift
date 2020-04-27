@@ -18,6 +18,7 @@ class MWSearchViewController: MWViewController {
     private var filteredTotalItems: Int = 0
     private var isRequestBusy: Bool = false
     private var searchTitle: String = ""
+    private var searchFilters: (genres: Set<String>, countries: [String?], year: String, ratingRange: (Float, Float)?)?
     
     private var movies: [MWMovie] = [] {
         didSet {
@@ -97,7 +98,12 @@ class MWSearchViewController: MWViewController {
     }
     
     @objc private func filterButtonDidTapped() {
-        MWI.s.pushVC(MWFilterViewController())
+        let controller = MWFilterViewController(filters: self.searchFilters)
+        MWI.s.pushVC(controller)
+        
+        controller.choosenFilters = { [weak self] (genres, countries, year, ratingRange) in
+            self?.searchFilters = (genres, countries, year, ratingRange)
+        }
     }
 }
 

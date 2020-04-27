@@ -50,6 +50,7 @@
 		996F79E6240BEAE8006FF3C0 /* MWNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = 996F79E5240BEAE8006FF3C0 /* MWNetwork.swift */; };
 		996F79E8240BEBB4006FF3C0 /* MWNetError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 996F79E7240BEBB4006FF3C0 /* MWNetError.swift */; };
 		996F79EA240C0374006FF3C0 /* MWGenre.swift in Sources */ = {isa = PBXBuildFile; fileRef = 996F79E9240C0374006FF3C0 /* MWGenre.swift */; };
+		997870E124563E6500CD2ACC /* MWGenresCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997870E024563E6500CD2ACC /* MWGenresCollectionViewController.swift */; };
 		9979B44E23FFC1DB005421D9 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 9979B44D23FFC1DB005421D9 /* .gitignore */; };
 		9979B45523FFC2A5005421D9 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9979B45423FFC2A5005421D9 /* Colors.xcassets */; };
 		9979B45F23FFC666005421D9 /* MWTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9979B45E23FFC666005421D9 /* MWTabBarViewController.swift */; };
@@ -141,6 +142,7 @@
 		996F79E5240BEAE8006FF3C0 /* MWNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWNetwork.swift; sourceTree = "<group>"; };
 		996F79E7240BEBB4006FF3C0 /* MWNetError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWNetError.swift; sourceTree = "<group>"; };
 		996F79E9240C0374006FF3C0 /* MWGenre.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWGenre.swift; sourceTree = "<group>"; };
+		997870E024563E6500CD2ACC /* MWGenresCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWGenresCollectionViewController.swift; sourceTree = "<group>"; };
 		9979B44D23FFC1DB005421D9 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = .gitignore; path = ../../../Downloads/.gitignore; sourceTree = "<group>"; };
 		9979B45423FFC2A5005421D9 /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
 		9979B45E23FFC666005421D9 /* MWTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWTabBarViewController.swift; sourceTree = "<group>"; };
@@ -299,6 +301,32 @@
 			path = Localisation;
 			sourceTree = "<group>";
 		};
+		997870E2245645FA00CD2ACC /* GenresCollectionView */ = {
+			isa = PBXGroup;
+			children = (
+				99F15294244C9AE0008A1923 /* Layouts */,
+				997870E42456460B00CD2ACC /* Controllers */,
+				997870E32456460400CD2ACC /* Cells */,
+			);
+			path = GenresCollectionView;
+			sourceTree = "<group>";
+		};
+		997870E32456460400CD2ACC /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				9941EAB72424F2CF00E0CFE6 /* MWGenreCollectionViewCell.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		997870E42456460B00CD2ACC /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				997870E024563E6500CD2ACC /* MWGenresCollectionViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
 		9979B44F23FFC1F2005421D9 /* Common */ = {
 			isa = PBXGroup;
 			children = (
@@ -314,6 +342,7 @@
 		9979B45023FFC20C005421D9 /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				997870E2245645FA00CD2ACC /* GenresCollectionView */,
 				997BA6312439385B007AA974 /* Member */,
 				99AB2D8C243767E200095464 /* Cast */,
 				992DB7CD2428CD2C0047D438 /* SingleMovie */,
@@ -619,7 +648,6 @@
 		99F1765A2424240500969F1D /* SingleCategory */ = {
 			isa = PBXGroup;
 			children = (
-				99F15294244C9AE0008A1923 /* Layouts */,
 				99F1765C2424242100969F1D /* Controllers */,
 				99F1765B2424241800969F1D /* Cells */,
 			);
@@ -630,7 +658,6 @@
 			isa = PBXGroup;
 			children = (
 				994E3CFF23FAA0170034B4D2 /* MWSingleMovieInCategoryCell.swift */,
-				9941EAB72424F2CF00E0CFE6 /* MWGenreCollectionViewCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -818,6 +845,7 @@
 				992A1D6B242AC43200D61D65 /* MWCastMemberCollectionViewCell.swift in Sources */,
 				99CAD4562451007600E88BBD /* MWCountryFilterTableViewCell.swift in Sources */,
 				9999E0CF23F9F378007EB718 /* AppDelegate.swift in Sources */,
+				997870E124563E6500CD2ACC /* MWGenresCollectionViewController.swift in Sources */,
 				993D6DC32447C423000F5180 /* UINavigationController + ex.swift in Sources */,
 				9981C573243924940079747B /* MWMemberDetails.swift in Sources */,
 				9900669C24452D0B0015C351 /* FavoriteActors+CoreDataClass.swift in Sources */,

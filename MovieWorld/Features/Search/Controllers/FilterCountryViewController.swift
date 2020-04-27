@@ -117,7 +117,8 @@ class FilterCountryViewController: MWViewController {
                 selectedCountries.append(country.country)
             }
         }
-        guard let choosenCountries = choosenCountries else { return }
+        
+        guard let choosenCountries = self.choosenCountries else { return }
         choosenCountries(selectedCountries)
     }
     

@@ -93,6 +93,86 @@ class MWSearchViewController: MWViewController {
         self.navigationItem.hidesSearchBarWhenScrolling = false
     }
     
+    private func setFilters() {
+        self.setGenreFilter()
+        self.setYearFilter()
+        self.setCountriesFilter()
+        self.setRatingFilter()
+    }
+    
+    private func setGenreFilter() {
+        guard let genres = self.searchFilters?.genres, !genres.isEmpty else { return }
+        var tempFilteredMovies: [MWMovie] = []
+        for movie in self.filteredMovies {
+            for genre in genres {
+                guard let movieGenres = movie.movieGenres else { return }
+                for movieGenre in movieGenres {
+                    if movieGenre == genre {
+                        guard !tempFilteredMovies.contains(movie) else { continue }
+                        tempFilteredMovies.append(movie)
+                    }
+                }
+            }
+        }
+        self.filteredMovies = tempFilteredMovies
+    }
+    
+    private func setYearFilter() {
+        guard let year = self.searchFilters?.year, !year.isEmpty else { return }
+        var tempFilteredMovies: [MWMovie] = []
+        for movie in self.filteredMovies {
+            if movie.getMovieReleaseYear() == year {
+                tempFilteredMovies.append(movie)
+            }
+        }
+        self.filteredMovies = tempFilteredMovies
+    }
+    
+    
+    private func setCountriesFilter() {
+        let countries = self.getCountriesIso()
+        guard !countries.isEmpty else { return }
+        var tempFilteredMovies: [MWMovie] = []
+        for movie in self.filteredMovies {
+            for country in countries {
+                guard let movieCountry = movie.originalLanguage else { return }
+                if movieCountry == country {
+                    guard !tempFilteredMovies.contains(movie) else { continue }
+                    tempFilteredMovies.append(movie)
+                }
+            }
+            self.filteredMovies = tempFilteredMovies
+        }
+    }
+    
+    private func getCountriesIso() -> [String?] {
+        var countriesIso: [String?] = []
+        if let countries = self.searchFilters?.countries {
+            for sysCountry in MWSys.sh.languages {
+                for country in countries {
+                    if country == sysCountry.englishName {
+                        countriesIso.append(sysCountry.iso)
+                    }
+                }
+            }
+        }
+        return countriesIso
+    }
+    
+    private func setRatingFilter() {
+        guard let ratingRange = self.searchFilters?.ratingRange else { return }
+        var tempFilteredMovies: [MWMovie] = []
+        for movie in self.filteredMovies {
+            guard let movieRating = movie.voteAvarage else { return }
+            let minRating = Double(ratingRange.0)
+            let maxRating = Double(ratingRange.1)
+            if (minRating <= movieRating) && (maxRating >= movieRating ) {
+                tempFilteredMovies.append(movie)
+            }
+        }
+        self.filteredMovies = tempFilteredMovies
+    }
+    
     @objc private func movieImageUpdated() {
         self.tableView.reloadData()
     }
@@ -103,6 +183,7 @@ class MWSearchViewController: MWViewController {
         
         controller.choosenFilters = { [weak self] (genres, countries, year, ratingRange) in
             self?.searchFilters = (genres, countries, year, ratingRange)
+            self?.setFilters()
         }
     }
 }

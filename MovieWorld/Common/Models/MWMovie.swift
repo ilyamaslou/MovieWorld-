@@ -44,19 +44,6 @@ class MWMovie: Decodable, Hashable {
     var movieGenres: [String]?
     var image: Data?
     
-    func setFilmGenres(genres: [MWGenre]) {
-        var tempGenres: [String] = []
-        guard let genreIds = genreIds  else { return }
-        for id in genreIds {
-            for genre in genres {
-                if genre.id == id {
-                    tempGenres.append(genre.name)
-                }
-            }
-        }
-        movieGenres = tempGenres
-    }
-    
     init() {}
     
     init(filmName: String,
@@ -99,5 +86,28 @@ class MWMovie: Decodable, Hashable {
         hasher.combine(posterPath)
         hasher.combine(originalLanguage)
         hasher.combine(genreIds)
+    }
+    
+    func setFilmGenres(genres: [MWGenre]) {
+        var tempGenres: [String] = []
+        guard let genreIds = genreIds  else { return }
+        for id in genreIds {
+            for genre in genres {
+                if genre.id == id {
+                    tempGenres.append(genre.name)
+                }
+            }
+        }
+        movieGenres = tempGenres
+    }
+    
+    func getMovieReleaseYear() -> String {
+        var releaseYear = ""
+        if let releaseDate = self.releaseDate {
+            let dividedDate = releaseDate.split(separator: "-")
+            releaseYear = String(dividedDate.first ?? "")
+            releaseYear = releaseYear.isEmpty ? "" : "\(releaseYear)"
+        }
+        return releaseYear
     }
 }

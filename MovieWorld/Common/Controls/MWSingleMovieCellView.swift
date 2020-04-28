@@ -138,14 +138,8 @@ class MWSingleMovieCellView: UIView {
                 .resizeImage(targetSize: CGSize(width: 80, height: 100))
         }
         
-        var releaseYear = ""
-        if let releaseDate = movie.releaseDate {
-            let dividedDate = releaseDate.split(separator: "-")
-            releaseYear = String(dividedDate.first ?? "")
-            releaseYear = releaseYear.isEmpty ? "" : "\(releaseYear),"
-        }
-        
-        self.releaseYearAndCountryLabel.text = "\(releaseYear) \(movie.originalLanguage ?? "")"
+        let releasedYear = movie.getMovieReleaseYear().isEmpty ? "" : "\(movie.getMovieReleaseYear()),"
+        self.releaseYearAndCountryLabel.text = "\(releasedYear) \(movie.originalLanguage ?? "")"
         self.genresLabel.text = self.setUpGenres(movieGenres: movie.movieGenres)
         
         if let movieRating = movie.voteAvarage, movieRating != 0 {

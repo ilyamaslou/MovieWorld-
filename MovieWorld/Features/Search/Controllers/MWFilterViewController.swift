@@ -290,6 +290,7 @@ class MWFilterViewController: MWViewController {
     @objc private func resetButtonDidTapped() {
         self.selectedCountries = []
         self.selectedYear = ""
+        self.yearView.value = ""
         self.ratingSlider.value = [1, 10]
         self.selectedRatingRange = nil
         self.collectionView.setUpGenres()

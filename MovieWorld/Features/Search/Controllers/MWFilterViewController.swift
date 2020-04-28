@@ -11,18 +11,18 @@ import MultiSlider
 
 class MWFilterViewController: MWViewController {
     
-    var choosenFilters: ((_ genres: Set<String>, _ countries: [String?], _ year: String, _ ratingRange: (Float, Float)?) -> ())?
+    var choosenFilters: ((_ genres: Set<String>?, _ countries: [String?]?, _ year: String?, _ ratingRange: (Float, Float)?) -> ())?
     
     private var offsets: UIEdgeInsets = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
     
-    private var selectedCountries: [String?] = [] {
+    private var selectedCountries: [String?]? {
         didSet {
             self.setUpCountries()
             self.checkReset()
         }
     }
     
-    private var selectedYear: String = "" {
+    private var selectedYear: String? {
         didSet {
             self.setUpYear()
             self.checkReset()
@@ -116,10 +116,10 @@ class MWFilterViewController: MWViewController {
         return button
     }()
     
-    init(filters: (genres: Set<String>, countries: [String?], year: String, ratingRange: (Float, Float)?)?) {
+    init(filters: (genres: Set<String>?, countries: [String?]?, year: String?, ratingRange: (Float, Float)?)?) {
         super.init()
         guard let filters = filters else { return }
-        self.collectionView.filteredGenres = filters.genres
+        self.collectionView.filteredGenres = filters.genres ?? []
         self.selectedCountries = filters.countries
         self.selectedYear = filters.year
         self.selectedRatingRange = filters.ratingRange
@@ -207,8 +207,8 @@ class MWFilterViewController: MWViewController {
     
     private func setUpCountries() {
         var countries = ""
-        
-        for country in self.selectedCountries {
+        guard let selectedCountries = self.selectedCountries else { return }
+        for country in selectedCountries {
             guard let country = country else { continue }
             countries += "\(country), "
         }
@@ -244,17 +244,19 @@ class MWFilterViewController: MWViewController {
     }
     
     private func setUpYear() {
-        if self.selectedYear.isEmpty {
-            self.selectedYear = Date().toYear
+        var dateToPick: String = ""
+        if self.selectedYear == nil {
+            dateToPick = Date().toYear
+        } else if let selectedYear = self.selectedYear {
+            dateToPick = selectedYear
         }
         
         for (id, year) in self.pickerData.enumerated() {
-            if year == self.selectedYear {
+            if year == dateToPick {
                 self.datePicker.selectRow(id, inComponent: 0, animated: true)
             }
         }
-        
-        self.yearView.value = self.selectedYear
+        self.yearView.value = self.selectedYear ?? ""
     }
     
     private func setUpSlider() {
@@ -269,8 +271,8 @@ class MWFilterViewController: MWViewController {
     }
     
     @objc private func checkReset() {
-        if !self.selectedCountries.isEmpty
-            || !self.selectedYear.isEmpty
+        if !(self.selectedCountries?.isEmpty ?? true)
+            || !(self.selectedYear?.isEmpty ?? true)
             || (self.selectedRatingRange != nil)
             || !self.collectionView.filteredGenres.isEmpty {
             self.updateResetButton(hasNewValues: true)
@@ -288,17 +290,18 @@ class MWFilterViewController: MWViewController {
     }
     
     @objc private func resetButtonDidTapped() {
-        self.selectedCountries = []
-        self.selectedYear = ""
+        self.selectedCountries = nil
+        self.countryView.value = ""
+        self.selectedYear = nil
         self.yearView.value = ""
-        self.ratingSlider.value = [1, 10]
         self.selectedRatingRange = nil
+        self.ratingSlider.value = [1, 10]
         self.collectionView.setUpGenres()
         self.collectionView.filteredGenres = []
     }
     
     @objc private func countryViewDidTapped() {
-        let controller: FilterCountryViewController = FilterCountryViewController(selectedCountries: self.selectedCountries)
+        let controller: FilterCountryViewController = FilterCountryViewController(selectedCountries: self.selectedCountries ?? [])
         MWI.s.pushVC(controller)
         
         controller.choosenCountries = { [weak self] (countries) in
@@ -309,6 +312,7 @@ class MWFilterViewController: MWViewController {
     
     @objc private func yearViewDidTapped() {
         self.navigationController?.navigationBar.layer.zPosition = -1
+        self.selectedYear = self.selectedYear ?? Date().toYear
         
         self.contentView.addSubview(self.viewWithLowAlpha)
         self.contentView.addSubview(self.datePickerToolBar)
@@ -339,7 +343,8 @@ class MWFilterViewController: MWViewController {
     
     @objc private func showButtonDidTapped() {
         guard let choosenFilters = self.choosenFilters else { return }
-        choosenFilters(self.collectionView.filteredGenres,
+        let filteredGenres = self.collectionView.filteredGenres.isEmpty ? nil : self.collectionView.filteredGenres
+        choosenFilters(filteredGenres,
                        self.selectedCountries,
                        self.selectedYear,
                        self.selectedRatingRange)

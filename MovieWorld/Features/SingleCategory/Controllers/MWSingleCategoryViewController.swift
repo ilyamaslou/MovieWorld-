@@ -109,16 +109,8 @@ class MWSingleCategoryViewController: MWViewController {
             return
         }
         
-        for movie in self.movies {
-            for genre in self.collectionView.filteredGenres {
-                guard let movieGenres = movie.movieGenres else { return }
-                for movieGenre in movieGenres {
-                    if movieGenre == genre {
-                        guard !tempFilteredMovies.contains(movie) else { continue }
-                        tempFilteredMovies.append(movie)
-                    }
-                }
-            }
+        for genre in self.collectionView.filteredGenres {
+            tempFilteredMovies.append(contentsOf: self.filteredMovies.filter{ ($0.movieGenres?.contains(genre) ?? false) })
         }
         
         self.filteredMovies = tempFilteredMovies

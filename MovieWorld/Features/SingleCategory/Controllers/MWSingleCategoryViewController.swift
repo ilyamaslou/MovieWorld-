@@ -118,8 +118,7 @@ class MWSingleCategoryViewController: MWViewController {
     }
     
     private func checkFilteredMoviesOnFillness() {
-        guard self.filteredMovies.count < 3,
-            self.shouldUseLoadingMethods else { return }
+        guard self.filteredMovies.count < 5, self.shouldUseLoadingMethods else { return }
         self.loadUnits()
     }
 }
@@ -159,8 +158,8 @@ extension MWSingleCategoryViewController: UITableViewDataSource, UITableViewDele
 extension MWSingleCategoryViewController {
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         let rowUnit = self.filteredMovies[indexPath.row]
-        guard self.filteredMovies.count > 2 else { return }
-        let unit = self.filteredMovies[self.filteredMovies.count - 2]
+        guard self.filteredMovies.count > 4 else { return }
+        let unit = self.filteredMovies[self.filteredMovies.count - 4]
         if self.totalItems > self.movies.count,
             rowUnit.id == unit.id {
             self.loadUnits()

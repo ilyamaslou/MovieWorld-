@@ -186,7 +186,7 @@ class MWSearchViewController: MWViewController {
     }
     
     private func checkFilteredMoviesOnFillnessAndLoad() {
-        guard self.filteredMovies.count < 3 else { return }
+        guard self.filteredMovies.count < 5 else { return }
         self.loadNextPage()
     }
     
@@ -345,8 +345,8 @@ extension MWSearchViewController: UISearchResultsUpdating, UISearchBarDelegate {
 extension MWSearchViewController {
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         let rowUnit = self.filteredMovies[indexPath.row]
-        guard let text = searchController.searchBar.text, filteredMovies.count > 2 else { return }
-        let unit = self.filteredMovies[self.filteredMovies.count - 2]
+        guard let text = searchController.searchBar.text, filteredMovies.count > 4 else { return }
+        let unit = self.filteredMovies[self.filteredMovies.count - 4]
         if text.isEmpty,
             self.totalItems > self.filteredMovies.count,
             rowUnit.id == unit.id {

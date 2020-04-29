@@ -17,7 +17,7 @@ enum MWNetError {
     case error401(error: MWSpecialError)
     case error404(error: MWSpecialError)
     case unknown
-    
+
     func getErrorDesription() -> String {
         switch self {
         case .incorrectUrl(let url):

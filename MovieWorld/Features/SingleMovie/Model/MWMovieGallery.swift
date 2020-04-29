@@ -11,7 +11,7 @@ import UIKit
 struct MWMovieGallery {
     var images: [Data] = []
     var videos: [String] = []
-    
+
     func getGalleryItems() -> [Any] {
         return videos + images
     }

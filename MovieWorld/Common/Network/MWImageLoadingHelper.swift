@@ -10,11 +10,11 @@ import UIKit
 import CoreData
 
 class MWImageLoadingHelper{
-    
+
     static let sh = MWImageLoadingHelper()
-    
+
     private init() {}
-    
+
     func loadMovieImage(for movie: MWMovie, in category: String = "") {
         //TODO: change poster size later by providing getNextSize() in Sizes
         if let imagePath = movie.posterPath,
@@ -25,18 +25,18 @@ class MWImageLoadingHelper{
                                   filePath: imagePath,
                                   succesHandler: { [weak self] (imageData: Data)  in
                                     guard let self = self else { return }
-                                    
+
                                     movie.image = imageData
                                     NotificationCenter.default.post(name: .movieImageUpdated, object: nil)
-                                    
+
                                     guard !category.isEmpty else { return }
                                     self.saveImage(for: movie, imageData: imageData, in: category)
                 }
             )
         }
     }
-    
-    func loadPersonImage<T:PersonImageble>(for person: T, path: String?) {
+
+    func loadPersonImage<T: PersonImageble>(for person: T, path: String?) {
         var personToChange = person
         if let imagePath = path,
             let baseUrl = MWSys.sh.configuration?.images?.secureBaseUrl,
@@ -51,15 +51,15 @@ class MWImageLoadingHelper{
             )
         }
     }
-    
+
     //TODO: fix problems with sizes and make this less hardcoded
     func loadMovieImages(for imagesToLoad: MWMovieImagesResponse?) {
         guard let backdrops = imagesToLoad?.backdrops else { return }
-        
+
         if imagesToLoad?.movieImages == nil {
             imagesToLoad?.movieImages = []
         }
-        
+
         for image in backdrops {
             let size = "original"
             guard let imagePath = image.filePath,
@@ -75,12 +75,12 @@ class MWImageLoadingHelper{
             )
         }
     }
-    
+
     private func fetchMovie(for movie: MWMovie, in category: String) -> Movie? {
         let managedContext = CoreDataManager.s.persistentContainer.viewContext
         let fetch: NSFetchRequest<Movie> = Movie.fetchRequest()
         fetch.predicate = NSPredicate(format: "ANY title = %@ and category.movieCategory = %@", movie.title ?? "", category)
-        
+
         var movie: Movie?
         do {
             movie = try managedContext.fetch(fetch).first
@@ -89,11 +89,11 @@ class MWImageLoadingHelper{
         }
         return movie
     }
-    
+
     private func saveImage(for movie: MWMovie, imageData: Data, in category: String) {
         let result = self.fetchMovie(for: movie, in: category)
         result?.movieImage = imageData
-        
+
         let managedContext = CoreDataManager.s.persistentContainer.viewContext
         do {
             try managedContext.save()

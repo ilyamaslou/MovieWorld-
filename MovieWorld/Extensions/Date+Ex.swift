@@ -10,6 +10,6 @@ import UIKit
 
 extension Date {
     var toAge: Int {
-        return Calendar.current.dateComponents([.year], from: self, to: Date()).year!
+        return Calendar.current.dateComponents([.year], from: self, to: Date()).year ?? 0
     }
 }

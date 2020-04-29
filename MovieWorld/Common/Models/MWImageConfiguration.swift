@@ -9,7 +9,7 @@
 import Foundation
 
 struct MWImageConfiguration: Decodable {
-    
+
     enum CodingKeys: String, CodingKey {
         case baseUrl = "base_url"
         case secureBaseUrl = "secure_base_url"
@@ -19,24 +19,24 @@ struct MWImageConfiguration: Decodable {
         case profileSizes = "profile_sizes"
         case stillSizes = "still_sizes"
     }
-    
+
     enum Sizes: String, Decodable {
        case w45, w92, w154, w185, w300, w342, w500, h632, w780, w1280, original, unkown
-        
+
         init(from decoder: Decoder) throws {
             let container = try decoder.singleValueContainer()
             self = try Sizes(rawValue: (container.decode(RawValue.self))) ?? .unkown
         }
     }
-    
-    var baseUrl :String?
-    var secureBaseUrl :String?
+
+    var baseUrl: String?
+    var secureBaseUrl: String?
     var backdropSizes: [Sizes.RawValue]?
     var logoSizes: [Sizes.RawValue]?
     var posterSizes: [Sizes.RawValue]?
     var profileSizes: [Sizes.RawValue]?
     var stillSizes: [Sizes.RawValue]?
-    
+
     init() { }
 
     init(baseUrl: String?,
@@ -54,7 +54,7 @@ struct MWImageConfiguration: Decodable {
         self.profileSizes = profileSizes
         self.stillSizes = stillSizes
     }
-    
+
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.baseUrl = (try? container.decode(String.self, forKey: .baseUrl)) ?? ""

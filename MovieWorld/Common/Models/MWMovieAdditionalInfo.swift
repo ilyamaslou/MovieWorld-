@@ -9,14 +9,14 @@
 import UIKit
 
 struct MWMovieAdditionalInfo: Decodable {
-    
+
     enum CodingKeys: String, CodingKey {
         case adult = "adult"
         case overview = "overview"
         case runtime = "runtime"
         case tagline = "tagline"
     }
-    
+
     var adult: Bool?
     var overview: String?
     var runtime: Int?

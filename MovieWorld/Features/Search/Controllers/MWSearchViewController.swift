@@ -12,14 +12,14 @@ class MWSearchViewController: MWViewController {
 
     override func initController() {
         super.initController()
-        
+
         let view = UIView()
         contentView.addSubview(view)
-        
+
         view.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
-        
+
         view.backgroundColor = .yellow
         self.title = "Search"
     }

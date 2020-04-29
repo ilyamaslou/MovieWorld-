@@ -9,7 +9,7 @@
 import UIKit
 
 struct MWMemberDetails: Decodable {
-    
+
     enum CodingKeys: String, CodingKey {
         case birthday = "birthday"
         case deathday = "deathday"
@@ -18,7 +18,7 @@ struct MWMemberDetails: Decodable {
         case department = "known_for_department"
         case biography = "biography"
     }
-    
+
     var birthday: String?
     var deathday: String?
     var id: Int?
@@ -26,4 +26,3 @@ struct MWMemberDetails: Decodable {
     var department: String?
     var biography: String?
 }
-

@@ -11,24 +11,24 @@ import SnapKit
 import CoreData
 
 class MWMainTabViewController: MWViewController {
-    
+
     private var moviesByCategories: [MWCategories: [MWMovie]] = [:] {
         didSet {
             self.tableView.reloadData()
         }
     }
-    
+
     private var moviesResultsInfoByCategories: [MWCategories: (totalResults: Int, totalPages: Int)] = [:]
-    
+
     private lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(pullToRefresh), for: .valueChanged)
         refreshControl.tintColor = UIColor(named: "accentColor")
         return refreshControl
     }()
-    
+
     private lazy var group = DispatchGroup()
-    
+
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.delegate = self
@@ -40,36 +40,35 @@ class MWMainTabViewController: MWViewController {
         tableView.register(MWMainTableViewCell.self, forCellReuseIdentifier: Constants.mainScreenTableViewCellId)
         return tableView
     }()
-    
+
     override func initController() {
         super.initController()
-        
+
         let view = self.tableView
         contentView.addSubview(view)
-        
+
         view.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
-        
+
         self.title = "Season".local()
-        
+
         self.loadMovies()
         self.group.notify(queue: .main, execute: self.tableView.reloadData)
     }
-    
-    
+
     private func loadMovies() {
         var urlPath = ""
-        
+
         for category in MWCategories.allCases {
             urlPath = category.getCategoryUrlPath()
-            
+
             self.group.enter()
             MWNet.sh.request(urlPath: urlPath ,
                              querryParameters: MWNet.sh.parameters,
                              succesHandler: { [weak self] (movies: MWMoviesResponse)  in
                                 guard let self = self else { return }
-                                
+
                                 self.moviesResultsInfoByCategories[category] = (movies.totalResults,
                                                                                 movies.totalPages)
                                 self.setGenres(to: movies.results)
@@ -80,33 +79,33 @@ class MWMainTabViewController: MWViewController {
                 },
                              errorHandler: { [weak self] (error) in
                                 guard let self = self else { return }
-                                
+
                                 let message = error.getErrorDesription()
                                 self.errorAlert(message: message)
-                                
+
                                 let movies = self.fetchMoviesByCategory(by: category)
                                 self.setMoviesToCategory(category: category, movies: movies)
                                 self.group.leave()
             })
         }
     }
-    
+
     private func setGenres(to movies: [MWMovie]) {
         for movie in movies {
             movie.setFilmGenres(genres: MWSys.sh.genres)
         }
     }
-    
+
     private func setImages(to movies: [MWMovie], in category: String) {
         for movie in movies {
             MWImageLoadingHelper.sh.loadMovieImage(for: movie, in: category)
         }
     }
-    
+
     @objc private func pullToRefresh() {
         self.loadMovies()
-        self.group.notify(queue: .main,execute: self.tableView.reloadData)
-        
+        self.group.notify(queue: .main, execute: self.tableView.reloadData)
+
         self.refreshControl.endRefreshing()
     }
 }
@@ -115,34 +114,34 @@ extension MWMainTabViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
     }
-    
+
     func numberOfSections(in tableView: UITableView) -> Int {
         return self.moviesByCategories.count
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(
             withIdentifier: Constants.mainScreenTableViewCellId) as? MWMainTableViewCell
             else { fatalError("The registered type for the cell does not match the casting") }
-        
+
         let category = Array(self.moviesByCategories.keys)[indexPath.section]
         if let movies = self.moviesByCategories[category] {
             cell.movies = movies
             cell.set(categoryName: category, totalResults: self.moviesResultsInfoByCategories[category])
         }
-        
+
         cell.selectionStyle = .none
-        
+
         return cell
     }
-    
+
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let view  = UIView()
         view.backgroundColor = .white
-        
+
         return view
     }
-    
+
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 24
     }
@@ -158,12 +157,12 @@ extension MWMainTabViewController {
         }
         self.tableView.reloadData()
     }
-    
+
     private func fetchMoviesByCategory(by category: MWCategories) -> [Movie] {
         let managedContext = CoreDataManager.s.persistentContainer.viewContext
         let fetch: NSFetchRequest<Movie> = Movie.fetchRequest()
         fetch.predicate = NSPredicate(format: "ANY category.movieCategory = %@", category.rawValue)
-        
+
         var result: [Movie] = []
         do {
             result = try managedContext.fetch(fetch)
@@ -172,15 +171,15 @@ extension MWMainTabViewController {
         }
         return result
     }
-    
+
     private func save(mwCategory: MWCategories, movies: [MWMovie]) {
         let result = self.fetchMoviesByCategory(by: mwCategory)
         let managedContext = CoreDataManager.s.persistentContainer.viewContext
-        
+
         if result.isEmpty {
             let category = MovieCategory(context: managedContext)
             category.movieCategory = mwCategory.rawValue
-            
+
             for movie in movies {
                 let newMovie = Movie(context: managedContext)
                 newMovie.id = Int64(movie.id ?? 0)
@@ -207,10 +206,10 @@ extension MWMainTabViewController {
                 movieToUpdate.voteAvarage = movieRating
             }
         }
-        
+
         self.saveAndReload(context: managedContext)
     }
-    
+
     private func setMoviesToCategory(category: MWCategories, movies: [Movie]) {
         var mwMovies: [MWMovie] = []
         for movie in movies {
@@ -222,13 +221,13 @@ extension MWMainTabViewController {
             newMovie.originalLanguage = movie.originalLanguage
             newMovie.releaseDate = movie.releaseDate
             newMovie.voteAvarage = movie.voteAvarage
-            
+
             if let imageData = movie.movieImage {
                 newMovie.image = imageData
-            } 
-            
+            }
+
             newMovie.setFilmGenres(genres: MWSys.sh.genres)
-            
+
             mwMovies.append(newMovie)
         }
         self.moviesByCategories[category] = mwMovies

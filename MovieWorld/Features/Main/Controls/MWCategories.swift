@@ -13,7 +13,7 @@ enum MWCategories: String, CaseIterable {
     case nowPlayingMovies = "Now Playing Movies"
     case topRatedMovies = "Top Rated"
     case upcomingMovies = "Upcoming Movies"
-    
+
     func getCategoryUrlPath() -> String {
         var urlPath = ""
         switch self {

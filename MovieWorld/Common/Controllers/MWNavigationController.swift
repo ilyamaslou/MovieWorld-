@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 class MWNavigationController: UINavigationController {
-    
+
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .default
     }

@@ -10,7 +10,7 @@ import UIKit
 import YouTubePlayer
 
 class MWMovieGalleryCollectionViewCell: UICollectionViewCell {
-    
+
     private lazy var movieImageView: UIImageView = {
         let view = UIImageView()
         view.clipsToBounds = true
@@ -18,18 +18,18 @@ class MWMovieGalleryCollectionViewCell: UICollectionViewCell {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    
+
     private lazy var movieVideoView: YouTubePlayerView = YouTubePlayerView()
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.setUpCell()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     func set(galleryItem: Any) {
         if let image = galleryItem as? Data {
             self.movieImageView.image = UIImage(data: image)
@@ -43,20 +43,20 @@ class MWMovieGalleryCollectionViewCell: UICollectionViewCell {
             return
         }
     }
-    
+
     private func setUpCell() {
         self.contentView.addSubview(movieImageView)
         self.contentView.addSubview(movieVideoView)
-        
+
         self.movieImageView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
-        
+
         self.movieVideoView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
     }
-    
+
     private func showLoadedVideo(videoUrlKey: String?) {
         guard let key = videoUrlKey else { return }
         let videoUrl = "https://www.youtube.com/watch?v=\(key)"

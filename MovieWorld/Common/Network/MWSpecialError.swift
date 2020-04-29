@@ -9,13 +9,13 @@
 import UIKit
 
 struct MWSpecialError: Decodable {
-    
+
     enum CodingKeys: String, CodingKey {
         case statusCode = "status_code", statusMessage = "status_message"
     }
-    
+
     var statusCode: Int?
     var statusMessage: String?
-    
+
     init() {}
 }

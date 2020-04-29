@@ -8,14 +8,14 @@
 import UIKit
 
 struct MWMoviesResponse: Decodable {
-    
+
     enum CodingKeys: String, CodingKey {
         case page = "page"
         case results = "results"
         case totalResults = "total_results"
         case totalPages = "total_pages"
     }
-    
+
     let page: Int
     let results: [MWMovie]
     let totalResults: Int
@@ -23,7 +23,7 @@ struct MWMoviesResponse: Decodable {
 }
 
 class MWMovie: Decodable, Hashable {
-    
+
     enum CodingKeys: String, CodingKey {
         case id = "id"
         case posterPath = "poster_path"
@@ -33,7 +33,7 @@ class MWMovie: Decodable, Hashable {
         case originalLanguage = "original_language"
         case voteAvarage = "vote_average"
     }
-    
+
     var id: Int?
     var posterPath: String?
     var title: String?
@@ -43,7 +43,7 @@ class MWMovie: Decodable, Hashable {
     var voteAvarage: Double?
     var movieGenres: [String]?
     var image: Data?
-    
+
     func setFilmGenres(genres: [MWGenre]) {
         var tempGenres: [String] = []
         guard let genreIds = genreIds  else { return }
@@ -56,9 +56,9 @@ class MWMovie: Decodable, Hashable {
         }
         movieGenres = tempGenres
     }
-    
+
     init() {}
-    
+
     init(filmName: String,
          releaseYear: String,
          filmGenresIds: [Int]) {
@@ -66,7 +66,7 @@ class MWMovie: Decodable, Hashable {
         self.releaseDate = releaseYear
         self.genreIds = filmGenresIds
     }
-    
+
     init(id: Int,
          posterPath: String,
          title: String,
@@ -82,7 +82,7 @@ class MWMovie: Decodable, Hashable {
         self.originalLanguage = originalLanguage
         self.voteAvarage = voteAverage
     }
-    
+
     static func == (lhs: MWMovie, rhs: MWMovie) -> Bool {
         return lhs.id == rhs.id &&
             lhs.title == rhs.title &&
@@ -91,7 +91,7 @@ class MWMovie: Decodable, Hashable {
             lhs.originalLanguage == rhs.originalLanguage &&
             lhs.genreIds == rhs.genreIds
     }
-    
+
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
         hasher.combine(title)

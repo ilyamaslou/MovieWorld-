@@ -62,6 +62,7 @@
 		9983A223243780F200810675 /* MWCrewMemberTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9983A222243780F200810675 /* MWCrewMemberTableViewCell.swift */; };
 		99915F88240D254800E39CE0 /* MWSpecialError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99915F87240D254800E39CE0 /* MWSpecialError.swift */; };
 		99937CAA243D52C700054731 /* UIImage + Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99937CA9243D52C700054731 /* UIImage + Ex.swift */; };
+		999637A9245A0304004A9E5D /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 999637A8245A0304004A9E5D /* .swiftlint.yml */; };
 		9999E0CF23F9F378007EB718 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9999E0CE23F9F378007EB718 /* AppDelegate.swift */; };
 		9999E0D323F9F378007EB718 /* MWMainTabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9999E0D223F9F378007EB718 /* MWMainTabViewController.swift */; };
 		9999E0D823F9F37A007EB718 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9999E0D723F9F37A007EB718 /* Assets.xcassets */; };
@@ -148,6 +149,7 @@
 		9983A222243780F200810675 /* MWCrewMemberTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWCrewMemberTableViewCell.swift; sourceTree = "<group>"; };
 		99915F87240D254800E39CE0 /* MWSpecialError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWSpecialError.swift; sourceTree = "<group>"; };
 		99937CA9243D52C700054731 /* UIImage + Ex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage + Ex.swift"; sourceTree = "<group>"; };
+		999637A8245A0304004A9E5D /* .swiftlint.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; name = .swiftlint.yml; path = ../../Downloads/.swiftlint.yml; sourceTree = "<group>"; };
 		9999E0CB23F9F378007EB718 /* MovieWorld.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MovieWorld.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9999E0CE23F9F378007EB718 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9999E0D223F9F378007EB718 /* MWMainTabViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWMainTabViewController.swift; sourceTree = "<group>"; };
@@ -456,6 +458,7 @@
 		9999E0C223F9F378007EB718 = {
 			isa = PBXGroup;
 			children = (
+				999637A8245A0304004A9E5D /* .swiftlint.yml */,
 				9999E0CD23F9F378007EB718 /* MovieWorld */,
 				9999E0CC23F9F378007EB718 /* Products */,
 				2139BEA7B03B0F53D918779C /* Pods */,
@@ -657,6 +660,7 @@
 				9999E0C823F9F378007EB718 /* Frameworks */,
 				9999E0C923F9F378007EB718 /* Resources */,
 				5AA1F9AC721D5BCE05161C0B /* [CP] Embed Pods Frameworks */,
+				999637AA245A030E004A9E5D /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -706,6 +710,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				999637A9245A0304004A9E5D /* .swiftlint.yml in Resources */,
 				9999E0DB23F9F37A007EB718 /* LaunchScreen.storyboard in Resources */,
 				996CB0A324124E2F00200EFE /* Localizable.strings in Resources */,
 				9979B45523FFC2A5005421D9 /* Colors.xcassets in Resources */,
@@ -755,6 +760,23 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MovieWorld/Pods-MovieWorld-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		999637AA245A030E004A9E5D /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

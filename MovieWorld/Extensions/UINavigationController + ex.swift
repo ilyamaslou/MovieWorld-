@@ -20,7 +20,7 @@ extension UINavigationController {
             self.navigationBar.scrollEdgeAppearance = appearance
         }
     }
-    
+
     func setBorder() {
         self.navigationBar.backgroundColor = .clear
         self.navigationBar.shadowImage = nil

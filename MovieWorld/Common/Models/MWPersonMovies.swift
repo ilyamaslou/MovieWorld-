@@ -8,17 +8,15 @@
 
 import UIKit
 
-
 struct MWPersonMoviesResponse: Decodable {
     var results: [MWPersonMovies]?
 }
 
 struct MWPersonMovies: Decodable {
-    
+
     enum CodingKeys: String, CodingKey {
         case knownFor = "known_for"
     }
-    
+
     var knownFor: [MWMovie]?
 }
-

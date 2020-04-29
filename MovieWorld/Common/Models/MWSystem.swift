@@ -10,11 +10,11 @@ import UIKit
 typealias MWSys = MWSystem
 
 class MWSystem {
-    
+
     static let sh = MWSystem()
-    
+
     var genres: [MWGenre] = []
     var configuration: MWConfiguration?
-    
+
     private init() {}
 }

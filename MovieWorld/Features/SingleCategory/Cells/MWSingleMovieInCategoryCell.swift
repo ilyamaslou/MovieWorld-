@@ -10,6 +10,8 @@ import UIKit
 
 class MWSingleMovieInCategoryCell: UITableViewCell {
 
+    static var reuseIdentifier: String = "MWSingleMovieInCategoryCell"
+
     private var movie = MWMovie()
 
     private lazy var movieView = MWSingleMovieView()

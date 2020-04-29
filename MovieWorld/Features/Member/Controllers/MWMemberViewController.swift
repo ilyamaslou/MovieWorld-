@@ -66,7 +66,7 @@ class MWMemberViewController: MWViewController {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: self.collectionViewLayout)
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.register(MWMainCollectionViewCell.self, forCellWithReuseIdentifier: Constants.mainScreenCollectionViewCellId)
+        collectionView.register(MWMainCollectionViewCell.self, forCellWithReuseIdentifier: MWMainCollectionViewCell.reuseIdentifier)
 
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.backgroundColor = .white
@@ -282,7 +282,7 @@ extension MWMemberViewController: UICollectionViewDelegate, UICollectionViewData
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
         guard let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: Constants.mainScreenCollectionViewCellId,
+            withReuseIdentifier: MWMainCollectionViewCell.reuseIdentifier,
             for: indexPath) as? MWMainCollectionViewCell else { fatalError("The registered type for the cell does not match the casting") }
 
         if self.memberMovies.count > 0 {

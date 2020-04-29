@@ -11,6 +11,8 @@ import CoreData
 
 class MWMainCollectionViewCell: UICollectionViewCell {
 
+    static var reuseIdentifier: String = "MWMainCollectionViewCell"
+
     private var movie: MWMovie = MWMovie()
 
     private lazy var nameLabel: UILabel = {

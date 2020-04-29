@@ -10,6 +10,8 @@ import UIKit
 
 class MWGenreCollectionViewCell: UICollectionViewCell {
 
+    static var reuseIdentifier: String = "MWGenreCollectionViewCell"
+
     var selectedGenre: ((String, Bool) -> Void)?
     var buttonIsSelected: Bool = false {
         didSet {

@@ -11,13 +11,14 @@ import UIKit
 class MWCategoryViewController: MWViewController {
 
     private var categories: [String] = Array(repeating: "Top 250", count: 25)
+    private var categoryCellId: String = "categoryCellId"
 
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.delegate = self
         tableView.dataSource = self
         tableView.separatorStyle = .none
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: Constants.categoryCellId)
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: self.categoryCellId)
         return tableView
     }()
 
@@ -44,7 +45,7 @@ extension MWCategoryViewController: UITableViewDelegate, UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(
-        withIdentifier: Constants.categoryCellId,
+            withIdentifier: self.categoryCellId,
         for: indexPath)
 
         cell.textLabel?.text = self.categories[indexPath.row]

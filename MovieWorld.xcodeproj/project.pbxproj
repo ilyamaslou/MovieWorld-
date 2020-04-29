@@ -84,7 +84,6 @@
 		99F15296244C9B1E008A1923 /* MWGroupsCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F15295244C9B1E008A1923 /* MWGroupsCollectionViewLayout.swift */; };
 		99F1529A244D039E008A1923 /* MWCategories.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F15299244D039E008A1923 /* MWCategories.swift */; };
 		99F2A4E724436666000910F8 /* MWProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F2A4E624436666000910F8 /* MWProfileViewController.swift */; };
-		99F910F124053EE000E4F4DB /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F910F024053EE000E4F4DB /* Constants.swift */; };
 		99FB969A242389CB00812329 /* MWImageLoadingHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FB9699242389CB00812329 /* MWImageLoadingHelper.swift */; };
 		EA7F3466F643D84D46128BE3 /* Pods_MovieWorld.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C871CBC05AFA2A873B51B459 /* Pods_MovieWorld.framework */; };
 /* End PBXBuildFile section */
@@ -173,7 +172,6 @@
 		99F15295244C9B1E008A1923 /* MWGroupsCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWGroupsCollectionViewLayout.swift; sourceTree = "<group>"; };
 		99F15299244D039E008A1923 /* MWCategories.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWCategories.swift; sourceTree = "<group>"; };
 		99F2A4E624436666000910F8 /* MWProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWProfileViewController.swift; sourceTree = "<group>"; };
-		99F910F024053EE000E4F4DB /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		99FB9699242389CB00812329 /* MWImageLoadingHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWImageLoadingHelper.swift; sourceTree = "<group>"; };
 		C871CBC05AFA2A873B51B459 /* Pods_MovieWorld.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MovieWorld.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -320,7 +318,6 @@
 		9979B45123FFC220005421D9 /* Utility */ = {
 			isa = PBXGroup;
 			children = (
-				99F910F024053EE000E4F4DB /* Constants.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -801,7 +798,6 @@
 				99AB2D8124321D1700095464 /* MWMovieGallery.swift in Sources */,
 				99B481F82439501200017903 /* Date+Ex.swift in Sources */,
 				99484300245A27DD009F04AE /* Genre+CoreDataClass.swift in Sources */,
-				99F910F124053EE000E4F4DB /* Constants.swift in Sources */,
 				99F1529A244D039E008A1923 /* MWCategories.swift in Sources */,
 				9979B46523FFD0D5005421D9 /* MWViewController.swift in Sources */,
 				999E6004241B7B7500F3103F /* CoreDataManager.swift in Sources */,

@@ -26,9 +26,9 @@ class MWCastViewController: MWViewController {
         tableView.showsVerticalScrollIndicator = false
         tableView.showsHorizontalScrollIndicator = false
         tableView.register(MWCastMemberTableViewCell.self,
-                           forCellReuseIdentifier: Constants.singleCastMemberTableViewCellId)
+                           forCellReuseIdentifier: MWCastMemberTableViewCell.reuseIdentifier)
         tableView.register(MWCrewMemberTableViewCell.self,
-                           forCellReuseIdentifier: Constants.singleCrewMemberTableViewCellId)
+                           forCellReuseIdentifier: MWCrewMemberTableViewCell.reuseIdentifier)
 
         return tableView
     }()
@@ -88,7 +88,7 @@ extension MWCastViewController: UITableViewDelegate, UITableViewDataSource {
 
         if let castMember = self.movieFullCast?[indexPath.section][indexPath.row] as? MWMovieCastMember {
             guard let cell = tableView.dequeueReusableCell(
-                withIdentifier: Constants.singleCastMemberTableViewCellId) as? MWCastMemberTableViewCell
+                withIdentifier: MWCastMemberTableViewCell.reuseIdentifier) as? MWCastMemberTableViewCell
                 else { fatalError("The registered type for the cell does not match the casting") }
 
             cell.selectionStyle = .none
@@ -97,7 +97,7 @@ extension MWCastViewController: UITableViewDelegate, UITableViewDataSource {
             return cell
         } else if let crewMember = self.movieFullCast?[indexPath.section][indexPath.row] as? MWMovieCrewMember {
             guard let cell = tableView.dequeueReusableCell(
-                withIdentifier: Constants.singleCrewMemberTableViewCellId) as? MWCrewMemberTableViewCell
+                withIdentifier: MWCrewMemberTableViewCell.reuseIdentifier) as? MWCrewMemberTableViewCell
                 else { fatalError("The registered type for the cell does not match the casting") }
 
             cell.selectionStyle = .none

@@ -123,7 +123,7 @@ class MWSingleMovieViewController: MWViewController {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: self.castCollectionViewLayout)
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.register(MWCastMemberCollectionViewCell.self, forCellWithReuseIdentifier: Constants.singleCastMemberCollectionViewCellId)
+        collectionView.register(MWCastMemberCollectionViewCell.self, forCellWithReuseIdentifier: MWCastMemberCollectionViewCell.reuseIdentifier)
 
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.backgroundColor = .white
@@ -156,7 +156,7 @@ class MWSingleMovieViewController: MWViewController {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: self.galleryViewLayout)
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.register(MWMovieGalleryCollectionViewCell.self, forCellWithReuseIdentifier: Constants.singleMovieGalleryCollectionViewCellId)
+        collectionView.register(MWMovieGalleryCollectionViewCell.self, forCellWithReuseIdentifier: MWMovieGalleryCollectionViewCell.reuseIdentifier)
 
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.backgroundColor = .white
@@ -478,7 +478,7 @@ extension MWSingleMovieViewController: UICollectionViewDelegate, UICollectionVie
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView == galleryCollectionView {
             guard let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: Constants.singleMovieGalleryCollectionViewCellId,
+                withReuseIdentifier: MWMovieGalleryCollectionViewCell.reuseIdentifier,
                 for: indexPath) as? MWMovieGalleryCollectionViewCell else { fatalError("The registered type for the cell does not match the casting") }
 
             cell.set(galleryItem: self.galleryItems[indexPath.item])
@@ -487,7 +487,7 @@ extension MWSingleMovieViewController: UICollectionViewDelegate, UICollectionVie
         }
 
         guard let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: Constants.singleCastMemberCollectionViewCellId,
+            withReuseIdentifier: MWCastMemberCollectionViewCell.reuseIdentifier,
             for: indexPath) as? MWCastMemberCollectionViewCell else { fatalError("The registered type for the cell does not match the casting") }
 
         if let memberOfCast = self.movieFullCast?.cast[indexPath.item] {

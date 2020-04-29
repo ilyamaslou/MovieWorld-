@@ -36,7 +36,7 @@ class MWMainTabViewController: MWViewController {
         tableView.showsVerticalScrollIndicator = false
         tableView.showsHorizontalScrollIndicator = false
         tableView.refreshControl = self.refreshControl
-        tableView.register(MWMainTableViewCell.self, forCellReuseIdentifier: Constants.mainScreenTableViewCellId)
+        tableView.register(MWMainTableViewCell.self, forCellReuseIdentifier: MWMainTableViewCell.reuseIdentifier)
         return tableView
     }()
 
@@ -120,7 +120,7 @@ extension MWMainTabViewController: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(
-            withIdentifier: Constants.mainScreenTableViewCellId) as? MWMainTableViewCell
+            withIdentifier: MWMainTableViewCell.reuseIdentifier) as? MWMainTableViewCell
             else { fatalError("The registered type for the cell does not match the casting") }
 
         let category = Array(self.moviesByCategories.keys)[indexPath.section]

@@ -46,7 +46,7 @@ class MWSingleCategoryViewController: MWViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.separatorStyle = .none
-        tableView.register(MWSingleMovieInCategoryCell.self, forCellReuseIdentifier: Constants.singleCategoryTableViewCellId)
+        tableView.register(MWSingleMovieInCategoryCell.self, forCellReuseIdentifier: MWSingleMovieInCategoryCell.reuseIdentifier)
         return tableView
     }()
 
@@ -54,7 +54,7 @@ class MWSingleCategoryViewController: MWViewController {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: self.collectionViewLayout)
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.register(MWGenreCollectionViewCell.self, forCellWithReuseIdentifier: Constants.singleCategoryGenresCollectionViewCellId)
+        collectionView.register(MWGenreCollectionViewCell.self, forCellWithReuseIdentifier: MWGenreCollectionViewCell.reuseIdentifier)
 
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.backgroundColor = .white
@@ -180,7 +180,7 @@ extension MWSingleCategoryViewController: UITableViewDataSource, UITableViewDele
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(
-            withIdentifier: Constants.singleCategoryTableViewCellId) as? MWSingleMovieInCategoryCell
+            withIdentifier: MWSingleMovieInCategoryCell.reuseIdentifier) as? MWSingleMovieInCategoryCell
             else { fatalError("The registered type for the cell does not match the casting") }
 
         cell.set(movie: self.filteredMovies[indexPath.row])
@@ -223,7 +223,7 @@ extension MWSingleCategoryViewController: UICollectionViewDelegate, UICollection
         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
         guard let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: Constants.singleCategoryGenresCollectionViewCellId,
+            withReuseIdentifier: MWGenreCollectionViewCell.reuseIdentifier,
             for: indexPath) as? MWGenreCollectionViewCell else { fatalError("The registered type for the cell does not match the casting") }
 
         cell.set(genreWithSelection: self.movieGenres[indexPath.item])

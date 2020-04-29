@@ -10,6 +10,8 @@ import UIKit
 
 class MWCastMemberCollectionViewCell: UICollectionViewCell {
 
+    static var reuseIdentifier: String = "MWCastMemberCollectionViewCell"
+
     private var memberOfCast: MWMovieCastMember?
 
     private lazy var nameLabel: UILabel = {

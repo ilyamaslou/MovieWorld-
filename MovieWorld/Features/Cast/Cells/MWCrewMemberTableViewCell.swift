@@ -10,6 +10,8 @@ import UIKit
 
 class MWCrewMemberTableViewCell: UITableViewCell {
 
+    static var reuseIdentifier: String = "MWCrewMemberTableViewCell"
+
     private let offsets = UIEdgeInsets(top: 11, left: 16, bottom: 11, right: 16)
 
     private var crewMember: MWMovieCrewMember?

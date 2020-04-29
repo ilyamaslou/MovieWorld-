@@ -11,6 +11,8 @@ import YouTubePlayer
 
 class MWMovieGalleryCollectionViewCell: UICollectionViewCell {
 
+    static var reuseIdentifier: String = "MWMovieGalleryCollectionViewCell"
+
     private lazy var movieImageView: UIImageView = {
         let view = UIImageView()
         view.clipsToBounds = true

@@ -271,9 +271,9 @@ class MWFilterViewController: MWViewController {
     }
     
     @objc private func checkReset() {
-        if !(self.selectedCountries?.isEmpty ?? true)
-            || !(self.selectedYear?.isEmpty ?? true)
-            || (self.selectedRatingRange != nil)
+        if self.selectedCountries != nil
+            || self.selectedYear != nil
+            || self.selectedRatingRange != nil
             || !self.collectionView.filteredGenres.isEmpty {
             self.updateResetButton(hasNewValues: true)
         } else {
@@ -296,8 +296,9 @@ class MWFilterViewController: MWViewController {
         self.yearView.value = ""
         self.selectedRatingRange = nil
         self.ratingSlider.value = [1, 10]
-        self.collectionView.setUpGenres()
         self.collectionView.filteredGenres = []
+        self.collectionView.setUpGenres()
+        self.checkReset()
     }
     
     @objc private func countryViewDidTapped() {

@@ -32,7 +32,7 @@ class MWInitController: MWViewController {
     override func initController() {
         super.initController()
 
-        contentView.addSubview(self.loadingIndicator)
+        self.contentView.addSubview(self.loadingIndicator)
 
         self.loadingIndicator.snp.makeConstraints { (make) in
             make.center.equalToSuperview()

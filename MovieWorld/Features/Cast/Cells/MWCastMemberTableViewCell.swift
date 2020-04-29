@@ -10,7 +10,7 @@ import UIKit
 
 class MWCastMemberTableViewCell: UITableViewCell {
 
-    private lazy var castMemberView: MWCastMemberCellView = MWCastMemberCellView()
+    private lazy var castMemberView = MWCastMemberCellView()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -30,7 +30,7 @@ class MWCastMemberTableViewCell: UITableViewCell {
 
     func set(castMember: MWMovieCastMember?) {
         self.castMemberView.set(castMember: castMember)
-        setNeedsUpdateConstraints()
-        layoutIfNeeded()
+        self.setNeedsUpdateConstraints()
+        self.layoutIfNeeded()
     }
 }

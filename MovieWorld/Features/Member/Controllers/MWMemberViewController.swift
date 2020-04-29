@@ -52,7 +52,7 @@ class MWMemberViewController: MWViewController {
         return view
     }()
 
-    private lazy var memberCellView: MWCastMemberCellView = MWCastMemberCellView()
+    private lazy var memberCellView = MWCastMemberCellView()
 
     private lazy var titleForCollectionView: UILabel = {
         let label = UILabel()
@@ -142,32 +142,32 @@ class MWMemberViewController: MWViewController {
         }
 
         self.memberCellView.snp.makeConstraints { (make) in
-            make.left.right.equalToSuperview()
             make.top.equalToSuperview().offset(self.offsets.top)
+            make.left.right.equalToSuperview()
         }
 
         self.titleForCollectionView.snp.makeConstraints { (make) in
-            make.right.equalToSuperview()
-            make.left.equalToSuperview().offset(self.offsets.left)
             make.top.equalTo(self.memberCellView.snp.bottom).offset(24)
+            make.left.equalToSuperview().offset(self.offsets.left)
+            make.right.equalToSuperview()
         }
 
         self.collectionView.snp.makeConstraints { (make) in
-            make.right.left.equalToSuperview()
             make.top.equalTo(self.titleForCollectionView.snp.bottom).offset(self.offsets.top)
+            make.left.right.equalToSuperview()
             make.height.equalTo(237)
         }
 
         self.roleLabel.snp.makeConstraints { (make) in
-            make.right.equalToSuperview()
-            make.left.equalToSuperview().offset(self.offsets.left)
             make.top.equalTo(self.collectionView.snp.bottom).offset(self.offsets.top)
+            make.left.equalToSuperview().offset(self.offsets.left)
+            make.right.equalToSuperview()
         }
 
         self.bioLabel.snp.makeConstraints { (make) in
             make.top.equalTo(self.roleLabel.snp.bottom).offset(self.offsets.top)
-            make.right.equalToSuperview().inset(self.offsets.right)
             make.left.equalToSuperview().offset(self.offsets.left)
+            make.right.equalToSuperview().inset(self.offsets.right)
             make.bottom.equalToSuperview().inset(10)
         }
     }
@@ -294,7 +294,7 @@ extension MWMemberViewController: UICollectionViewDelegate, UICollectionViewData
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        MWI.s.pushVC(MWSingelMovieViewController(movie: self.memberMovies[indexPath.item]))
+        MWI.s.pushVC(MWSingleMovieViewController(movie: self.memberMovies[indexPath.item]))
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

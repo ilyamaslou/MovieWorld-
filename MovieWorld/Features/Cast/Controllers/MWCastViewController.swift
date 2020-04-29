@@ -48,8 +48,8 @@ class MWCastViewController: MWViewController {
     override func updateViewConstraints() {
 
         self.tableView.snp.makeConstraints { (make) in
-            make.left.right.equalToSuperview()
             make.top.equalToSuperview().offset(16)
+            make.left.right.equalToSuperview()
             make.bottom.equalToSuperview().inset(10)
         }
 
@@ -123,9 +123,9 @@ extension MWCastViewController: UITableViewDelegate, UITableViewDataSource {
         view.addSubview(titleLabel)
         titleLabel.snp.makeConstraints { (make) in
             make.top.equalToSuperview().offset(24)
-            make.bottom.equalToSuperview().inset(16)
             make.left.equalToSuperview().offset(16)
             make.right.equalToSuperview()
+            make.bottom.equalToSuperview().inset(16)
         }
 
         return view

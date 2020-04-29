@@ -10,7 +10,7 @@ import UIKit
 import YouTubePlayer
 import CoreData
 
-class MWSingelMovieViewController: MWViewController {
+class MWSingleMovieViewController: MWViewController {
 
     private let offsets = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
 
@@ -73,8 +73,8 @@ class MWSingelMovieViewController: MWViewController {
         return view
     }()
 
-    private lazy var movieCellView: MWSingleMovieCellView = MWSingleMovieCellView()
-    private lazy var moviePlayer: YouTubePlayerView = YouTubePlayerView()
+    private lazy var movieCellView = MWSingleMovieView()
+    private lazy var moviePlayer = YouTubePlayerView()
 
     private lazy var loadingIndicator: UIActivityIndicatorView = {
         let view = UIActivityIndicatorView()
@@ -211,14 +211,14 @@ class MWSingelMovieViewController: MWViewController {
         }
 
         self.movieCellView.snp.makeConstraints { (make) in
-            make.left.right.equalToSuperview()
             make.top.equalToSuperview().offset(self.offsets.top)
+            make.left.right.equalToSuperview()
         }
 
         self.moviePlayer.snp.makeConstraints { (make) in
+            make.top.equalTo(self.movieCellView.snp.bottom).offset(18)
             make.left.equalToSuperview().offset(self.offsets.left)
             make.right.equalToSuperview().inset(self.offsets)
-            make.top.equalTo(self.movieCellView.snp.bottom).offset(18)
             make.height.equalTo(180)
         }
 
@@ -227,9 +227,9 @@ class MWSingelMovieViewController: MWViewController {
         }
 
         self.descriptionContainerView.snp.makeConstraints { (make) in
+            make.top.equalTo(self.moviePlayer.snp.bottom).offset(24)
             make.left.equalToSuperview().offset(self.offsets.left)
             make.right.equalToSuperview().inset(self.offsets)
-            make.top.equalTo(self.moviePlayer.snp.bottom).offset(24)
         }
 
         self.descriptionLabel.snp.makeConstraints { (make) in
@@ -237,8 +237,8 @@ class MWSingelMovieViewController: MWViewController {
         }
 
         self.movieRuntimeLabel.snp.makeConstraints { (make) in
-            make.left.right.equalToSuperview()
             make.top.equalTo(self.descriptionLabel.snp.bottom).offset(self.offsets.top)
+            make.left.right.equalToSuperview()
         }
 
         self.descriptionTextLabel.snp.makeConstraints { (make) in
@@ -260,8 +260,8 @@ class MWSingelMovieViewController: MWViewController {
 
         self.galleryLabel.snp.makeConstraints { (make) in
             make.top.equalTo(self.castCollectionView.snp.bottom).offset(self.offsets.top)
-            make.right.equalToSuperview()
             make.left.equalToSuperview().offset(self.offsets.left)
+            make.right.equalToSuperview()
         }
 
         self.galleryCollectionView.snp.makeConstraints { (make) in
@@ -461,7 +461,7 @@ class MWSingelMovieViewController: MWViewController {
     }
 }
 
-extension MWSingelMovieViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension MWSingleMovieViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == galleryCollectionView {
@@ -503,7 +503,7 @@ extension MWSingelMovieViewController: UICollectionViewDelegate, UICollectionVie
 }
 
 //MARK: CoreData Additional movie Info
-extension MWSingelMovieViewController {
+extension MWSingleMovieViewController {
     private func fetchMovie() {
         let managedContext = CoreDataManager.s.persistentContainer.viewContext
         let fetch: NSFetchRequest<Movie> = Movie.fetchRequest()
@@ -565,7 +565,7 @@ extension MWSingelMovieViewController {
 }
 
 //MARK: CoreData FavoriteMovies
-extension MWSingelMovieViewController {
+extension MWSingleMovieViewController {
     private func saveContext(context: NSManagedObjectContext) {
         do {
             try context.save()

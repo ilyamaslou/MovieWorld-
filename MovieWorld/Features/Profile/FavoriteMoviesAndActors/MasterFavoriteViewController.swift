@@ -23,12 +23,12 @@ class MasterFavoriteViewController: MWViewController {
         return view
     }()
 
-    private lazy var sepparationLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.layer.backgroundColor = UIColor(named: "shadowColor")?.cgColor
-        label.layer.opacity = 0.3
-        return label
+    private lazy var sepparationView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.layer.backgroundColor = UIColor(named: "shadowColor")?.cgColor
+        view.layer.opacity = 0.3
+        return view
     }()
 
     private lazy var moviesViewController: MWFavoriteMoviesViewController = {
@@ -65,15 +65,15 @@ class MasterFavoriteViewController: MWViewController {
         self.setupSegmentedControl()
 
         self.contentView.addSubview(self.segmentedControl)
-        self.contentView.addSubview(self.sepparationLabel)
+        self.contentView.addSubview(self.sepparationView)
 
         self.segmentedControl.snp.makeConstraints { (make) in
+            make.top.equalToSuperview()
             make.left.equalToSuperview().offset(16)
             make.right.equalToSuperview().inset(16)
-            make.top.equalToSuperview()
         }
 
-        self.sepparationLabel.snp.makeConstraints { (make) in
+        self.sepparationView.snp.makeConstraints { (make) in
             make.top.equalTo(self.segmentedControl.snp.bottom).offset(10)
             make.left.right.equalToSuperview()
             make.height.equalTo(1)
@@ -113,7 +113,7 @@ extension MasterFavoriteViewController {
         self.contentView.addSubview(viewController.view)
 
         viewController.view.snp.remakeConstraints { (make) in
-            make.top.equalTo(self.sepparationLabel.snp.bottom)
+            make.top.equalTo(self.sepparationView.snp.bottom)
             make.left.right.bottom.equalToSuperview()
         }
 

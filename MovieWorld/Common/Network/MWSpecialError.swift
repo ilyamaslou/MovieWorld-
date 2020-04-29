@@ -6,8 +6,6 @@
 //  Copyright © 2020 Ilya Maslou. All rights reserved.
 //
 
-import UIKit
-
 struct MWSpecialError: Decodable {
 
     enum CodingKeys: String, CodingKey {

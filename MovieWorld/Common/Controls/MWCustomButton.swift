@@ -12,7 +12,7 @@ class MWCustomButton: UIButton {
 
     override var isHighlighted: Bool {
         didSet {
-            layer.opacity = isHighlighted ? 0.5 : 1
+            self.layer.opacity = isHighlighted ? 0.5 : 1
         }
     }
 
@@ -32,26 +32,26 @@ class MWCustomButton: UIButton {
         let imageWidth = self.imageView?.frame.size.width
         let titleLabelWidth = self.titleLabel?.frame.size.width
 
-        contentEdgeInsets = UIEdgeInsets(top: 4, left: 12, bottom: 4, right: 12)
-        titleEdgeInsets = UIEdgeInsets(top: .zero, left: -((imageWidth ?? -4) + 4), bottom: .zero, right: (imageWidth ?? -4) + 4)
-        imageEdgeInsets = UIEdgeInsets(top: .zero, left: titleLabelWidth ?? .zero, bottom: .zero, right: -(titleLabelWidth ?? .zero) - 4)
+        self.contentEdgeInsets = UIEdgeInsets(top: 4, left: 12, bottom: 4, right: 12)
+        self.titleEdgeInsets = UIEdgeInsets(top: .zero, left: -((imageWidth ?? -4) + 4), bottom: .zero, right: (imageWidth ?? -4) + 4)
+        self.imageEdgeInsets = UIEdgeInsets(top: .zero, left: titleLabelWidth ?? .zero, bottom: .zero, right: -(titleLabelWidth ?? .zero) - 4)
     }
 
-    func setUpButton(title: String = "All", haveArrow: Bool = true) {
-        layer.cornerRadius = 5
-        backgroundColor = UIColor(named: "accentColor")
-        setTitleColor(.white, for: .normal)
-        setTitleColor(.white, for: .highlighted)
+    func setUpButton(title: String = "All", hasArrow: Bool = true) {
+        self.layer.cornerRadius = 5
+        self.backgroundColor = UIColor(named: "accentColor")
+        self.setTitleColor(.white, for: .normal)
+        self.setTitleColor(.white, for: .highlighted)
 
-        setTitle(title, for: .normal)
-        titleLabel?.font = .systemFont(ofSize: 13)
+        self.setTitle(title, for: .normal)
+        self.titleLabel?.font = .systemFont(ofSize: 13)
 
-        if haveArrow {
-            setImage(UIImage(named: "nextIcon"), for: .normal)
-            setImage(UIImage(named: "nextIcon"), for: .highlighted)
+        if hasArrow {
+            self.setImage(UIImage(named: "nextIcon"), for: .normal)
+            self.setImage(UIImage(named: "nextIcon"), for: .highlighted)
         } else {
-            setImage(nil, for: .normal)
-            setImage(nil, for: .highlighted)
+            self.setImage(nil, for: .normal)
+            self.setImage(nil, for: .highlighted)
         }
 
         self.setNeedsUpdateConstraints()

@@ -16,7 +16,7 @@
 		992CF937240549E200301BC5 /* MWMainTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 992CF936240549E200301BC5 /* MWMainTableViewCell.swift */; };
 		992CF93924054B3A00301BC5 /* MWCustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 992CF93824054B3A00301BC5 /* MWCustomButton.swift */; };
 		992CF93B240687B700301BC5 /* MWMainCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 992CF93A240687B700301BC5 /* MWMainCollectionViewCell.swift */; };
-		992DB7D12428CD700047D438 /* MWSingelMovieViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 992DB7D02428CD700047D438 /* MWSingelMovieViewController.swift */; };
+		992DB7D12428CD700047D438 /* MWSingleMovieViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 992DB7D02428CD700047D438 /* MWSingleMovieViewController.swift */; };
 		992DB7D32428D8920047D438 /* MWMovieVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 992DB7D22428D8920047D438 /* MWMovieVideo.swift */; };
 		993D6DC32447C423000F5180 /* UINavigationController + ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993D6DC22447C423000F5180 /* UINavigationController + ex.swift */; };
 		9941EAB82424F2CF00E0CFE6 /* MWGenreCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9941EAB72424F2CF00E0CFE6 /* MWGenreCollectionViewCell.swift */; };
@@ -79,7 +79,7 @@
 		99BAE46A241194AD00F45B11 /* MWInitController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BAE469241194AD00F45B11 /* MWInitController.swift */; };
 		99BAE46C2411A22600F45B11 /* MWSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BAE46B2411A22600F45B11 /* MWSystem.swift */; };
 		99BAE46E2411A6DC00F45B11 /* MWConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BAE46D2411A6DC00F45B11 /* MWConfiguration.swift */; };
-		99CC6DBF242E30180078B63C /* MWSingleMovieCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CC6DBE242E30180078B63C /* MWSingleMovieCellView.swift */; };
+		99CC6DBF242E30180078B63C /* MWSingleMovieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CC6DBE242E30180078B63C /* MWSingleMovieView.swift */; };
 		99DAFEDF2443CBF200C74F8A /* MWFavoriteMoviesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DAFEDE2443CBF200C74F8A /* MWFavoriteMoviesViewController.swift */; };
 		99F15296244C9B1E008A1923 /* MWGroupsCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F15295244C9B1E008A1923 /* MWGroupsCollectionViewLayout.swift */; };
 		99F1529A244D039E008A1923 /* MWCategories.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F15299244D039E008A1923 /* MWCategories.swift */; };
@@ -101,7 +101,7 @@
 		992CF936240549E200301BC5 /* MWMainTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWMainTableViewCell.swift; sourceTree = "<group>"; };
 		992CF93824054B3A00301BC5 /* MWCustomButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWCustomButton.swift; sourceTree = "<group>"; };
 		992CF93A240687B700301BC5 /* MWMainCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWMainCollectionViewCell.swift; sourceTree = "<group>"; };
-		992DB7D02428CD700047D438 /* MWSingelMovieViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWSingelMovieViewController.swift; sourceTree = "<group>"; };
+		992DB7D02428CD700047D438 /* MWSingleMovieViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWSingleMovieViewController.swift; sourceTree = "<group>"; };
 		992DB7D22428D8920047D438 /* MWMovieVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWMovieVideo.swift; sourceTree = "<group>"; };
 		993D6DC22447C423000F5180 /* UINavigationController + ex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationController + ex.swift"; sourceTree = "<group>"; };
 		9941EAB72424F2CF00E0CFE6 /* MWGenreCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWGenreCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -168,7 +168,7 @@
 		99BAE469241194AD00F45B11 /* MWInitController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWInitController.swift; sourceTree = "<group>"; };
 		99BAE46B2411A22600F45B11 /* MWSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWSystem.swift; sourceTree = "<group>"; };
 		99BAE46D2411A6DC00F45B11 /* MWConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWConfiguration.swift; sourceTree = "<group>"; };
-		99CC6DBE242E30180078B63C /* MWSingleMovieCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWSingleMovieCellView.swift; sourceTree = "<group>"; };
+		99CC6DBE242E30180078B63C /* MWSingleMovieView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWSingleMovieView.swift; sourceTree = "<group>"; };
 		99DAFEDE2443CBF200C74F8A /* MWFavoriteMoviesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWFavoriteMoviesViewController.swift; sourceTree = "<group>"; };
 		99F15295244C9B1E008A1923 /* MWGroupsCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWGroupsCollectionViewLayout.swift; sourceTree = "<group>"; };
 		99F15299244D039E008A1923 /* MWCategories.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWCategories.swift; sourceTree = "<group>"; };
@@ -246,7 +246,7 @@
 		992DB7CE2428CD3A0047D438 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				992DB7D02428CD700047D438 /* MWSingelMovieViewController.swift */,
+				992DB7D02428CD700047D438 /* MWSingleMovieViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -372,7 +372,7 @@
 			isa = PBXGroup;
 			children = (
 				992CF93824054B3A00301BC5 /* MWCustomButton.swift */,
-				99CC6DBE242E30180078B63C /* MWSingleMovieCellView.swift */,
+				99CC6DBE242E30180078B63C /* MWSingleMovieView.swift */,
 				99AB2D822433EB1200095464 /* MWTitleButtonView.swift */,
 			);
 			path = Controls;
@@ -839,7 +839,7 @@
 				99BAE46A241194AD00F45B11 /* MWInitController.swift in Sources */,
 				99915F88240D254800E39CE0 /* MWSpecialError.swift in Sources */,
 				994842FE245A27DD009F04AE /* CastMember+CoreDataClass.swift in Sources */,
-				992DB7D12428CD700047D438 /* MWSingelMovieViewController.swift in Sources */,
+				992DB7D12428CD700047D438 /* MWSingleMovieViewController.swift in Sources */,
 				996F79E3240BEACF006FF3C0 /* MWNetwork+ExUtility.swift in Sources */,
 				992DB7D32428D8920047D438 /* MWMovieVideo.swift in Sources */,
 				990066A12445342D0015C351 /* MWFavoriteActorsViewController.swift in Sources */,
@@ -848,7 +848,7 @@
 				994E3CFA23FA9C8B0034B4D2 /* MWInterface.swift in Sources */,
 				994E3CFC23FA9D990034B4D2 /* MWNavigationController.swift in Sources */,
 				991420CF243A0FAB00A11F49 /* MWPersonMovies.swift in Sources */,
-				99CC6DBF242E30180078B63C /* MWSingleMovieCellView.swift in Sources */,
+				99CC6DBF242E30180078B63C /* MWSingleMovieView.swift in Sources */,
 				99484303245A27DD009F04AE /* MovieAdditionalInfo+CoreDataProperties.swift in Sources */,
 				992A1D67242AA61E00D61D65 /* MWMovieCast.swift in Sources */,
 				994E3D0323FAA18E0034B4D2 /* MWMovie.swift in Sources */,

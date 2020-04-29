@@ -26,17 +26,11 @@ class MWProfileViewController: MWViewController {
         super.initController()
         self.title = "Profile"
 
-        let view = UIView()
-        self.contentView.addSubview(view)
-        view.addSubview(self.favoriteMovies)
-
-        view.snp.makeConstraints { (make) in
-            make.edges.equalToSuperview()
-        }
+        self.contentView.addSubview(self.favoriteMovies)
 
         self.favoriteMovies.snp.makeConstraints { (make) in
-            make.left.right.equalToSuperview()
             make.top.equalToSuperview().offset(16)
+            make.left.right.equalToSuperview()
             make.bottom.lessThanOrEqualToSuperview()
         }
     }

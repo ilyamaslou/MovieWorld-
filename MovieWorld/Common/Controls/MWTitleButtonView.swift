@@ -53,11 +53,11 @@ class MWTitleButtonView: UIView {
         self.addSubview(self.showAllButton)
 
         self.label.snp.makeConstraints { (make) in
-            make.top.bottom.left.equalToSuperview()
+            make.top.left.bottom.equalToSuperview()
         }
 
         self.showAllButton.snp.makeConstraints { (make) in
-            make.top.bottom.right.equalToSuperview()
+            make.top.right.bottom.equalToSuperview()
             make.left.greaterThanOrEqualTo(self.label.snp.right)
         }
     }

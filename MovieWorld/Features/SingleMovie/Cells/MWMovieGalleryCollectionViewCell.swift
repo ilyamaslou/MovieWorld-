@@ -19,7 +19,7 @@ class MWMovieGalleryCollectionViewCell: UICollectionViewCell {
         return view
     }()
 
-    private lazy var movieVideoView: YouTubePlayerView = YouTubePlayerView()
+    private lazy var movieVideoView = YouTubePlayerView()
 
     override init(frame: CGRect) {
         super.init(frame: frame)

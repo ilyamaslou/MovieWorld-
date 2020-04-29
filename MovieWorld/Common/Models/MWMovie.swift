@@ -5,6 +5,7 @@
 //  Created by Ilya Maslou on 2/17/20.
 //  Copyright © 2020 Ilya Maslou. All rights reserved.
 //
+
 import UIKit
 
 struct MWMoviesResponse: Decodable {
@@ -45,16 +46,12 @@ class MWMovie: Decodable, Hashable {
     var image: Data?
 
     func setFilmGenres(genres: [MWGenre]) {
-        var tempGenres: [String] = []
-        guard let genreIds = genreIds  else { return }
+        var tmpGenres: [MWGenre] = []
+        guard let genreIds = self.genreIds  else { return }
         for id in genreIds {
-            for genre in genres {
-                if genre.id == id {
-                    tempGenres.append(genre.name)
-                }
-            }
+            tmpGenres.append(contentsOf: genres.filter { $0.id == id } )
         }
-        movieGenres = tempGenres
+        self.movieGenres = tmpGenres.map { $0.name }
     }
 
     init() {}

@@ -6,7 +6,7 @@
 //  Copyright © 2020 Ilya Maslou. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 extension Notification.Name {
     static let movieImageUpdated = Notification.Name("movieImagesUpdated")

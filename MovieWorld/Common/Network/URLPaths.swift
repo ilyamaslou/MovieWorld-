@@ -6,8 +6,6 @@
 //  Copyright © 2020 Ilya Maslou. All rights reserved.
 //
 
-import Foundation
-
 struct URLPaths {
     static let popularMovies: String = "movie/popular"
     static let topRatedMovies: String = "movie/top_rated"

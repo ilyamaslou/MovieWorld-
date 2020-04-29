@@ -6,7 +6,7 @@
 //  Copyright © 2020 Ilya Maslou. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 struct MWMovieCastResponse: Decodable {
     let id: Int?

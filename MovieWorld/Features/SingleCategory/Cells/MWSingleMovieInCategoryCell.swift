@@ -7,13 +7,12 @@
 //
 
 import UIKit
-import SnapKit
 
 class MWSingleMovieInCategoryCell: UITableViewCell {
 
     private var movie = MWMovie()
 
-    private lazy var movieView = MWSingleMovieCellView()
+    private lazy var movieView = MWSingleMovieView()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)

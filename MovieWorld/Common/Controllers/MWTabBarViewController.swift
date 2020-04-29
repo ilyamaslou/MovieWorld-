@@ -54,7 +54,7 @@ class MWTabBarViewController: UITabBarController {
         searchVC.tabBarItem = self.searchTabBarItem
         profileVC.tabBarItem = self.profileTabBarItem
 
-         self.viewControllers = [mainVC, categoryVC, searchVC, profileVC]
+        self.viewControllers = [mainVC, categoryVC, searchVC, profileVC]
             .map{ MWNavigationController(rootViewController: $0) }
 
         self.setUpTabBarStyle()

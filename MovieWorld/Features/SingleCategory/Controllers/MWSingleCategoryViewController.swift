@@ -103,15 +103,15 @@ class MWSingleCategoryViewController: MWViewController {
         self.contentView.addSubview(self.loadingSpinner)
 
         self.collectionView.snp.makeConstraints {(make) in
-            make.left.right.equalToSuperview()
             make.top.equalToSuperview().offset(16)
+            make.left.right.equalToSuperview()
             make.height.equalTo(70)
         }
 
         self.tableView.snp.makeConstraints { (make) in
+            make.top.equalTo(collectionView.snp.bottom).offset(16)
             make.left.right.equalToSuperview()
             make.bottom.equalToSuperview()
-            make.top.equalTo(collectionView.snp.bottom).offset(16)
         }
 
         self.loadingSpinner.snp.makeConstraints { (make) in
@@ -190,7 +190,7 @@ extension MWSingleCategoryViewController: UITableViewDataSource, UITableViewDele
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        MWI.s.pushVC(MWSingelMovieViewController(movie: self.movies[indexPath.row]))
+        MWI.s.pushVC(MWSingleMovieViewController(movie: self.movies[indexPath.row]))
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {

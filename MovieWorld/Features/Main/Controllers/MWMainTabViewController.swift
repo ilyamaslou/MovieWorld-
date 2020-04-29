@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SnapKit
 import CoreData
 
 class MWMainTabViewController: MWViewController {

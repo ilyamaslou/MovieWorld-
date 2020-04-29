@@ -6,8 +6,6 @@
 //  Copyright © 2020 Ilya Maslou. All rights reserved.
 //
 
-import Foundation
-
 struct MWImageConfiguration: Decodable {
 
     enum CodingKeys: String, CodingKey {
@@ -37,7 +35,7 @@ struct MWImageConfiguration: Decodable {
     var profileSizes: [Sizes.RawValue]?
     var stillSizes: [Sizes.RawValue]?
 
-    init() { }
+    init() {}
 
     init(baseUrl: String?,
          secureBaseUrl: String?,

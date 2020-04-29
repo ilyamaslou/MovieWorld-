@@ -46,17 +46,12 @@ class MWCastMemberCellView: UIView {
         return label
     }()
 
-    //FIXME: Question ? (if i set shadow) Why after scroll shadow dissapear
-    private lazy var sepparationLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.layer.backgroundColor = UIColor.lightGray.cgColor
-        label.layer.opacity = 0.2
-        //        label.layer.shadowRadius = 2
-        //        label.layer.shadowOpacity = 0.5
-        //        label.layer.shadowColor = UIColor(named: "shadowColor")?.cgColor
-        //        label.layer.shadowOffset = CGSize(width: 0, height: 4)
-        return label
+    private lazy var sepparationView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.layer.backgroundColor = UIColor.lightGray.cgColor
+        view.layer.opacity = 0.2
+        return view
     }()
 
     override init(frame: CGRect) {
@@ -103,7 +98,7 @@ class MWCastMemberCellView: UIView {
         self.addSubview(self.memberNameLabel)
         self.addSubview(self.memberRoleLabel)
         self.addSubview(self.memberBirthLabel)
-        self.addSubview(self.sepparationLabel)
+        self.addSubview(self.sepparationView)
     }
 
     override func updateConstraints() {
@@ -114,25 +109,25 @@ class MWCastMemberCellView: UIView {
 
         self.memberNameLabel.snp.makeConstraints { (make) in
             make.top.equalToSuperview().inset(self.offsets)
-            make.right.equalToSuperview()
             make.left.equalTo(self.memberImageView.snp.right).offset(self.offsets.left)
+            make.right.equalToSuperview()
         }
 
         self.memberRoleLabel.snp.makeConstraints { (make) in
             make.top.equalTo(self.memberNameLabel.snp.bottom).offset(3)
-            make.right.equalToSuperview()
             make.left.equalTo(self.memberNameLabel.snp.left)
+            make.right.equalToSuperview()
         }
 
         self.memberBirthLabel.snp.makeConstraints { (make) in
             make.top.equalTo(self.memberRoleLabel.snp.bottom).offset(1)
-            make.right.equalToSuperview()
             make.left.equalTo(self.memberRoleLabel.snp.left)
+            make.right.equalToSuperview()
             make.bottom.equalToSuperview().inset(4)
         }
 
-        self.sepparationLabel.snp.makeConstraints { (make) in
-            make.right.left.bottom.equalToSuperview()
+        self.sepparationView.snp.makeConstraints { (make) in
+            make.left.right.bottom.equalToSuperview()
             make.height.equalTo(3)
         }
 

@@ -31,8 +31,7 @@ class MWImageLoadingHelper{
 
                                     guard !category.isEmpty else { return }
                                     self.saveImage(for: movie, imageData: imageData, in: category)
-                }
-            )
+            })
         }
     }
 
@@ -47,8 +46,7 @@ class MWImageLoadingHelper{
                                   succesHandler: { (imageData: Data)  in
                                     personToChange.image = imageData
                                     NotificationCenter.default.post(name: .memberImageUpdated, object: nil)
-            }
-            )
+            })
         }
     }
 
@@ -71,8 +69,7 @@ class MWImageLoadingHelper{
                                   succesHandler: { (imageData: Data) in
                                     imagesResponse.movieImages?.append(imageData)
                                     NotificationCenter.default.post(name: .movieImagesCollectionUpdated, object: nil)
-            }
-            )
+            })
         }
     }
 

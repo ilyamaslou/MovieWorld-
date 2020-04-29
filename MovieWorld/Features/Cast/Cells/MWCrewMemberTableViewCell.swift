@@ -32,7 +32,7 @@ class MWCrewMemberTableViewCell: UITableViewCell {
     }
 
     override func updateConstraints() {
-        self.memberNameLabel.snp.makeConstraints { (make) in
+        self.memberNameLabel.snp.updateConstraints { (make) in
             make.top.left.bottom.equalToSuperview().inset(self.offsets)
             make.right.equalToSuperview()
         }
@@ -43,7 +43,7 @@ class MWCrewMemberTableViewCell: UITableViewCell {
     func set(crewMember: MWMovieCrewMember?) {
         self.crewMember = crewMember
         self.memberNameLabel.text = crewMember?.name
-        setNeedsUpdateConstraints()
-        layoutIfNeeded()
+        self.setNeedsUpdateConstraints()
+        self.layoutIfNeeded()
     }
 }

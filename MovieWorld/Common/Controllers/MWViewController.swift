@@ -13,7 +13,7 @@ class MWViewController: UIViewController {
     private(set) lazy var contentView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
-
+        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
 
@@ -57,10 +57,9 @@ class MWViewController: UIViewController {
 
     private func makeConstraints() {
         self.contentView.snp.makeConstraints { (make) in
-            make.left.right.equalToSuperview()
             make.top.equalTo(self.view.safeAreaLayoutGuide.snp.topMargin)
+            make.left.right.equalToSuperview()
             make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottomMargin)
-
         }
     }
 }

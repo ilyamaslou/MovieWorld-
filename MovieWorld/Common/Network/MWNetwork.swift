@@ -31,7 +31,7 @@ class MWNetwork {
 
         let request = URLRequest(url: requestUrl)
 
-        let task = self.session.dataTask(with: request) { (data, _, error) in
+        let task = self.session.dataTask(with: request) { (data, statusCode, error) in
 
             if let data = data, error == nil {
                     DispatchQueue.main.async {

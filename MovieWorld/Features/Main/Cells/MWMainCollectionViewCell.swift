@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SnapKit
 import CoreData
 
 class MWMainCollectionViewCell: UICollectionViewCell {
@@ -95,7 +94,7 @@ class MWMainCollectionViewCell: UICollectionViewCell {
     }
 
     private func setImageView() -> UIImage? {
-        layoutIfNeeded()
+        self.layoutIfNeeded()
         guard  let imageData = movie.image else { return UIImage(named: "imageNotFound") }
         return  UIImage(data: imageData)
     }

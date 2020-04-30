@@ -12,7 +12,7 @@ class MWCastMemberTableViewCell: UITableViewCell {
 
     static var reuseIdentifier: String = "MWCastMemberTableViewCell"
 
-    private lazy var castMemberView = MWCastMemberCellView()
+    private lazy var castMemberView = MWCastMemberView()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)

@@ -12,6 +12,9 @@ class MWMainTableViewCell: UITableViewCell {
 
     static var reuseIdentifier: String = "MWMainTableViewCell"
 
+    private var insets = UIEdgeInsets(top: 24, left: 16, bottom: -12, right: 7)
+    private let imageSize = CGSize(width: 130, height: 237)
+
     var movies: [MWMovie] = [] {
         didSet {
             self.collectionView.reloadData()
@@ -57,7 +60,7 @@ class MWMainTableViewCell: UITableViewCell {
                                                selector: #selector(movieImageUpdated),
                                                name: .movieImageUpdated, object: nil)
 
-        backgroundColor = .white
+        self.backgroundColor = .white
         self.contentView.addSubview(self.showAllView)
         self.contentView.addSubview(self.collectionView)
     }
@@ -68,15 +71,15 @@ class MWMainTableViewCell: UITableViewCell {
 
     override func updateConstraints() {
         self.showAllView.snp.updateConstraints { (make) in
-            make.top.equalToSuperview().offset(24)
-            make.left.equalToSuperview().offset(16)
-            make.right.equalToSuperview().inset(7)
-            make.bottom.equalTo(self.collectionView.snp.top).offset(-12)
+            make.top.equalToSuperview().offset(self.insets.top)
+            make.left.equalToSuperview().offset(self.insets.left)
+            make.right.equalToSuperview().inset(self.insets)
+            make.bottom.equalTo(self.collectionView.snp.top).offset(self.insets.bottom)
         }
 
         self.collectionView.snp.updateConstraints { (make) in
             make.left.right.bottom.equalToSuperview()
-            make.height.equalTo(237)
+            make.height.equalTo(self.imageSize.height)
         }
 
         super.updateConstraints()
@@ -120,6 +123,6 @@ extension MWMainTableViewCell: UICollectionViewDelegate, UICollectionViewDataSou
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 130, height: 237)
+        return self.imageSize
     }
 }

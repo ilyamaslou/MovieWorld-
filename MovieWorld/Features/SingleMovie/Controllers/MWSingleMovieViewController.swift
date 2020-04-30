@@ -45,7 +45,7 @@ class MWSingleMovieViewController: MWViewController {
         let item = UIBarButtonItem(image: UIImage(named: "unselectedFavoriteIcon"),
                                    style: .plain,
                                    target: self,
-                                   action: #selector(self.didFavoriteButtonTapped))
+                                   action: #selector(self.didFavoriteButtonTap))
         return item
     }()
 
@@ -451,8 +451,8 @@ class MWSingleMovieViewController: MWViewController {
         self.refreshControl.endRefreshing()
     }
 
-    @objc private func didFavoriteButtonTapped() {
-        self.isFavorite = !self.isFavorite
+    @objc private func didFavoriteButtonTap() {
+        self.isFavorite.toggle()
         if self.isFavorite {
             self.save()
         } else {

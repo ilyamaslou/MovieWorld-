@@ -8,9 +8,10 @@
 
 import UIKit
 
-class MWCastMemberCellView: UIView {
+class MWCastMemberView: UIView {
 
     private let offsets = UIEdgeInsets(top: 10, left: 16, bottom: 10, right: 16)
+    private let imageSize = CGSize(width: 70, height: 70)
 
     private var castMember: MWMovieCastMember?
 
@@ -64,7 +65,6 @@ class MWCastMemberCellView: UIView {
     }
 
     func set(castMember: MWMovieCastMember?, birthday: String = "") {
-
         self.castMember = castMember
         self.memberNameLabel.text = castMember?.name
         self.memberRoleLabel.text = castMember?.character
@@ -102,35 +102,34 @@ class MWCastMemberCellView: UIView {
     }
 
     override func updateConstraints() {
-        self.memberImageView.snp.makeConstraints { (make) in
+        self.memberImageView.snp.updateConstraints { (make) in
             make.top.left.bottom.equalToSuperview().inset(self.offsets)
-            make.size.equalTo(CGSize(width: 70, height: 70))
+            make.size.equalTo(self.imageSize)
         }
 
-        self.memberNameLabel.snp.makeConstraints { (make) in
+        self.memberNameLabel.snp.updateConstraints { (make) in
             make.top.equalToSuperview().inset(self.offsets)
             make.left.equalTo(self.memberImageView.snp.right).offset(self.offsets.left)
             make.right.equalToSuperview()
         }
 
-        self.memberRoleLabel.snp.makeConstraints { (make) in
+        self.memberRoleLabel.snp.updateConstraints { (make) in
             make.top.equalTo(self.memberNameLabel.snp.bottom).offset(3)
             make.left.equalTo(self.memberNameLabel.snp.left)
             make.right.equalToSuperview()
         }
 
-        self.memberBirthLabel.snp.makeConstraints { (make) in
+        self.memberBirthLabel.snp.updateConstraints { (make) in
             make.top.equalTo(self.memberRoleLabel.snp.bottom).offset(1)
             make.left.equalTo(self.memberRoleLabel.snp.left)
             make.right.equalToSuperview()
             make.bottom.equalToSuperview().inset(4)
         }
 
-        self.sepparationView.snp.makeConstraints { (make) in
+        self.sepparationView.snp.updateConstraints { (make) in
             make.left.right.bottom.equalToSuperview()
             make.height.equalTo(3)
         }
-
         super.updateConstraints()
     }
 }

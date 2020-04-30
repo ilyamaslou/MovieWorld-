@@ -45,12 +45,12 @@ class MWGenreCollectionViewCell: UICollectionViewCell {
     func set(genreWithSelection: (String, Bool)) {
         self.singleGenreButton.setUpButton(title: genreWithSelection.0, hasArrow: false)
         self.buttonIsSelected = genreWithSelection.1
-        setNeedsUpdateConstraints()
-        layoutIfNeeded()
+        self.setNeedsUpdateConstraints()
+        self.layoutIfNeeded()
     }
 
     @objc private func singleGenreDidTapped() {
-        self.buttonIsSelected = !self.buttonIsSelected
+        self.buttonIsSelected.toggle()
 
         guard let selectedGenre = self.selectedGenre, let titleGenre = self.singleGenreButton.titleLabel?.text
             else { return }

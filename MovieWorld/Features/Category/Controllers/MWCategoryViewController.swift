@@ -46,7 +46,7 @@ extension MWCategoryViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(
             withIdentifier: self.categoryCellId,
-        for: indexPath)
+            for: indexPath)
 
         cell.textLabel?.text = self.categories[indexPath.row]
         cell.textLabel?.font = .systemFont(ofSize: 17)

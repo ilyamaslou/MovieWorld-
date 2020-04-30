@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import CoreData
 
 class MWMainCollectionViewCell: UICollectionViewCell {
 
@@ -43,7 +42,7 @@ class MWMainCollectionViewCell: UICollectionViewCell {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.setUpCell()
+        self.makeConstraints()
     }
 
     required init?(coder: NSCoder) {
@@ -55,27 +54,26 @@ class MWMainCollectionViewCell: UICollectionViewCell {
         self.nameLabel.text = movie.title
         self.movieImageView.image = self.setImageView()
         self.infoLabel.text = self.setInfoLabelText()
+        self.setNeedsUpdateConstraints()
     }
 
-    private func setUpCell() {
-        backgroundColor = .white
+    private func makeConstraints() {
         self.translatesAutoresizingMaskIntoConstraints = false
-
         self.contentView.addSubview(self.nameLabel)
         self.contentView.addSubview(self.infoLabel)
         self.contentView.addSubview(self.movieImageView)
 
-        self.movieImageView.snp.updateConstraints { (make) in
+        self.movieImageView.snp.makeConstraints { (make) in
             make.top.left.right.equalToSuperview()
         }
 
-        self.nameLabel.snp.updateConstraints { (make) in
+        self.nameLabel.snp.makeConstraints { (make) in
             make.top.equalTo(self.movieImageView.snp.bottom).inset(-12)
             make.left.equalToSuperview()
             make.right.equalTo(self.movieImageView.snp.right)
         }
 
-        self.infoLabel.snp.updateConstraints { (make) in
+        self.infoLabel.snp.makeConstraints { (make) in
             make.top.equalTo(self.nameLabel.snp.bottom)
             make.left.bottom.equalToSuperview()
             make.right.equalTo(self.movieImageView.snp.right)
@@ -97,7 +95,7 @@ class MWMainCollectionViewCell: UICollectionViewCell {
 
     private func setImageView() -> UIImage? {
         self.layoutIfNeeded()
-        guard  let imageData = movie.image else { return UIImage(named: "imageNotFound") }
-        return  UIImage(data: imageData)
+        guard let imageData = movie.image else { return UIImage(named: "imageNotFound") }
+        return UIImage(data: imageData)
     }
 }

@@ -69,8 +69,7 @@ class MasterFavoriteViewController: MWViewController {
 
         self.segmentedControl.snp.makeConstraints { (make) in
             make.top.equalToSuperview()
-            make.left.equalToSuperview().offset(16)
-            make.right.equalToSuperview().inset(16)
+            make.left.right.equalToSuperview().inset(16)
         }
 
         self.sepparationView.snp.makeConstraints { (make) in
@@ -93,11 +92,11 @@ class MasterFavoriteViewController: MWViewController {
 
     private func updateView() {
         if self.segmentedControl.selectedSegmentIndex == 0 {
-            remove(asChildViewController: self.actorsViewController)
-            add(asChildViewController: self.moviesViewController)
+            self.remove(asChildViewController: self.actorsViewController)
+            self.add(asChildViewController: self.moviesViewController)
         } else {
-            remove(asChildViewController: self.moviesViewController)
-            add(asChildViewController: self.actorsViewController)
+            self.remove(asChildViewController: self.moviesViewController)
+            self.add(asChildViewController: self.actorsViewController)
         }
     }
 
@@ -108,7 +107,7 @@ class MasterFavoriteViewController: MWViewController {
 
 extension MasterFavoriteViewController {
     private func add(asChildViewController viewController: UIViewController) {
-        addChild(viewController)
+        self.addChild(viewController)
 
         self.contentView.addSubview(viewController.view)
 

@@ -43,10 +43,9 @@ class MWMainTabViewController: MWViewController {
     override func initController() {
         super.initController()
 
-        let view = self.tableView
-        contentView.addSubview(view)
+        self.contentView.addSubview(self.tableView)
 
-        view.snp.makeConstraints { (make) in
+        self.tableView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
 

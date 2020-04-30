@@ -13,4 +13,5 @@ struct URLPaths {
     static let upcomingMovies: String = "movie/upcoming"
     static let getGenres: String = "genre/movie/list"
     static let getConfiguration: String = "configuration"
+    static let searchPerson: String = "search/person"
 }

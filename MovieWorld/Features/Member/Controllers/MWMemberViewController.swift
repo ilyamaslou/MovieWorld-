@@ -12,6 +12,7 @@ import CoreData
 class MWMemberViewController: MWViewController {
 
     private let offsets = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
+    private let imageHeight = 237
 
     private var member: Any?
     private var memberInfo: MWMemberDetails?
@@ -31,7 +32,7 @@ class MWMemberViewController: MWViewController {
         let item = UIBarButtonItem(image: UIImage(named: "unselectedFavoriteIcon"),
                                    style: .plain,
                                    target: self,
-                                   action: #selector(self.didFavoriteButtonTapped))
+                                   action: #selector(self.didFavoriteButtonTap))
         return item
     }()
 
@@ -52,7 +53,7 @@ class MWMemberViewController: MWViewController {
         return view
     }()
 
-    private lazy var memberCellView = MWCastMemberCellView()
+    private lazy var memberCellView = MWCastMemberView()
 
     private lazy var titleForCollectionView: UILabel = {
         let label = UILabel()
@@ -138,7 +139,7 @@ class MWMemberViewController: MWViewController {
 
         self.contentViewContainer.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
-            make.width.equalTo(self.view.snp.width)
+            make.width.equalToSuperview()
         }
 
         self.memberCellView.snp.makeConstraints { (make) in
@@ -155,7 +156,7 @@ class MWMemberViewController: MWViewController {
         self.collectionView.snp.makeConstraints { (make) in
             make.top.equalTo(self.titleForCollectionView.snp.bottom).offset(self.offsets.top)
             make.left.right.equalToSuperview()
-            make.height.equalTo(237)
+            make.height.equalTo(self.imageHeight)
         }
 
         self.roleLabel.snp.makeConstraints { (make) in
@@ -166,8 +167,7 @@ class MWMemberViewController: MWViewController {
 
         self.bioLabel.snp.makeConstraints { (make) in
             make.top.equalTo(self.roleLabel.snp.bottom).offset(self.offsets.top)
-            make.left.equalToSuperview().offset(self.offsets.left)
-            make.right.equalToSuperview().inset(self.offsets.right)
+            make.left.right.equalToSuperview().inset(self.offsets)
             make.bottom.equalToSuperview().inset(10)
         }
     }
@@ -204,7 +204,7 @@ class MWMemberViewController: MWViewController {
     }
 
     private func loadMemberMovies() {
-        let urlPath = "search/person"
+        let urlPath = URLPaths.searchPerson
         var querryParameters: [String: String] = MWNet.sh.parameters
         querryParameters["query"] = self.getMemberName()
 
@@ -263,8 +263,8 @@ class MWMemberViewController: MWViewController {
         self.collectionView.reloadData()
     }
 
-    @objc private func didFavoriteButtonTapped() {
-        self.isFavorite = !self.isFavorite
+    @objc private func didFavoriteButtonTap() {
+        self.isFavorite.toggle()
         if self.isFavorite {
             self.save()
         } else {
@@ -299,7 +299,7 @@ extension MWMemberViewController: UICollectionViewDelegate, UICollectionViewData
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = ((Int(self.view.frame.size.width) - 48) / 3)
-        return CGSize(width: width, height: 237)
+        return CGSize(width: width, height: self.imageHeight)
     }
 }
 

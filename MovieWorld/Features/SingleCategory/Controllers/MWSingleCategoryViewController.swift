@@ -142,25 +142,18 @@ class MWSingleCategoryViewController: MWViewController {
     }
 
     private func updateTableByGenres() {
-        var tempFilteredMovies: Set<MWMovie> = []
+        var tempFilteredMovies: [MWMovie] = []
 
         if self.filteredGenres.isEmpty {
             self.filteredMovies = self.movies
             return
         }
 
-        for movie in self.movies {
-            for genre in self.filteredGenres {
-                guard let movieGenres = movie.movieGenres else { return }
-                for movieGenre in movieGenres {
-                    if movieGenre == genre {
-                        tempFilteredMovies.insert(movie)
-                    }
-                }
-            }
+        for genre in self.filteredGenres {
+            tempFilteredMovies.append(contentsOf: self.filteredMovies.filter{ ($0.movieGenres?.contains(genre) ?? false) })
         }
 
-        self.filteredMovies = Array(tempFilteredMovies)
+        self.filteredMovies = tempFilteredMovies
     }
 
     private func selectUnselectGenre(genreToChange: String) {
@@ -198,8 +191,7 @@ extension MWSingleCategoryViewController: UITableViewDataSource, UITableViewDele
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        guard section != 0  else { return 0 }
-        return 16
+        return (section != 0) ? 16 : 0
     }
 }
 

@@ -15,6 +15,7 @@ class MWSingleCategoryViewController: MWViewController {
     private var totalItems: Int = 0
     private var isRequestBusy: Bool = false
     private var category: MWCategories?
+    private var shouldUseLoadingMethods = true
 
     private var movies: [MWMovie] = [] {
         didSet {
@@ -29,47 +30,19 @@ class MWSingleCategoryViewController: MWViewController {
         }
     }
 
-    private var movieGenres: [(String, Bool)] = [] {
-        didSet {
-            self.collectionView.reloadData()
-        }
-    }
-
-    private var filteredGenres: Set<String> = [] {
-        didSet {
-            self.collectionView.reloadData()
-        }
-    }
-
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.delegate = self
         tableView.dataSource = self
         tableView.separatorStyle = .none
-        tableView.register(MWSingleMovieInCategoryCell.self, forCellReuseIdentifier: MWSingleMovieInCategoryCell.reuseIdentifier)
+        tableView.showsVerticalScrollIndicator = false
+        tableView.showsHorizontalScrollIndicator = false
+        tableView.register(MWSingleMovieInCategoryCell.self,
+                           forCellReuseIdentifier: MWSingleMovieInCategoryCell.reuseIdentifier)
         return tableView
     }()
 
-    private lazy var collectionView: UICollectionView = {
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: self.collectionViewLayout)
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        collectionView.register(MWGenreCollectionViewCell.self, forCellWithReuseIdentifier: MWGenreCollectionViewCell.reuseIdentifier)
-
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.backgroundColor = .white
-        collectionView.contentInsetAdjustmentBehavior = .never
-        collectionView.showsVerticalScrollIndicator = false
-        collectionView.showsHorizontalScrollIndicator = false
-        collectionView.contentInset = UIEdgeInsets(top: .zero, left: 16, bottom: .zero, right: 16)
-        return collectionView
-    }()
-
-    private lazy var collectionViewLayout: MWGroupsCollectionViewLayout = {
-        let collectionViewLayout = MWGroupsCollectionViewLayout()
-        collectionViewLayout.delegate = self
-        return collectionViewLayout
-    }()
+    private lazy var collectionView: MWGenresCollectionViewController = MWGenresCollectionViewController()
 
     private lazy var loadingSpinner: UIActivityIndicatorView = {
         let view = UIActivityIndicatorView()
@@ -88,7 +61,7 @@ class MWSingleCategoryViewController: MWViewController {
         self.totalPages = totalResultsInfo?.totalPages ?? 0
         self.totalItems = totalResultsInfo?.totalResults ?? 0
 
-        self.updateTableAndCollectionView(movies: movies)
+        self.setTableViewMovies(movies: movies, useLoading: true)
     }
 
     required init?(coder: NSCoder) {
@@ -98,18 +71,22 @@ class MWSingleCategoryViewController: MWViewController {
     override func initController() {
         super.initController()
 
-        self.contentView.addSubview(self.collectionView)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(updateTableByGenres),
+                                               name: .genresChanged, object: nil)
+
+        self.contentView.addSubview(self.collectionView.view)
         self.contentView.addSubview(self.tableView)
         self.contentView.addSubview(self.loadingSpinner)
 
-        self.collectionView.snp.makeConstraints {(make) in
+        self.collectionView.view.snp.makeConstraints {(make) in
             make.top.equalToSuperview().offset(16)
             make.left.right.equalToSuperview()
             make.height.equalTo(70)
         }
 
         self.tableView.snp.makeConstraints { (make) in
-            make.top.equalTo(collectionView.snp.bottom).offset(16)
+            make.top.equalTo(collectionView.view.snp.bottom).offset(16)
             make.left.right.equalToSuperview()
             make.bottom.equalToSuperview()
         }
@@ -119,49 +96,30 @@ class MWSingleCategoryViewController: MWViewController {
         }
     }
 
-    func updateTableAndCollectionView(movies: [MWMovie]) {
+    func setTableViewMovies(movies: [MWMovie], useLoading: Bool = false) {
         self.movies = movies
-        self.setUpGenres()
+        self.shouldUseLoadingMethods = useLoading
     }
 
-    private func setUpGenres() {
-        var oldGenres: Set<String> = []
-        self.movieGenres.forEach { oldGenres.insert($0.0) }
-
-        var oldAndNewGenres: Set<String> = []
-        for movie in self.movies {
-            guard let genres = movie.movieGenres else { return }
-            for genre in genres {
-                oldAndNewGenres.insert(genre)
-            }
-        }
-        let newGenres = oldAndNewGenres.subtracting(oldGenres)
-        newGenres.forEach { self.movieGenres.append(($0, false)) }
-
-        self.movieGenres.sort { $0.0 < $1.0 }
-    }
-
-    private func updateTableByGenres() {
+    @objc private func updateTableByGenres() {
         var tempFilteredMovies: [MWMovie] = []
 
-        if self.filteredGenres.isEmpty {
+        if self.collectionView.filteredGenres.isEmpty {
             self.filteredMovies = self.movies
             return
         }
 
-        for genre in self.filteredGenres {
+        for genre in self.collectionView.filteredGenres {
             tempFilteredMovies.append(contentsOf: self.filteredMovies.filter{ ($0.movieGenres?.contains(genre) ?? false) })
         }
 
         self.filteredMovies = tempFilteredMovies
+        self.checkFilteredMoviesOnFillness()
     }
 
-    private func selectUnselectGenre(genreToChange: String) {
-        for (id, (genre, isSelected)) in self.movieGenres.enumerated() {
-            if genreToChange == genre {
-                self.movieGenres[id].1 = !isSelected
-            }
-        }
+    private func checkFilteredMoviesOnFillness() {
+        guard self.filteredMovies.count < 5, self.shouldUseLoadingMethods else { return }
+        self.loadUnits()
     }
 }
 
@@ -183,7 +141,7 @@ extension MWSingleCategoryViewController: UITableViewDataSource, UITableViewDele
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        MWI.s.pushVC(MWSingleMovieViewController(movie: self.movies[indexPath.row]))
+        MWI.s.pushVC(MWSingleMovieViewController(movie: self.filteredMovies[indexPath.row]))
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -191,88 +149,42 @@ extension MWSingleCategoryViewController: UITableViewDataSource, UITableViewDele
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return (section != 0) ? 16 : 0
-    }
-}
-
-extension MWSingleCategoryViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.movieGenres.count
-    }
-
-    func collectionView(
-        _ collectionView: UICollectionView,
-        layout collectionViewLayout: UICollectionViewLayout,
-        sizeForItemAt indexPath: IndexPath) -> CGSize {
-
-        let itemSize = (collectionView.frame.width - (collectionView.contentInset.left + collectionView.contentInset.right)) / 2
-        return CGSize(width: itemSize, height: itemSize)
-    }
-
-    func collectionView(
-        _ collectionView: UICollectionView,
-        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-
-        guard let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: MWGenreCollectionViewCell.reuseIdentifier,
-            for: indexPath) as? MWGenreCollectionViewCell else { fatalError("The registered type for the cell does not match the casting") }
-
-        cell.set(genreWithSelection: self.movieGenres[indexPath.item])
-
-        cell.selectedGenre = { [weak self] genre, isSelected in
-            guard let self = self else { return }
-            if isSelected {
-                self.filteredGenres.insert(genre)
-            } else {
-                self.filteredGenres.remove(genre)
-            }
-            self.selectUnselectGenre(genreToChange: genre)
-            self.updateTableByGenres()
-        }
-        return cell
-    }
-}
-
-extension MWSingleCategoryViewController: MWGroupsLayoutDelegate {
-    func collectionView(
-        _ collectionView: UICollectionView,
-        widthForLabelAtIndexPath indexPath: IndexPath) -> CGFloat {
-        return self.movieGenres[indexPath.item].0.textWidth(font: .systemFont(ofSize: 13)) + 24
+        guard section != 0  else { return 0 }
+        return 16
     }
 }
 
 //MARK: Pagination
 extension MWSingleCategoryViewController {
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        let rowUnit = self.movies[indexPath.row]
-        guard movies.count > 5 else { return }
-        let unit = self.movies[self.movies.count - 5]
+        let rowUnit = self.filteredMovies[indexPath.row]
+        guard self.filteredMovies.count > 4 else { return }
+        let unit = self.filteredMovies[self.filteredMovies.count - 4]
         if self.totalItems > self.movies.count,
             rowUnit.id == unit.id {
             self.loadUnits()
-            self.loadingSpinner.startAnimating()
         }
     }
 
     private func loadUnits() {
+        self.loadingSpinner.startAnimating()
         guard !self.isRequestBusy,
             self.movies.count != self.totalItems else { return }
         self.isRequestBusy = true
 
-        self.loadMovies { [weak self] (movies) in
+        self.loadMovies{ [weak self] (movies) in
             guard let self = self else { return }
             self.isRequestBusy = false
             self.page += 1
-            self.collectionViewLayout.cache = []
             self.movies += movies
-            self.setUpGenres()
+            self.updateTableByGenres()
             self.loadingSpinner.stopAnimating()
         }
     }
 
     private func loadMovies( completion: @escaping ([MWMovie]) -> Void) {
-        guard let category = self.category else { return }
+        guard let category = self.category,
+            self.page <= self.totalPages else { return }
         let urlPath = category.getCategoryUrlPath()
         var query = MWNet.sh.parameters
         query["page"] = String(self.page)
@@ -283,8 +195,7 @@ extension MWSingleCategoryViewController {
 
                             self.totalItems = movies.totalResults
                             self.totalPages = movies.totalPages
-                            self.setGenres(to: movies.results)
-                            self.setImages(to: movies.results, in: category.rawValue)
+                            self.setGenresAndImages(to: movies.results)
                             completion(movies.results)
             },
                          errorHandler: { [weak self] (error) in
@@ -292,18 +203,14 @@ extension MWSingleCategoryViewController {
 
                             let message = error.getErrorDesription()
                             self.errorAlert(message: message)
+                            self.loadingSpinner.stopAnimating()
         })
     }
 
-    private func setGenres(to movies: [MWMovie]){
+    private func setGenresAndImages(to movies: [MWMovie]){
         for movie in movies {
             movie.setFilmGenres(genres: MWSys.sh.genres)
-        }
-    }
-
-    private func setImages(to movies: [MWMovie], in category: String) {
-        for movie in movies {
-            MWImageLoadingHelper.sh.loadMovieImage(for: movie, in: category)
+            MWImageLoadingHelper.sh.loadMovieImage(for: movie)
         }
     }
 }

@@ -13,4 +13,5 @@ extension Notification.Name {
     static let memberMovieImageUpdated = Notification.Name("memberMovieImageUpdated")
     static let memberImageUpdated = Notification.Name("memberImagesUpdated")
     static let movieImagesCollectionUpdated = Notification.Name("movieImagesCollectionUpdated")
+    static let genresChanged = Notification.Name("genresChanged")
 }

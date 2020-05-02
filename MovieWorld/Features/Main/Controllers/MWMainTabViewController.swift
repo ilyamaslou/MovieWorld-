@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SnapKit
 import CoreData
 
 class MWMainTabViewController: MWViewController {
@@ -42,14 +43,13 @@ class MWMainTabViewController: MWViewController {
 
     override func initController() {
         super.initController()
+        self.title = "Season".local()
 
-        self.contentView.addSubview(self.tableView)
+        contentView.addSubview(self.tableView)
 
         self.tableView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
-
-        self.title = "Season".local()
 
         self.loadMovies()
         self.group.notify(queue: .main, execute: self.tableView.reloadData)

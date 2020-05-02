@@ -12,7 +12,6 @@ import CoreData
 class MWMemberViewController: MWViewController {
 
     private let offsets = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
-    private let imageHeight = 237
 
     private var member: Any?
     private var memberInfo: MWMemberDetails?
@@ -28,13 +27,10 @@ class MWMemberViewController: MWViewController {
         }
     }
 
-    private lazy var rightBarButtonDidFavoriteItem: UIBarButtonItem = {
-        let item = UIBarButtonItem(image: UIImage(named: "unselectedFavoriteIcon"),
-                                   style: .plain,
-                                   target: self,
-                                   action: #selector(self.didFavoriteButtonTap))
-        return item
-    }()
+    private lazy var rightBarButtonDidFavoriteItem: UIBarButtonItem = UIBarButtonItem(image: UIImage(named: "unselectedFavoriteIcon"),
+                                                                                      style: .plain,
+                                                                                      target: self,
+                                                                                      action: #selector(self.didFavoriteButtonTapped))
 
     private lazy var scrollView: UIScrollView = {
         let view = UIScrollView()
@@ -53,7 +49,7 @@ class MWMemberViewController: MWViewController {
         return view
     }()
 
-    private lazy var memberCellView = MWCastMemberView()
+    private lazy var memberCellView: MWCastMemberView = MWCastMemberView()
 
     private lazy var titleForCollectionView: UILabel = {
         let label = UILabel()
@@ -123,7 +119,7 @@ class MWMemberViewController: MWViewController {
 
     override func initController() {
         super.initController()
-        navigationItem.largeTitleDisplayMode = .never
+        self.navigationItem.largeTitleDisplayMode = .never
 
         self.contentView.addSubview(self.scrollView)
         self.scrollView.addSubview(self.contentViewContainer)
@@ -139,7 +135,7 @@ class MWMemberViewController: MWViewController {
 
         self.contentViewContainer.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
-            make.width.equalToSuperview()
+            make.width.equalTo(self.view.snp.width)
         }
 
         self.memberCellView.snp.makeConstraints { (make) in
@@ -155,8 +151,8 @@ class MWMemberViewController: MWViewController {
 
         self.collectionView.snp.makeConstraints { (make) in
             make.top.equalTo(self.titleForCollectionView.snp.bottom).offset(self.offsets.top)
-            make.left.right.equalToSuperview()
-            make.height.equalTo(self.imageHeight)
+            make.right.left.equalToSuperview()
+            make.height.equalTo(237)
         }
 
         self.roleLabel.snp.makeConstraints { (make) in
@@ -170,6 +166,11 @@ class MWMemberViewController: MWViewController {
             make.left.right.equalToSuperview().inset(self.offsets)
             make.bottom.equalToSuperview().inset(10)
         }
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationItem.largeTitleDisplayMode = .always
     }
 
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -204,7 +205,7 @@ class MWMemberViewController: MWViewController {
     }
 
     private func loadMemberMovies() {
-        let urlPath = URLPaths.searchPerson
+        let urlPath = "search/person"
         var querryParameters: [String: String] = MWNet.sh.parameters
         querryParameters["query"] = self.getMemberName()
 
@@ -223,10 +224,13 @@ class MWMemberViewController: MWViewController {
             },
                          errorHandler: { [weak self] (error) in
                             guard let self = self else { return }
+
                             let message = error.getErrorDesription()
                             self.errorAlert(message: message)
+
         })
     }
+
     private func getMemberName() -> String {
         var memberName: String = ""
 
@@ -237,6 +241,7 @@ class MWMemberViewController: MWViewController {
             let name = crewMember.name {
             memberName = name
         }
+
         return memberName
     }
 
@@ -263,8 +268,8 @@ class MWMemberViewController: MWViewController {
         self.collectionView.reloadData()
     }
 
-    @objc private func didFavoriteButtonTap() {
-        self.isFavorite.toggle()
+    @objc private func didFavoriteButtonTapped() {
+        self.isFavorite = !self.isFavorite
         if self.isFavorite {
             self.save()
         } else {
@@ -299,7 +304,7 @@ extension MWMemberViewController: UICollectionViewDelegate, UICollectionViewData
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = ((Int(self.view.frame.size.width) - 48) / 3)
-        return CGSize(width: width, height: self.imageHeight)
+        return CGSize(width: width, height: 237)
     }
 }
 

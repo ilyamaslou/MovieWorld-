@@ -41,6 +41,7 @@ class MWInitController: MWViewController {
         self.loadingIndicator.startAnimating()
 
         self.loadGenres()
+        self.loadLanguages()
         self.loadConfiguration()
 
         self.group.notify(queue: .main, execute: MWI.s.setUpTabBar)
@@ -88,6 +89,23 @@ class MWInitController: MWViewController {
                             self.fetchImageConfiguration()
                             MWSys.sh.configuration = MWConfiguration(images: self.imageConfiguration)
 
+                            self.group.leave()
+        })
+    }
+
+    private func loadLanguages() {
+        self.group.enter()
+        MWNet.sh.request(urlPath: URLPaths.getLanguages ,
+                         querryParameters: MWNet.sh.parameters,
+                         succesHandler: { [weak self] (languages: [MWLanguageConfiguration])  in
+                            guard let self = self else { return }
+                            MWSys.sh.languages = languages
+                            self.group.leave()
+            },
+                         errorHandler: { [weak self] (error) in
+                            guard let self = self else { return }
+                            let message = error.getErrorDesription()
+                            print(message)
                             self.group.leave()
         })
     }

@@ -7,6 +7,9 @@
 //
 
 struct URLPaths {
+    static let getLanguages: String = "configuration/languages"
+    static let trandingDayMovies: String = "trending/movie/day"
+    static let searchMovies: String = "search/movie"
     static let popularMovies: String = "movie/popular"
     static let topRatedMovies: String = "movie/top_rated"
     static let nowPlayingMovies: String = "movie/now_playing"

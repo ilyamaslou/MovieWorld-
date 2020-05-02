@@ -41,13 +41,10 @@ class MWSingleMovieViewController: MWViewController {
     private var galleryItems: [Any] = []
     private var imagesResponse: MWMovieImagesResponse?
 
-    private lazy var rightBarButtonDidFavoriteItem: UIBarButtonItem = {
-        let item = UIBarButtonItem(image: UIImage(named: "unselectedFavoriteIcon"),
-                                   style: .plain,
-                                   target: self,
-                                   action: #selector(self.didFavoriteButtonTap))
-        return item
-    }()
+    private lazy var rightBarButtonDidFavoriteItem: UIBarButtonItem = UIBarButtonItem( image: UIImage(named: "unselectedFavoriteIcon"),
+                                                                                       style: .plain,
+                                                                                       target: self,
+                                                                                       action: #selector(self.didFavoriteButtonTapped))
 
     private lazy var scrollView: UIScrollView = {
         let view = UIScrollView()
@@ -73,8 +70,8 @@ class MWSingleMovieViewController: MWViewController {
         return view
     }()
 
-    private lazy var movieCellView = MWSingleMovieView()
-    private lazy var moviePlayer = YouTubePlayerView()
+    private lazy var movieCellView: MWSingleMovieView = MWSingleMovieView()
+    private lazy var moviePlayer: YouTubePlayerView = YouTubePlayerView()
 
     private lazy var loadingIndicator: UIActivityIndicatorView = {
         let view = UIActivityIndicatorView()
@@ -179,7 +176,7 @@ class MWSingleMovieViewController: MWViewController {
 
     override func initController() {
         super.initController()
-        navigationItem.largeTitleDisplayMode = .never
+        self.navigationItem.largeTitleDisplayMode = .never
         self.loadingIndicator.startAnimating()
 
         self.contentView.addSubview(self.scrollView)
@@ -217,8 +214,7 @@ class MWSingleMovieViewController: MWViewController {
 
         self.moviePlayer.snp.makeConstraints { (make) in
             make.top.equalTo(self.movieCellView.snp.bottom).offset(18)
-            make.left.equalToSuperview().offset(self.offsets.left)
-            make.right.equalToSuperview().inset(self.offsets)
+            make.left.right.equalToSuperview().inset(self.offsets)
             make.height.equalTo(180)
         }
 
@@ -228,8 +224,7 @@ class MWSingleMovieViewController: MWViewController {
 
         self.descriptionContainerView.snp.makeConstraints { (make) in
             make.top.equalTo(self.moviePlayer.snp.bottom).offset(24)
-            make.left.equalToSuperview().offset(self.offsets.left)
-            make.right.equalToSuperview().inset(self.offsets)
+            make.left.right.equalToSuperview().inset(self.offsets)
         }
 
         self.descriptionLabel.snp.makeConstraints { (make) in
@@ -272,6 +267,11 @@ class MWSingleMovieViewController: MWViewController {
         }
 
         super.updateViewConstraints()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationItem.largeTitleDisplayMode = .always
     }
 
     init(movie: MWMovie) {
@@ -451,8 +451,8 @@ class MWSingleMovieViewController: MWViewController {
         self.refreshControl.endRefreshing()
     }
 
-    @objc private func didFavoriteButtonTap() {
-        self.isFavorite.toggle()
+    @objc private func didFavoriteButtonTapped() {
+        self.isFavorite = !self.isFavorite
         if self.isFavorite {
             self.save()
         } else {

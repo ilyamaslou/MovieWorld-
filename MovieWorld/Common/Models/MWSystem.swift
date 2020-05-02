@@ -6,6 +6,7 @@
 //  Copyright © 2020 Ilya Maslou. All rights reserved.
 //
 
+import UIKit
 typealias MWSys = MWSystem
 
 class MWSystem {
@@ -14,6 +15,7 @@ class MWSystem {
 
     var genres: [MWGenre] = []
     var configuration: MWConfiguration?
+    var languages: [MWLanguageConfiguration] = []
 
     private init() {}
 }

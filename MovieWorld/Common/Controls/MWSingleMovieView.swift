@@ -58,12 +58,12 @@ class MWSingleMovieView: UIView {
         return label
     }()
 
-    private lazy var sepparationView: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.layer.backgroundColor = UIColor.lightGray.cgColor
-        view.layer.opacity = 0.2
-        return view
+    private lazy var sepparationLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.layer.backgroundColor = UIColor.lightGray.cgColor
+        label.layer.opacity = 0.2
+        return label
     }()
 
     override init(frame: CGRect) {
@@ -83,43 +83,44 @@ class MWSingleMovieView: UIView {
         self.addSubview(self.releaseYearAndCountryLabel)
         self.addSubview(self.genresLabel)
         self.addSubview(self.ratingsLabel)
-        self.addSubview(self.sepparationView)
+        self.addSubview(self.sepparationLabel)
     }
 
     override func updateConstraints() {
 
         self.filmImageView.snp.updateConstraints { (make) in
-            make.top.left.equalToSuperview().inset(self.offsets)
+            make.top.equalToSuperview().offset(self.offsets.top)
+            make.left.equalToSuperview().offset(self.offsets.left)
             make.bottom.equalToSuperview().inset(10)
             make.width.equalTo(80)
         }
 
         self.filmNameLabel.snp.updateConstraints { (make) in
             make.top.equalToSuperview().offset(self.offsets.top)
-            make.left.equalTo(self.filmImageView.snp.right).offset(self.offsets.left)
+            make.left.equalTo(filmImageView.snp.right).offset(self.offsets.left)
             make.right.equalToSuperview()
         }
 
         self.releaseYearAndCountryLabel.snp.updateConstraints { (make) in
             make.top.equalTo(self.filmNameLabel.snp.bottom).offset(3)
-            make.left.equalTo(self.filmImageView.snp.right).offset(self.offsets.left)
+            make.left.equalTo(filmImageView.snp.right).offset(self.offsets.left)
             make.right.equalToSuperview()
         }
 
         self.genresLabel.snp.updateConstraints { (make) in
             make.top.equalTo(self.releaseYearAndCountryLabel.snp.bottom).offset(1)
-            make.left.equalTo(self.filmImageView.snp.right).offset(self.offsets.left)
+            make.left.equalTo(filmImageView.snp.right).offset(self.offsets.left)
             make.right.equalToSuperview()
         }
 
         self.ratingsLabel.snp.updateConstraints { (make) in
-            make.top.equalTo(self.genresLabel.snp.bottom).offset(8)
-            make.left.equalTo(self.filmImageView.snp.right).offset(self.offsets.left)
+            make.top.equalTo(genresLabel.snp.bottom).offset(8)
+            make.left.equalTo(filmImageView.snp.right).offset(self.offsets.left)
             make.right.equalToSuperview()
             make.bottom.equalToSuperview().inset(self.offsets.bottom)
         }
 
-        self.sepparationView.snp.makeConstraints { (make) in
+        self.sepparationLabel.snp.makeConstraints { (make) in
             make.left.right.bottom.equalToSuperview()
             make.height.equalTo(3)
         }
@@ -137,14 +138,8 @@ class MWSingleMovieView: UIView {
                 .resizeImage(targetSize: CGSize(width: 80, height: 100))
         }
 
-        var releaseYear = ""
-        if let releaseDate = movie.releaseDate {
-            let dividedDate = releaseDate.split(separator: "-")
-            releaseYear = String(dividedDate.first ?? "")
-            releaseYear = releaseYear.isEmpty ? "" : "\(releaseYear),"
-        }
-
-        self.releaseYearAndCountryLabel.text = "\(releaseYear) \(movie.originalLanguage ?? "")"
+        let releasedYear = movie.getMovieReleaseYear().isEmpty ? "" : "\(movie.getMovieReleaseYear()),"
+        self.releaseYearAndCountryLabel.text = "\(releasedYear) \(movie.originalLanguage ?? "")"
         self.genresLabel.text = self.setUpGenres(movieGenres: movie.movieGenres)
 
         if let movieRating = movie.voteAvarage, movieRating != 0 {

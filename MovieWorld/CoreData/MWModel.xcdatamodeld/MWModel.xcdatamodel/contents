@@ -55,12 +55,12 @@
     </entity>
     <elements>
         <element name="CastMember" positionX="-36" positionY="126" width="128" height="148"/>
+        <element name="FavoriteActors" positionX="-36" positionY="126" width="128" height="58"/>
         <element name="FavoriteMovies" positionX="-36" positionY="117" width="128" height="58"/>
         <element name="Genre" positionX="-54" positionY="-9" width="128" height="73"/>
         <element name="ImageConfiguration" positionX="-36" positionY="27" width="128" height="148"/>
         <element name="Movie" positionX="-45" positionY="63" width="128" height="223"/>
         <element name="MovieAdditionalInfo" positionX="-27" positionY="117" width="128" height="118"/>
         <element name="MovieCategory" positionX="-36" positionY="72" width="128" height="73"/>
-        <element name="FavoriteActors" positionX="-36" positionY="126" width="128" height="58"/>
     </elements>
 </model>

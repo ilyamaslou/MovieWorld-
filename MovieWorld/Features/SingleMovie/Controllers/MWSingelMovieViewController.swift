@@ -70,7 +70,7 @@ class MWSingelMovieViewController: MWViewController {
         return view
     }()
     
-    private lazy var movieCellView: MWSingleMovieCellView = MWSingleMovieCellView()
+    private lazy var movieCellView: MWSingleMovieView = MWSingleMovieView()
     private lazy var moviePlayer: YouTubePlayerView = YouTubePlayerView()
     
     private lazy var loadingIndicator: UIActivityIndicatorView = {

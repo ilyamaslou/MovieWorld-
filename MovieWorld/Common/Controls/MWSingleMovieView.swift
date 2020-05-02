@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MWSingleMovieCellView: UIView {
+class MWSingleMovieView: UIView {
     
     private let offsets = UIEdgeInsets(top: 10, left: 16, bottom: 8, right: -16)
     private let contentInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)

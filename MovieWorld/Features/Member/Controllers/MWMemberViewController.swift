@@ -49,7 +49,7 @@ class MWMemberViewController: MWViewController {
         return view
     }()
     
-    private lazy var memberCellView: MWCastMemberCellView = MWCastMemberCellView()
+    private lazy var memberCellView: MWCastMemberView = MWCastMemberView()
     
     private lazy var titleForCollectionView: UILabel = {
         let label = UILabel()

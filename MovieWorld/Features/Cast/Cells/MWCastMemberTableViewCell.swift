@@ -10,7 +10,7 @@ import UIKit
 
 class MWCastMemberTableViewCell: UITableViewCell {
     
-    private lazy var castMemberView: MWCastMemberCellView = MWCastMemberCellView()
+    private lazy var castMemberView: MWCastMemberView = MWCastMemberView()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)

@@ -42,7 +42,7 @@
 		9979B46323FFCF19005421D9 /* MWSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9979B46223FFCF19005421D9 /* MWSearchViewController.swift */; };
 		9979B46523FFD0D5005421D9 /* MWViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9979B46423FFD0D5005421D9 /* MWViewController.swift */; };
 		997BA63524393893007AA974 /* MWMemberViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997BA63424393893007AA974 /* MWMemberViewController.swift */; };
-		997BA63724394767007AA974 /* MWCastMemberCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997BA63624394767007AA974 /* MWCastMemberCellView.swift */; };
+		997BA63724394767007AA974 /* MWCastMemberView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997BA63624394767007AA974 /* MWCastMemberView.swift */; };
 		9981C573243924940079747B /* MWMemberDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9981C572243924940079747B /* MWMemberDetails.swift */; };
 		9983A223243780F200810675 /* MWCrewMemberTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9983A222243780F200810675 /* MWCrewMemberTableViewCell.swift */; };
 		99915F88240D254800E39CE0 /* MWSpecialError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99915F87240D254800E39CE0 /* MWSpecialError.swift */; };
@@ -134,7 +134,7 @@
 		9979B46223FFCF19005421D9 /* MWSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWSearchViewController.swift; sourceTree = "<group>"; };
 		9979B46423FFD0D5005421D9 /* MWViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWViewController.swift; sourceTree = "<group>"; };
 		997BA63424393893007AA974 /* MWMemberViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWMemberViewController.swift; sourceTree = "<group>"; };
-		997BA63624394767007AA974 /* MWCastMemberCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWCastMemberCellView.swift; sourceTree = "<group>"; };
+		997BA63624394767007AA974 /* MWCastMemberView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWCastMemberView.swift; sourceTree = "<group>"; };
 		9981C572243924940079747B /* MWMemberDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWMemberDetails.swift; sourceTree = "<group>"; };
 		9983A222243780F200810675 /* MWCrewMemberTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWCrewMemberTableViewCell.swift; sourceTree = "<group>"; };
 		99915F87240D254800E39CE0 /* MWSpecialError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWSpecialError.swift; sourceTree = "<group>"; };
@@ -492,7 +492,7 @@
 		997BA6382439477A007AA974 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				997BA63624394767007AA974 /* MWCastMemberCellView.swift */,
+				997BA63624394767007AA974 /* MWCastMemberView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -866,7 +866,7 @@
 				996F79E4240BEACF006FF3C0 /* String+Ex.swift in Sources */,
 				9983A223243780F200810675 /* MWCrewMemberTableViewCell.swift in Sources */,
 				99BAE46C2411A22600F45B11 /* MWSystem.swift in Sources */,
-				997BA63724394767007AA974 /* MWCastMemberCellView.swift in Sources */,
+				997BA63724394767007AA974 /* MWCastMemberView.swift in Sources */,
 				992CF937240549E200301BC5 /* MWMainTableViewCell.swift in Sources */,
 				995F405924153DA8005DC65F /* URLPaths.swift in Sources */,
 				99B1ACEB245E0A1F00D6B047 /* MovieAdditionalInfo+CoreDataClass.swift in Sources */,

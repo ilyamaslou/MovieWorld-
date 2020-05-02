@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MWCastMemberCellView: UIView {
+class MWCastMemberView: UIView {
     
     private let offsets = UIEdgeInsets(top: 10, left: 16, bottom: 10, right: 16)
     

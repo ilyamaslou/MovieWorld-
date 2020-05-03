@@ -6,7 +6,7 @@
 //  Copyright © 2020 Ilya Maslou. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
 class MWMovieImagesResponse: Decodable {
     let id: Int?

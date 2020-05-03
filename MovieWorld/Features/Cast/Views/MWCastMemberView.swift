@@ -10,7 +10,7 @@ import UIKit
 
 class MWCastMemberView: UIView {
 
-    private let offsets = UIEdgeInsets(top: 10, left: 16, bottom: 10, right: 16)
+    private let edgeInsets = UIEdgeInsets(top: 10, left: 16, bottom: 10, right: 16)
     private let imageSize = CGSize(width: 70, height: 70)
 
     private var castMember: MWMovieCastMember?
@@ -47,7 +47,7 @@ class MWCastMemberView: UIView {
         return label
     }()
 
-    private lazy var sepparationView: UIView = {
+    private lazy var separationView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.backgroundColor = UIColor.lightGray.cgColor
@@ -98,18 +98,18 @@ class MWCastMemberView: UIView {
         self.addSubview(self.memberNameLabel)
         self.addSubview(self.memberRoleLabel)
         self.addSubview(self.memberBirthLabel)
-        self.addSubview(self.sepparationView)
+        self.addSubview(self.separationView)
     }
 
     override func updateConstraints() {
         self.memberImageView.snp.updateConstraints { (make) in
-            make.top.left.bottom.equalToSuperview().inset(self.offsets)
+            make.top.left.bottom.equalToSuperview().inset(self.edgeInsets)
             make.size.equalTo(self.imageSize)
         }
 
         self.memberNameLabel.snp.updateConstraints { (make) in
-            make.top.equalToSuperview().inset(self.offsets)
-            make.left.equalTo(self.memberImageView.snp.right).offset(self.offsets.left)
+            make.top.equalToSuperview().inset(self.edgeInsets)
+            make.left.equalTo(self.memberImageView.snp.right).offset(self.edgeInsets.left)
             make.right.equalToSuperview()
         }
 
@@ -126,7 +126,7 @@ class MWCastMemberView: UIView {
             make.bottom.equalToSuperview().inset(4)
         }
 
-        self.sepparationView.snp.updateConstraints { (make) in
+        self.separationView.snp.updateConstraints { (make) in
             make.left.right.bottom.equalToSuperview()
             make.height.equalTo(3)
         }

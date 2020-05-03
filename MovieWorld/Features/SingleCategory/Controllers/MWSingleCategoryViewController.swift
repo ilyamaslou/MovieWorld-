@@ -17,6 +17,8 @@ class MWSingleCategoryViewController: MWViewController {
     private var category: MWCategories?
     private var shouldUseLoadingMethods = true
 
+    private let collectionViewHeight: Int = 70
+
     private var movies: [MWMovie] = [] {
         didSet {
             self.filteredMovies = self.movies
@@ -42,7 +44,7 @@ class MWSingleCategoryViewController: MWViewController {
         return tableView
     }()
 
-    private lazy var collectionView: MWGenresCollectionViewController = MWGenresCollectionViewController()
+    private lazy var collectionView = MWGenresCollectionViewController()
 
     private lazy var loadingSpinner: UIActivityIndicatorView = {
         let view = UIActivityIndicatorView()
@@ -82,7 +84,7 @@ class MWSingleCategoryViewController: MWViewController {
         self.collectionView.view.snp.makeConstraints {(make) in
             make.top.equalToSuperview().offset(16)
             make.left.right.equalToSuperview()
-            make.height.equalTo(70)
+            make.height.equalTo(self.collectionViewHeight)
         }
 
         self.tableView.snp.makeConstraints { (make) in

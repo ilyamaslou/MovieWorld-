@@ -36,6 +36,6 @@ class MWProfileViewController: MWViewController {
     }
 
     @objc private func favoriteButtonDidPressed() {
-        MWI.s.pushVC(MasterFavoriteViewController())
+        MWI.s.pushVC(MWMasterFavoriteViewController())
     }
 }

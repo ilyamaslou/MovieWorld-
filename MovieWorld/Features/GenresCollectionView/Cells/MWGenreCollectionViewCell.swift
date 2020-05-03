@@ -52,8 +52,8 @@ class MWGenreCollectionViewCell: UICollectionViewCell {
     @objc private func singleGenreDidTapped() {
         self.buttonIsSelected.toggle()
 
-        guard let selectedGenre = self.selectedGenre, let titleGenre = self.singleGenreButton.titleLabel?.text
-            else { return }
+        guard let selectedGenre = self.selectedGenre,
+            let titleGenre = self.singleGenreButton.titleLabel?.text else { return }
         selectedGenre(titleGenre, self.buttonIsSelected)
     }
 }

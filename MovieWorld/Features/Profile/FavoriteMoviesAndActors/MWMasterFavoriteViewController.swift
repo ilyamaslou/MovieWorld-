@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MasterFavoriteViewController: MWViewController {
+class MWMasterFavoriteViewController: MWViewController {
 
     private lazy var segmentedControl: UISegmentedControl = {
         let view = UISegmentedControl()
@@ -23,7 +23,7 @@ class MasterFavoriteViewController: MWViewController {
         return view
     }()
 
-    private lazy var sepparationView: UIView = {
+    private lazy var separationView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.backgroundColor = UIColor(named: "shadowColor")?.cgColor
@@ -65,14 +65,14 @@ class MasterFavoriteViewController: MWViewController {
         self.setupSegmentedControl()
 
         self.contentView.addSubview(self.segmentedControl)
-        self.contentView.addSubview(self.sepparationView)
+        self.contentView.addSubview(self.separationView)
 
         self.segmentedControl.snp.makeConstraints { (make) in
             make.top.equalToSuperview()
             make.left.right.equalToSuperview().inset(16)
         }
 
-        self.sepparationView.snp.makeConstraints { (make) in
+        self.separationView.snp.makeConstraints { (make) in
             make.top.equalTo(self.segmentedControl.snp.bottom).offset(10)
             make.left.right.equalToSuperview()
             make.height.equalTo(1)
@@ -105,14 +105,14 @@ class MasterFavoriteViewController: MWViewController {
     }
 }
 
-extension MasterFavoriteViewController {
+extension MWMasterFavoriteViewController {
     private func add(asChildViewController viewController: UIViewController) {
         self.addChild(viewController)
 
         self.contentView.addSubview(viewController.view)
 
         viewController.view.snp.remakeConstraints { (make) in
-            make.top.equalTo(self.sepparationView.snp.bottom)
+            make.top.equalTo(self.separationView.snp.bottom)
             make.left.right.bottom.equalToSuperview()
         }
 

@@ -12,7 +12,7 @@ class MWMainCollectionViewCell: UICollectionViewCell {
 
     static var reuseIdentifier: String = "MWMainCollectionViewCell"
 
-    private var movie: MWMovie = MWMovie()
+    private var movie = MWMovie()
 
     private lazy var nameLabel: UILabel = {
         let label = UILabel()

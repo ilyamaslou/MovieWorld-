@@ -13,9 +13,7 @@ class MWFavoriteMoviesViewController: MWViewController {
 
     private var movies: [MWMovie] = []
 
-    private lazy var moviesByGenresController: MWSingleCategoryViewController = {
-        return MWSingleCategoryViewController(movies: self.movies)
-    }()
+    private lazy var moviesByGenresController = MWSingleCategoryViewController(movies: self.movies)
 
     private lazy var emptyListLabel: UILabel = {
         let label = UILabel()
@@ -52,7 +50,7 @@ class MWFavoriteMoviesViewController: MWViewController {
     }
 
     private func setUpVisibleOfEmptyListLabel(listIsEmpty: Bool) {
-        self.emptyListLabel.isHidden = listIsEmpty ? false : true
+        self.emptyListLabel.isHidden = !listIsEmpty
     }
 }
 

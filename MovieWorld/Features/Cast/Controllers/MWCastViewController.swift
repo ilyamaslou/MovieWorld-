@@ -35,7 +35,7 @@ class MWCastViewController: MWViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.largeTitleDisplayMode = .always
+        self.navigationItem.largeTitleDisplayMode = .always
     }
 
     override func initController() {

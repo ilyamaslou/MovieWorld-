@@ -12,7 +12,10 @@ import CoreData
 
 class MWSingleMovieViewController: MWViewController {
 
-    private let offsets = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
+    private let edgeInsets = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
+    private let castCollectionViewHeight: Int = 237
+    private let galleryCollectionViewHeight: Int = 200
+    private let moviePlayerHeight: Int = 180
 
     private var cdMovie: Movie?
 
@@ -70,8 +73,8 @@ class MWSingleMovieViewController: MWViewController {
         return view
     }()
 
-    private lazy var movieCellView: MWSingleMovieView = MWSingleMovieView()
-    private lazy var moviePlayer: YouTubePlayerView = YouTubePlayerView()
+    private lazy var movieCellView = MWSingleMovieView()
+    private lazy var moviePlayer = YouTubePlayerView()
 
     private lazy var loadingIndicator: UIActivityIndicatorView = {
         let view = UIActivityIndicatorView()
@@ -136,7 +139,7 @@ class MWSingleMovieViewController: MWViewController {
         collectionViewLayout.scrollDirection = .horizontal
         collectionViewLayout.minimumLineSpacing = 16
         collectionViewLayout.minimumInteritemSpacing = 16
-        collectionViewLayout.sectionInset = UIEdgeInsets(top: .zero, left: self.offsets.left, bottom: .zero, right: self.offsets.right)
+        collectionViewLayout.sectionInset = UIEdgeInsets(top: .zero, left: self.edgeInsets.left, bottom: .zero, right: self.edgeInsets.right)
         collectionViewLayout.itemSize = CGSize(width: 130, height: 237)
         return collectionViewLayout
     }()
@@ -169,7 +172,7 @@ class MWSingleMovieViewController: MWViewController {
         collectionViewLayout.scrollDirection = .horizontal
         collectionViewLayout.minimumLineSpacing = 16
         collectionViewLayout.minimumInteritemSpacing = 16
-        collectionViewLayout.sectionInset = UIEdgeInsets(top: .zero, left: self.offsets.left, bottom: .zero, right: self.offsets.right)
+        collectionViewLayout.sectionInset = UIEdgeInsets(top: .zero, left: self.edgeInsets.left, bottom: .zero, right: self.edgeInsets.right)
         collectionViewLayout.itemSize = CGSize(width: 500, height: 200)
         return collectionViewLayout
     }()
@@ -208,14 +211,14 @@ class MWSingleMovieViewController: MWViewController {
         }
 
         self.movieCellView.snp.makeConstraints { (make) in
-            make.top.equalToSuperview().offset(self.offsets.top)
+            make.top.equalToSuperview().offset(self.edgeInsets.top)
             make.left.right.equalToSuperview()
         }
 
         self.moviePlayer.snp.makeConstraints { (make) in
             make.top.equalTo(self.movieCellView.snp.bottom).offset(18)
-            make.left.right.equalToSuperview().inset(self.offsets)
-            make.height.equalTo(180)
+            make.left.right.equalToSuperview().inset(self.edgeInsets)
+            make.height.equalTo(self.moviePlayerHeight)
         }
 
         self.loadingIndicator.snp.makeConstraints { (make) in
@@ -224,7 +227,7 @@ class MWSingleMovieViewController: MWViewController {
 
         self.descriptionContainerView.snp.makeConstraints { (make) in
             make.top.equalTo(self.moviePlayer.snp.bottom).offset(24)
-            make.left.right.equalToSuperview().inset(self.offsets)
+            make.left.right.equalToSuperview().inset(self.edgeInsets)
         }
 
         self.descriptionLabel.snp.makeConstraints { (make) in
@@ -232,7 +235,7 @@ class MWSingleMovieViewController: MWViewController {
         }
 
         self.movieRuntimeLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(self.descriptionLabel.snp.bottom).offset(self.offsets.top)
+            make.top.equalTo(self.descriptionLabel.snp.bottom).offset(self.edgeInsets.top)
             make.left.right.equalToSuperview()
         }
 
@@ -243,27 +246,27 @@ class MWSingleMovieViewController: MWViewController {
 
         self.showAllView.snp.makeConstraints { (make) in
             make.top.greaterThanOrEqualTo(self.descriptionContainerView.snp.bottom).offset(24)
-            make.left.equalToSuperview().offset(self.offsets.left)
+            make.left.equalToSuperview().offset(self.edgeInsets.left)
             make.right.equalToSuperview().inset(26)
         }
 
         self.castCollectionView.snp.makeConstraints { (make) in
-            make.top.equalTo(self.showAllView.snp.bottom).offset(self.offsets.top)
+            make.top.equalTo(self.showAllView.snp.bottom).offset(self.edgeInsets.top)
             make.left.right.equalToSuperview()
-            make.height.equalTo(237)
+            make.height.equalTo(self.castCollectionViewHeight)
         }
 
         self.galleryLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(self.castCollectionView.snp.bottom).offset(self.offsets.top)
-            make.left.equalToSuperview().offset(self.offsets.left)
+            make.top.equalTo(self.castCollectionView.snp.bottom).offset(self.edgeInsets.top)
+            make.left.equalToSuperview().offset(self.edgeInsets.left)
             make.right.equalToSuperview()
         }
 
         self.galleryCollectionView.snp.makeConstraints { (make) in
-            make.top.equalTo(self.galleryLabel.snp.bottom).offset(self.offsets.top)
+            make.top.equalTo(self.galleryLabel.snp.bottom).offset(self.edgeInsets.top)
             make.left.right.equalToSuperview()
             make.bottom.equalToSuperview().inset(10)
-            make.height.equalTo(200)
+            make.height.equalTo(self.galleryCollectionViewHeight)
         }
 
         super.updateViewConstraints()
@@ -301,7 +304,7 @@ class MWSingleMovieViewController: MWViewController {
 
     private func showLoadedVideo(videoUrlKey: String?) {
         guard let key = videoUrlKey else { return }
-        let videoUrl = "https://www.youtube.com/watch?v=\(key)"
+        let videoUrl = String(format: URLPaths.getVideo, key)
         let encodedURL = videoUrl.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
         if let url = URL(string: encodedURL) {
             self.moviePlayer.loadVideoURL(url)
@@ -310,7 +313,7 @@ class MWSingleMovieViewController: MWViewController {
 
     private func loadMovieVideos() {
         guard let movieId = self.movie.id else { return }
-        let urlPath = "movie/\(movieId)/videos"
+        let urlPath = String(format: URLPaths.getMovieVideos, movieId)
 
         MWNet.sh.request(urlPath: urlPath ,
                          querryParameters: MWNet.sh.parameters,
@@ -337,7 +340,7 @@ class MWSingleMovieViewController: MWViewController {
 
     private func loadMovieCast() {
         guard let movieId = self.movie.id else { return }
-        let urlPath = "movie/\(movieId)/credits"
+        let urlPath = String(format: URLPaths.getMovieCredits, movieId)
 
         MWNet.sh.request(urlPath: urlPath ,
                          querryParameters: MWNet.sh.parameters,
@@ -367,7 +370,7 @@ class MWSingleMovieViewController: MWViewController {
 
     private func loadMovieAdditionalInfo() {
         guard let movieId = self.movie.id else { return }
-        let urlPath = "movie/\(movieId)"
+        let urlPath = String(format: URLPaths.movieAdditionalInfo, movieId)
 
         MWNet.sh.request(urlPath: urlPath ,
                          querryParameters: MWNet.sh.parameters,
@@ -389,7 +392,7 @@ class MWSingleMovieViewController: MWViewController {
 
     private func loadMovieImages() {
         guard let movieId = self.movie.id else { return }
-        let urlPath = "movie/\(movieId)/images"
+        let urlPath = String(format: URLPaths.movieImages, movieId)
 
         MWNet.sh.request(urlPath: urlPath ,
                          querryParameters: MWNet.sh.parameters,

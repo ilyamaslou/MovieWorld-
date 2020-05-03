@@ -13,9 +13,7 @@ class MWFavoriteActorsViewController: MWViewController {
 
     private var cast: [[MWMovieCastMember]] = []
 
-    private lazy var actorsController: MWCastViewController = {
-        return MWCastViewController(castMembers: self.cast)
-    }()
+    private lazy var actorsController = MWCastViewController(castMembers: self.cast)
 
     private lazy var emptyListLabel: UILabel = {
         let label = UILabel()
@@ -51,7 +49,7 @@ class MWFavoriteActorsViewController: MWViewController {
     }
 
     private func setUpVisibleOfEmptyListLabel(listIsEmpty: Bool) {
-        self.emptyListLabel.isHidden = listIsEmpty ? false : true
+        self.emptyListLabel.isHidden = !listIsEmpty
     }
 }
 

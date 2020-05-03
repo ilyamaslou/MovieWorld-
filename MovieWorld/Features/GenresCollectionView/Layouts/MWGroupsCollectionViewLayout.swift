@@ -11,6 +11,7 @@ import UIKit
 class MWGroupsCollectionViewLayout: UICollectionViewLayout {
 
     weak var delegate: MWGroupsLayoutDelegate?
+
     private var cache: [UICollectionViewLayoutAttributes] = []
     private let numberOfColumns = 2
     private let cellPadding: CGFloat = 6

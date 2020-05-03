@@ -11,7 +11,8 @@ import CoreData
 
 class MWMemberViewController: MWViewController {
 
-    private let offsets = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
+    private let edgeInsets = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
+    private let collectionViewSize = CGSize(width: .zero, height: 237)
 
     private var member: Any?
     private var memberInfo: MWMemberDetails?
@@ -49,7 +50,7 @@ class MWMemberViewController: MWViewController {
         return view
     }()
 
-    private lazy var memberCellView: MWCastMemberView = MWCastMemberView()
+    private lazy var memberCellView = MWCastMemberView()
 
     private lazy var titleForCollectionView: UILabel = {
         let label = UILabel()
@@ -139,31 +140,31 @@ class MWMemberViewController: MWViewController {
         }
 
         self.memberCellView.snp.makeConstraints { (make) in
-            make.top.equalToSuperview().offset(self.offsets.top)
+            make.top.equalToSuperview().offset(self.edgeInsets.top)
             make.left.right.equalToSuperview()
         }
 
         self.titleForCollectionView.snp.makeConstraints { (make) in
             make.top.equalTo(self.memberCellView.snp.bottom).offset(24)
-            make.left.equalToSuperview().offset(self.offsets.left)
+            make.left.equalToSuperview().offset(self.edgeInsets.left)
             make.right.equalToSuperview()
         }
 
         self.collectionView.snp.makeConstraints { (make) in
-            make.top.equalTo(self.titleForCollectionView.snp.bottom).offset(self.offsets.top)
+            make.top.equalTo(self.titleForCollectionView.snp.bottom).offset(self.edgeInsets.top)
             make.right.left.equalToSuperview()
-            make.height.equalTo(237)
+            make.height.equalTo(self.collectionViewSize.height)
         }
 
         self.roleLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(self.collectionView.snp.bottom).offset(self.offsets.top)
-            make.left.equalToSuperview().offset(self.offsets.left)
+            make.top.equalTo(self.collectionView.snp.bottom).offset(self.edgeInsets.top)
+            make.left.equalToSuperview().offset(self.edgeInsets.left)
             make.right.equalToSuperview()
         }
 
         self.bioLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(self.roleLabel.snp.bottom).offset(self.offsets.top)
-            make.left.right.equalToSuperview().inset(self.offsets)
+            make.top.equalTo(self.roleLabel.snp.bottom).offset(self.edgeInsets.top)
+            make.left.right.equalToSuperview().inset(self.edgeInsets)
             make.bottom.equalToSuperview().inset(10)
         }
     }
@@ -188,7 +189,7 @@ class MWMemberViewController: MWViewController {
     }
 
     private func loadInfo(id: Int) {
-        let urlPath = "person/\(id)"
+        let urlPath = String(format: URLPaths.personInfo, id)
         MWNet.sh.request(urlPath: urlPath ,
                          querryParameters: MWNet.sh.parameters,
                          succesHandler: { [weak self] (info: MWMemberDetails)  in
@@ -205,7 +206,7 @@ class MWMemberViewController: MWViewController {
     }
 
     private func loadMemberMovies() {
-        let urlPath = "search/person"
+        let urlPath = URLPaths.personMovies
         var querryParameters: [String: String] = MWNet.sh.parameters
         querryParameters["query"] = self.getMemberName()
 

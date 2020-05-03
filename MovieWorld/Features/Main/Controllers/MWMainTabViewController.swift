@@ -73,6 +73,7 @@ class MWMainTabViewController: MWViewController {
                                 self.setImages(to: movies.results, in: category.rawValue)
                                 self.moviesByCategories[category] = movies.results
                                 self.save(mwCategory: category, movies: movies.results)
+                                self.refreshControl.endRefreshing()
                                 self.group.leave()
                 },
                              errorHandler: { [weak self] (error) in
@@ -83,6 +84,7 @@ class MWMainTabViewController: MWViewController {
 
                                 let movies = self.fetchMoviesByCategory(by: category)
                                 self.setMoviesToCategory(category: category, movies: movies)
+                                self.refreshControl.endRefreshing()
                                 self.group.leave()
             })
         }
@@ -103,8 +105,6 @@ class MWMainTabViewController: MWViewController {
     @objc private func pullToRefresh() {
         self.loadMovies()
         self.group.notify(queue: .main, execute: self.tableView.reloadData)
-
-        self.refreshControl.endRefreshing()
     }
 }
 

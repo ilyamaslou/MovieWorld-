@@ -10,9 +10,10 @@ import UIKit
 
 class MWSingleMovieView: UIView {
 
-    private let offsets = UIEdgeInsets(top: 10, left: 16, bottom: 8, right: -16)
+    private let edgeInsets = UIEdgeInsets(top: 10, left: 16, bottom: 8, right: -16)
     private let contentInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
-    private var movie: MWMovie = MWMovie()
+    private let imageSize = CGSize(width: 80, height: 80)
+    private var movie = MWMovie()
 
     private lazy var filmImageView: UIImageView = {
         let view = UIImageView()
@@ -58,7 +59,7 @@ class MWSingleMovieView: UIView {
         return label
     }()
 
-    private lazy var sepparationLabel: UILabel = {
+    private lazy var separationLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.layer.backgroundColor = UIColor.lightGray.cgColor
@@ -83,44 +84,44 @@ class MWSingleMovieView: UIView {
         self.addSubview(self.releaseYearAndCountryLabel)
         self.addSubview(self.genresLabel)
         self.addSubview(self.ratingsLabel)
-        self.addSubview(self.sepparationLabel)
+        self.addSubview(self.separationLabel)
     }
 
     override func updateConstraints() {
 
         self.filmImageView.snp.updateConstraints { (make) in
-            make.top.equalToSuperview().offset(self.offsets.top)
-            make.left.equalToSuperview().offset(self.offsets.left)
+            make.top.equalToSuperview().offset(self.edgeInsets.top)
+            make.left.equalToSuperview().offset(self.edgeInsets.left)
             make.bottom.equalToSuperview().inset(10)
-            make.width.equalTo(80)
+            make.width.equalTo(self.imageSize.width)
         }
 
         self.filmNameLabel.snp.updateConstraints { (make) in
-            make.top.equalToSuperview().offset(self.offsets.top)
-            make.left.equalTo(filmImageView.snp.right).offset(self.offsets.left)
+            make.top.equalToSuperview().offset(self.edgeInsets.top)
+            make.left.equalTo(filmImageView.snp.right).offset(self.edgeInsets.left)
             make.right.equalToSuperview()
         }
 
         self.releaseYearAndCountryLabel.snp.updateConstraints { (make) in
             make.top.equalTo(self.filmNameLabel.snp.bottom).offset(3)
-            make.left.equalTo(filmImageView.snp.right).offset(self.offsets.left)
+            make.left.equalTo(filmImageView.snp.right).offset(self.edgeInsets.left)
             make.right.equalToSuperview()
         }
 
         self.genresLabel.snp.updateConstraints { (make) in
             make.top.equalTo(self.releaseYearAndCountryLabel.snp.bottom).offset(1)
-            make.left.equalTo(filmImageView.snp.right).offset(self.offsets.left)
+            make.left.equalTo(filmImageView.snp.right).offset(self.edgeInsets.left)
             make.right.equalToSuperview()
         }
 
         self.ratingsLabel.snp.updateConstraints { (make) in
             make.top.equalTo(genresLabel.snp.bottom).offset(8)
-            make.left.equalTo(filmImageView.snp.right).offset(self.offsets.left)
+            make.left.equalTo(filmImageView.snp.right).offset(self.edgeInsets.left)
             make.right.equalToSuperview()
-            make.bottom.equalToSuperview().inset(self.offsets.bottom)
+            make.bottom.equalToSuperview().inset(self.edgeInsets.bottom)
         }
 
-        self.sepparationLabel.snp.makeConstraints { (make) in
+        self.separationLabel.snp.makeConstraints { (make) in
             make.left.right.bottom.equalToSuperview()
             make.height.equalTo(3)
         }

@@ -24,15 +24,13 @@ class MWCategoryViewController: MWViewController {
 
     override func initController() {
         super.initController()
+        self.title = "Category".local()
 
-        contentView.addSubview(self.tableView)
+        self.contentView.addSubview(self.tableView)
 
         self.tableView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
-
-        view.backgroundColor = .green
-        self.title = "Category".local()
     }
 
 }

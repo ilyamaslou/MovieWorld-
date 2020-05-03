@@ -28,7 +28,7 @@ class MWViewController: UIViewController {
 
     func initController() {}
 
-    func errorAlert( message: String) {
+    func errorAlert(message: String) {
         let alert = UIAlertController(title: nil,
                                       message: message,
                                       preferredStyle: .alert)

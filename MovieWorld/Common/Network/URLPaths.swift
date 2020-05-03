@@ -17,4 +17,11 @@ struct URLPaths {
     static let getGenres: String = "genre/movie/list"
     static let getConfiguration: String = "configuration"
     static let searchPerson: String = "search/person"
+    static let getVideo = "https://www.youtube.com/watch?v=%@"
+    static let getMovieVideos = "movie/%d/videos"
+    static let getMovieCredits = "movie/%d/credits"
+    static let movieAdditionalInfo = "movie/%d"
+    static let movieImages = "movie/%d/images"
+    static let personInfo = "person/%d"
+    static let personMovies = "search/person"
 }

@@ -12,7 +12,7 @@ class MWCrewMemberTableViewCell: UITableViewCell {
 
     static var reuseIdentifier: String = "MWCrewMemberTableViewCell"
 
-    private let offsets = UIEdgeInsets(top: 11, left: 16, bottom: 11, right: 16)
+    private let edgeInsets = UIEdgeInsets(top: 11, left: 16, bottom: 11, right: 16)
 
     private var crewMember: MWMovieCrewMember?
 
@@ -35,7 +35,7 @@ class MWCrewMemberTableViewCell: UITableViewCell {
 
     override func updateConstraints() {
         self.memberNameLabel.snp.updateConstraints { (make) in
-            make.top.left.bottom.equalToSuperview().inset(self.offsets)
+            make.top.left.bottom.equalToSuperview().inset(self.edgeInsets)
             make.right.equalToSuperview()
         }
 

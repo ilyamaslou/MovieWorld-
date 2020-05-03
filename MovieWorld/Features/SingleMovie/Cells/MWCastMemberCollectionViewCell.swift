@@ -57,7 +57,7 @@ class MWCastMemberCollectionViewCell: UICollectionViewCell {
     }
 
     private func setUpCell() {
-        backgroundColor = .white
+        self.backgroundColor = .white
 
         self.contentView.addSubview(self.nameLabel)
         self.contentView.addSubview(self.infoLabel)
@@ -82,8 +82,8 @@ class MWCastMemberCollectionViewCell: UICollectionViewCell {
     }
 
     private func setImageView() -> UIImage? {
-        layoutIfNeeded()
-        guard  let imageData = memberOfCast?.image else { return UIImage(named: "imageNotFound") }
-        return  UIImage(data: imageData)
+        self.layoutIfNeeded()
+        guard let imageData = memberOfCast?.image else { return UIImage(named: "imageNotFound") }
+        return UIImage(data: imageData)
     }
 }

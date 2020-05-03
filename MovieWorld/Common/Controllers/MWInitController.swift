@@ -12,7 +12,7 @@ import CoreData
 class MWInitController: MWViewController {
 
     private var genres: [MWGenre] = []
-    private var imageConfiguration: MWImageConfiguration = MWImageConfiguration()
+    private var imageConfiguration = MWImageConfiguration()
 
     private lazy var loadingIndicator: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView()

@@ -59,7 +59,7 @@ class MWSearchViewController: MWViewController {
         return tableView
     }()
 
-    private lazy var searchController: UISearchController = UISearchController(searchResultsController: nil)
+    private lazy var searchController = UISearchController(searchResultsController: nil)
 
     private lazy var loadingSpinner: UIActivityIndicatorView = {
         let view = UIActivityIndicatorView()

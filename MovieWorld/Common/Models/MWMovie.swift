@@ -5,7 +5,7 @@
 //  Created by Ilya Maslou on 2/17/20.
 //  Copyright © 2020 Ilya Maslou. All rights reserved.
 //
-import UIKit
+import Foundation
 
 struct MWMoviesResponse: Decodable {
 
@@ -80,25 +80,21 @@ class MWMovie: Decodable, Hashable {
     }
 
     func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
-        hasher.combine(title)
-        hasher.combine(releaseDate)
-        hasher.combine(posterPath)
-        hasher.combine(originalLanguage)
-        hasher.combine(genreIds)
+        hasher.combine(self.id)
+        hasher.combine(self.title)
+        hasher.combine(self.releaseDate)
+        hasher.combine(self.posterPath)
+        hasher.combine(self.originalLanguage)
+        hasher.combine(self.genreIds)
     }
 
     func setFilmGenres(genres: [MWGenre]) {
         var tempGenres: [String] = []
-        guard let genreIds = genreIds  else { return }
+        guard let genreIds = self.genreIds  else { return }
         for id in genreIds {
-            for genre in genres {
-                if genre.id == id {
-                    tempGenres.append(genre.name)
-                }
-            }
+            tempGenres.append(genres.filter{ $0.id == id }.first?.name ?? "")
         }
-        movieGenres = tempGenres
+        self.movieGenres = tempGenres
     }
 
     func getMovieReleaseYear() -> String {

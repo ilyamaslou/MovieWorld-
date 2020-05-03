@@ -18,7 +18,7 @@ class MWCountryFilterTableViewCell: UITableViewCell {
         }
     }
 
-    private let offsets: UIEdgeInsets = UIEdgeInsets(top: 11, left: 16, bottom: 11, right: 15)
+    private let edgeInsets = UIEdgeInsets(top: 11, left: 16, bottom: 11, right: 15)
 
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
@@ -53,16 +53,16 @@ class MWCountryFilterTableViewCell: UITableViewCell {
         self.contentView.addSubview(self.checkImage)
 
         self.titleLabel.snp.makeConstraints { (make) in
-            make.top.equalToSuperview().offset(self.offsets.top)
-            make.left.equalToSuperview().offset(self.offsets.left)
-            make.bottom.equalToSuperview().inset(self.offsets.bottom)
+            make.top.equalToSuperview().offset(self.edgeInsets.top)
+            make.left.equalToSuperview().offset(self.edgeInsets.left)
+            make.bottom.equalToSuperview().inset(self.edgeInsets.bottom)
         }
 
         self.checkImage.snp.makeConstraints { (make) in
-            make.top.equalToSuperview().offset(self.offsets.top)
+            make.top.equalToSuperview().offset(self.edgeInsets.top)
             make.left.equalTo(self.titleLabel.snp.right)
-            make.right.equalToSuperview().inset(self.offsets.right)
-            make.bottom.equalToSuperview().inset(self.offsets.bottom)
+            make.right.equalToSuperview().inset(self.edgeInsets.right)
+            make.bottom.equalToSuperview().inset(self.edgeInsets.bottom)
         }
     }
 

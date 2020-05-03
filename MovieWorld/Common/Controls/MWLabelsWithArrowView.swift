@@ -26,12 +26,12 @@ class MWLabelsWithArrowView: UIView {
         didSet {
             self.arrowImage.isHidden = !self.hasArrow
             self.valueLabel.snp.remakeConstraints { (make) in
-                make.right.equalToSuperview().inset(self.offsets.right)
+                make.right.equalToSuperview().inset(self.edgeInsets.right)
             }
         }
     }
 
-    private let offsets: UIEdgeInsets = UIEdgeInsets(top: 11, left: 16, bottom: 11, right: 15)
+    private let edgeInsets: UIEdgeInsets = UIEdgeInsets(top: 11, left: 16, bottom: 11, right: 15)
 
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
@@ -80,22 +80,22 @@ class MWLabelsWithArrowView: UIView {
 
     override func updateConstraints() {
         self.titleLabel.snp.updateConstraints { (make) in
-            make.top.equalToSuperview().offset(self.offsets.top)
-            make.left.equalToSuperview().offset(self.offsets.left)
-            make.bottom.equalToSuperview().inset(self.offsets.bottom)
+            make.top.equalToSuperview().offset(self.edgeInsets.top)
+            make.left.equalToSuperview().offset(self.edgeInsets.left)
+            make.bottom.equalToSuperview().inset(self.edgeInsets.bottom)
         }
 
         self.valueLabel.snp.updateConstraints { (make) in
-            make.top.equalToSuperview().offset(self.offsets.top)
-            make.left.greaterThanOrEqualTo(self.titleLabel.snp.right).offset(self.offsets.left)
+            make.top.equalToSuperview().offset(self.edgeInsets.top)
+            make.left.greaterThanOrEqualTo(self.titleLabel.snp.right).offset(self.edgeInsets.left)
             make.right.equalTo(self.arrowImage.snp.left)
-            make.bottom.equalToSuperview().inset(self.offsets.bottom)
+            make.bottom.equalToSuperview().inset(self.edgeInsets.bottom)
         }
 
         self.arrowImage.snp.updateConstraints { (make) in
-            make.top.equalToSuperview().offset(self.offsets.top)
-            make.right.equalToSuperview().inset(self.offsets.right)
-            make.bottom.equalToSuperview().inset(self.offsets.bottom)
+            make.top.equalToSuperview().offset(self.edgeInsets.top)
+            make.right.equalToSuperview().inset(self.edgeInsets.right)
+            make.bottom.equalToSuperview().inset(self.edgeInsets.bottom)
         }
 
         super.updateConstraints()

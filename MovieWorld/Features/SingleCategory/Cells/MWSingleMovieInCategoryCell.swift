@@ -34,7 +34,7 @@ class MWSingleMovieInCategoryCell: UITableViewCell {
 
     func set(movie: MWMovie) {
         self.movieView.setView(movie: movie)
-        setNeedsUpdateConstraints()
-        layoutIfNeeded()
+        self.setNeedsUpdateConstraints()
+        self.layoutIfNeeded()
     }
 }

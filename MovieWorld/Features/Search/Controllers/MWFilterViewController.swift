@@ -13,7 +13,8 @@ class MWFilterViewController: MWViewController {
 
     var choosenFilters: ((_ genres: Set<String>?, _ countries: [String?]?, _ year: String?, _ ratingRange: (Float, Float)?) -> Void)?
 
-    private var offsets: UIEdgeInsets = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
+    private var edgeInsets = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
+    private let collectionViewHeight: Int = 70
 
     private var selectedCountries: [String?]? {
         didSet {
@@ -144,34 +145,34 @@ class MWFilterViewController: MWViewController {
 
     override func updateViewConstraints() {
         self.collectionView.view.snp.makeConstraints { (make) in
-            make.top.equalToSuperview().offset(self.offsets.top)
+            make.top.equalToSuperview().offset(self.edgeInsets.top)
             make.left.right.equalToSuperview()
-            make.height.equalTo(70)
+            make.height.equalTo(self.collectionViewHeight)
         }
 
         self.countryView.snp.makeConstraints { (make) in
-            make.top.equalTo(self.collectionView.view.snp.bottom).offset(self.offsets.top)
+            make.top.equalTo(self.collectionView.view.snp.bottom).offset(self.edgeInsets.top)
             make.left.right.equalToSuperview()
         }
 
         self.yearView.snp.makeConstraints { (make) in
-            make.top.equalTo(self.countryView.snp.bottom).offset(self.offsets.top)
+            make.top.equalTo(self.countryView.snp.bottom).offset(self.edgeInsets.top)
             make.left.right.equalToSuperview()
         }
 
         self.ratingView.snp.makeConstraints { (make) in
-            make.top.equalTo(self.yearView.snp.bottom).offset(self.offsets.top)
+            make.top.equalTo(self.yearView.snp.bottom).offset(self.edgeInsets.top)
             make.left.right.equalToSuperview()
         }
 
         self.ratingSlider.snp.makeConstraints { (make) in
             make.top.equalTo(self.ratingView.snp.bottom)
-            make.left.right.equalToSuperview().inset(self.offsets)
+            make.left.right.equalToSuperview().inset(self.edgeInsets)
         }
 
         self.showButton.snp.makeConstraints { (make) in
             make.top.greaterThanOrEqualTo( self.ratingSlider.snp.bottom)
-            make.left.right.equalToSuperview().inset(self.offsets)
+            make.left.right.equalToSuperview().inset(self.edgeInsets)
             make.bottom.equalToSuperview().inset(32)
         }
 

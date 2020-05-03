@@ -6,8 +6,6 @@
 //  Copyright © 2020 Ilya Maslou. All rights reserved.
 //
 
-import UIKit
-
 enum MWNetError {
     case incorrectUrl(url: String)
     case networkError(error: Error)

@@ -91,7 +91,7 @@ class MWMainTableViewCell: UITableViewCell {
         self.showAllView.controllerToPushing = MWSingleCategoryViewController(movies: self.movies,
                                                                               category: categoryName,
                                                                               totalResultsInfo: totalResults)
-        setNeedsUpdateConstraints()
+        self.setNeedsUpdateConstraints()
     }
 
     @objc private func movieImageUpdated() {

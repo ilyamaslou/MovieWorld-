@@ -21,7 +21,7 @@ class MWInterface {
 
     private init() {}
 
-    public func setup(window: UIWindow) {
+    func setup(window: UIWindow) {
         self.window = window
         self.window?.backgroundColor = .white
 
@@ -31,15 +31,15 @@ class MWInterface {
         self.window?.makeKeyAndVisible()
     }
 
-    public func pushVC(_ vc: UIViewController, animated: Bool = true) {
+    func pushVC(_ vc: UIViewController, animated: Bool = true) {
         (self.tabBarViewController.selectedViewController as? MWNavigationController)?.pushViewController(vc, animated: animated)
     }
 
-    public func popVC(animated: Bool = true) {
+    func popVC(animated: Bool = true) {
         (self.tabBarViewController.selectedViewController as? MWNavigationController)?.popViewController(animated: animated)
     }
 
-    public func setUpTabBar() {
+    func setUpTabBar() {
         self.window?.rootViewController = self.tabBarViewController
     }
 

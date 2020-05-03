@@ -9,7 +9,7 @@
 import UIKit
 
 extension UIImage {
-    func resizeImage(targetSize: CGSize) -> UIImage {
+    func resizeImage(targetSize: CGSize) -> UIImage? {
         let size = self.size
         let widthRatio  = targetSize.width  / size.width
         let heightRatio = targetSize.height / size.height
@@ -21,6 +21,6 @@ extension UIImage {
         let newImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
 
-        return newImage ?? UIImage()
+        return newImage
     }
 }

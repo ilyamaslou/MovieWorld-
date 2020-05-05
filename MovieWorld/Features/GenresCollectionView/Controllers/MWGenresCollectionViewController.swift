@@ -97,10 +97,9 @@ extension MWGenresCollectionViewController: UICollectionViewDelegate, UICollecti
     func collectionView(
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-
         guard let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: MWGenreCollectionViewCell.reuseIdentifier,
-            for: indexPath) as? MWGenreCollectionViewCell else { fatalError("The registered type for the cell does not match the casting") }
+            for: indexPath) as? MWGenreCollectionViewCell else { return UICollectionViewCell() }
 
         cell.set(genreWithSelection: self.movieGenres[indexPath.item])
 

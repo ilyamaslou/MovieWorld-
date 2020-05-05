@@ -135,7 +135,7 @@ extension MWMainTableViewCell: UICollectionViewDelegate {
 
         guard let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: MWMainCollectionViewCell.reuseIdentifier,
-            for: indexPath) as? MWMainCollectionViewCell else { fatalError("The registered type for the cell does not match the casting") }
+            for: indexPath) as? MWMainCollectionViewCell else { return UICollectionViewCell() }
 
         if self.movies.count > 0 {
             let singleFilm = self.movies[indexPath.item]

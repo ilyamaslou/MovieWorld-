@@ -31,6 +31,7 @@ class MWCastMemberTableViewCell: UITableViewCell {
     //MARK:- setter
 
     func set(castMember: MWMovieCastMember?) {
+        self.selectionStyle = .none
         self.castMemberView.set(castMember: castMember)
         self.setNeedsUpdateConstraints()
     }

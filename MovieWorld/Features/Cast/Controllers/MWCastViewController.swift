@@ -93,21 +93,15 @@ extension MWCastViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
         if let castMember = self.movieFullCast?[indexPath.section][indexPath.row] as? MWMovieCastMember {
-            guard let cell = tableView.dequeueReusableCell(
-                withIdentifier: MWCastMemberTableViewCell.reuseIdentifier) as? MWCastMemberTableViewCell
-                else { fatalError("The registered type for the cell does not match the casting") }
-
-            cell.selectionStyle = .none
-            cell.set(castMember: castMember)
+            let cell = tableView.dequeueReusableCell(
+                withIdentifier: MWCastMemberTableViewCell.reuseIdentifier, for: indexPath)
+            (cell as? MWCastMemberTableViewCell)?.set(castMember: castMember)
 
             return cell
         } else if let crewMember = self.movieFullCast?[indexPath.section][indexPath.row] as? MWMovieCrewMember {
-            guard let cell = tableView.dequeueReusableCell(
-                withIdentifier: MWCrewMemberTableViewCell.reuseIdentifier) as? MWCrewMemberTableViewCell
-                else { fatalError("The registered type for the cell does not match the casting") }
-
-            cell.selectionStyle = .none
-            cell.set(crewMember: crewMember)
+            let cell = tableView.dequeueReusableCell(
+                withIdentifier: MWCrewMemberTableViewCell.reuseIdentifier, for: indexPath)
+            (cell as? MWCrewMemberTableViewCell)?.set(crewMember: crewMember)
 
             return cell
         } else {

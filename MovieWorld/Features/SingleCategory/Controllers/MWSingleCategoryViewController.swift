@@ -156,11 +156,10 @@ extension MWSingleCategoryViewController: UITableViewDataSource, UITableViewDele
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(
-            withIdentifier: MWSingleMovieInCategoryCell.reuseIdentifier) as? MWSingleMovieInCategoryCell
-            else { fatalError("The registered type for the cell does not match the casting") }
+        let cell = tableView.dequeueReusableCell(
+            withIdentifier: MWSingleMovieInCategoryCell.reuseIdentifier, for: indexPath)
+        (cell as? MWSingleMovieInCategoryCell)?.set(movie: self.filteredMovies[indexPath.row])
 
-        cell.set(movie: self.filteredMovies[indexPath.row])
         return cell
     }
 

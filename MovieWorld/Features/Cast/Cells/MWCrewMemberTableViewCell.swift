@@ -48,6 +48,7 @@ class MWCrewMemberTableViewCell: UITableViewCell {
     //MARK:- setter
 
     func set(crewMember: MWMovieCrewMember?) {
+        self.selectionStyle = .none
         self.crewMember = crewMember
         self.memberNameLabel.text = crewMember?.name
         self.setNeedsUpdateConstraints()

@@ -308,7 +308,7 @@ extension MWMemberViewController: UICollectionViewDelegate, UICollectionViewData
 
         guard let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: MWMainCollectionViewCell.reuseIdentifier,
-            for: indexPath) as? MWMainCollectionViewCell else { fatalError("The registered type for the cell does not match the casting") }
+            for: indexPath) as? MWMainCollectionViewCell else { return UICollectionViewCell() }
 
         if self.memberMovies.count > 0 {
             let singleFilm = self.memberMovies[indexPath.item]

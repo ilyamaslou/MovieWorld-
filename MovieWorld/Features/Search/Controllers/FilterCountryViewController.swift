@@ -176,12 +176,9 @@ extension FilterCountryViewController: UITableViewDelegate, UITableViewDataSourc
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(
-            withIdentifier: MWCountryFilterTableViewCell.reuseIdentifier) as? MWCountryFilterTableViewCell
-            else { fatalError("The registered type for the cell does not match the casting") }
-
-        cell.set(country: self.filteredCountries[indexPath.row])
-        cell.selectionStyle = .none
+        let cell = tableView.dequeueReusableCell(
+            withIdentifier: MWCountryFilterTableViewCell.reuseIdentifier, for: indexPath)
+        (cell as? MWCountryFilterTableViewCell)?.set(country: self.filteredCountries[indexPath.row])
 
         return cell
     }

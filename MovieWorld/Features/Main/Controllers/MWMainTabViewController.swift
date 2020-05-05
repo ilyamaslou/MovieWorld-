@@ -139,7 +139,7 @@ extension MWMainTabViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(
             withIdentifier: MWMainTableViewCell.reuseIdentifier) as? MWMainTableViewCell
-            else { fatalError("The registered type for the cell does not match the casting") }
+            else { return UITableViewCell() }
 
         let category = Array(self.moviesByCategories.keys)[indexPath.section]
         if let movies = self.moviesByCategories[category] {

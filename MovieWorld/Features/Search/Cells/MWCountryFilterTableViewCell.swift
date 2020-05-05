@@ -79,5 +79,6 @@ class MWCountryFilterTableViewCell: UITableViewCell {
     func set(country: (country: String?, isSelected: Bool)) {
         self.titleLabel.text = country.country
         self.isCellSelected = country.isSelected
+        self.setNeedsUpdateConstraints()
     }
 }

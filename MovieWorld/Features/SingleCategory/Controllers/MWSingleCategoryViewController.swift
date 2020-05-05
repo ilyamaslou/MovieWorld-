@@ -161,8 +161,6 @@ extension MWSingleCategoryViewController: UITableViewDataSource, UITableViewDele
             else { fatalError("The registered type for the cell does not match the casting") }
 
         cell.set(movie: self.filteredMovies[indexPath.row])
-        cell.selectionStyle = .none
-
         return cell
     }
 

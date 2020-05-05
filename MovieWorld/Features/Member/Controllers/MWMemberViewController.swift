@@ -371,11 +371,11 @@ extension MWMemberViewController {
     }
 
     private func save() {
+        guard let member = self.member as? MWMovieCastMember else { return }
         let managedContext = CoreDataManager.s.persistentContainer.viewContext
-
         let favoriteActors = FavoriteActors(context: managedContext)
         let newMemmber = CastMember(context: managedContext)
-        guard let member = self.member as? MWMovieCastMember else { return }
+
         newMemmber.id = Int64(member.id ?? 0)
         newMemmber.profilePath = member.profilePath
         newMemmber.character = member.character
@@ -392,10 +392,10 @@ extension MWMemberViewController {
     }
 
     private func remove() {
-        let managedContext = CoreDataManager.s.persistentContainer.viewContext
-
-        let favoriteActors = FavoriteActors(context: managedContext)
         guard let memberToRemove = self.fetchFavoriteActor() else { return }
+        let managedContext = CoreDataManager.s.persistentContainer.viewContext
+        let favoriteActors = FavoriteActors(context: managedContext)
+
         favoriteActors.removeFromActors(memberToRemove)
         memberToRemove.favoriteActors = nil
         self.saveContext(context: managedContext)

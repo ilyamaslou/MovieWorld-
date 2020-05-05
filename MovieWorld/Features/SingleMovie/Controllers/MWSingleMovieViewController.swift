@@ -197,6 +197,7 @@ class MWSingleMovieViewController: MWViewController {
                                                name: .movieImagesCollectionUpdated, object: nil)
         self.movie = movie
         self.movieCellView.setView(movie: movie)
+        self.movieCellView.setNeedsUpdateConstraints()
 
         self.fetchIsFavorite()
 
@@ -573,8 +574,8 @@ extension MWSingleMovieViewController {
     }
 
     private func setFetchedAddittionalInfo() {
-        var newInfo = MWMovieAdditionalInfo()
         guard let fetchedInfo = self.fetchAdditionalInfo() else { return }
+        var newInfo = MWMovieAdditionalInfo()
         newInfo.adult = fetchedInfo.adult
         newInfo.overview = fetchedInfo.overview
         newInfo.runtime = Int(fetchedInfo.runtime)
@@ -604,12 +605,12 @@ extension MWSingleMovieViewController {
     }
 
     @discardableResult private func fetchFavoriteMovie() -> Movie? {
-        let managedContext = CoreDataManager.s.persistentContainer.viewContext
-        let fetch: NSFetchRequest<Movie> = Movie.fetchRequest()
-
         guard let id = self.movie.id,
             let title = self.movie.title,
             let releaseDate = self.movie.releaseDate else { return Movie() }
+
+        let managedContext = CoreDataManager.s.persistentContainer.viewContext
+        let fetch: NSFetchRequest<Movie> = Movie.fetchRequest()
         fetch.predicate = NSPredicate(format: "ANY id = %i and title = %@ and releaseDate = %@ and favorite != nil", id, title, releaseDate)
 
         var result: [Movie] = []
@@ -657,10 +658,10 @@ extension MWSingleMovieViewController {
     }
 
     private func remove() {
-        let managedContext = CoreDataManager.s.persistentContainer.viewContext
-
-        let favoriteMovies = FavoriteMovies(context: managedContext)
         guard let movieToRemove = self.fetchFavoriteMovie() else { return }
+        let managedContext = CoreDataManager.s.persistentContainer.viewContext
+        let favoriteMovies = FavoriteMovies(context: managedContext)
+
         favoriteMovies.removeFromMovies(movieToRemove)
         movieToRemove.favorite = nil
 

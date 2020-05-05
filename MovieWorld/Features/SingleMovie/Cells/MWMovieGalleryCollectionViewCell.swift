@@ -67,6 +67,7 @@ class MWMovieGalleryCollectionViewCell: UICollectionViewCell {
         } else {
             return
         }
+        self.setNeedsUpdateConstraints()
     }
 
     private func setAndShowLoadedVideo(videoUrlKey: String?) {

@@ -37,8 +37,11 @@ class MWSingleMovieInCategoryCell: UITableViewCell {
     //MARK:- setter
 
     func set(movie: MWMovie) {
+        self.selectionStyle = .none
         self.movieView.setView(movie: movie)
         self.setNeedsUpdateConstraints()
+
+        // this needed for normally located title and other labels.  Or what alternative?
         self.layoutIfNeeded()
     }
 }

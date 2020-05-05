@@ -136,9 +136,8 @@ class MWSearchViewController: MWViewController {
 
     private func getFilteredMovies(for moviesForFilter: [MWMovie]?,
                                    filter: ( ([MWMovie]) -> [MWMovie]?)) -> [MWMovie]? {
-        var moviesFilteredByAttribute: [MWMovie]? = []
-
         guard let moviesForFilter = moviesForFilter else { return nil }
+        var moviesFilteredByAttribute: [MWMovie]? = []
         moviesFilteredByAttribute = filter(moviesForFilter)
 
         if let filtredMovies = moviesFilteredByAttribute, filtredMovies.isEmpty {
@@ -151,8 +150,8 @@ class MWSearchViewController: MWViewController {
     }
 
     private func getCountriesIso() -> [String?] {
-        var countriesIso: [String?] = []
         guard let countries = self.movieFilters?.countries else { return [] }
+        var countriesIso: [String?] = []
         for sysCountry in MWSys.sh.languages {
             for country in countries {
                 if country == sysCountry.englishName {
@@ -241,8 +240,6 @@ extension MWSearchViewController: UITableViewDelegate, UITableViewDataSource {
             else { fatalError("The registered type for the cell does not match the casting") }
 
         cell.set(movie: self.filteredMovies[indexPath.row])
-        cell.selectionStyle = .none
-
         return cell
     }
 
@@ -358,8 +355,8 @@ extension MWSearchViewController: UISearchResultsUpdating, UISearchBarDelegate {
 
 extension MWSearchViewController {
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        let rowUnit = self.filteredMovies[indexPath.row]
         guard let text = searchController.searchBar.text, filteredMovies.count > 4 else { return }
+        let rowUnit = self.filteredMovies[indexPath.row]
         let unit = self.filteredMovies[self.filteredMovies.count - 4]
         if text.isEmpty,
             self.totalItems > self.filteredMovies.count,

@@ -56,7 +56,6 @@ class MWGenreCollectionViewCell: UICollectionViewCell {
         self.singleGenreButton.setUpButton(title: genreWithSelection.0, hasArrow: false)
         self.buttonIsSelected = genreWithSelection.1
         self.setNeedsUpdateConstraints()
-        self.layoutIfNeeded()
     }
 
     //MARK:- action by tap

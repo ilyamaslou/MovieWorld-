@@ -14,6 +14,10 @@ class MWCastMemberCollectionViewCell: UICollectionViewCell {
 
     static var reuseIdentifier: String = "MWCastMemberCollectionViewCell"
 
+    //MARK: - size variable
+
+    private var imageNotFoundSize = CGSize(width: 130, height: 185)
+
     //MARK: - private variables
 
     private var memberOfCast: MWMovieCastMember?
@@ -90,11 +94,12 @@ class MWCastMemberCollectionViewCell: UICollectionViewCell {
         self.nameLabel.text = actor.name
         self.infoLabel.text = actor.character
         self.movieImageView.image = self.setImageView()
+        self.setNeedsUpdateConstraints()
     }
 
     private func setImageView() -> UIImage? {
-        self.layoutIfNeeded()
-        guard let imageData = memberOfCast?.image else { return UIImage(named: "imageNotFound") }
+        guard let imageData = memberOfCast?.image else { return UIImage(named: "imageNotFound")?
+            .resizeImage(targetSize: self.imageNotFoundSize ) }
         return UIImage(data: imageData)
     }
 }

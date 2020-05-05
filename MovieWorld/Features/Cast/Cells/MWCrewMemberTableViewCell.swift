@@ -51,6 +51,5 @@ class MWCrewMemberTableViewCell: UITableViewCell {
         self.crewMember = crewMember
         self.memberNameLabel.text = crewMember?.name
         self.setNeedsUpdateConstraints()
-        self.layoutIfNeeded()
     }
 }

@@ -198,7 +198,7 @@ class MWFilterViewController: MWViewController {
         super.updateViewConstraints()
     }
 
-    //MARK: - setUp view data actions
+    //MARK: - setup view data actions
 
     private func setUpView() {
         self.title = "Filter"
@@ -218,8 +218,12 @@ class MWFilterViewController: MWViewController {
     }
 
     private func setUpCountries() {
+        guard let selectedCountries = self.selectedCountries else {
+            self.countryView.value = ""
+            return
+        }
+
         var countries = ""
-        guard let selectedCountries = self.selectedCountries else { return }
         for country in selectedCountries {
             guard let country = country else { continue }
             countries += "\(country), "

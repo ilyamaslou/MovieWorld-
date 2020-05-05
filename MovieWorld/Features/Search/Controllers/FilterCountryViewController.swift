@@ -12,11 +12,11 @@ class FilterCountryViewController: MWViewController {
 
     //MARK: - variable
 
-    var choosenCountries: (([String?]) -> Void)?
+    var choosenCountries: (([String?]?) -> Void)?
 
     //MARK: - private variables
 
-    private var recievedSelectedCountries: [String?] = []
+    private var recievedSelectedCountries: [String?]?
     private var selectedCountryKey: Int = 0
     private var languagesConfiguration: [MWLanguageConfiguration] = []
 
@@ -55,7 +55,7 @@ class FilterCountryViewController: MWViewController {
 
     //MARK: - initialization
 
-    init(selectedCountries: [String?] = [] ) {
+    init(selectedCountries: [String?]?) {
         super.init()
         self.recievedSelectedCountries = selectedCountries
         self.setSelectedCountries()
@@ -97,8 +97,9 @@ class FilterCountryViewController: MWViewController {
     //MARK: - setters
 
     private func setSelectedCountries() {
+        guard let recievedSelectedCountries = self.recievedSelectedCountries else { return }
         for (id, country) in self.countries.enumerated() {
-            for selectedCountry in self.recievedSelectedCountries {
+            for selectedCountry in recievedSelectedCountries {
                 if country.country == selectedCountry {
                     self.countries[id].isSelected = true
                 }
@@ -119,21 +120,17 @@ class FilterCountryViewController: MWViewController {
     //MARK: - send selected action
 
     private func didSendChoosedCountries() {
-        var selectedCountries: [String?] = []
-        for country in self.countries {
-            if country.isSelected == true {
-                selectedCountries.append(country.country)
-            }
-        }
-
         guard let choosenCountries = self.choosenCountries else { return }
+        var selectedCountries: [String?]? = []
+        selectedCountries?.append(contentsOf: self.countries.filter{ $0.isSelected == true }.map{ $0.country })
+        selectedCountries = (selectedCountries?.isEmpty ?? false) ? nil : selectedCountries
         choosenCountries(selectedCountries)
     }
 
     //MARK: - resetButton actions
 
     @objc private func resetButtonDidTapped() {
-        self.recievedSelectedCountries = []
+        self.recievedSelectedCountries = nil
         self.setUpLanguages()
         self.didSendChoosedCountries()
         self.checkReset()

@@ -26,7 +26,6 @@ class MWCastMemberView: UIView {
         view.translatesAutoresizingMaskIntoConstraints = false
         view.clipsToBounds = true
         view.layer.cornerRadius = 5
-        setNeedsUpdateConstraints()
         return view
     }()
 
@@ -117,6 +116,8 @@ class MWCastMemberView: UIView {
         }
 
         self.setUpBirthday(birthday: birthday)
+
+        self.setNeedsUpdateConstraints()
     }
 
     func setUpBirthday(birthday: String) {

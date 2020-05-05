@@ -27,7 +27,6 @@ class MWSingleMovieView: UIView {
         view.translatesAutoresizingMaskIntoConstraints = false
         view.clipsToBounds = true
         view.layer.cornerRadius = 5
-        setNeedsUpdateConstraints()
         return view
     }()
 
@@ -118,7 +117,7 @@ class MWSingleMovieView: UIView {
             make.bottom.equalToSuperview().inset(self.edgeInsets.bottom)
         }
 
-        self.separationLabel.snp.makeConstraints { (make) in
+        self.separationLabel.snp.updateConstraints { (make) in
             make.left.right.bottom.equalToSuperview()
             make.height.equalTo(3)
         }
@@ -147,12 +146,14 @@ class MWSingleMovieView: UIView {
         } else {
             self.ratingsLabel.text = "Not rated"
         }
+
+        self.setNeedsUpdateConstraints()
     }
 
     private func setUpGenres(movieGenres: [String]?) -> String {
-        var genres = ""
-
         guard let movieGenres = movieGenres else { return "" }
+
+        var genres = ""
         for genre in movieGenres {
             genres += "\(genre), "
         }

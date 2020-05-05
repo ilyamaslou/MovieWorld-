@@ -33,6 +33,5 @@ class MWCastMemberTableViewCell: UITableViewCell {
     func set(castMember: MWMovieCastMember?) {
         self.castMemberView.set(castMember: castMember)
         self.setNeedsUpdateConstraints()
-        self.layoutIfNeeded()
     }
 }

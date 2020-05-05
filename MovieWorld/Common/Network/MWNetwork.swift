@@ -33,13 +33,10 @@ class MWNetwork {
                       filePath: String,
                       succesHandler: @escaping ((Data) -> Void)) {
         let url = baseUrl + size + filePath
-
         guard let requestUrl = URL(string: url) else { return }
-
         let request = URLRequest(url: requestUrl)
 
         let task = self.session.dataTask(with: request) { (data, statusCode, error) in
-
             if let data = data, error == nil {
                     DispatchQueue.main.async {
                         succesHandler(data)
@@ -54,15 +51,11 @@ class MWNetwork {
                                succesHandler: @escaping ((T) -> Void),
                                errorHandler: @escaping ((MWNetError) -> Void)) {
         let fullPath = self.baseUrl + urlPath
-
         let url = getUrlWithParams(fullPath: fullPath, params: querryParameters)
-
         guard let requestUrl = URL(string: url) else { return }
-
         let request = URLRequest(url: requestUrl)
 
         let task = self.session.dataTask(with: request) { (data, response, error) in
-
             if let error = error {
                 DispatchQueue.main.async {
                     errorHandler(.networkError(error: error))

@@ -103,8 +103,8 @@ class MWMovie: Decodable, Hashable {
     //MARK:- action with parameters functions
 
     func setFilmGenres(genres: [MWGenre]) {
-        var tempGenres: [String] = []
         guard let genreIds = self.genreIds  else { return }
+        var tempGenres: [String] = []
         for id in genreIds {
             tempGenres.append(genres.filter{ $0.id == id }.first?.name ?? "")
         }

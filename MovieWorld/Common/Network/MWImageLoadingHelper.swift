@@ -31,7 +31,6 @@ class MWImageLoadingHelper{
                                   filePath: imagePath,
                                   succesHandler: { [weak self] (imageData: Data)  in
                                     guard let self = self else { return }
-
                                     movie.image = imageData
                                     NotificationCenter.default.post(name: .movieImageUpdated, object: nil)
 
@@ -59,16 +58,16 @@ class MWImageLoadingHelper{
     //TODO: fix problems with sizes and make this less hardcoded
     func loadMovieImages(for imagesToLoad: MWMovieImagesResponse?) {
         guard let backdrops = imagesToLoad?.backdrops else { return }
-
         if imagesToLoad?.movieImages == nil {
             imagesToLoad?.movieImages = []
         }
 
         for image in backdrops {
-            let size = "original"
             guard let imagePath = image.filePath,
                 let imagesResponse = imagesToLoad,
                 let baseUrl = MWSys.sh.configuration?.images?.secureBaseUrl else  { break }
+
+            let size = "original"
             MWNet.sh.imageRequest(baseUrl: baseUrl,
                                   size: size,
                                   filePath: imagePath,

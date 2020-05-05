@@ -14,6 +14,10 @@ class MWMainCollectionViewCell: UICollectionViewCell {
 
     static var reuseIdentifier: String = "MWMainCollectionViewCell"
 
+    //MARK: - size variable
+
+    private var imageNotFoundSize = CGSize(width: 130, height: 185)
+
     //MARK: - private variable
 
     private var movie = MWMovie()
@@ -106,8 +110,8 @@ class MWMainCollectionViewCell: UICollectionViewCell {
     }
 
     private func setImageView() -> UIImage? {
-        self.layoutIfNeeded()
-        guard let imageData = movie.image else { return UIImage(named: "imageNotFound") }
+        guard let imageData = movie.image else { return UIImage(named: "imageNotFound")?
+            .resizeImage(targetSize: self.imageNotFoundSize ) }
         return UIImage(data: imageData)
     }
 }

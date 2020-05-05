@@ -251,8 +251,7 @@ extension MWSearchViewController: UITableViewDelegate, UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        guard section != 0  else { return 0 }
-        return 16
+        return (section != 0) ? 16 : 0
     }
 }
 

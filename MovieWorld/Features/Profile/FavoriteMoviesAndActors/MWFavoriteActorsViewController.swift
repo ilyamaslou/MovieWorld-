@@ -19,14 +19,7 @@ class MWFavoriteActorsViewController: MWViewController {
 
     private lazy var actorsController = MWCastViewController(castMembers: self.cast)
 
-    private lazy var emptyListLabel: UILabel = {
-        let label = UILabel()
-        label.text = "The favorites peoples list is empty"
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = .systemFont(ofSize: 24, weight: .bold)
-        label.isHidden = true
-        return label
-    }()
+    private lazy var emptyListLabel = MWEmptyListLabel()
 
     //MARK: - initialization
 

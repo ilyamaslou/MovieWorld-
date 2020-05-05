@@ -19,14 +19,7 @@ class MWFavoriteMoviesViewController: MWViewController {
 
     private lazy var moviesByGenresController = MWSingleCategoryViewController(movies: self.movies)
 
-    private lazy var emptyListLabel: UILabel = {
-        let label = UILabel()
-        label.text = "The favorites movies list is empty"
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = .systemFont(ofSize: 24, weight: .bold)
-        label.isHidden = true
-        return label
-    }()
+    private lazy var emptyListLabel = MWEmptyListLabel()
 
     //MARK: - initialization
 

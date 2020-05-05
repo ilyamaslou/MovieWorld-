@@ -112,23 +112,7 @@ extension MWCastViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard  let groupMember = self.movieFullCast?[section].first as? MWMovieCrewMember
             else { return UIView() }
-
-        let view = UIView()
-        view.backgroundColor = .white
-
-        let titleLabel = UILabel()
-        titleLabel.font = .systemFont(ofSize: 17, weight: .bold)
-        titleLabel.text = groupMember.job
-
-        view.addSubview(titleLabel)
-        titleLabel.snp.makeConstraints { (make) in
-            make.top.equalToSuperview().offset(24)
-            make.left.equalToSuperview().offset(16)
-            make.right.equalToSuperview()
-            make.bottom.equalToSuperview().inset(16)
-        }
-
-        return view
+        return MWViewForHeader(title: groupMember.job)
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

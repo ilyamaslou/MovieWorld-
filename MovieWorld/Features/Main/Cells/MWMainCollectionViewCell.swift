@@ -10,9 +10,15 @@ import UIKit
 
 class MWMainCollectionViewCell: UICollectionViewCell {
 
+    //MARK: - static variable
+
     static var reuseIdentifier: String = "MWMainCollectionViewCell"
 
+    //MARK: - private variable
+
     private var movie = MWMovie()
+
+    //MARK:- gui variables
 
     private lazy var nameLabel: UILabel = {
         let label = UILabel()
@@ -40,6 +46,8 @@ class MWMainCollectionViewCell: UICollectionViewCell {
         return view
     }()
 
+    //MARK: - initialization
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.makeConstraints()
@@ -49,13 +57,7 @@ class MWMainCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func set(movie: MWMovie) {
-        self.movie = movie
-        self.nameLabel.text = movie.title
-        self.movieImageView.image = self.setImageView()
-        self.infoLabel.text = self.setInfoLabelText()
-        self.setNeedsUpdateConstraints()
-    }
+    // MARK: - constraints
 
     private func makeConstraints() {
         self.translatesAutoresizingMaskIntoConstraints = false
@@ -78,6 +80,16 @@ class MWMainCollectionViewCell: UICollectionViewCell {
             make.left.bottom.equalToSuperview()
             make.right.equalTo(self.movieImageView.snp.right)
         }
+    }
+
+    //MARK: - setters
+
+    func set(movie: MWMovie) {
+        self.movie = movie
+        self.nameLabel.text = movie.title
+        self.movieImageView.image = self.setImageView()
+        self.infoLabel.text = self.setInfoLabelText()
+        self.setNeedsUpdateConstraints()
     }
 
     private func setInfoLabelText() -> String {

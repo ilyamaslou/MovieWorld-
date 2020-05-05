@@ -10,7 +10,11 @@ import UIKit
 
 class MWGenreCollectionViewCell: UICollectionViewCell {
 
+    //MARK: - static variable
+
     static var reuseIdentifier: String = "MWGenreCollectionViewCell"
+
+    //MARK: - variables
 
     var selectedGenre: ((String, Bool) -> Void)?
     var buttonIsSelected: Bool = false {
@@ -18,6 +22,8 @@ class MWGenreCollectionViewCell: UICollectionViewCell {
             self.singleGenreButton.backgroundColor = buttonIsSelected ? UIColor(named: "accentColor") : UIColor(named: "lightAccentColor")
         }
     }
+
+    //MARK:- gui variable
 
     private lazy var singleGenreButton: MWCustomButton = {
         let button = MWCustomButton()
@@ -27,6 +33,8 @@ class MWGenreCollectionViewCell: UICollectionViewCell {
         button.addTarget(self, action: #selector(singleGenreDidTapped), for: .touchUpInside)
         return button
     }()
+
+    //MARK: - initialization and making constraints
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -42,12 +50,16 @@ class MWGenreCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
+    //MARK:- setter
+
     func set(genreWithSelection: (String, Bool)) {
         self.singleGenreButton.setUpButton(title: genreWithSelection.0, hasArrow: false)
         self.buttonIsSelected = genreWithSelection.1
         self.setNeedsUpdateConstraints()
         self.layoutIfNeeded()
     }
+
+    //MARK:- action by tap
 
     @objc private func singleGenreDidTapped() {
         self.buttonIsSelected.toggle()

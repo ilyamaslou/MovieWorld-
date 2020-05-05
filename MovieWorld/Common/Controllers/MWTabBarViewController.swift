@@ -10,6 +10,8 @@ import UIKit
 
 class MWTabBarViewController: UITabBarController {
 
+    //MARK:- gui variables
+
     private lazy var mainTabBarItem: UITabBarItem = {
         let view: UITabBarItem = UITabBarItem(
             title: "Main".local(),
@@ -38,10 +40,14 @@ class MWTabBarViewController: UITabBarController {
         return view
     }()
 
+    //MARK: - view life cycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupVC()
     }
+
+    //MARK:- setup view controller actions
 
     private func setupVC() {
         let mainVC = MWMainTabViewController()

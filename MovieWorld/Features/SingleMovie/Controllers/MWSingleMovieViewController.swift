@@ -12,12 +12,16 @@ import CoreData
 
 class MWSingleMovieViewController: MWViewController {
 
+    //MARK:- insets and sizes variables
+
     private let edgeInsets = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
     private let castCollectionViewHeight: Int = 237
     private let galleryCollectionViewHeight: Int = 200
     private let moviePlayerHeight: Int = 180
 
-    private var cdMovie: Movie?
+    //MARK: - private variables
+
+    private var coreDatadMovie: Movie?
 
     private var isFavorite: Bool = false {
         didSet {
@@ -43,6 +47,8 @@ class MWSingleMovieViewController: MWViewController {
     private var gallery: MWMovieGallery = MWMovieGallery()
     private var galleryItems: [Any] = []
     private var imagesResponse: MWMovieImagesResponse?
+
+    //MARK:- gui variables
 
     private lazy var rightBarButtonDidFavoriteItem: UIBarButtonItem = UIBarButtonItem( image: UIImage(named: "unselectedFavoriteIcon"),
                                                                                        style: .plain,
@@ -177,105 +183,7 @@ class MWSingleMovieViewController: MWViewController {
         return collectionViewLayout
     }()
 
-    override func initController() {
-        super.initController()
-        self.navigationItem.largeTitleDisplayMode = .never
-        self.loadingIndicator.startAnimating()
-
-        self.contentView.addSubview(self.scrollView)
-        self.scrollView.addSubview(self.contentViewContainer)
-        self.scrollView.addSubview(self.refreshControl)
-
-        self.contentViewContainer.addSubview(self.movieCellView)
-        self.contentViewContainer.addSubview(self.moviePlayer)
-        self.contentViewContainer.addSubview(self.loadingIndicator)
-        self.contentViewContainer.addSubview(self.descriptionContainerView)
-        self.contentViewContainer.addSubview(self.showAllView)
-        self.contentViewContainer.addSubview(self.castCollectionView)
-        self.contentViewContainer.addSubview(self.galleryLabel)
-        self.contentViewContainer.addSubview(self.galleryCollectionView)
-
-        self.descriptionContainerView.addSubview(self.descriptionLabel)
-        self.descriptionContainerView.addSubview(self.movieRuntimeLabel)
-        self.descriptionContainerView.addSubview(self.descriptionTextLabel)
-    }
-
-    override func updateViewConstraints() {
-        self.scrollView.snp.makeConstraints { (make) in
-            make.edges.equalToSuperview()
-        }
-
-        self.contentViewContainer.snp.makeConstraints { (make) in
-            make.edges.equalTo(self.scrollView)
-            make.width.equalTo(self.view.snp.width)
-        }
-
-        self.movieCellView.snp.makeConstraints { (make) in
-            make.top.equalToSuperview().offset(self.edgeInsets.top)
-            make.left.right.equalToSuperview()
-        }
-
-        self.moviePlayer.snp.makeConstraints { (make) in
-            make.top.equalTo(self.movieCellView.snp.bottom).offset(18)
-            make.left.right.equalToSuperview().inset(self.edgeInsets)
-            make.height.equalTo(self.moviePlayerHeight)
-        }
-
-        self.loadingIndicator.snp.makeConstraints { (make) in
-            make.center.equalTo(self.moviePlayer.snp.center)
-        }
-
-        self.descriptionContainerView.snp.makeConstraints { (make) in
-            make.top.equalTo(self.moviePlayer.snp.bottom).offset(24)
-            make.left.right.equalToSuperview().inset(self.edgeInsets)
-        }
-
-        self.descriptionLabel.snp.makeConstraints { (make) in
-            make.top.left.right.equalToSuperview()
-        }
-
-        self.movieRuntimeLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(self.descriptionLabel.snp.bottom).offset(self.edgeInsets.top)
-            make.left.right.equalToSuperview()
-        }
-
-        self.descriptionTextLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(self.movieRuntimeLabel.snp.bottom).offset(8)
-            make.left.right.bottom.equalToSuperview()
-        }
-
-        self.showAllView.snp.makeConstraints { (make) in
-            make.top.greaterThanOrEqualTo(self.descriptionContainerView.snp.bottom).offset(24)
-            make.left.equalToSuperview().offset(self.edgeInsets.left)
-            make.right.equalToSuperview().inset(26)
-        }
-
-        self.castCollectionView.snp.makeConstraints { (make) in
-            make.top.equalTo(self.showAllView.snp.bottom).offset(self.edgeInsets.top)
-            make.left.right.equalToSuperview()
-            make.height.equalTo(self.castCollectionViewHeight)
-        }
-
-        self.galleryLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(self.castCollectionView.snp.bottom).offset(self.edgeInsets.top)
-            make.left.equalToSuperview().offset(self.edgeInsets.left)
-            make.right.equalToSuperview()
-        }
-
-        self.galleryCollectionView.snp.makeConstraints { (make) in
-            make.top.equalTo(self.galleryLabel.snp.bottom).offset(self.edgeInsets.top)
-            make.left.right.equalToSuperview()
-            make.bottom.equalToSuperview().inset(10)
-            make.height.equalTo(self.galleryCollectionViewHeight)
-        }
-
-        super.updateViewConstraints()
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        self.navigationItem.largeTitleDisplayMode = .always
-    }
+    //MARK: - initialization
 
     init(movie: MWMovie) {
         super.init()
@@ -302,14 +210,111 @@ class MWSingleMovieViewController: MWViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func showLoadedVideo(videoUrlKey: String?) {
-        guard let key = videoUrlKey else { return }
-        let videoUrl = String(format: URLPaths.getVideo, key)
-        let encodedURL = videoUrl.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
-        if let url = URL(string: encodedURL) {
-            self.moviePlayer.loadVideoURL(url)
-        }
+    override func initController() {
+        super.initController()
+        self.navigationItem.largeTitleDisplayMode = .never
+        self.loadingIndicator.startAnimating()
+
+        self.contentView.addSubview(self.scrollView)
+        self.scrollView.addSubview(self.contentViewContainer)
+        self.scrollView.addSubview(self.refreshControl)
+
+        self.contentViewContainer.addSubview(self.movieCellView)
+        self.contentViewContainer.addSubview(self.moviePlayer)
+        self.contentViewContainer.addSubview(self.loadingIndicator)
+        self.contentViewContainer.addSubview(self.descriptionContainerView)
+        self.contentViewContainer.addSubview(self.showAllView)
+        self.contentViewContainer.addSubview(self.castCollectionView)
+        self.contentViewContainer.addSubview(self.galleryLabel)
+        self.contentViewContainer.addSubview(self.galleryCollectionView)
+
+        self.descriptionContainerView.addSubview(self.descriptionLabel)
+        self.descriptionContainerView.addSubview(self.movieRuntimeLabel)
+        self.descriptionContainerView.addSubview(self.descriptionTextLabel)
     }
+
+    //MARK: constraints
+
+    override func updateViewConstraints() {
+        self.scrollView.snp.updateConstraints { (make) in
+            make.edges.equalToSuperview()
+        }
+
+        self.contentViewContainer.snp.updateConstraints { (make) in
+            make.edges.equalTo(self.scrollView)
+            make.width.equalTo(self.view.snp.width)
+        }
+
+        self.movieCellView.snp.updateConstraints { (make) in
+            make.top.equalToSuperview().offset(self.edgeInsets.top)
+            make.left.right.equalToSuperview()
+        }
+
+        self.moviePlayer.snp.updateConstraints { (make) in
+            make.top.equalTo(self.movieCellView.snp.bottom).offset(18)
+            make.left.right.equalToSuperview().inset(self.edgeInsets)
+            make.height.equalTo(self.moviePlayerHeight)
+        }
+
+        self.loadingIndicator.snp.updateConstraints { (make) in
+            make.center.equalTo(self.moviePlayer.snp.center)
+        }
+
+        self.descriptionContainerView.snp.updateConstraints { (make) in
+            make.top.equalTo(self.moviePlayer.snp.bottom).offset(24)
+            make.left.right.equalToSuperview().inset(self.edgeInsets)
+        }
+
+        self.descriptionLabel.snp.updateConstraints { (make) in
+            make.top.left.right.equalToSuperview()
+        }
+
+        self.movieRuntimeLabel.snp.updateConstraints { (make) in
+            make.top.equalTo(self.descriptionLabel.snp.bottom).offset(self.edgeInsets.top)
+            make.left.right.equalToSuperview()
+        }
+
+        self.descriptionTextLabel.snp.updateConstraints { (make) in
+            make.top.equalTo(self.movieRuntimeLabel.snp.bottom).offset(8)
+            make.left.right.bottom.equalToSuperview()
+        }
+
+        self.showAllView.snp.updateConstraints { (make) in
+            make.top.greaterThanOrEqualTo(self.descriptionContainerView.snp.bottom).offset(24)
+            make.left.equalToSuperview().offset(self.edgeInsets.left)
+            make.right.equalToSuperview().inset(26)
+        }
+
+        self.castCollectionView.snp.updateConstraints { (make) in
+            make.top.equalTo(self.showAllView.snp.bottom).offset(self.edgeInsets.top)
+            make.left.right.equalToSuperview()
+            make.height.equalTo(self.castCollectionViewHeight)
+        }
+
+        self.galleryLabel.snp.updateConstraints { (make) in
+            make.top.equalTo(self.castCollectionView.snp.bottom).offset(self.edgeInsets.top)
+            make.left.equalToSuperview().offset(self.edgeInsets.left)
+            make.right.equalToSuperview()
+        }
+
+        self.galleryCollectionView.snp.updateConstraints { (make) in
+            make.top.equalTo(self.galleryLabel.snp.bottom).offset(self.edgeInsets.top)
+            make.left.right.equalToSuperview()
+            make.bottom.equalToSuperview().inset(10)
+            make.height.equalTo(self.galleryCollectionViewHeight)
+        }
+
+        super.updateViewConstraints()
+    }
+
+    //MARK: - viewController life cycle
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationItem.largeTitleDisplayMode = .always
+    }
+
+    //MARK:- request functions
 
     private func loadMovieVideos() {
         guard let movieId = self.movie.id else { return }
@@ -325,7 +330,7 @@ class MWSingleMovieViewController: MWViewController {
                                     self.gallery.videos.append(url)
                                 }
                             }
-                            self.showLoadedVideo(videoUrlKey: self.gallery.videos.first)
+                            self.setAndShowLoadedVideo(videoUrlKey: self.gallery.videos.first)
                             self.reloadGalleryItems()
                             self.loadingIndicator.stopAnimating()
             },
@@ -351,21 +356,6 @@ class MWSingleMovieViewController: MWViewController {
                             let message = error.getErrorDesription()
                             self?.errorAlert(message: message)
         })
-    }
-
-    private func setCast(cast: MWMovieCastResponse) {
-        self.movieFullCast = cast
-
-        let sortedCast = cast.cast.sorted { (member1, member2: MWMovieCastMember) in
-            guard let order1 = member1.order, let order2 = member2.order else { return false }
-            return order1 < order2
-        }
-        self.movieFullCast?.cast = sortedCast
-
-        guard let castMembers = self.movieFullCast?.cast,
-            let crewMembers = self.movieFullCast?.crew else { return }
-        self.setImages(to: castMembers)
-        self.setImages(to: crewMembers)
     }
 
     private func loadMovieAdditionalInfo() {
@@ -410,7 +400,7 @@ class MWSingleMovieViewController: MWViewController {
         })
     }
 
-    private func setImages<T>(to peoples: [T]) {
+    private func loadPeoplesImages<T>(to peoples: [T]) {
         if let peoples = peoples as? [MWMovieCastMember] {
             for people in peoples {
                 MWImageLoadingHelper.sh.loadPersonImage(for: people, path: people.profilePath)
@@ -424,11 +414,39 @@ class MWSingleMovieViewController: MWViewController {
         }
     }
 
+    //MARK:- setters
+
+    private func setCast(cast: MWMovieCastResponse) {
+        self.movieFullCast = cast
+
+        let sortedCast = cast.cast.sorted { (member1, member2: MWMovieCastMember) in
+            guard let order1 = member1.order, let order2 = member2.order else { return false }
+            return order1 < order2
+        }
+        self.movieFullCast?.cast = sortedCast
+
+        guard let castMembers = self.movieFullCast?.cast,
+            let crewMembers = self.movieFullCast?.crew else { return }
+        self.loadPeoplesImages(to: castMembers)
+        self.loadPeoplesImages(to: crewMembers)
+    }
+
+    private func setAndShowLoadedVideo(videoUrlKey: String?) {
+        guard let key = videoUrlKey else { return }
+        let videoUrl = String(format: URLPaths.getVideo, key)
+        let encodedURL = videoUrl.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+        if let url = URL(string: encodedURL) {
+            self.moviePlayer.loadVideoURL(url)
+        }
+    }
+
     private func setDetails() {
         self.descriptionTextLabel.text = self.movieDetails?.overview ?? ""
         guard let movieRuntime = self.movieDetails?.runtime else { return }
         self.movieRuntimeLabel.text = "\(movieRuntime) minutes"
     }
+
+    //MARK:- update view actions
 
     private func reloadGalleryItems() {
         self.galleryItems = self.gallery.getGalleryItems()
@@ -464,7 +482,9 @@ class MWSingleMovieViewController: MWViewController {
     }
 }
 
-extension MWSingleMovieViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+//MARK:- UICollectionViewDelegate
+
+extension MWSingleMovieViewController: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == galleryCollectionView {
@@ -479,7 +499,7 @@ extension MWSingleMovieViewController: UICollectionViewDelegate, UICollectionVie
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if collectionView == galleryCollectionView {
+        if collectionView == self.galleryCollectionView {
             guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: MWMovieGalleryCollectionViewCell.reuseIdentifier,
                 for: indexPath) as? MWMovieGalleryCollectionViewCell else { fatalError("The registered type for the cell does not match the casting") }
@@ -499,9 +519,15 @@ extension MWSingleMovieViewController: UICollectionViewDelegate, UICollectionVie
 
         return cell
     }
+}
 
+//MARK:- UICollectionViewDataSource, UICollectionViewDelegateFlowLayout
+
+extension MWSingleMovieViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        MWI.s.pushVC(MWMemberViewController(member: self.movieFullCast?.cast[indexPath.item]))
+        if collectionView == self.castCollectionView {
+            MWI.s.pushVC(MWMemberViewController(member: self.movieFullCast?.cast[indexPath.item]))
+        }
     }
 }
 
@@ -514,7 +540,7 @@ extension MWSingleMovieViewController {
                                       self.movie.id ?? 0,
                                       self.movie.title ?? "")
         do {
-            self.cdMovie = try managedContext.fetch(fetch).last
+            self.coreDatadMovie = try managedContext.fetch(fetch).last
         } catch {
             print(error.localizedDescription)
         }
@@ -522,7 +548,7 @@ extension MWSingleMovieViewController {
 
     @discardableResult  private func fetchAdditionalInfo() -> MovieAdditionalInfo? {
         self.fetchMovie()
-        return self.cdMovie?.additionalInfo
+        return self.coreDatadMovie?.additionalInfo
     }
 
     private func saveAdditionalInfo (info: MWMovieAdditionalInfo) {
@@ -535,7 +561,7 @@ extension MWSingleMovieViewController {
             newAdditionalInfo.overview = info.overview
             newAdditionalInfo.runtime = Int64(info.runtime ?? 0)
             newAdditionalInfo.tagline = info.tagline
-            self.cdMovie?.additionalInfo = newAdditionalInfo
+            self.coreDatadMovie?.additionalInfo = newAdditionalInfo
         } else {
             guard let fetchedInfo = fetchedInfo else { return }
             fetchedInfo.adult = info.adult ?? false

@@ -10,8 +10,12 @@ import UIKit
 
 class MWCategoryViewController: MWViewController {
 
+    //MARK: - private variables
+
     private var categories: [String] = Array(repeating: "Top 250", count: 25)
     private var categoryCellId: String = "categoryCellId"
+
+    //MARK:- gui variables
 
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -21,6 +25,8 @@ class MWCategoryViewController: MWViewController {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: self.categoryCellId)
         return tableView
     }()
+
+    //MARK: - initialization and constraints setting
 
     override func initController() {
         super.initController()
@@ -34,6 +40,8 @@ class MWCategoryViewController: MWViewController {
     }
 
 }
+
+//MARK: - UITableViewDelegate, UITableViewDataSource
 
 extension MWCategoryViewController: UITableViewDelegate, UITableViewDataSource {
 

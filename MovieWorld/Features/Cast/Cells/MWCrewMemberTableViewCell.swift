@@ -10,11 +10,19 @@ import UIKit
 
 class MWCrewMemberTableViewCell: UITableViewCell {
 
+    //MARK: - static variables
+
     static var reuseIdentifier: String = "MWCrewMemberTableViewCell"
+
+    //MARK: - insets
 
     private let edgeInsets = UIEdgeInsets(top: 11, left: 16, bottom: 11, right: 16)
 
+    //MARK: - private variable
+
     private var crewMember: MWMovieCrewMember?
+
+    //MARK:- gui variable
 
     private lazy var memberNameLabel: UILabel = {
         let label = UILabel()
@@ -24,16 +32,11 @@ class MWCrewMemberTableViewCell: UITableViewCell {
         return label
     }()
 
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        self.contentView.addSubview(self.memberNameLabel)
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    // MARK: - constraints
 
     override func updateConstraints() {
+        self.contentView.addSubview(self.memberNameLabel)
+
         self.memberNameLabel.snp.updateConstraints { (make) in
             make.top.left.bottom.equalToSuperview().inset(self.edgeInsets)
             make.right.equalToSuperview()
@@ -41,6 +44,8 @@ class MWCrewMemberTableViewCell: UITableViewCell {
 
         super.updateConstraints()
     }
+
+    //MARK:- setter
 
     func set(crewMember: MWMovieCrewMember?) {
         self.crewMember = crewMember

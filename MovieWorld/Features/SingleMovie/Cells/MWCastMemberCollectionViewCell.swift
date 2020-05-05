@@ -10,9 +10,15 @@ import UIKit
 
 class MWCastMemberCollectionViewCell: UICollectionViewCell {
 
+    //MARK: - static variable
+
     static var reuseIdentifier: String = "MWCastMemberCollectionViewCell"
 
+    //MARK: - private variables
+
     private var memberOfCast: MWMovieCastMember?
+
+    //MARK:- gui variables
 
     private lazy var nameLabel: UILabel = {
         let label = UILabel()
@@ -40,25 +46,21 @@ class MWCastMemberCollectionViewCell: UICollectionViewCell {
         return view
     }()
 
+    //MARK: - initialization
+
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.setUpCell()
+        self.backgroundColor = .white
+        self.makeConstraints()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func set(actor: MWMovieCastMember) {
-        self.memberOfCast = actor
-        self.nameLabel.text = actor.name
-        self.infoLabel.text = actor.character
-        self.movieImageView.image = self.setImageView()
-    }
+    // MARK: - constraints
 
-    private func setUpCell() {
-        self.backgroundColor = .white
-
+    private func makeConstraints() {
         self.contentView.addSubview(self.nameLabel)
         self.contentView.addSubview(self.infoLabel)
         self.contentView.addSubview(self.movieImageView)
@@ -79,6 +81,15 @@ class MWCastMemberCollectionViewCell: UICollectionViewCell {
             make.left.bottom.equalToSuperview()
             make.right.equalTo(self.movieImageView.snp.right)
         }
+    }
+
+    //MARK:- setters
+
+    func set(actor: MWMovieCastMember) {
+        self.memberOfCast = actor
+        self.nameLabel.text = actor.name
+        self.infoLabel.text = actor.character
+        self.movieImageView.image = self.setImageView()
     }
 
     private func setImageView() -> UIImage? {

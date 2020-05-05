@@ -9,12 +9,16 @@ import Foundation
 
 struct MWMoviesResponse: Decodable {
 
+    //MARK:- enum
+
     enum CodingKeys: String, CodingKey {
         case page = "page"
         case results = "results"
         case totalResults = "total_results"
         case totalPages = "total_pages"
     }
+
+    //MARK:- Parameters
 
     let page: Int
     let results: [MWMovie]
@@ -23,6 +27,8 @@ struct MWMoviesResponse: Decodable {
 }
 
 class MWMovie: Decodable, Hashable {
+
+    //MARK:- enum
 
     enum CodingKeys: String, CodingKey {
         case id = "id"
@@ -34,6 +40,8 @@ class MWMovie: Decodable, Hashable {
         case voteAvarage = "vote_average"
     }
 
+    //MARK:- Parameters
+
     var id: Int?
     var posterPath: String?
     var title: String?
@@ -43,6 +51,8 @@ class MWMovie: Decodable, Hashable {
     var voteAvarage: Double?
     var movieGenres: [String]?
     var image: Data?
+
+    //MARK: - initialization
 
     init() {}
 
@@ -70,6 +80,8 @@ class MWMovie: Decodable, Hashable {
         self.voteAvarage = voteAverage
     }
 
+    //MARK:- comparing object functions
+
     static func == (lhs: MWMovie, rhs: MWMovie) -> Bool {
         return lhs.id == rhs.id &&
             lhs.title == rhs.title &&
@@ -87,6 +99,8 @@ class MWMovie: Decodable, Hashable {
         hasher.combine(self.originalLanguage)
         hasher.combine(self.genreIds)
     }
+
+    //MARK:- action with parameters functions
 
     func setFilmGenres(genres: [MWGenre]) {
         var tempGenres: [String] = []

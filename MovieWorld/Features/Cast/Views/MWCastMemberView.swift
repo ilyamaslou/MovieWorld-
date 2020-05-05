@@ -10,10 +10,16 @@ import UIKit
 
 class MWCastMemberView: UIView {
 
+    //MARK: insets and size variables
+
     private let edgeInsets = UIEdgeInsets(top: 10, left: 16, bottom: 10, right: 16)
     private let imageSize = CGSize(width: 70, height: 70)
 
+    //MARK: - private variables
+
     private var castMember: MWMovieCastMember?
+
+    //MARK:- gui variables
 
     private lazy var memberImageView: UIImageView = {
         let view = UIImageView()
@@ -55,43 +61,9 @@ class MWCastMemberView: UIView {
         return view
     }()
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        self.setUpView()
-    }
+    //MARK:- constraints
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    func set(castMember: MWMovieCastMember?, birthday: String = "") {
-        self.castMember = castMember
-        self.memberNameLabel.text = castMember?.name
-        self.memberRoleLabel.text = castMember?.character
-
-        if let image = castMember?.image {
-            self.memberImageView.image = UIImage(data: image)
-        } else {
-            self.memberImageView.image = UIImage(named: "imageNotFound")
-        }
-
-        self.setUpBirthday(birthday: birthday)
-    }
-
-    func setUpBirthday(birthday: String) {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-
-        let stringFormatter = DateFormatter()
-        stringFormatter.dateFormat = "dd.MM.yyyy"
-
-        guard let age = dateFormatter.date(from: birthday) else { return }
-        let formattedBirthday = stringFormatter.string(from: age)
-
-        self.memberBirthLabel.text = "\(formattedBirthday) (\(age.toAge) years)"
-    }
-
-    private func setUpView() {
+    override func updateConstraints() {
         self.translatesAutoresizingMaskIntoConstraints = false
 
         self.addSubview(self.memberImageView)
@@ -99,9 +71,7 @@ class MWCastMemberView: UIView {
         self.addSubview(self.memberRoleLabel)
         self.addSubview(self.memberBirthLabel)
         self.addSubview(self.separationView)
-    }
 
-    override func updateConstraints() {
         self.memberImageView.snp.updateConstraints { (make) in
             make.top.left.bottom.equalToSuperview().inset(self.edgeInsets)
             make.size.equalTo(self.imageSize)
@@ -131,5 +101,34 @@ class MWCastMemberView: UIView {
             make.height.equalTo(3)
         }
         super.updateConstraints()
+    }
+
+    //MARK:- setters
+
+    func set(castMember: MWMovieCastMember?, birthday: String = "") {
+        self.castMember = castMember
+        self.memberNameLabel.text = castMember?.name
+        self.memberRoleLabel.text = castMember?.character
+
+        if let image = castMember?.image {
+            self.memberImageView.image = UIImage(data: image)
+        } else {
+            self.memberImageView.image = UIImage(named: "imageNotFound")
+        }
+
+        self.setUpBirthday(birthday: birthday)
+    }
+
+    func setUpBirthday(birthday: String) {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+
+        let stringFormatter = DateFormatter()
+        stringFormatter.dateFormat = "dd.MM.yyyy"
+
+        guard let age = dateFormatter.date(from: birthday) else { return }
+        let formattedBirthday = stringFormatter.string(from: age)
+
+        self.memberBirthLabel.text = "\(formattedBirthday) (\(age.toAge) years)"
     }
 }

@@ -10,6 +10,8 @@ import SnapKit
 
 class MWSearchViewController: MWViewController {
 
+    //MARK: - pagination variables
+
     private var page: Int = 1
     private var totalPages: Int = 0
     private var totalItems: Int = 0
@@ -17,6 +19,9 @@ class MWSearchViewController: MWViewController {
     private var searchedTotalPages: Int = 0
     private var searchedTotalItems: Int = 0
     private var isRequestBusy: Bool = false
+
+    //MARK: - private variables
+
     private var searchTitle: String = ""
     private var movieFilters: (genres: Set<String>?, countries: [String?]?, year: String?, ratingRange: (Float, Float)?)?
 
@@ -41,6 +46,8 @@ class MWSearchViewController: MWViewController {
             self.tableView.reloadData()
         }
     }
+
+    //MARK:- gui variables
 
     private lazy var filterBarButton: UIBarButtonItem = UIBarButtonItem(image: UIImage(named: "filterIcon"),
                                                                         style: .plain,
@@ -68,6 +75,8 @@ class MWSearchViewController: MWViewController {
         return view
     }()
 
+    //MARK: - initialization
+
     override func initController() {
         super.initController()
         NotificationCenter.default.addObserver(self,
@@ -75,11 +84,11 @@ class MWSearchViewController: MWViewController {
                                                name: .movieImageUpdated, object: nil)
 
         self.presettingSearchControllerNavBar()
-        self.setUpView()
+        self.makeConstraints()
         self.loadMovies()
     }
 
-    private func setUpView() {
+    private func makeConstraints() {
         self.contentView.addSubview(self.tableView)
         self.contentView.addSubview(self.loadingSpinner)
 
@@ -92,6 +101,8 @@ class MWSearchViewController: MWViewController {
         }
     }
 
+    //MARK: - setting of navigation bar
+
     private func presettingSearchControllerNavBar() {
         self.title = "Search"
         self.searchController.searchResultsUpdater = self
@@ -101,6 +112,8 @@ class MWSearchViewController: MWViewController {
         self.navigationItem.setRightBarButton(self.filterBarButton, animated: true)
         self.navigationItem.hidesSearchBarWhenScrolling = false
     }
+
+    //MARK: - setter
 
     private func setFilters() {
         let moviesFilteredByGenre = self.getFilteredMovies(for: self.filteredMovies,
@@ -119,6 +132,8 @@ class MWSearchViewController: MWViewController {
         }
     }
 
+    //MARK: - getters
+
     private func getFilteredMovies(for moviesForFilter: [MWMovie]?,
                                    filter: ( ([MWMovie]) -> [MWMovie]?)) -> [MWMovie]? {
         var moviesFilteredByAttribute: [MWMovie]? = []
@@ -134,6 +149,21 @@ class MWSearchViewController: MWViewController {
 
         return moviesFilteredByAttribute
     }
+
+    private func getCountriesIso() -> [String?] {
+        var countriesIso: [String?] = []
+        guard let countries = self.movieFilters?.countries else { return [] }
+        for sysCountry in MWSys.sh.languages {
+            for country in countries {
+                if country == sysCountry.englishName {
+                    countriesIso.append(sysCountry.iso)
+                }
+            }
+        }
+        return countriesIso
+    }
+
+    //MARK: - filter actions
 
     private func filterMoviesByGenre(for moviesForFiltering: [MWMovie]) -> [MWMovie]? {
         guard let genres = self.movieFilters?.genres, !genres.isEmpty else { return nil }
@@ -161,19 +191,6 @@ class MWSearchViewController: MWViewController {
         return tempFilteredMovies
     }
 
-    private func getCountriesIso() -> [String?] {
-        var countriesIso: [String?] = []
-        guard let countries = self.movieFilters?.countries else { return [] }
-        for sysCountry in MWSys.sh.languages {
-            for country in countries {
-                if country == sysCountry.englishName {
-                    countriesIso.append(sysCountry.iso)
-                }
-            }
-        }
-        return countriesIso
-    }
-
     private func filterMoviesByRating(for moviesForFiltering: [MWMovie]) -> [MWMovie]? {
         guard let ratingRange = self.movieFilters?.ratingRange else { return nil }
         var tempFilteredMovies: [MWMovie] = []
@@ -184,6 +201,8 @@ class MWSearchViewController: MWViewController {
         return tempFilteredMovies
     }
 
+    //MARK: - check and update actions
+
     private func checkFilteredMoviesOnFillnessAndLoad() {
         guard self.filteredMovies.count < 5 else { return }
         self.loadNextPage()
@@ -192,6 +211,8 @@ class MWSearchViewController: MWViewController {
     @objc private func movieImageUpdated() {
         self.tableView.reloadData()
     }
+
+    //MARK: - filter button tap action
 
     @objc private func filterButtonDidTapped() {
         let controller = MWFilterViewController(filters: self.movieFilters)
@@ -206,6 +227,8 @@ class MWSearchViewController: MWViewController {
         }
     }
 }
+
+//MARK: - UITableViewDelegate, UITableViewDataSource
 
 extension MWSearchViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -236,6 +259,8 @@ extension MWSearchViewController: UITableViewDelegate, UITableViewDataSource {
         return 16
     }
 }
+
+//MARK: - request functions
 
 extension MWSearchViewController {
     private func load(urlPath: String, querry: [String: String], completion: @escaping (MWMoviesResponse) -> Void) {
@@ -287,20 +312,6 @@ extension MWSearchViewController {
         }
     }
 
-    private func loadNextPage() {
-        guard !self.isRequestBusy,
-            self.filteredMovies.count != self.totalItems else { return }
-        self.isRequestBusy = true
-        self.loadMovies()
-    }
-
-    private func loadNextSearchPage() {
-        guard !self.isRequestBusy,
-            self.filteredMovies.count != self.searchedTotalItems else { return }
-        self.isRequestBusy = true
-        self.loadSearchedMovies()
-    }
-
     private func setGenreAndImage(to movies: [MWMovie]) {
         for movie in movies {
             movie.setFilmGenres(genres: MWSys.sh.genres)
@@ -308,6 +319,8 @@ extension MWSearchViewController {
         }
     }
 }
+
+//MARK: - UISearchResultsUpdating, UISearchBarDelegate
 
 extension MWSearchViewController: UISearchResultsUpdating, UISearchBarDelegate {
     func updateSearchResults(for searchController: UISearchController) {
@@ -341,6 +354,8 @@ extension MWSearchViewController: UISearchResultsUpdating, UISearchBarDelegate {
     }
 }
 
+//MARK: - pagination
+
 extension MWSearchViewController {
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         let rowUnit = self.filteredMovies[indexPath.row]
@@ -355,5 +370,19 @@ extension MWSearchViewController {
             rowUnit.id == unit.id {
             self.loadNextSearchPage()
         }
+    }
+
+    private func loadNextPage() {
+        guard !self.isRequestBusy,
+            self.filteredMovies.count != self.totalItems else { return }
+        self.isRequestBusy = true
+        self.loadMovies()
+    }
+
+    private func loadNextSearchPage() {
+        guard !self.isRequestBusy,
+            self.filteredMovies.count != self.searchedTotalItems else { return }
+        self.isRequestBusy = true
+        self.loadSearchedMovies()
     }
 }

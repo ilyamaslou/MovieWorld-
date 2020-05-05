@@ -8,6 +8,8 @@
 
 struct MWImageConfiguration: Decodable {
 
+    //MARK:- enums
+
     enum CodingKeys: String, CodingKey {
         case baseUrl = "base_url"
         case secureBaseUrl = "secure_base_url"
@@ -19,13 +21,15 @@ struct MWImageConfiguration: Decodable {
     }
 
     enum Sizes: String, Decodable {
-       case w45, w92, w154, w185, w300, w342, w500, h632, w780, w1280, original, unkown
+        case w45, w92, w154, w185, w300, w342, w500, h632, w780, w1280, original, unkown
 
         init(from decoder: Decoder) throws {
             let container = try decoder.singleValueContainer()
             self = try Sizes(rawValue: (container.decode(RawValue.self))) ?? .unkown
         }
     }
+
+    //MARK:- Parameters
 
     var baseUrl: String?
     var secureBaseUrl: String?
@@ -34,6 +38,8 @@ struct MWImageConfiguration: Decodable {
     var posterSizes: [Sizes.RawValue]?
     var profileSizes: [Sizes.RawValue]?
     var stillSizes: [Sizes.RawValue]?
+
+    //MARK: - initialization
 
     init() {}
 

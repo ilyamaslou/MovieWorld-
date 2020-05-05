@@ -11,9 +11,15 @@ import CoreData
 
 class MWImageLoadingHelper{
 
+    //MARK:- static variables
+
     static let sh = MWImageLoadingHelper()
 
+    //MARK: - initialization
+
     private init() {}
+
+    //MARK:- request functions
 
     func loadMovieImage(for movie: MWMovie, in category: String = "") {
         //TODO: change poster size later by providing getNextSize() in Sizes
@@ -72,6 +78,8 @@ class MWImageLoadingHelper{
             })
         }
     }
+
+    //MARK:- Core Data actions
 
     private func fetchMovie(for movie: MWMovie, in category: String) -> Movie? {
         let managedContext = CoreDataManager.s.persistentContainer.viewContext

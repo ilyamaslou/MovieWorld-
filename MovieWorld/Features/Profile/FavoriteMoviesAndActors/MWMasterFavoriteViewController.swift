@@ -10,6 +10,8 @@ import UIKit
 
 class MWMasterFavoriteViewController: MWViewController {
 
+    //MARK:- gui variables
+
     private lazy var segmentedControl: UISegmentedControl = {
         let view = UISegmentedControl()
         view.translatesAutoresizingMaskIntoConstraints = true
@@ -45,25 +47,19 @@ class MWMasterFavoriteViewController: MWViewController {
         return viewController
     }()
 
+    //MARK: - initialization
+
     override func initController() {
         super.initController()
-        self.setupView()
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.navigationController?.removeBorder()
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        self.navigationController?.setBorder()
-    }
-
-    private func setupView() {
         self.title = "Favorite"
         self.setupSegmentedControl()
+        self.makeConstraints()
+        self.updateView()
+    }
 
+    //MARK: - constraints
+
+    private func makeConstraints() {
         self.contentView.addSubview(self.segmentedControl)
         self.contentView.addSubview(self.separationView)
 
@@ -77,9 +73,21 @@ class MWMasterFavoriteViewController: MWViewController {
             make.left.right.equalToSuperview()
             make.height.equalTo(1)
         }
-
-        self.updateView()
     }
+
+    //MARK: - viewController life cycle
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.removeBorder()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationController?.setBorder()
+    }
+
+    //MARK: - SegmentControl actions
 
     private func setupSegmentedControl() {
         self.segmentedControl.removeAllSegments()
@@ -104,6 +112,8 @@ class MWMasterFavoriteViewController: MWViewController {
         self.updateView()
     }
 }
+
+//MARK: - child viewController extension
 
 extension MWMasterFavoriteViewController {
     private func add(asChildViewController viewController: UIViewController) {

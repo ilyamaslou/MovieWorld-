@@ -10,9 +10,16 @@ import UIKit
 
 class MWGroupsCollectionViewLayout: UICollectionViewLayout {
 
+    //MARK:- delegate var
+
     weak var delegate: MWGroupsLayoutDelegate?
 
+    //MARK: - private variables
+
     private var cache: [UICollectionViewLayoutAttributes] = []
+
+    //MARK:- private configure properties
+
     private let numberOfColumns = 2
     private let cellPadding: CGFloat = 6
 
@@ -27,6 +34,8 @@ class MWGroupsCollectionViewLayout: UICollectionViewLayout {
     override var collectionViewContentSize: CGSize {
         return CGSize(width: contentWidth, height: contentHeight)
     }
+
+    //MARK:- update collectionView cells function
 
     override func prepare() {
         guard cache.isEmpty == true,
@@ -63,6 +72,8 @@ class MWGroupsCollectionViewLayout: UICollectionViewLayout {
             column = column < (numberOfColumns - 1) ? (column + 1) : 0
         }
     }
+
+    //MARK:- setting layoutAttributes for cells
 
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
         var visibleLayoutAttributes: [UICollectionViewLayoutAttributes] = []

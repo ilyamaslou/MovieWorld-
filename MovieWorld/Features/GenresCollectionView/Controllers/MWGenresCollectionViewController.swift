@@ -10,6 +10,8 @@ import UIKit
 
 class MWGenresCollectionViewController: MWViewController {
 
+    //MARK: - variables
+
     var movieGenres: [(String, Bool)] = [] {
         didSet {
             self.collectionView.reloadData()
@@ -21,6 +23,8 @@ class MWGenresCollectionViewController: MWViewController {
             self.collectionView.reloadData()
         }
     }
+
+    //MARK:- gui variables
 
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: self.collectionViewLayout)
@@ -42,6 +46,8 @@ class MWGenresCollectionViewController: MWViewController {
         collectionViewLayout.delegate = self
         return collectionViewLayout
     }()
+
+    //MARK: - initialization and setting constraints
 
     override func initController() {
         super.initController()
@@ -80,22 +86,12 @@ class MWGenresCollectionViewController: MWViewController {
     }
 }
 
-extension MWGenresCollectionViewController: UICollectionViewDataSource,
-    UICollectionViewDelegate,
-    MWGroupsLayoutDelegate,
-UICollectionViewDelegateFlowLayout {
+//MARK:- UICollectionViewDataSource,  UICollectionViewDelegate
+
+extension MWGenresCollectionViewController: UICollectionViewDelegate, UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.movieGenres.count
-    }
-
-    func collectionView(
-        _ collectionView: UICollectionView,
-        layout collectionViewLayout: UICollectionViewLayout,
-        sizeForItemAt indexPath: IndexPath) -> CGSize {
-
-        let itemSize = (collectionView.frame.width - (collectionView.contentInset.left + collectionView.contentInset.right)) / 2
-        return CGSize(width: itemSize, height: itemSize)
     }
 
     func collectionView(
@@ -123,7 +119,9 @@ UICollectionViewDelegateFlowLayout {
 
         return cell
     }
+}
 
+extension MWGenresCollectionViewController: MWGroupsLayoutDelegate {
     func collectionView(
         _ collectionView: UICollectionView,
         widthForLabelAtIndexPath indexPath: IndexPath) -> CGFloat {

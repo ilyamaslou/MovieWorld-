@@ -10,10 +10,17 @@ import UIKit
 
 class MWSingleMovieView: UIView {
 
+    //MARK:- insets and size variables
+
     private let edgeInsets = UIEdgeInsets(top: 10, left: 16, bottom: 8, right: -16)
     private let contentInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
     private let imageSize = CGSize(width: 80, height: 80)
+
+    //MARK: - private variables
+
     private var movie = MWMovie()
+
+    //MARK:- gui variables
 
     private lazy var filmImageView: UIImageView = {
         let view = UIImageView()
@@ -67,16 +74,9 @@ class MWSingleMovieView: UIView {
         return label
     }()
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        self.setUpView()
-    }
+    // MARK: - constraints
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    private func setUpView() {
+    override func updateConstraints() {
         self.translatesAutoresizingMaskIntoConstraints = false
 
         self.addSubview(self.filmImageView)
@@ -85,9 +85,6 @@ class MWSingleMovieView: UIView {
         self.addSubview(self.genresLabel)
         self.addSubview(self.ratingsLabel)
         self.addSubview(self.separationLabel)
-    }
-
-    override func updateConstraints() {
 
         self.filmImageView.snp.updateConstraints { (make) in
             make.top.equalToSuperview().offset(self.edgeInsets.top)
@@ -128,6 +125,8 @@ class MWSingleMovieView: UIView {
 
         super.updateConstraints()
     }
+
+    //MARK:- setters
 
     func setView(movie: MWMovie) {
         self.filmNameLabel.text = movie.title

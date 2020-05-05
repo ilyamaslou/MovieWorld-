@@ -9,10 +9,15 @@
 import UIKit
 
 enum MWCategories: String, CaseIterable {
+
+    //MARK:- cases
+
     case popularMovies = "Popular Movies"
     case nowPlayingMovies = "Now Playing Movies"
     case topRatedMovies = "Top Rated"
     case upcomingMovies = "Upcoming Movies"
+
+    //MARK:- action with cases function
 
     func getCategoryUrlPath() -> String {
         var urlPath = ""

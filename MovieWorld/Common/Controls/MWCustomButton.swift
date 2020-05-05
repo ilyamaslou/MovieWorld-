@@ -10,11 +10,15 @@ import UIKit
 
 class MWCustomButton: UIButton {
 
+    //MARK: parameter
+
     override var isHighlighted: Bool {
         didSet {
             self.layer.opacity = isHighlighted ? 0.5 : 1
         }
     }
+
+    //MARK: - initialization
 
     override init(frame: CGRect) {
         super.init(frame: frame )
@@ -25,6 +29,8 @@ class MWCustomButton: UIButton {
         super.init(coder: coder)
         self.setUpButton()
     }
+
+    //MARK:- setup view action
 
     override func layoutSubviews() {
         super.layoutSubviews()

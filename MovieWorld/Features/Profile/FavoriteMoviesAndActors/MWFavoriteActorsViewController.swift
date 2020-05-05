@@ -11,7 +11,11 @@ import CoreData
 
 class MWFavoriteActorsViewController: MWViewController {
 
+    //MARK: - private variable
+
     private var cast: [[MWMovieCastMember]] = []
+
+    //MARK:- gui variables
 
     private lazy var actorsController = MWCastViewController(castMembers: self.cast)
 
@@ -24,17 +28,16 @@ class MWFavoriteActorsViewController: MWViewController {
         return label
     }()
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.actorsController.updateTableView(cast: self.getFavoriteActors())
-    }
+    //MARK: - initialization
 
     override func initController() {
         super.initController()
-        self.setUpView()
+        self.makeConstraints()
     }
 
-    private func setUpView() {
+    // MARK: - constraints
+
+    private func makeConstraints() {
         guard let actorsControllerView = self.actorsController.view else { return }
         self.contentView.addSubview(actorsControllerView)
         self.contentView.addSubview(self.emptyListLabel)
@@ -48,10 +51,19 @@ class MWFavoriteActorsViewController: MWViewController {
         }
     }
 
+    //MARK: - viewController life cycle
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.actorsController.updateTableView(cast: self.getFavoriteActors())
+    }
+
     private func setUpVisibleOfEmptyListLabel(listIsEmpty: Bool) {
         self.emptyListLabel.isHidden = !listIsEmpty
     }
 }
+
+//MARK: - CoreData FavoriteActors
 
 extension MWFavoriteActorsViewController {
     @discardableResult private func fetchFavoriteActors() -> [CastMember] {

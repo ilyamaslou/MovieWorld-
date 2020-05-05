@@ -7,6 +7,9 @@
 //
 
 enum MWNetError {
+
+    //MARK:- enum cases
+
     case incorrectUrl(url: String)
     case networkError(error: Error)
     case serverError(statusCode: Int)
@@ -15,6 +18,8 @@ enum MWNetError {
     case error401(error: MWSpecialError)
     case error404(error: MWSpecialError)
     case unknown
+
+    //MARK:- action with cases 
 
     func getErrorDesription() -> String {
         switch self {

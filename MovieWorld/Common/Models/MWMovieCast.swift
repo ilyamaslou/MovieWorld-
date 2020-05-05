@@ -9,9 +9,14 @@
 import Foundation
 
 struct MWMovieCastResponse: Decodable {
+
+    //MARK:- Parameters
+
     let id: Int?
     var cast: [MWMovieCastMember]
     let crew: [MWMovieCrewMember]
+
+    //MARK:- action with parameters function
 
     func getFullCast() -> [[Any]] {
         var fullCast: [[Any]] = []
@@ -34,6 +39,8 @@ struct MWMovieCastResponse: Decodable {
 
 class MWMovieCastMember: Decodable, PersonImageble {
 
+    //MARK:- enum
+
     enum CodingKeys: String, CodingKey {
         case id = "id"
         case character = "character"
@@ -42,12 +49,16 @@ class MWMovieCastMember: Decodable, PersonImageble {
         case profilePath = "profile_path"
     }
 
+    //MARK:- Parameters
+
     var id: Int?
     var character: String?
     var name: String?
     var order: Int?
     var profilePath: String?
     var image: Data?
+
+    //MARK: - initialization
 
     init() {}
 
@@ -68,6 +79,8 @@ class MWMovieCastMember: Decodable, PersonImageble {
 
 class MWMovieCrewMember: Decodable, PersonImageble {
 
+    //MARK:- enum
+
     enum CodingKeys: String, CodingKey {
         case id = "id"
         case department = "department"
@@ -75,6 +88,8 @@ class MWMovieCrewMember: Decodable, PersonImageble {
         case job = "job"
         case profilePath = "profile_path"
     }
+
+    //MARK:- Parameters
 
     let id: Int?
     let department: String?

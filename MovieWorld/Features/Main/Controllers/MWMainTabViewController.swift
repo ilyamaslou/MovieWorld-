@@ -12,6 +12,8 @@ import CoreData
 
 class MWMainTabViewController: MWViewController {
 
+    //MARK: - private variables
+
     private var moviesByCategories: [MWCategories: [MWMovie]] = [:] {
         didSet {
             self.tableView.reloadData()
@@ -19,6 +21,9 @@ class MWMainTabViewController: MWViewController {
     }
 
     private var moviesResultsInfoByCategories: [MWCategories: (totalResults: Int, totalPages: Int)] = [:]
+    private var group = DispatchGroup()
+
+    //MARK:- gui variables
 
     private lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
@@ -26,8 +31,6 @@ class MWMainTabViewController: MWViewController {
         refreshControl.tintColor = UIColor(named: "accentColor")
         return refreshControl
     }()
-
-    private lazy var group = DispatchGroup()
 
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -41,19 +44,29 @@ class MWMainTabViewController: MWViewController {
         return tableView
     }()
 
+    //MARK: - initialization
+
     override func initController() {
         super.initController()
         self.title = "Season".local()
-
-        contentView.addSubview(self.tableView)
-
-        self.tableView.snp.makeConstraints { (make) in
-            make.edges.equalToSuperview()
-        }
+        self.makeConstraints()
 
         self.loadMovies()
         self.group.notify(queue: .main, execute: self.tableView.reloadData)
     }
+
+    //MARK: - constraints
+
+    private func makeConstraints() {
+        contentView.addSubview(self.tableView)
+
+        self.tableView.snp.makeConstraints { (make) in
+            make.top.left.right.equalToSuperview()
+            make.bottom.equalToSuperview().inset(16)
+        }
+    }
+
+    //MARK: - request
 
     private func loadMovies() {
         var urlPath = ""
@@ -90,6 +103,8 @@ class MWMainTabViewController: MWViewController {
         }
     }
 
+    //MARK: - setters
+
     private func setGenres(to movies: [MWMovie]) {
         for movie in movies {
             movie.setFilmGenres(genres: MWSys.sh.genres)
@@ -102,11 +117,15 @@ class MWMainTabViewController: MWViewController {
         }
     }
 
+    //MARK: - update action
+
     @objc private func pullToRefresh() {
         self.loadMovies()
         self.group.notify(queue: .main, execute: self.tableView.reloadData)
     }
 }
+
+//MARK: - UITableViewDataSource, UITableViewDelegate
 
 extension MWMainTabViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

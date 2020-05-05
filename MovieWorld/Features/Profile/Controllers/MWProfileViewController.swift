@@ -11,6 +11,8 @@ import CoreData
 
 class MWProfileViewController: MWViewController {
 
+    //MARK:- gui variable
+
     private lazy var favoriteMovies: UIButton = {
         var button = UIButton()
         button.setTitle("Favorites", for: .normal)
@@ -22,10 +24,17 @@ class MWProfileViewController: MWViewController {
         return button
     }()
 
+    //MARK: - initialization
+
     override func initController() {
         super.initController()
         self.title = "Profile"
+        self.makeConstraints()
+    }
 
+    // MARK: - constraints
+
+    private func makeConstraints() {
         self.contentView.addSubview(self.favoriteMovies)
 
         self.favoriteMovies.snp.makeConstraints { (make) in
@@ -34,6 +43,8 @@ class MWProfileViewController: MWViewController {
             make.bottom.lessThanOrEqualToSuperview()
         }
     }
+
+    //MARK: - tap action
 
     @objc private func favoriteButtonDidPressed() {
         MWI.s.pushVC(MWMasterFavoriteViewController())

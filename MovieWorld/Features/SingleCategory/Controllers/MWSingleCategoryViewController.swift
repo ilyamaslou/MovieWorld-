@@ -10,14 +10,21 @@ import UIKit
 
 class MWSingleCategoryViewController: MWViewController {
 
+    //MARK: - pagination variables
+
     private var page: Int = 2
     private var totalPages: Int = 0
     private var totalItems: Int = 0
     private var isRequestBusy: Bool = false
-    private var category: MWCategories?
     private var shouldUseLoadingMethods = true
 
+    //MARK: - size variable
+
     private let collectionViewHeight: Int = 70
+
+    //MARK: - private variables
+
+    private var category: MWCategories?
 
     private var movies: [MWMovie] = [] {
         didSet {
@@ -31,6 +38,8 @@ class MWSingleCategoryViewController: MWViewController {
             self.tableView.reloadData()
         }
     }
+
+    //MARK:- gui variables
 
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -52,6 +61,8 @@ class MWSingleCategoryViewController: MWViewController {
         view.color = UIColor(named: "accentColor")
         return view
     }()
+
+    //MARK: - initialization
 
     init(title: String = "Movies",
          movies: [MWMovie],
@@ -76,7 +87,12 @@ class MWSingleCategoryViewController: MWViewController {
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(updateTableByGenres),
                                                name: .genresChanged, object: nil)
+        self.makeConstraints()
+    }
 
+    // MARK: - constraints
+
+    private func makeConstraints() {
         self.contentView.addSubview(self.collectionView.view)
         self.contentView.addSubview(self.tableView)
         self.contentView.addSubview(self.loadingSpinner)
@@ -98,10 +114,21 @@ class MWSingleCategoryViewController: MWViewController {
         }
     }
 
+    //MARK:- setter
+
     func setTableViewMovies(movies: [MWMovie], useLoading: Bool = false) {
         self.movies = movies
         self.shouldUseLoadingMethods = useLoading
     }
+
+    //MARK: - pagination check action
+
+    private func checkFilteredMoviesOnFillness() {
+        guard self.filteredMovies.count < 5, self.shouldUseLoadingMethods else { return }
+        self.loadUnits()
+    }
+
+    //MARK:- update action
 
     @objc private func updateTableByGenres() {
         var tempFilteredMovies: [MWMovie] = []
@@ -118,12 +145,9 @@ class MWSingleCategoryViewController: MWViewController {
         self.filteredMovies = tempFilteredMovies
         self.checkFilteredMoviesOnFillness()
     }
-
-    private func checkFilteredMoviesOnFillness() {
-        guard self.filteredMovies.count < 5, self.shouldUseLoadingMethods else { return }
-        self.loadUnits()
-    }
 }
+
+//MARK:- UITableViewDataSource, UITableViewDelegate
 
 extension MWSingleCategoryViewController: UITableViewDataSource, UITableViewDelegate {
 
@@ -209,7 +233,7 @@ extension MWSingleCategoryViewController {
         })
     }
 
-    private func setGenresAndImages(to movies: [MWMovie]){
+    private func setGenresAndImages(to movies: [MWMovie]) {
         for movie in movies {
             movie.setFilmGenres(genres: MWSys.sh.genres)
             MWImageLoadingHelper.sh.loadMovieImage(for: movie)

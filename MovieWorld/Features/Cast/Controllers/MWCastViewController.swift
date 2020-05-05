@@ -10,11 +10,15 @@ import UIKit
 
 class MWCastViewController: MWViewController {
 
+    //MARK: - private variable
+
     private var movieFullCast: [[Any]]? = [] {
         didSet {
             self.tableView.reloadData()
         }
     }
+
+    //MARK:- gui variable
 
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
@@ -33,28 +37,7 @@ class MWCastViewController: MWViewController {
         return tableView
     }()
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        self.navigationItem.largeTitleDisplayMode = .always
-    }
-
-    override func initController() {
-        super.initController()
-        self.title = "Cast"
-
-        self.contentView.addSubview(self.tableView)
-    }
-
-    override func updateViewConstraints() {
-
-        self.tableView.snp.makeConstraints { (make) in
-            make.top.equalToSuperview().offset(16)
-            make.left.right.equalToSuperview()
-            make.bottom.equalToSuperview().inset(10)
-        }
-
-        super.updateViewConstraints()
-    }
+    //MARK: - initialization
 
     init(cast: MWMovieCastResponse?) {
         super.init()
@@ -70,10 +53,33 @@ class MWCastViewController: MWViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func initController() {
+        super.initController()
+        self.title = "Cast"
+    }
+
+    // MARK: - constraints
+
+    override func updateViewConstraints() {
+        self.contentView.addSubview(self.tableView)
+
+        self.tableView.snp.makeConstraints { (make) in
+            make.top.equalToSuperview().offset(16)
+            make.left.right.equalToSuperview()
+            make.bottom.equalToSuperview().inset(10)
+        }
+
+        super.updateViewConstraints()
+    }
+
+    //MARK: - setter
+
     func updateTableView(cast: [[MWMovieCastMember]]) {
         self.movieFullCast = cast
     }
 }
+
+//MARK: UITableViewDelegate, UITableViewDataSource
 
 extension MWCastViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

@@ -11,8 +11,13 @@ import CoreData
 
 class MWInitController: MWViewController {
 
+    //MARK: - private variables
+
     private var genres: [MWGenre] = []
     private var imageConfiguration = MWImageConfiguration()
+    private var group = DispatchGroup()
+
+    //MARK:- gui variable
 
     private lazy var loadingIndicator: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView()
@@ -27,25 +32,31 @@ class MWInitController: MWViewController {
         return indicator
     }()
 
-    private lazy var group = DispatchGroup()
+    //MARK: - initialization
 
     override func initController() {
         super.initController()
-
-        self.contentView.addSubview(self.loadingIndicator)
-
-        self.loadingIndicator.snp.makeConstraints { (make) in
-            make.center.equalToSuperview()
-        }
+        self.makeConstraints()
 
         self.loadingIndicator.startAnimating()
-
         self.loadGenres()
         self.loadLanguages()
         self.loadConfiguration()
 
         self.group.notify(queue: .main, execute: MWI.s.setUpTabBar)
     }
+
+    // MARK: - constraints
+
+    private func makeConstraints() {
+        self.contentView.addSubview(self.loadingIndicator)
+
+        self.loadingIndicator.snp.makeConstraints { (make) in
+            make.center.equalToSuperview()
+        }
+    }
+
+    //MARK:- request functions
 
     private func loadGenres() {
         self.group.enter()

@@ -10,7 +10,11 @@ import UIKit
 
 class MWCountryFilterTableViewCell: UITableViewCell {
 
+    //MARK: - static variables
+
     static var reuseIdentifier: String = "MWCountryFilterTableViewCell"
+
+    //MARK: - variable
 
     var isCellSelected: Bool = false {
         didSet {
@@ -18,7 +22,11 @@ class MWCountryFilterTableViewCell: UITableViewCell {
         }
     }
 
+    //MARK: - insets
+
     private let edgeInsets = UIEdgeInsets(top: 11, left: 16, bottom: 11, right: 15)
+
+    //MARK:- gui variables
 
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
@@ -35,20 +43,20 @@ class MWCountryFilterTableViewCell: UITableViewCell {
         return view
     }()
 
+    //MARK: - initialization
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        self.setUpCell()
+        self.makeConstraints()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func prepareForReuse() {
-        super.prepareForReuse()
-    }
+    // MARK: - constraints
 
-    private func setUpCell() {
+    private func makeConstraints() {
         self.contentView.addSubview(self.titleLabel)
         self.contentView.addSubview(self.checkImage)
 
@@ -65,6 +73,8 @@ class MWCountryFilterTableViewCell: UITableViewCell {
             make.bottom.equalToSuperview().inset(self.edgeInsets.bottom)
         }
     }
+
+    //MARK: - setters
 
     func set(country: (country: String?, isSelected: Bool)) {
         self.titleLabel.text = country.country

@@ -8,10 +8,14 @@
 
 struct MWLanguageConfiguration: Decodable {
 
+    //MARK:- enum
+
     enum CodingKeys: String, CodingKey {
         case iso = "iso_639_1"
         case englishName = "english_name"
     }
+
+    //MARK:- action with parameters functions
 
     var iso: String?
     var englishName: String?

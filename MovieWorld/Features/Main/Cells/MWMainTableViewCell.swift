@@ -10,10 +10,16 @@ import UIKit
 
 class MWMainTableViewCell: UITableViewCell {
 
+    //MARK: - static variables
+
     static var reuseIdentifier: String = "MWMainTableViewCell"
+
+    //MARK:- insets and size variables
 
     private var insets = UIEdgeInsets(top: 24, left: 16, bottom: -12, right: 7)
     private let imageSize = CGSize(width: 130, height: 237)
+
+    //MARK: - private variable
 
     var movies: [MWMovie] = [] {
         didSet {
@@ -21,7 +27,11 @@ class MWMainTableViewCell: UITableViewCell {
         }
     }
 
+    //MARK: - private variable
+
     private var category: String = ""
+
+    //MARK:- gui variables
 
     private lazy var showAllView: MWTitleButtonView = {
         let view = MWTitleButtonView()
@@ -53,6 +63,8 @@ class MWMainTableViewCell: UITableViewCell {
         return collectionViewLayout
     }()
 
+    //MARK: - initialization
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
@@ -68,6 +80,8 @@ class MWMainTableViewCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    // MARK: - constraints
 
     override func updateConstraints() {
         self.showAllView.snp.updateConstraints { (make) in
@@ -85,6 +99,8 @@ class MWMainTableViewCell: UITableViewCell {
         super.updateConstraints()
     }
 
+    //MARK: - setters
+
     func set(categoryName: MWCategories, totalResults: (Int, Int)?) {
         self.category = categoryName.rawValue
         self.showAllView.title = categoryName.rawValue
@@ -94,13 +110,16 @@ class MWMainTableViewCell: UITableViewCell {
         self.setNeedsUpdateConstraints()
     }
 
+    //MARK: - update collection action
+
     @objc private func movieImageUpdated() {
         self.collectionView.reloadData()
     }
 }
 
-extension MWMainTableViewCell: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+//MARK: - UICollectionViewDelegate
 
+extension MWMainTableViewCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.movies.count
     }
@@ -117,7 +136,11 @@ extension MWMainTableViewCell: UICollectionViewDelegate, UICollectionViewDataSou
         }
         return cell
     }
+}
 
+//MARK: - UICollectionViewDataSource, UICollectionViewDelegateFlowLayout
+
+extension MWMainTableViewCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         MWI.s.pushVC(MWSingleMovieViewController(movie: self.movies[indexPath.item]))
     }

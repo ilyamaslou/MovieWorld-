@@ -16,11 +16,15 @@ class MWMovieImagesResponse: Decodable {
 
 struct MWMovieImages: Decodable {
 
+    //MARK:- enum
+
     enum CodingKeys: String, CodingKey {
         case filePath = "file_path"
         case height = "height"
         case width = "width"
     }
+
+    //MARK:- Parameters
 
     let filePath: String?
     let height: Int?

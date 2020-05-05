@@ -11,7 +11,11 @@ import YouTubePlayer
 
 class MWMovieGalleryCollectionViewCell: UICollectionViewCell {
 
+    //MARK: - static variable
+
     static var reuseIdentifier: String = "MWMovieGalleryCollectionViewCell"
+
+    //MARK:- gui variables
 
     private lazy var movieImageView: UIImageView = {
         let view = UIImageView()
@@ -23,30 +27,20 @@ class MWMovieGalleryCollectionViewCell: UICollectionViewCell {
 
     private lazy var movieVideoView = YouTubePlayerView()
 
+    //MARK: - initialization
+
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.setUpCell()
+        self.makeConstraints()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func set(galleryItem: Any) {
-        if let image = galleryItem as? Data {
-            self.movieImageView.image = UIImage(data: image)
-            self.movieVideoView.isHidden = true
-            self.movieImageView.isHidden = false
-        } else if let videoUrl = galleryItem as? String {
-            self.showLoadedVideo(videoUrlKey: videoUrl)
-            self.movieImageView.isHidden = true
-            self.movieVideoView.isHidden = false
-        } else {
-            return
-        }
-    }
+    // MARK: - constraints
 
-    private func setUpCell() {
+    private func makeConstraints() {
         self.contentView.addSubview(movieImageView)
         self.contentView.addSubview(movieVideoView)
 
@@ -59,7 +53,23 @@ class MWMovieGalleryCollectionViewCell: UICollectionViewCell {
         }
     }
 
-    private func showLoadedVideo(videoUrlKey: String?) {
+    //MARK:- setters
+
+    func set(galleryItem: Any) {
+        if let image = galleryItem as? Data {
+            self.movieImageView.image = UIImage(data: image)
+            self.movieVideoView.isHidden = true
+            self.movieImageView.isHidden = false
+        } else if let videoUrl = galleryItem as? String {
+            self.setAndShowLoadedVideo(videoUrlKey: videoUrl)
+            self.movieImageView.isHidden = true
+            self.movieVideoView.isHidden = false
+        } else {
+            return
+        }
+    }
+
+    private func setAndShowLoadedVideo(videoUrlKey: String?) {
         guard let key = videoUrlKey else { return }
         let videoUrl = String(format: URLPaths.getVideo, key)
         let encodedURL = videoUrl.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""

@@ -11,15 +11,22 @@ typealias MWNet = MWNetwork
 
 class MWNetwork {
 
+    //MARK: - static variables
+
     static let sh = MWNetwork()
 
-    private let baseUrl: String = "https://api.themoviedb.org/3/"
-    private let apiKey: String = "79d5894567be5b76ab7434fc12879584"
+    //MARK: - private variables
 
     private var session = URLSession(configuration: .ephemeral)
+    private let baseUrl: String = "https://api.themoviedb.org/3/"
+    private let apiKey: String = "79d5894567be5b76ab7434fc12879584"
     private(set) lazy var parameters: [String: String] = ["api_key": self.apiKey]
 
+    //MARK: - initialization
+
     private init() {}
+
+    // MARK: - request functions
 
     func imageRequest(baseUrl: String,
                       size: String,

@@ -11,7 +11,11 @@ import CoreData
 
 class MWFavoriteMoviesViewController: MWViewController {
 
+    //MARK: - private variables
+
     private var movies: [MWMovie] = []
+
+    //MARK:- gui variables
 
     private lazy var moviesByGenresController = MWSingleCategoryViewController(movies: self.movies)
 
@@ -24,17 +28,16 @@ class MWFavoriteMoviesViewController: MWViewController {
         return label
     }()
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.moviesByGenresController.setTableViewMovies(movies: self.getFavoriteMovies())
-    }
+    //MARK: - initialization
 
     override func initController() {
         super.initController()
-        self.setUpView()
+        self.makeConstraints()
     }
 
-    private func setUpView() {
+    // MARK: - constraints
+
+    private func makeConstraints() {
         guard let moviesByGenresView = self.moviesByGenresController.view else { return }
 
         self.contentView.addSubview(moviesByGenresView)
@@ -49,10 +52,21 @@ class MWFavoriteMoviesViewController: MWViewController {
         }
     }
 
+    //MARK: - viewController life cycle
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.moviesByGenresController.setTableViewMovies(movies: self.getFavoriteMovies())
+    }
+
+    //MARK: - action if favorites list is empty
+
     private func setUpVisibleOfEmptyListLabel(listIsEmpty: Bool) {
         self.emptyListLabel.isHidden = !listIsEmpty
     }
 }
+
+//MARK: - CoreData FavoritesMovies
 
 extension MWFavoriteMoviesViewController {
     @discardableResult private func fetchFavoriteMovies() -> [Movie] {

@@ -10,7 +10,11 @@ import UIKit
 
 class FilterCountryViewController: MWViewController {
 
+    //MARK: - variable
+
     var choosenCountries: (([String?]) -> Void)?
+
+    //MARK: - private variables
 
     private var recievedSelectedCountries: [String?] = []
     private var selectedCountryKey: Int = 0
@@ -23,6 +27,8 @@ class FilterCountryViewController: MWViewController {
     }
 
     private var filteredCountries: [(country: String?, isSelected: Bool)] = []
+
+    //MARK:- gui variables
 
     private lazy var searchController = UISearchController(searchResultsController: nil)
 
@@ -47,6 +53,8 @@ class FilterCountryViewController: MWViewController {
         return tableView
     }()
 
+    //MARK: - initialization
+
     init(selectedCountries: [String?] = [] ) {
         super.init()
         self.recievedSelectedCountries = selectedCountries
@@ -62,8 +70,19 @@ class FilterCountryViewController: MWViewController {
         super.initController()
         self.presetNavBar()
         self.setUpLanguages()
-        self.setUpView()
+        self.makeConstraints()
     }
+
+    //MARK: - constraints
+
+    private func makeConstraints() {
+        self.contentView.addSubview(self.tableView)
+        self.tableView.snp.makeConstraints { (make) in
+            make.edges.equalToSuperview()
+        }
+    }
+
+    //MARK: - set navigation bar
 
     private func presetNavBar() {
         self.title = "Country"
@@ -75,12 +94,7 @@ class FilterCountryViewController: MWViewController {
         self.searchController.searchBar.delegate = self
     }
 
-    private func setUpView() {
-        self.contentView.addSubview(self.tableView)
-        self.tableView.snp.makeConstraints { (make) in
-            make.edges.equalToSuperview()
-        }
-    }
+    //MARK: - setters
 
     private func setSelectedCountries() {
         for (id, country) in self.countries.enumerated() {
@@ -102,13 +116,7 @@ class FilterCountryViewController: MWViewController {
         self.countries.sort { ($0.country ?? "") < ($1.country ?? "") }
     }
 
-    private func updateCountry(filteredCountry: (country: String?, isSelected: Bool)) {
-        for (id, country) in self.countries.enumerated() {
-            if country.country == filteredCountry.country {
-                self.countries[id].isSelected = filteredCountry.isSelected
-            }
-        }
-    }
+    //MARK: - send selected action
 
     private func didSendChoosedCountries() {
         var selectedCountries: [String?] = []
@@ -120,6 +128,16 @@ class FilterCountryViewController: MWViewController {
 
         guard let choosenCountries = self.choosenCountries else { return }
         choosenCountries(selectedCountries)
+    }
+
+    //MARK: - resetButton actions
+
+    @objc private func resetButtonDidTapped() {
+        self.recievedSelectedCountries = []
+        self.setUpLanguages()
+        self.didSendChoosedCountries()
+        self.checkReset()
+        self.tableView.reloadData()
     }
 
     private func checkReset() {
@@ -142,14 +160,18 @@ class FilterCountryViewController: MWViewController {
         self.resetBarButton.isEnabled = hasNewValues ? true : false
     }
 
-    @objc private func resetButtonDidTapped() {
-        self.recievedSelectedCountries = []
-        self.setUpLanguages()
-        self.didSendChoosedCountries()
-        self.checkReset()
-        self.tableView.reloadData()
+    //MARK: - update content action
+
+    private func updateCountry(filteredCountry: (country: String?, isSelected: Bool)) {
+        for (id, country) in self.countries.enumerated() {
+            if country.country == filteredCountry.country {
+                self.countries[id].isSelected = filteredCountry.isSelected
+            }
+        }
     }
 }
+
+//MARK: - UITableViewDelegate, UITableViewDataSource
 
 extension FilterCountryViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -183,6 +205,8 @@ extension FilterCountryViewController: UITableViewDelegate, UITableViewDataSourc
         self.didSendChoosedCountries()
     }
 }
+
+//MARK: - UISearchResultsUpdating, UISearchBarDelegate
 
 extension FilterCountryViewController: UISearchResultsUpdating, UISearchBarDelegate {
     func updateSearchResults(for searchController: UISearchController) {

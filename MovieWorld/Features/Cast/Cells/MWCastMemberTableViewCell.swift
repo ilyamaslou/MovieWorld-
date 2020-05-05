@@ -10,25 +10,25 @@ import UIKit
 
 class MWCastMemberTableViewCell: UITableViewCell {
 
+    //MARK: - static variable
+
     static var reuseIdentifier: String = "MWCastMemberTableViewCell"
+
+    //MARK:- gui variable
 
     private lazy var castMemberView = MWCastMemberView()
 
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        self.contentView.addSubview(self.castMemberView)
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    // MARK: - constraints
 
     override func updateConstraints() {
+        self.contentView.addSubview(self.castMemberView)
         self.castMemberView.snp.updateConstraints { (make) in
             make.edges.equalToSuperview()
         }
         super.updateConstraints()
     }
+
+    //MARK:- setter
 
     func set(castMember: MWMovieCastMember?) {
         self.castMemberView.set(castMember: castMember)

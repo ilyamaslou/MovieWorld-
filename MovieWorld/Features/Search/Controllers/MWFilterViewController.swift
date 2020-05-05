@@ -11,10 +11,16 @@ import MultiSlider
 
 class MWFilterViewController: MWViewController {
 
+    //MARK: - variable
+
     var choosenFilters: ((_ genres: Set<String>?, _ countries: [String?]?, _ year: String?, _ ratingRange: (Float, Float)?) -> Void)?
+
+    //MARK: - size and insets variables
 
     private var edgeInsets = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
     private let collectionViewHeight: Int = 70
+
+    //MARK: - private variables
 
     private var selectedCountries: [String?]? {
         didSet {
@@ -38,6 +44,8 @@ class MWFilterViewController: MWViewController {
             self.checkReset()
         }
     }
+
+    //MARK:- gui variables
 
     private lazy var resetBarButton: UIBarButtonItem = {
         let button = UIBarButtonItem(title: "Reset",
@@ -117,6 +125,8 @@ class MWFilterViewController: MWViewController {
         return button
     }()
 
+    //MARK: - initialization
+
     init(filters: (genres: Set<String>?, countries: [String?]?, year: String?, ratingRange: (Float, Float)?)?) {
         super.init()
         guard let filters = filters else { return }
@@ -143,7 +153,16 @@ class MWFilterViewController: MWViewController {
         self.setUpPickerData()
     }
 
+    // MARK: - constraints
+
     override func updateViewConstraints() {
+        self.contentView.addSubview(self.collectionView.view)
+        self.contentView.addSubview(self.countryView)
+        self.contentView.addSubview(self.yearView)
+        self.contentView.addSubview(self.ratingView)
+        self.contentView.addSubview(self.ratingSlider)
+        self.contentView.addSubview(self.showButton)
+
         self.collectionView.view.snp.makeConstraints { (make) in
             make.top.equalToSuperview().offset(self.edgeInsets.top)
             make.left.right.equalToSuperview()
@@ -179,19 +198,14 @@ class MWFilterViewController: MWViewController {
         super.updateViewConstraints()
     }
 
+    //MARK: - setUp view data actions
+
     private func setUpView() {
         self.title = "Filter"
         self.navigationItem.setRightBarButton(self.resetBarButton, animated: true)
 
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapGestureDone))
         self.contentView.addGestureRecognizer(tapGesture)
-
-        self.contentView.addSubview(self.collectionView.view)
-        self.contentView.addSubview(self.countryView)
-        self.contentView.addSubview(self.yearView)
-        self.contentView.addSubview(self.ratingView)
-        self.contentView.addSubview(self.ratingSlider)
-        self.contentView.addSubview(self.showButton)
     }
 
     private func setUpDataOnViews() {
@@ -263,6 +277,8 @@ class MWFilterViewController: MWViewController {
                                    CGFloat(self.selectedRatingRange?.to ?? 10.0)]
     }
 
+    //MARK: - resetButton actions
+
     private func updateResetButton(hasNewValues: Bool) {
         self.resetBarButton.tintColor = hasNewValues ? UIColor(named: "accentColor") : UIColor(named: "shadowColor")
         self.resetBarButton.isEnabled = hasNewValues ? true : false
@@ -279,14 +295,6 @@ class MWFilterViewController: MWViewController {
         }
     }
 
-    @objc func tapGestureDone() {
-        self.navigationController?.navigationBar.layer.zPosition = 0
-        self.datePicker.removeFromSuperview()
-        self.datePickerToolBar.removeFromSuperview()
-        self.viewWithLowAlpha.removeFromSuperview()
-        self.updateViewConstraints()
-    }
-
     @objc private func resetButtonDidTapped() {
         self.selectedCountries = nil
         self.countryView.value = ""
@@ -297,6 +305,16 @@ class MWFilterViewController: MWViewController {
         self.collectionView.filteredGenres = []
         self.collectionView.setUpGenres()
         self.checkReset()
+    }
+
+    //MARK: - tap actions
+
+    @objc func tapGestureDone() {
+        self.navigationController?.navigationBar.layer.zPosition = 0
+        self.datePicker.removeFromSuperview()
+        self.datePickerToolBar.removeFromSuperview()
+        self.viewWithLowAlpha.removeFromSuperview()
+        self.updateViewConstraints()
     }
 
     @objc private func countryViewDidTapped() {
@@ -350,6 +368,8 @@ class MWFilterViewController: MWViewController {
         MWI.s.popVC()
     }
 }
+
+//MARK: - UIPickerViewDelegate, UIPickerViewDataSource
 
 extension MWFilterViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     func numberOfComponents(in pickerView: UIPickerView) -> Int {

@@ -8,12 +8,18 @@
 
 struct MWSpecialError: Decodable {
 
+    //MARK:- enum
+
     enum CodingKeys: String, CodingKey {
         case statusCode = "status_code", statusMessage = "status_message"
     }
 
+    //MARK:- Parameters
+
     var statusCode: Int?
     var statusMessage: String?
+
+    //MARK: - initialization
 
     init() {}
 }

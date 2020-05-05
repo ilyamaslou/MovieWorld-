@@ -11,8 +11,12 @@ import CoreData
 
 class MWMemberViewController: MWViewController {
 
+    //MARK: - insets and size variables
+
     private let edgeInsets = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
     private let collectionViewSize = CGSize(width: .zero, height: 237)
+
+    //MARK: - private variables
 
     private var member: Any?
     private var memberInfo: MWMemberDetails?
@@ -27,6 +31,8 @@ class MWMemberViewController: MWViewController {
             self.navigationItem.rightBarButtonItem?.image = isFavorite ?  UIImage(named: "selectedFaovoriteIcon") : UIImage(named: "unselectedFavoriteIcon")
         }
     }
+
+    //MARK:- gui variables
 
     private lazy var rightBarButtonDidFavoriteItem: UIBarButtonItem = UIBarButtonItem(image: UIImage(named: "unselectedFavoriteIcon"),
                                                                                       style: .plain,
@@ -100,6 +106,8 @@ class MWMemberViewController: MWViewController {
         return label
     }()
 
+    //MARK: - initialization
+
     init(member: Any?) {
         super.init()
         self.navigationItem.setRightBarButton(self.rightBarButtonDidFavoriteItem, animated: true)
@@ -121,7 +129,12 @@ class MWMemberViewController: MWViewController {
     override func initController() {
         super.initController()
         self.navigationItem.largeTitleDisplayMode = .never
+        self.makeConstraints()
+    }
 
+    // MARK: - constraints
+
+    private func makeConstraints() {
         self.contentView.addSubview(self.scrollView)
         self.scrollView.addSubview(self.contentViewContainer)
         self.contentViewContainer.addSubview(self.memberCellView)
@@ -169,14 +182,14 @@ class MWMemberViewController: MWViewController {
         }
     }
 
+    //MARK: - view controller life cycle
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.navigationItem.largeTitleDisplayMode = .always
     }
 
-    override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
-        self.collectionViewLayout.invalidateLayout()
-    }
+    //MARK:- request functions
 
     private func loadMemberInfo() {
         if let castMember = self.member as? MWMovieCastMember,
@@ -221,7 +234,7 @@ class MWMemberViewController: MWViewController {
 
                             self.memberMovies = memberKnownForMovies
                             self.setGenres()
-                            self.setImages()
+                            self.loadAndSetImages()
             },
                          errorHandler: { [weak self] (error) in
                             guard let self = self else { return }
@@ -230,6 +243,20 @@ class MWMemberViewController: MWViewController {
                             self.errorAlert(message: message)
 
         })
+    }
+
+    private func loadAndSetImages() {
+        for movie in self.memberMovies {
+            MWImageLoadingHelper.sh.loadMovieImage(for: movie)
+        }
+    }
+
+    //MARK:- seter and getter for genres
+
+    private func setGenres() {
+        for movie in self.memberMovies {
+            movie.setFilmGenres(genres: MWSys.sh.genres)
+        }
     }
 
     private func getMemberName() -> String {
@@ -246,17 +273,7 @@ class MWMemberViewController: MWViewController {
         return memberName
     }
 
-    private func setGenres() {
-        for movie in self.memberMovies {
-            movie.setFilmGenres(genres: MWSys.sh.genres)
-        }
-    }
-
-    private func setImages() {
-        for movie in self.memberMovies {
-            MWImageLoadingHelper.sh.loadMovieImage(for: movie)
-        }
-    }
+    //MARK:- Actions
 
     private func updateView() {
         self.roleLabel.text = self.memberInfo?.department
@@ -279,7 +296,9 @@ class MWMemberViewController: MWViewController {
     }
 }
 
-extension MWMemberViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+//MARK:- UICollectionViewDelegate, UICollectionViewDataSource
+
+extension MWMemberViewController: UICollectionViewDelegate, UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.memberMovies.count
@@ -302,7 +321,11 @@ extension MWMemberViewController: UICollectionViewDelegate, UICollectionViewData
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         MWI.s.pushVC(MWSingleMovieViewController(movie: self.memberMovies[indexPath.item]))
     }
+}
 
+//MARK:- UICollectionViewDelegateFlowLayout
+
+extension MWMemberViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = ((Int(self.view.frame.size.width) - 48) / 3)
         return CGSize(width: width, height: 237)

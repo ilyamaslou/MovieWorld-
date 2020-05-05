@@ -8,12 +8,16 @@
 
 struct MWMovieAdditionalInfo: Decodable {
 
+    //MARK:- enum
+
     enum CodingKeys: String, CodingKey {
         case adult = "adult"
         case overview = "overview"
         case runtime = "runtime"
         case tagline = "tagline"
     }
+
+    //MARK:- Parameters
 
     var adult: Bool?
     var overview: String?

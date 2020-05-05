@@ -8,6 +8,8 @@
 
 struct MWMemberDetails: Decodable {
 
+    //MARK:- enum
+
     enum CodingKeys: String, CodingKey {
         case birthday = "birthday"
         case deathday = "deathday"
@@ -16,6 +18,8 @@ struct MWMemberDetails: Decodable {
         case department = "known_for_department"
         case biography = "biography"
     }
+
+    //MARK:- Parameters
 
     var birthday: String?
     var deathday: String?

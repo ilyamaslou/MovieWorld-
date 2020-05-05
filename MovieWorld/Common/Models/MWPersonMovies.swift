@@ -12,9 +12,13 @@ struct MWPersonMoviesResponse: Decodable {
 
 struct MWPersonMovies: Decodable {
 
+    //MARK:- enum
+
     enum CodingKeys: String, CodingKey {
         case knownFor = "known_for"
     }
+
+    //MARK:- parameter
 
     var knownFor: [MWMovie]?
 }

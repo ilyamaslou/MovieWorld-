@@ -10,6 +10,8 @@ import UIKit
 
 class MWTitleButtonView: UIView {
 
+    //MARK:-  variables
+
     var title: String? {
         didSet {
             self.label.text = self.title
@@ -22,7 +24,11 @@ class MWTitleButtonView: UIView {
         }
     }
 
+    //MARK:- Later will be deleted
+
     var controllerToPushing: UIViewController?
+
+    //MARK:- gui variables
 
     private lazy var label: UILabel = {
         let label = UILabel()
@@ -38,29 +44,25 @@ class MWTitleButtonView: UIView {
         return button
     }()
 
-    override init(frame: CGRect) {
-        super.init(frame: frame )
-        self.setUpView()
-    }
+    // MARK: - constraints
 
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        self.setUpView()
-    }
-
-    private func setUpView() {
+    override func updateConstraints() {
         self.addSubview(self.label)
         self.addSubview(self.showAllButton)
 
-        self.label.snp.makeConstraints { (make) in
+        self.label.snp.updateConstraints { (make) in
             make.top.left.bottom.equalToSuperview()
         }
 
-        self.showAllButton.snp.makeConstraints { (make) in
+        self.showAllButton.snp.updateConstraints { (make) in
             make.top.right.bottom.equalToSuperview()
             make.left.greaterThanOrEqualTo(self.label.snp.right)
         }
+
+        super.updateConstraints()
     }
+
+    //MARK:- Actions
 
     @objc private func showAllButtonDidTapped() {
         guard let controller = controllerToPushing else { return }

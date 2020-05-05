@@ -10,6 +10,12 @@ import UIKit
 
 class MWLabelsWithArrowView: UIView {
 
+    //MARK:- insets variable
+
+    private let edgeInsets: UIEdgeInsets = UIEdgeInsets(top: 11, left: 16, bottom: 11, right: 15)
+
+    //MARK: - variables
+
     var title: String = "" {
         didSet {
             self.titleLabel.text = self.title
@@ -31,7 +37,7 @@ class MWLabelsWithArrowView: UIView {
         }
     }
 
-    private let edgeInsets: UIEdgeInsets = UIEdgeInsets(top: 11, left: 16, bottom: 11, right: 15)
+    //MARK:- gui variables
 
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
@@ -62,6 +68,8 @@ class MWLabelsWithArrowView: UIView {
         return view
     }()
 
+    //MARK: - initialization
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.setUpView()
@@ -71,33 +79,34 @@ class MWLabelsWithArrowView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: - constraints
+
     private func setUpView() {
         self.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(self.titleLabel)
         self.addSubview(self.valueLabel)
         self.addSubview(self.arrowImage)
+        self.makeConstraints()
     }
 
-    override func updateConstraints() {
-        self.titleLabel.snp.updateConstraints { (make) in
+    private func makeConstraints() {
+        self.titleLabel.snp.makeConstraints { (make) in
             make.top.equalToSuperview().offset(self.edgeInsets.top)
             make.left.equalToSuperview().offset(self.edgeInsets.left)
             make.bottom.equalToSuperview().inset(self.edgeInsets.bottom)
         }
 
-        self.valueLabel.snp.updateConstraints { (make) in
+        self.valueLabel.snp.makeConstraints { (make) in
             make.top.equalToSuperview().offset(self.edgeInsets.top)
             make.left.greaterThanOrEqualTo(self.titleLabel.snp.right).offset(self.edgeInsets.left)
             make.right.equalTo(self.arrowImage.snp.left)
             make.bottom.equalToSuperview().inset(self.edgeInsets.bottom)
         }
 
-        self.arrowImage.snp.updateConstraints { (make) in
+        self.arrowImage.snp.makeConstraints { (make) in
             make.top.equalToSuperview().offset(self.edgeInsets.top)
             make.right.equalToSuperview().inset(self.edgeInsets.right)
             make.bottom.equalToSuperview().inset(self.edgeInsets.bottom)
         }
-
-        super.updateConstraints()
     }
 }

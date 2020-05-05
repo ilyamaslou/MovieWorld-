@@ -12,14 +12,24 @@ typealias MWI = MWInterface
 
 class MWInterface {
 
+    //MARK: - static variables
+
     static let s = MWInterface()
 
-    private(set) weak var window: UIWindow?
+    //MARK: - private variables
 
     private lazy var tabBarViewController = MWTabBarViewController()
     private lazy var initController = MWInitController()
 
+    //MARK: - private(set) gui variables
+
+    private(set) weak var window: UIWindow?
+
+    //MARK: - initialization
+
     private init() {}
+
+    //MARK:- setup window actions
 
     func setup(window: UIWindow) {
         self.window = window
@@ -29,18 +39,6 @@ class MWInterface {
 
         self.window?.rootViewController = self.initController
         self.window?.makeKeyAndVisible()
-    }
-
-    func pushVC(_ vc: UIViewController, animated: Bool = true) {
-        (self.tabBarViewController.selectedViewController as? MWNavigationController)?.pushViewController(vc, animated: animated)
-    }
-
-    func popVC(animated: Bool = true) {
-        (self.tabBarViewController.selectedViewController as? MWNavigationController)?.popViewController(animated: animated)
-    }
-
-    func setUpTabBar() {
-        self.window?.rootViewController = self.tabBarViewController
     }
 
     private func setUpNavigationBarStyle() {
@@ -54,5 +52,19 @@ class MWInterface {
             newNavBar.configureWithDefaultBackground()
             standartNavBar.scrollEdgeAppearance = newNavBar
         }
+    }
+
+    func setUpTabBar() {
+        self.window?.rootViewController = self.tabBarViewController
+    }
+
+    //MARK:- push/pop actions
+
+    func pushVC(_ vc: UIViewController, animated: Bool = true) {
+        (self.tabBarViewController.selectedViewController as? MWNavigationController)?.pushViewController(vc, animated: animated)
+    }
+
+    func popVC(animated: Bool = true) {
+        (self.tabBarViewController.selectedViewController as? MWNavigationController)?.popViewController(animated: animated)
     }
 }

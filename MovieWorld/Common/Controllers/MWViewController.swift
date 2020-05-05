@@ -10,12 +10,16 @@ import UIKit
 
 class MWViewController: UIViewController {
 
+    //MARK:- gui variables
+
     private(set) lazy var contentView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
+
+    //MARK: - initialization
 
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -26,7 +30,25 @@ class MWViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    private func _init() {
+        self.view.addSubview(self.contentView)
+        self.makeConstraints()
+        self.initController()
+    }
+
     func initController() {}
+
+    // MARK: - constraints
+
+    private func makeConstraints() {
+        self.contentView.snp.makeConstraints { (make) in
+            make.top.equalTo(self.view.safeAreaLayoutGuide.snp.topMargin)
+            make.left.right.equalToSuperview()
+            make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottomMargin)
+        }
+    }
+
+    //MARK:- view controller alert
 
     func errorAlert(message: String) {
         let alert = UIAlertController(title: nil,
@@ -47,19 +69,5 @@ class MWViewController: UIViewController {
         alert.addAction(alertAction)
 
         present(alert, animated: true)
-    }
-
-    private func _init() {
-        self.view.addSubview(self.contentView)
-        self.makeConstraints()
-        self.initController()
-    }
-
-    private func makeConstraints() {
-        self.contentView.snp.makeConstraints { (make) in
-            make.top.equalTo(self.view.safeAreaLayoutGuide.snp.topMargin)
-            make.left.right.equalToSuperview()
-            make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottomMargin)
-        }
     }
 }

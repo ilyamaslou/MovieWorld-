@@ -85,7 +85,7 @@ class MWSingleCategoryViewController: MWViewController {
         super.initController()
 
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(updateTableByGenres),
+                                               selector: #selector(self.updateTableByGenres),
                                                name: .genresChanged, object: nil)
         self.makeConstraints()
     }

@@ -51,7 +51,7 @@ class MWFilterViewController: MWViewController {
         let button = UIBarButtonItem(title: "Reset",
                                      style: .plain,
                                      target: self,
-                                     action: #selector(resetButtonDidTapped))
+                                     action: #selector(self.resetButtonDidTapped))
         button.tintColor = UIColor(named: "shadowColor")
         return button
     }()
@@ -61,14 +61,14 @@ class MWFilterViewController: MWViewController {
     private lazy var countryView: MWLabelsWithArrowView = {
         var view = MWLabelsWithArrowView()
         view.title = "Country"
-        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(countryViewDidTapped)))
+        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.countryViewDidTapped)))
         return view
     }()
 
     private lazy var yearView: MWLabelsWithArrowView = {
         var view = MWLabelsWithArrowView()
         view.title = "Year"
-        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(yearViewDidTapped)))
+        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.yearViewDidTapped)))
         return view
     }()
 
@@ -108,7 +108,7 @@ class MWFilterViewController: MWViewController {
         slider.tintColor = UIColor(named: "accentColor")
         slider.orientation = .horizontal
         slider.snapStepSize = 0.1
-        slider.addTarget(self, action: #selector(sliderChanged), for: .valueChanged)
+        slider.addTarget(self, action: #selector(self.sliderChanged), for: .valueChanged)
         slider.translatesAutoresizingMaskIntoConstraints = false
         return slider
     }()
@@ -121,7 +121,7 @@ class MWFilterViewController: MWViewController {
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 17)
         button.layer.cornerRadius = 5
-        button.addTarget(self, action: #selector(showButtonDidTapped), for: .touchUpInside)
+        button.addTarget(self, action: #selector(self.showButtonDidTapped), for: .touchUpInside)
         return button
     }()
 
@@ -144,7 +144,7 @@ class MWFilterViewController: MWViewController {
 
     override func initController() {
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(checkReset),
+                                               selector: #selector(self.checkReset),
                                                name: .genresChanged, object: nil)
 
         self.checkReset()
@@ -204,7 +204,7 @@ class MWFilterViewController: MWViewController {
         self.title = "Filter"
         self.navigationItem.setRightBarButton(self.resetBarButton, animated: true)
 
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapGestureDone))
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.tapGestureDone))
         self.contentView.addGestureRecognizer(tapGesture)
     }
 
@@ -242,7 +242,7 @@ class MWFilterViewController: MWViewController {
             UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         )
         items.append(
-            UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(tapGestureDone))
+            UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self.tapGestureDone))
         )
 
         self.datePickerToolBar.translatesAutoresizingMaskIntoConstraints = false

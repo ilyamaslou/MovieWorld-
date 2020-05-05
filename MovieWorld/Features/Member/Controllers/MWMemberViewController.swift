@@ -113,7 +113,7 @@ class MWMemberViewController: MWViewController {
         self.navigationItem.setRightBarButton(self.rightBarButtonDidFavoriteItem, animated: true)
 
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(imageLoaded),
+                                               selector: #selector(self.imageLoaded),
                                                name: .movieImageUpdated, object: nil)
         self.member = member
 

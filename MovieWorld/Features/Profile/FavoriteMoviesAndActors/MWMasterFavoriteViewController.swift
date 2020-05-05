@@ -93,7 +93,7 @@ class MWMasterFavoriteViewController: MWViewController {
         self.segmentedControl.removeAllSegments()
         self.segmentedControl.insertSegment(withTitle: "Films", at: 0, animated: false)
         self.segmentedControl.insertSegment(withTitle: "People", at: 1, animated: false)
-        self.segmentedControl.addTarget(self, action: #selector(selectionDidChange), for: .valueChanged)
+        self.segmentedControl.addTarget(self, action: #selector(self.selectionDidChange), for: .valueChanged)
 
         self.segmentedControl.selectedSegmentIndex = 0
     }

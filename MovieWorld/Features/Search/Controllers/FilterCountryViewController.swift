@@ -36,7 +36,7 @@ class FilterCountryViewController: MWViewController {
         let button = UIBarButtonItem(title: "Reset",
                                      style: .plain,
                                      target: self,
-                                     action: #selector(resetButtonDidTapped))
+                                     action: #selector(self.resetButtonDidTapped))
         button.tintColor = UIColor(named: "shadowColor")
         return button
     }()

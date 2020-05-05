@@ -52,7 +52,7 @@ class MWSearchViewController: MWViewController {
     private lazy var filterBarButton: UIBarButtonItem = UIBarButtonItem(image: UIImage(named: "filterIcon"),
                                                                         style: .plain,
                                                                         target: self,
-                                                                        action: #selector(filterButtonDidTapped))
+                                                                        action: #selector(self.filterButtonDidTapped))
 
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -80,7 +80,7 @@ class MWSearchViewController: MWViewController {
     override func initController() {
         super.initController()
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(movieImageUpdated),
+                                               selector: #selector(self.movieImageUpdated),
                                                name: .movieImageUpdated, object: nil)
 
         self.presettingSearchControllerNavBar()

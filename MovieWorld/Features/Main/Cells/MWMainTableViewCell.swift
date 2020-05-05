@@ -29,7 +29,8 @@ class MWMainTableViewCell: UITableViewCell {
 
     //MARK: - private variable
 
-    private var category: String = ""
+    private var category: MWCategories?
+    private var totalResults: (Int, Int)?
 
     //MARK:- gui variables
 
@@ -69,12 +70,9 @@ class MWMainTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(movieImageUpdated),
+                                               selector: #selector(self.movieImageUpdated),
                                                name: .movieImageUpdated, object: nil)
-
-        self.backgroundColor = .white
-        self.contentView.addSubview(self.showAllView)
-        self.contentView.addSubview(self.collectionView)
+        self.setShowAllButtonTappedAction()
     }
 
     required init?(coder: NSCoder) {
@@ -84,6 +82,9 @@ class MWMainTableViewCell: UITableViewCell {
     // MARK: - constraints
 
     override func updateConstraints() {
+        self.contentView.addSubview(self.showAllView)
+        self.contentView.addSubview(self.collectionView)
+
         self.showAllView.snp.updateConstraints { (make) in
             make.top.equalToSuperview().offset(self.insets.top)
             make.left.equalToSuperview().offset(self.insets.left)
@@ -102,12 +103,18 @@ class MWMainTableViewCell: UITableViewCell {
     //MARK: - setters
 
     func set(categoryName: MWCategories, totalResults: (Int, Int)?) {
-        self.category = categoryName.rawValue
+        self.category = categoryName
+        self.totalResults = totalResults
         self.showAllView.title = categoryName.rawValue
-        self.showAllView.controllerToPushing = MWSingleCategoryViewController(movies: self.movies,
-                                                                              category: categoryName,
-                                                                              totalResultsInfo: totalResults)
         self.setNeedsUpdateConstraints()
+    }
+
+    private func setShowAllButtonTappedAction() {
+        self.showAllView.buttonIsTapped = {
+            MWI.s.pushVC(MWSingleCategoryViewController(movies: self.movies,
+                                                        category: self.category,
+                                                        totalResultsInfo: self.totalResults))
+        }
     }
 
     //MARK: - update collection action

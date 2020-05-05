@@ -38,7 +38,6 @@ class MWSingleMovieViewController: MWViewController {
     private var movieFullCast: MWMovieCastResponse? {
         didSet {
             self.castCollectionView.reloadData()
-            self.showAllView.controllerToPushing = MWCastViewController(cast: self.movieFullCast)
         }
     }
 
@@ -67,7 +66,7 @@ class MWSingleMovieViewController: MWViewController {
 
     private lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(pullToRefresh), for: .valueChanged)
+        refreshControl.addTarget(self, action: #selector(self.pullToRefresh), for: .valueChanged)
         refreshControl.tintColor = UIColor(named: "accentColor")
         return refreshControl
     }()
@@ -188,13 +187,9 @@ class MWSingleMovieViewController: MWViewController {
     init(movie: MWMovie) {
         super.init()
         self.navigationItem.setRightBarButton(self.rightBarButtonDidFavoriteItem, animated: true)
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(memberImageUpdated),
-                                               name: .memberImageUpdated, object: nil)
+        self.observeNotifications()
+        self.setShowAllButtonTappedAction()
 
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(movieImagesCollectionUpdated),
-                                               name: .movieImagesCollectionUpdated, object: nil)
         self.movie = movie
         self.movieCellView.setView(movie: movie)
         self.movieCellView.setNeedsUpdateConstraints()
@@ -232,6 +227,17 @@ class MWSingleMovieViewController: MWViewController {
         self.descriptionContainerView.addSubview(self.descriptionLabel)
         self.descriptionContainerView.addSubview(self.movieRuntimeLabel)
         self.descriptionContainerView.addSubview(self.descriptionTextLabel)
+    }
+
+    private func observeNotifications() {
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(self.memberImageUpdated),
+                                               name: .memberImageUpdated, object: nil)
+
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(self.movieImagesCollectionUpdated),
+                                               name: .movieImagesCollectionUpdated, object: nil)
+
     }
 
     //MARK: constraints
@@ -447,6 +453,12 @@ class MWSingleMovieViewController: MWViewController {
         self.movieRuntimeLabel.text = "\(movieRuntime) minutes"
     }
 
+    private func setShowAllButtonTappedAction() {
+        self.showAllView.buttonIsTapped = {
+            MWI.s.pushVC(MWCastViewController(cast: self.movieFullCast))
+        }
+    }
+
     //MARK:- update view actions
 
     private func reloadGalleryItems() {
@@ -472,6 +484,8 @@ class MWSingleMovieViewController: MWViewController {
 
         self.refreshControl.endRefreshing()
     }
+
+    //MARK: - button tapped actions
 
     @objc private func didFavoriteButtonTapped() {
         self.isFavorite = !self.isFavorite

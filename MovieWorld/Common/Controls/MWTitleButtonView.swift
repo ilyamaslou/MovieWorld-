@@ -24,9 +24,7 @@ class MWTitleButtonView: UIView {
         }
     }
 
-    //MARK:- Later will be deleted
-
-    var controllerToPushing: UIViewController?
+    var buttonIsTapped: (() -> Void)?
 
     //MARK:- gui variables
 
@@ -40,7 +38,7 @@ class MWTitleButtonView: UIView {
     private lazy var showAllButton: MWCustomButton = {
         let button = MWCustomButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(showAllButtonDidTapped), for: .touchUpInside)
+        button.addTarget(self, action: #selector(self.showAllButtonDidTapped), for: .touchUpInside)
         return button
     }()
 
@@ -65,7 +63,7 @@ class MWTitleButtonView: UIView {
     //MARK:- Actions
 
     @objc private func showAllButtonDidTapped() {
-        guard let controller = controllerToPushing else { return }
-        MWI.s.pushVC(controller)
+        guard let buttonIsTapped = self.buttonIsTapped else { return }
+        buttonIsTapped()
     }
 }

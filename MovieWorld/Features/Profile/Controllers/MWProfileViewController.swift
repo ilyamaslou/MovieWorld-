@@ -19,7 +19,7 @@ class MWProfileViewController: MWViewController {
         button.setTitleColor(.black, for: .normal)
         button.layer.borderColor = UIColor.black.cgColor
         button.layer.borderWidth = 1
-        button.addTarget(self, action: #selector(favoriteButtonDidPressed), for: .touchUpInside)
+        button.addTarget(self, action: #selector(self.favoriteButtonDidPressed), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()

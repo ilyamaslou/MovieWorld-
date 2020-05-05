@@ -30,7 +30,7 @@ class MWGenreCollectionViewCell: UICollectionViewCell {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = UIColor(named: "lightAccentColor")
         button.setUpButton(title: "", hasArrow: false)
-        button.addTarget(self, action: #selector(singleGenreDidTapped), for: .touchUpInside)
+        button.addTarget(self, action: #selector(self.singleGenreDidTapped), for: .touchUpInside)
         return button
     }()
 

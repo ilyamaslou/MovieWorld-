@@ -26,7 +26,6 @@ class MWCastMemberCollectionViewCell: UICollectionViewCell {
 
     private lazy var nameLabel: UILabel = {
         let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 17, weight: .bold)
         label.adjustsFontSizeToFitWidth = false
         label.lineBreakMode = .byTruncatingTail
@@ -36,7 +35,6 @@ class MWCastMemberCollectionViewCell: UICollectionViewCell {
     private lazy var infoLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 13, weight: .regular)
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.adjustsFontSizeToFitWidth = false
         label.lineBreakMode = .byTruncatingTail
         return label
@@ -46,7 +44,6 @@ class MWCastMemberCollectionViewCell: UICollectionViewCell {
         let view = UIImageView()
         view.clipsToBounds = true
         view.layer.cornerRadius = 5
-        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
 

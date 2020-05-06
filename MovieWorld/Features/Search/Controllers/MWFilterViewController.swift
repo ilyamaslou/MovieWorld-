@@ -76,7 +76,6 @@ class MWFilterViewController: MWViewController {
         let picker = UIPickerView()
         picker.delegate = self
         picker.dataSource = self
-        picker.translatesAutoresizingMaskIntoConstraints = false
         picker.backgroundColor = .white
         return picker
     }()
@@ -86,7 +85,6 @@ class MWFilterViewController: MWViewController {
     private lazy var viewWithLowAlpha: UIView = {
         let view: UIView = UIView()
         view.backgroundColor = UIColor.black.withAlphaComponent(0.6)
-        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
 
@@ -109,14 +107,12 @@ class MWFilterViewController: MWViewController {
         slider.orientation = .horizontal
         slider.snapStepSize = 0.1
         slider.addTarget(self, action: #selector(self.sliderChanged), for: .valueChanged)
-        slider.translatesAutoresizingMaskIntoConstraints = false
         return slider
     }()
 
     private lazy var showButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = UIColor(named: "accentColor")
-        button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Show", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 17)
@@ -245,7 +241,6 @@ class MWFilterViewController: MWViewController {
             UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self.tapGestureDone))
         )
 
-        self.datePickerToolBar.translatesAutoresizingMaskIntoConstraints = false
         self.datePickerToolBar.setItems(items, animated: true)
         self.datePickerToolBar.tintColor = UIColor(named: "accentColor")
         self.datePickerToolBar.sizeToFit()

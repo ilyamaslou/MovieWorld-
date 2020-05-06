@@ -11,18 +11,13 @@ import CoreData
 
 class MWMemberViewController: MWViewController {
 
-    //MARK: - insets and size variables
-
-    private let edgeInsets = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
-    private let collectionViewSize = CGSize(width: .zero, height: 237)
-
     //MARK: - private variables
 
     private var member: Personalized?
     private var memberInfo: MWMemberDetails?
     private var memberMovies: [MWMovie] = [] {
         didSet {
-            self.collectionView.reloadData()
+            self.contentViewContainer.collectionView.reloadData()
         }
     }
 
@@ -43,7 +38,6 @@ class MWMemberViewController: MWViewController {
 
     private lazy var scrollView: UIScrollView = {
         let view = UIScrollView()
-        view.translatesAutoresizingMaskIntoConstraints = false
         view.showsVerticalScrollIndicator = false
         view.showsHorizontalScrollIndicator = false
         view.alwaysBounceVertical = true
@@ -51,61 +45,11 @@ class MWMemberViewController: MWViewController {
         return view
     }()
 
-    private lazy var contentViewContainer: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .clear
+    private lazy var contentViewContainer: MWSingleMemberView = {
+        let view = MWSingleMemberView()
+        view.collectionView.delegate = self
+        view.collectionView.dataSource = self
         return view
-    }()
-
-    private lazy var memberCellView = MWCastMemberView()
-
-    private lazy var titleForCollectionView: UILabel = {
-        let label = UILabel()
-        label.text = "Filmography"
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = .systemFont(ofSize: 17, weight: .bold)
-        return label
-    }()
-
-    private lazy var collectionView: UICollectionView = {
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: self.collectionViewLayout)
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        collectionView.register(MWMainCollectionViewCell.self, forCellWithReuseIdentifier: MWMainCollectionViewCell.reuseIdentifier)
-
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.backgroundColor = .white
-        collectionView.contentInsetAdjustmentBehavior = .never
-        collectionView.showsVerticalScrollIndicator = false
-        collectionView.showsHorizontalScrollIndicator = false
-
-        return collectionView
-    }()
-
-    private lazy var collectionViewLayout: UICollectionViewFlowLayout = {
-        let collectionViewLayout = UICollectionViewFlowLayout()
-        collectionViewLayout.scrollDirection = .horizontal
-        collectionViewLayout.minimumLineSpacing = 8
-        collectionViewLayout.minimumInteritemSpacing = 8
-        collectionViewLayout.sectionInset = UIEdgeInsets(top: .zero, left: 16, bottom: .zero, right: 16)
-        return collectionViewLayout
-    }()
-
-    private lazy var roleLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = .systemFont(ofSize: 17, weight: .bold)
-        return label
-    }()
-
-    private lazy var bioLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 17)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.adjustsFontSizeToFitWidth = false
-        label.numberOfLines = 0
-        return label
     }()
 
     //MARK: - initialization
@@ -140,11 +84,6 @@ class MWMemberViewController: MWViewController {
     private func makeConstraints() {
         self.contentView.addSubview(self.scrollView)
         self.scrollView.addSubview(self.contentViewContainer)
-        self.contentViewContainer.addSubview(self.memberCellView)
-        self.contentViewContainer.addSubview(self.titleForCollectionView)
-        self.contentViewContainer.addSubview(self.collectionView)
-        self.contentViewContainer.addSubview(self.roleLabel)
-        self.contentViewContainer.addSubview(self.bioLabel)
 
         self.scrollView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
@@ -153,35 +92,6 @@ class MWMemberViewController: MWViewController {
         self.contentViewContainer.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
             make.width.equalTo(self.view.snp.width)
-        }
-
-        self.memberCellView.snp.makeConstraints { (make) in
-            make.top.equalToSuperview().offset(self.edgeInsets.top)
-            make.left.right.equalToSuperview()
-        }
-
-        self.titleForCollectionView.snp.makeConstraints { (make) in
-            make.top.equalTo(self.memberCellView.snp.bottom).offset(24)
-            make.left.equalToSuperview().offset(self.edgeInsets.left)
-            make.right.equalToSuperview()
-        }
-
-        self.collectionView.snp.makeConstraints { (make) in
-            make.top.equalTo(self.titleForCollectionView.snp.bottom).offset(self.edgeInsets.top)
-            make.right.left.equalToSuperview()
-            make.height.equalTo(self.collectionViewSize.height)
-        }
-
-        self.roleLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(self.collectionView.snp.bottom).offset(self.edgeInsets.top)
-            make.left.equalToSuperview().offset(self.edgeInsets.left)
-            make.right.equalToSuperview()
-        }
-
-        self.bioLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(self.roleLabel.snp.bottom).offset(self.edgeInsets.top)
-            make.left.right.equalToSuperview().inset(self.edgeInsets)
-            make.bottom.equalToSuperview().inset(10)
         }
     }
 
@@ -262,14 +172,14 @@ class MWMemberViewController: MWViewController {
     //MARK:- Actions
 
     private func updateView() {
-        self.roleLabel.text = self.memberInfo?.department
-        self.bioLabel.text = self.memberInfo?.biography
+        self.contentViewContainer.roleLabel.text = self.memberInfo?.department
+        self.contentViewContainer.bioLabel.text = self.memberInfo?.biography
         guard let castMember = self.member as? MWMovieCastMember else { return }
-        self.memberCellView.set(castMember: castMember, birthday: self.memberInfo?.birthday ?? "")
+        self.contentViewContainer.memberCellView.set(castMember: castMember, birthday: self.memberInfo?.birthday ?? "")
     }
 
     @objc private func imageLoaded() {
-        self.collectionView.reloadData()
+        self.contentViewContainer.collectionView.reloadData()
     }
 
     @objc private func didFavoriteButtonTapped() {

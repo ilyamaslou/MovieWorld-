@@ -32,7 +32,6 @@ class MWGenresCollectionViewController: MWViewController {
         collectionView.dataSource = self
         collectionView.register(MWGenreCollectionViewCell.self, forCellWithReuseIdentifier: MWGenreCollectionViewCell.reuseIdentifier)
 
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.backgroundColor = .white
         collectionView.contentInsetAdjustmentBehavior = .never
         collectionView.showsVerticalScrollIndicator = false

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MWMasterFavoriteViewController: MWViewController {
+class MWFavoriteViewController: MWViewController {
 
     //MARK:- gui variables
 
@@ -27,7 +27,6 @@ class MWMasterFavoriteViewController: MWViewController {
 
     private lazy var separationView: UIView = {
         let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.backgroundColor = UIColor(named: "shadowColor")?.cgColor
         view.layer.opacity = 0.3
         return view

@@ -15,7 +15,6 @@ class MWViewController: UIViewController {
     private(set) lazy var contentView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
-        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
 

@@ -41,7 +41,6 @@ class MWLabelsWithArrowView: UIView {
 
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 17)
         label.lineBreakMode = .byTruncatingTail
         label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
@@ -51,7 +50,6 @@ class MWLabelsWithArrowView: UIView {
 
     private lazy var valueLabel: UILabel = {
         let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 17, weight: .light)
         label.textColor = .gray
         label.lineBreakMode = .byTruncatingTail
@@ -63,7 +61,6 @@ class MWLabelsWithArrowView: UIView {
     private lazy var arrowImage: UIImageView = {
         let view: UIImageView = UIImageView()
         view.image = UIImage(named: "nextArrow")
-        view.translatesAutoresizingMaskIntoConstraints = false
         view.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         return view
     }()
@@ -82,7 +79,6 @@ class MWLabelsWithArrowView: UIView {
     // MARK: - constraints
 
     private func setUpView() {
-        self.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(self.titleLabel)
         self.addSubview(self.valueLabel)
         self.addSubview(self.arrowImage)

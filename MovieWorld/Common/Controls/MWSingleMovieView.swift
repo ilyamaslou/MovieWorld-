@@ -24,7 +24,6 @@ class MWSingleMovieView: UIView {
 
     private lazy var filmImageView: UIImageView = {
         let view = UIImageView()
-        view.translatesAutoresizingMaskIntoConstraints = false
         view.clipsToBounds = true
         view.layer.cornerRadius = 5
         return view
@@ -32,7 +31,6 @@ class MWSingleMovieView: UIView {
 
     private lazy var filmNameLabel: UILabel = {
         let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 17, weight: .semibold)
         label.numberOfLines = 0
         label.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
@@ -41,7 +39,6 @@ class MWSingleMovieView: UIView {
 
     private lazy var releaseYearAndCountryLabel: UILabel = {
         let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 15)
         label.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
         return label
@@ -49,7 +46,6 @@ class MWSingleMovieView: UIView {
 
     private lazy var genresLabel: UILabel = {
         let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 15, weight: .light)
         label.textColor = .gray
         label.numberOfLines = 0
@@ -59,7 +55,6 @@ class MWSingleMovieView: UIView {
 
     private lazy var ratingsLabel: UILabel = {
         let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 15)
         label.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
         return label
@@ -67,7 +62,6 @@ class MWSingleMovieView: UIView {
 
     private lazy var separationLabel: UILabel = {
         let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.layer.backgroundColor = UIColor.lightGray.cgColor
         label.layer.opacity = 0.2
         return label
@@ -76,8 +70,6 @@ class MWSingleMovieView: UIView {
     // MARK: - constraints
 
     override func updateConstraints() {
-        self.translatesAutoresizingMaskIntoConstraints = false
-
         self.addSubview(self.filmImageView)
         self.addSubview(self.filmNameLabel)
         self.addSubview(self.releaseYearAndCountryLabel)

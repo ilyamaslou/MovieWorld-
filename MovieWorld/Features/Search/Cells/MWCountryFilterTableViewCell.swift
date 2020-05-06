@@ -32,14 +32,12 @@ class MWCountryFilterTableViewCell: UITableViewCell {
         let label = UILabel()
         label.font = .systemFont(ofSize: 17)
         label.lineBreakMode = .byTruncatingTail
-        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
 
     private lazy var checkImage: UIImageView = {
         let view = UIImageView()
         view.image = UIImage(named: "selectImage")
-        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
 

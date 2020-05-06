@@ -23,7 +23,6 @@ class MWCastMemberView: UIView {
 
     private lazy var memberImageView: UIImageView = {
         let view = UIImageView()
-        view.translatesAutoresizingMaskIntoConstraints = false
         view.clipsToBounds = true
         view.layer.cornerRadius = 5
         return view
@@ -31,21 +30,18 @@ class MWCastMemberView: UIView {
 
     private lazy var memberNameLabel: UILabel = {
         let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 17, weight: .bold)
         return label
     }()
 
     private lazy var memberRoleLabel: UILabel = {
         let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 13)
         return label
     }()
 
     private lazy var memberBirthLabel: UILabel = {
         let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 13, weight: .light)
         label.textColor = .gray
         label.numberOfLines = 0
@@ -54,7 +50,6 @@ class MWCastMemberView: UIView {
 
     private lazy var separationView: UIView = {
         let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.backgroundColor = UIColor.lightGray.cgColor
         view.layer.opacity = 0.2
         return view
@@ -63,8 +58,6 @@ class MWCastMemberView: UIView {
     //MARK:- constraints
 
     override func updateConstraints() {
-        self.translatesAutoresizingMaskIntoConstraints = false
-
         self.addSubview(self.memberImageView)
         self.addSubview(self.memberNameLabel)
         self.addSubview(self.memberRoleLabel)

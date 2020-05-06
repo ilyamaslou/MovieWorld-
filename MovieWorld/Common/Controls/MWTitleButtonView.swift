@@ -30,14 +30,12 @@ class MWTitleButtonView: UIView {
 
     private lazy var label: UILabel = {
         let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 17, weight: .bold)
         return label
     }()
 
     private lazy var showAllButton: MWCustomButton = {
         let button = MWCustomButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(self.showAllButtonDidTapped), for: .touchUpInside)
         return button
     }()

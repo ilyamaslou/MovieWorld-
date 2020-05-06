@@ -20,7 +20,6 @@ class MWProfileViewController: MWViewController {
         button.layer.borderColor = UIColor.black.cgColor
         button.layer.borderWidth = 1
         button.addTarget(self, action: #selector(self.favoriteButtonDidPressed), for: .touchUpInside)
-        button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
 
@@ -47,6 +46,6 @@ class MWProfileViewController: MWViewController {
     //MARK: - tap action
 
     @objc private func favoriteButtonDidPressed() {
-        MWI.s.pushVC(MWMasterFavoriteViewController())
+        MWI.s.pushVC(MWFavoriteViewController())
     }
 }

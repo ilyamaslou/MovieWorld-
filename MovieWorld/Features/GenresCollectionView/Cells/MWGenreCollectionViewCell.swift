@@ -27,27 +27,21 @@ class MWGenreCollectionViewCell: UICollectionViewCell {
 
     private lazy var singleGenreButton: MWCustomButton = {
         let button = MWCustomButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = UIColor(named: "lightAccentColor")
         button.setUpButton(title: "", hasArrow: false)
         button.addTarget(self, action: #selector(self.singleGenreDidTapped), for: .touchUpInside)
         return button
     }()
 
-    //MARK: - initialization and making constraints
+    // MARK: - constraints
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        self.contentView.translatesAutoresizingMaskIntoConstraints = false
+    override func updateConstraints() {
         self.contentView.addSubview(self.singleGenreButton)
 
         self.singleGenreButton.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.updateConstraints()
     }
 
     //MARK:- setter

@@ -152,7 +152,7 @@ class MWFilterViewController: MWViewController {
     // MARK: - constraints
 
     override func updateViewConstraints() {
-        self.contentView.addSubview(self.collectionView.view)
+        self.add(self.collectionView)
         self.contentView.addSubview(self.countryView)
         self.contentView.addSubview(self.yearView)
         self.contentView.addSubview(self.ratingView)

@@ -93,7 +93,7 @@ class MWSingleCategoryViewController: MWViewController {
     // MARK: - constraints
 
     private func makeConstraints() {
-        self.contentView.addSubview(self.collectionView.view)
+        self.add(self.collectionView)
         self.contentView.addSubview(self.tableView)
         self.contentView.addSubview(self.loadingSpinner)
 
@@ -131,15 +131,21 @@ class MWSingleCategoryViewController: MWViewController {
     //MARK:- update action
 
     @objc private func updateTableByGenres() {
-        var tempFilteredMovies: [MWMovie] = []
-
         if self.collectionView.filteredGenres.isEmpty {
             self.filteredMovies = self.movies
             return
         }
 
-        for genre in self.collectionView.filteredGenres {
-            tempFilteredMovies.append(contentsOf: self.filteredMovies.filter{ ($0.movieGenres?.contains(genre) ?? false) })
+        var tempFilteredMovies: [MWMovie] = []
+
+        var filteredMovies: [MWMovie] = []
+        self.collectionView.filteredGenres.forEach { (genre) in
+            filteredMovies.append(contentsOf: self.movies.filter{ ($0.movieGenres?.contains(genre) ?? false) })
+        }
+
+        for movie in filteredMovies {
+            guard !tempFilteredMovies.contains(movie) else { continue }
+            tempFilteredMovies.append(movie)
         }
 
         self.filteredMovies = tempFilteredMovies

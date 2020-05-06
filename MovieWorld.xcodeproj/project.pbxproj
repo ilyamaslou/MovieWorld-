@@ -72,6 +72,7 @@
 		999E6004241B7B7500F3103F /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999E6003241B7B7500F3103F /* CoreDataManager.swift */; };
 		99A7878E246227E700A0F216 /* MWEmptyListLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A7878D246227E700A0F216 /* MWEmptyListLabel.swift */; };
 		99A7879024622B7C00A0F216 /* MWViewForHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A7878F24622B7C00A0F216 /* MWViewForHeader.swift */; };
+		99A787922462DE2000A0F216 /* UIViewController + Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A787912462DE2000A0F216 /* UIViewController + Ex.swift */; };
 		99AA6E01242254820087BB44 /* MWSingleCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99AA6E00242254820087BB44 /* MWSingleCategoryViewController.swift */; };
 		99AB2D7E2431E90200095464 /* MWMovieGalleryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99AB2D7D2431E90200095464 /* MWMovieGalleryCollectionViewCell.swift */; };
 		99AB2D8124321D1700095464 /* MWMovieGallery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99AB2D8024321D1700095464 /* MWMovieGallery.swift */; };
@@ -168,6 +169,7 @@
 		999E6003241B7B7500F3103F /* CoreDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CoreDataManager.swift; path = ../../../../Downloads/CourceCoreData/CourceCoreData/CoreData/CoreDataManager.swift; sourceTree = "<group>"; };
 		99A7878D246227E700A0F216 /* MWEmptyListLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWEmptyListLabel.swift; sourceTree = "<group>"; };
 		99A7878F24622B7C00A0F216 /* MWViewForHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWViewForHeader.swift; sourceTree = "<group>"; };
+		99A787912462DE2000A0F216 /* UIViewController + Ex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController + Ex.swift"; sourceTree = "<group>"; };
 		99AA6E00242254820087BB44 /* MWSingleCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWSingleCategoryViewController.swift; sourceTree = "<group>"; };
 		99AB2D7D2431E90200095464 /* MWMovieGalleryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWMovieGalleryCollectionViewCell.swift; sourceTree = "<group>"; };
 		99AB2D8024321D1700095464 /* MWMovieGallery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWMovieGallery.swift; sourceTree = "<group>"; };
@@ -354,6 +356,7 @@
 				99B481F72439501200017903 /* Date+Ex.swift */,
 				99937CA9243D52C700054731 /* UIImage + Ex.swift */,
 				993D6DC22447C423000F5180 /* UINavigationController + ex.swift */,
+				99A787912462DE2000A0F216 /* UIViewController + Ex.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -838,6 +841,7 @@
 				992A1D6B242AC43200D61D65 /* MWCastMemberCollectionViewCell.swift in Sources */,
 				99CAD4562451007600E88BBD /* MWCountryFilterTableViewCell.swift in Sources */,
 				9999E0CF23F9F378007EB718 /* AppDelegate.swift in Sources */,
+				99A787922462DE2000A0F216 /* UIViewController + Ex.swift in Sources */,
 				997870E124563E6500CD2ACC /* MWGenresCollectionViewController.swift in Sources */,
 				993D6DC32447C423000F5180 /* UINavigationController + ex.swift in Sources */,
 				9981C573243924940079747B /* MWMemberDetails.swift in Sources */,

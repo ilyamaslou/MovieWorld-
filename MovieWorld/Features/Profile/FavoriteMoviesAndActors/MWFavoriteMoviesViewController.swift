@@ -25,18 +25,20 @@ class MWFavoriteMoviesViewController: MWViewController {
 
     override func initController() {
         super.initController()
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(self.updateTableView),
+                                               name: .movieIsFavoriteChanged, object: nil)
         self.makeConstraints()
+        self.updateTableView()
     }
 
     // MARK: - constraints
 
     private func makeConstraints() {
-        guard let moviesByGenresView = self.moviesByGenresController.view else { return }
-
-        self.contentView.addSubview(moviesByGenresView)
+        self.add(self.moviesByGenresController)
         self.contentView.addSubview(emptyListLabel)
 
-        moviesByGenresView.snp.makeConstraints { (make) in
+        self.moviesByGenresController.view.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
 
@@ -45,17 +47,16 @@ class MWFavoriteMoviesViewController: MWViewController {
         }
     }
 
-    //MARK: - viewController life cycle
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.moviesByGenresController.setTableViewMovies(movies: self.getFavoriteMovies())
-    }
-
     //MARK: - action if favorites list is empty
 
     private func setUpVisibleOfEmptyListLabel(listIsEmpty: Bool) {
         self.emptyListLabel.isHidden = !listIsEmpty
+    }
+
+    //MARK: - Update TableView action
+
+    @objc private func updateTableView() {
+        self.moviesByGenresController.setTableViewMovies(movies: self.getFavoriteMovies())
     }
 }
 

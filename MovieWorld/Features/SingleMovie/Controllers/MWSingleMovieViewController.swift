@@ -29,6 +29,8 @@ class MWSingleMovieViewController: MWViewController {
         }
     }
 
+    private var oldIsFavorite: Bool = false
+
     private var movie: MWMovie = MWMovie() {
         didSet {
             self.castCollectionView.reloadData()
@@ -195,6 +197,7 @@ class MWSingleMovieViewController: MWViewController {
         self.movieCellView.setNeedsUpdateConstraints()
 
         self.fetchIsFavorite()
+        self.oldIsFavorite = self.isFavorite
 
         self.loadMovieVideos()
         self.loadMovieCast()
@@ -319,6 +322,8 @@ class MWSingleMovieViewController: MWViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.navigationItem.largeTitleDisplayMode = .always
+        guard self.isFavorite != self.oldIsFavorite else { return }
+        NotificationCenter.default.post(name: .movieIsFavoriteChanged, object: nil)
     }
 
     //MARK:- request functions

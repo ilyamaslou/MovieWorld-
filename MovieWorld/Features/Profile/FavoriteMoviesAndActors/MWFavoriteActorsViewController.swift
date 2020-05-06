@@ -25,17 +25,20 @@ class MWFavoriteActorsViewController: MWViewController {
 
     override func initController() {
         super.initController()
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(self.updateTableView),
+                                               name: .actorIsFavoriteChanged, object: nil)
         self.makeConstraints()
+        self.updateTableView()
     }
 
     // MARK: - constraints
 
     private func makeConstraints() {
-        guard let actorsControllerView = self.actorsController.view else { return }
-        self.contentView.addSubview(actorsControllerView)
+        self.add(self.actorsController)
         self.contentView.addSubview(self.emptyListLabel)
 
-        actorsControllerView.snp.makeConstraints { (make) in
+        self.actorsController.view.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
 
@@ -44,15 +47,16 @@ class MWFavoriteActorsViewController: MWViewController {
         }
     }
 
-    //MARK: - viewController life cycle
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.actorsController.updateTableView(cast: self.getFavoriteActors())
-    }
+    //MARK: - action if favorites list is empty
 
     private func setUpVisibleOfEmptyListLabel(listIsEmpty: Bool) {
         self.emptyListLabel.isHidden = !listIsEmpty
+    }
+
+    //MARK: - Update TableView action
+
+    @objc private func updateTableView() {
+        self.actorsController.updateTableView(cast: self.getFavoriteActors())
     }
 }
 

@@ -12,7 +12,7 @@ class MWCastViewController: MWViewController {
 
     //MARK: - private variable
 
-    private var movieFullCast: [[Any]]? = [] {
+    private var movieFullCast: [[Personalized]]? = [] {
         didSet {
             self.tableView.reloadData()
         }

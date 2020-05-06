@@ -218,7 +218,8 @@ extension MWSingleCategoryViewController {
 
                             self.totalItems = movies.totalResults
                             self.totalPages = movies.totalPages
-                            self.setGenresAndImages(to: movies.results)
+                            self.setGenres(to: movies.results)
+                            self.loadAndSetImages(to: movies.results)
                             completion(movies.results)
             },
                          errorHandler: { [weak self] (error) in
@@ -230,10 +231,15 @@ extension MWSingleCategoryViewController {
         })
     }
 
-    private func setGenresAndImages(to movies: [MWMovie]) {
+    private func loadAndSetImages(to movies: [MWMovie]) {
+        for movie in movies {
+            MWImageLoadingHelper.sh.loadMovieImage(for: movie)
+        }
+    }
+
+    private func setGenres( to movies: [MWMovie]) {
         for movie in movies {
             movie.setFilmGenres(genres: MWSys.sh.genres)
-            MWImageLoadingHelper.sh.loadMovieImage(for: movie)
         }
     }
 }

@@ -18,7 +18,7 @@ class MWMemberViewController: MWViewController {
 
     //MARK: - private variables
 
-    private var member: Any?
+    private var member: Personalized?
     private var memberInfo: MWMemberDetails?
     private var memberMovies: [MWMovie] = [] {
         didSet {
@@ -31,6 +31,8 @@ class MWMemberViewController: MWViewController {
             self.navigationItem.rightBarButtonItem?.image = isFavorite ?  UIImage(named: "selectedFaovoriteIcon") : UIImage(named: "unselectedFavoriteIcon")
         }
     }
+
+    private var oldIsFavorite: Bool = false
 
     //MARK:- gui variables
 
@@ -108,7 +110,7 @@ class MWMemberViewController: MWViewController {
 
     //MARK: - initialization
 
-    init(member: Any?) {
+    init(member: Personalized?) {
         super.init()
         self.navigationItem.setRightBarButton(self.rightBarButtonDidFavoriteItem, animated: true)
 
@@ -116,8 +118,9 @@ class MWMemberViewController: MWViewController {
                                                selector: #selector(self.imageLoaded),
                                                name: .movieImageUpdated, object: nil)
         self.member = member
-
         self.fetchIsFavorite()
+        self.oldIsFavorite = self.isFavorite
+
         self.loadMemberInfo()
         self.loadMemberMovies()
     }
@@ -187,18 +190,15 @@ class MWMemberViewController: MWViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.navigationItem.largeTitleDisplayMode = .always
+        guard self.isFavorite != self.oldIsFavorite else { return }
+        NotificationCenter.default.post(name: .actorIsFavoriteChanged, object: nil)
     }
 
     //MARK:- request functions
 
     private func loadMemberInfo() {
-        if let castMember = self.member as? MWMovieCastMember,
-            let id = castMember.id {
-            self.loadInfo(id: id)
-        } else if let crewMember = self.member as? MWMovieCrewMember,
-            let id = crewMember.id {
-            self.loadInfo(id: id)
-        }
+        guard let id = self.member?.id else { return }
+        self.loadInfo(id: id)
     }
 
     private func loadInfo(id: Int) {
@@ -221,7 +221,7 @@ class MWMemberViewController: MWViewController {
     private func loadMemberMovies() {
         let urlPath = URLPaths.personMovies
         var querryParameters: [String: String] = MWNet.sh.parameters
-        querryParameters["query"] = self.getMemberName()
+        querryParameters["query"] = self.member?.name
 
         MWNet.sh.request(urlPath: urlPath ,
                          querryParameters: querryParameters,
@@ -257,20 +257,6 @@ class MWMemberViewController: MWViewController {
         for movie in self.memberMovies {
             movie.setFilmGenres(genres: MWSys.sh.genres)
         }
-    }
-
-    private func getMemberName() -> String {
-        var memberName: String = ""
-
-        if let castMember = self.member as? MWMovieCastMember,
-            let name = castMember.name {
-            memberName = name
-        } else if let crewMember = self.member as? MWMovieCrewMember,
-            let name = crewMember.name {
-            memberName = name
-        }
-
-        return memberName
     }
 
     //MARK:- Actions

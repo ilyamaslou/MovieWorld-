@@ -18,8 +18,8 @@ struct MWMovieCastResponse: Decodable {
 
     //MARK:- action with parameters function
 
-    func getFullCast() -> [[Any]] {
-        var fullCast: [[Any]] = []
+    func getFullCast() -> [[Personalized]] {
+        var fullCast: [[Personalized]] = []
 
         var cast: [MWMovieCastMember] = []
         for memberOfCast in self.cast {
@@ -37,7 +37,7 @@ struct MWMovieCastResponse: Decodable {
     }
 }
 
-class MWMovieCastMember: Decodable, PersonImageble {
+class MWMovieCastMember: Decodable, Personalized {
 
     //MARK:- enum
 
@@ -77,7 +77,7 @@ class MWMovieCastMember: Decodable, PersonImageble {
     }
 }
 
-class MWMovieCrewMember: Decodable, PersonImageble {
+class MWMovieCrewMember: Decodable, Personalized {
 
     //MARK:- enum
 
@@ -91,14 +91,16 @@ class MWMovieCrewMember: Decodable, PersonImageble {
 
     //MARK:- Parameters
 
-    let id: Int?
+    var id: Int?
     let department: String?
-    let name: String?
+    var name: String?
     let job: String?
     let profilePath: String?
     var image: Data?
 }
 
-protocol PersonImageble {
-    var image: Data? {get set}
+protocol Personalized {
+    var id: Int? { get set }
+    var name: String? {get set }
+    var image: Data? { get set }
 }

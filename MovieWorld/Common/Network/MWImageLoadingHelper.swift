@@ -40,7 +40,7 @@ class MWImageLoadingHelper{
         }
     }
 
-    func loadPersonImage<T: PersonImageble>(for person: T, path: String?) {
+    func loadPersonImage<T: Personalized>(for person: T, path: String?) {
         var personToChange = person
         if let imagePath = path,
             let baseUrl = MWSys.sh.configuration?.images?.secureBaseUrl,

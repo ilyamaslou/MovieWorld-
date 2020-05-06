@@ -33,19 +33,9 @@ class MWMasterFavoriteViewController: MWViewController {
         return view
     }()
 
-    private lazy var moviesViewController: MWFavoriteMoviesViewController = {
-        let viewController = MWFavoriteMoviesViewController()
-        self.add(asChildViewController: viewController)
+    private lazy var moviesViewController = MWFavoriteMoviesViewController()
 
-        return viewController
-    }()
-
-    private lazy var actorsViewController: MWFavoriteActorsViewController = {
-        let viewController = MWFavoriteActorsViewController()
-        self.add(asChildViewController: viewController)
-
-        return viewController
-    }()
+    private lazy var actorsViewController = MWFavoriteActorsViewController()
 
     //MARK: - initialization
 
@@ -60,6 +50,9 @@ class MWMasterFavoriteViewController: MWViewController {
     //MARK: - constraints
 
     private func makeConstraints() {
+        self.add(self.moviesViewController)
+        self.add(self.actorsViewController)
+
         self.contentView.addSubview(self.segmentedControl)
         self.contentView.addSubview(self.separationView)
 
@@ -72,6 +65,16 @@ class MWMasterFavoriteViewController: MWViewController {
             make.top.equalTo(self.segmentedControl.snp.bottom).offset(10)
             make.left.right.equalToSuperview()
             make.height.equalTo(1)
+        }
+
+        self.moviesViewController.view.snp.makeConstraints { (make) in
+            make.top.equalTo(self.separationView.snp.bottom)
+            make.left.right.bottom.equalToSuperview()
+        }
+
+        self.actorsViewController.view.snp.makeConstraints { (make) in
+            make.top.equalTo(self.separationView.snp.bottom)
+            make.left.right.bottom.equalToSuperview()
         }
     }
 
@@ -99,41 +102,12 @@ class MWMasterFavoriteViewController: MWViewController {
     }
 
     private func updateView() {
-        if self.segmentedControl.selectedSegmentIndex == 0 {
-            self.remove(asChildViewController: self.actorsViewController)
-            self.add(asChildViewController: self.moviesViewController)
-        } else {
-            self.remove(asChildViewController: self.moviesViewController)
-            self.add(asChildViewController: self.actorsViewController)
-        }
+        self.actorsViewController.view.isHidden = (self.segmentedControl.selectedSegmentIndex == 0)
+            ? true
+            : false
     }
 
     @objc private func selectionDidChange() {
         self.updateView()
-    }
-}
-
-//MARK: - child viewController extension
-
-extension MWMasterFavoriteViewController {
-    private func add(asChildViewController viewController: UIViewController) {
-        self.addChild(viewController)
-
-        self.contentView.addSubview(viewController.view)
-
-        viewController.view.snp.remakeConstraints { (make) in
-            make.top.equalTo(self.separationView.snp.bottom)
-            make.left.right.bottom.equalToSuperview()
-        }
-
-        viewController.didMove(toParent: self)
-    }
-
-    private func remove(asChildViewController viewController: UIViewController) {
-        viewController.willMove(toParent: nil)
-
-        viewController.view.removeFromSuperview()
-
-        viewController.removeFromParent()
     }
 }

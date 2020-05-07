@@ -46,6 +46,22 @@ class MWNetwork {
         task.resume()
     }
 
+    func collectionsRequest(succesHandler: @escaping ((Data) -> Void)) {
+        let url = URLPaths.dailyCollectionsURL
+
+        guard let requestUrl = URL(string: url) else { return }
+        let request = URLRequest(url: requestUrl)
+
+        let task = self.session.dataTask(with: request) { (data, statusCode, error) in
+            if let data = data, error == nil {
+                    DispatchQueue.main.async {
+                        succesHandler(data)
+                }
+            }
+        }
+        task.resume()
+    }
+
     func request<T: Decodable>(urlPath: String,
                                querryParameters: [String: String],
                                succesHandler: @escaping ((T) -> Void),

@@ -26,17 +26,37 @@ class MWCategoryViewController: MWViewController {
         return tableView
     }()
 
-    //MARK: - initialization and constraints setting
+    //MARK: - initialization
 
     override func initController() {
         super.initController()
         self.title = "Category".local()
+        self.loadCategories()
+    }
 
+    //MARK: - constraints
+
+    override func updateViewConstraints() {
         self.contentView.addSubview(self.tableView)
 
         self.tableView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
+        super.updateViewConstraints()
+    }
+
+    //MARK: - request
+
+    private func loadCategories() {
+        MWNet.sh.collectionsRequest(succesHandler: { [weak self] (categories: Data) in
+
+            do {
+                let values = try? JSONDecoder().decode([MWCategoriesModel].self, from: categories)
+                print(values ?? "NOOOOOOOOO")
+            } catch {
+                print("Json decoding failed")
+            }
+        })
     }
 
 }

@@ -8,7 +8,7 @@
 
 import UIKit
 
-enum MWCategories: String, CaseIterable {
+enum MWMainCategories: String, CaseIterable {
 
     //MARK:- cases
 

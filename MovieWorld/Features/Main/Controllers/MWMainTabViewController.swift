@@ -14,13 +14,13 @@ class MWMainTabViewController: MWViewController {
 
     //MARK: - private variables
 
-    private var moviesByCategories: [MWCategories: [MWMovie]] = [:] {
+    private var moviesByCategories: [MWMainCategories: [MWMovie]] = [:] {
         didSet {
             self.tableView.reloadData()
         }
     }
 
-    private var moviesResultsInfoByCategories: [MWCategories: (totalResults: Int, totalPages: Int)] = [:]
+    private var moviesResultsInfoByCategories: [MWMainCategories: (totalResults: Int, totalPages: Int)] = [:]
     private var group = DispatchGroup()
 
     //MARK:- gui variables
@@ -71,7 +71,7 @@ class MWMainTabViewController: MWViewController {
     private func loadMovies() {
         var urlPath = ""
 
-        for category in MWCategories.allCases {
+        for category in MWMainCategories.allCases {
             urlPath = category.getCategoryUrlPath()
 
             self.group.enter()
@@ -172,7 +172,7 @@ extension MWMainTabViewController {
         self.tableView.reloadData()
     }
 
-    private func fetchMoviesByCategory(by category: MWCategories) -> [Movie] {
+    private func fetchMoviesByCategory(by category: MWMainCategories) -> [Movie] {
         let managedContext = CoreDataManager.s.persistentContainer.viewContext
         let fetch: NSFetchRequest<Movie> = Movie.fetchRequest()
         fetch.predicate = NSPredicate(format: "ANY category.movieCategory = %@", category.rawValue)
@@ -186,7 +186,7 @@ extension MWMainTabViewController {
         return result
     }
 
-    private func save(mwCategory: MWCategories, movies: [MWMovie]) {
+    private func save(mwCategory: MWMainCategories, movies: [MWMovie]) {
         let result = self.fetchMoviesByCategory(by: mwCategory)
         let managedContext = CoreDataManager.s.persistentContainer.viewContext
 
@@ -224,7 +224,7 @@ extension MWMainTabViewController {
         self.saveAndReload(context: managedContext)
     }
 
-    private func setMoviesToCategory(category: MWCategories, movies: [Movie]) {
+    private func setMoviesToCategory(category: MWMainCategories, movies: [Movie]) {
         var mwMovies: [MWMovie] = []
         for movie in movies {
             let newMovie = MWMovie()

@@ -29,7 +29,7 @@ class MWMainTableViewCell: UITableViewCell {
 
     //MARK: - private variable
 
-    private var category: MWCategories?
+    private var category: MWMainCategories?
     private var totalResults: (Int, Int)?
 
     //MARK:- gui variables
@@ -101,7 +101,7 @@ class MWMainTableViewCell: UITableViewCell {
 
     //MARK: - setters
 
-    func set(categoryName: MWCategories, totalResults: (Int, Int)?) {
+    func set(categoryName: MWMainCategories, totalResults: (Int, Int)?) {
         self.category = categoryName
         self.totalResults = totalResults
         self.showAllView.title = categoryName.rawValue

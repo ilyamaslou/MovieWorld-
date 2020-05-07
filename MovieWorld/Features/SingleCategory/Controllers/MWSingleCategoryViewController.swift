@@ -24,7 +24,7 @@ class MWSingleCategoryViewController: MWViewController {
 
     //MARK: - private variables
 
-    private var category: MWCategories?
+    private var category: MWMainCategories?
 
     private var movies: [MWMovie] = [] {
         didSet {
@@ -66,7 +66,7 @@ class MWSingleCategoryViewController: MWViewController {
 
     init(title: String = "Movies",
          movies: [MWMovie],
-         category: MWCategories? = nil,
+         category: MWMainCategories? = nil,
          totalResultsInfo: (totalResults: Int, totalPages: Int)? = (0, 0)) {
         super.init()
         self.title = title

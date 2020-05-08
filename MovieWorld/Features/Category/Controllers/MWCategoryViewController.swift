@@ -50,7 +50,8 @@ class MWCategoryViewController: MWViewController {
     private func loadCategories() {
         MWNet.sh.collectionsRequest(succesHandler: { [weak self] (isCreated: Bool) in
             if isCreated {
-                print("YOOOOO mafaka")
+                let decodedArray = MWCollectionOfCategoriesHelper.sh.decodeLineByLineFileData(decodeType: MWCategoriesModel.self)
+                print(decodedArray.count)
             }
         })
     }

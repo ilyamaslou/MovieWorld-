@@ -48,7 +48,6 @@ class MWNetwork {
     }
 
     func collectionsRequest(succesHandler: @escaping ((Bool) -> Void)) {
-
         let url = URLPaths.dailyCollectionsURL
         guard let requestUrl = URL(string: url) else { return }
         let request = URLRequest(url: requestUrl)
@@ -58,12 +57,10 @@ class MWNetwork {
         let task = self.session.dataTask(with: request) { (data, urlResponse, error) in
             if let data = data {
                 do {
-
                     let decompressedData: Data
                     if data.isGzipped {
                         decompressedData = try data.gunzipped()
                         try decompressedData.write(to: fileURL)
-                        print(decompressedData)
                     } else {
                         decompressedData = data
                     }
@@ -74,7 +71,6 @@ class MWNetwork {
             }
         }
         task.resume()
-
     }
 
     func request<T: Decodable>(urlPath: String,

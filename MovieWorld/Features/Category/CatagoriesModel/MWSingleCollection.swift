@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct MWCategoryModel: Decodable {
+struct MWSingleCollection: Decodable {
 
     //MARK: - enum
 

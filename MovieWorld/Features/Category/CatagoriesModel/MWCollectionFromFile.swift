@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct MWCollectionModel: Decodable {
+struct MWCollectionFromFile: Decodable {
 
     //MARK:- Parameters
 

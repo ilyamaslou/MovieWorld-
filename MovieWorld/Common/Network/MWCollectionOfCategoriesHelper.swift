@@ -18,7 +18,7 @@ class MWCollectionOfCategoriesHelper {
 
     private init() {}
 
-    //MARK:- retrive working data functions
+    //MARK:- functions that retrived working data
 
     private func sepparateLinesInFile(inFile: String, withExtension: String) -> [String] {
         let directoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]

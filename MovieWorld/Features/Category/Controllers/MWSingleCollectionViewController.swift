@@ -13,13 +13,13 @@ class MWSingleCollectionViewController: MWViewController {
     //MARK: - private variables
 
     private var collectionIndex: Int?
-    private var collection: MWCategoryModel? {
+    private var collection: MWSingleCollection? {
         didSet {
             self.tableView.reloadData()
         }
     }
 
-    //MARK:- gui variables
+    //MARK:- gui variable
 
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -31,17 +31,14 @@ class MWSingleCollectionViewController: MWViewController {
         return tableView
     }()
 
-    private lazy var textView = UITextView()
-
     //MARK: - initialization
 
-    init(collection: MWCollectionModel) {
+    init(collection: MWCollectionFromFile) {
         super.init()
         self.title = collection.name
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(self.imageLoaded),
                                                name: .movieImageUpdated, object: nil)
-
         self.collectionIndex = collection.id
         self.loadCollection()
     }
@@ -61,7 +58,7 @@ class MWSingleCollectionViewController: MWViewController {
         super.updateViewConstraints()
     }
 
-    //MARK: - request
+    //MARK: - requests
 
     private func loadCollection() {
         guard let collectionIndex = self.collectionIndex else { return }
@@ -69,7 +66,7 @@ class MWSingleCollectionViewController: MWViewController {
 
         MWNet.sh.request(urlPath: urlPath ,
                          querryParameters: MWNet.sh.parameters,
-                         succesHandler: { [weak self] (collection: MWCategoryModel)  in
+                         succesHandler: { [weak self] (collection: MWSingleCollection)  in
                             guard let self = self else { return }
                             self.collection = collection
                             self.loadAndSetImages()
@@ -104,6 +101,8 @@ class MWSingleCollectionViewController: MWViewController {
         self.tableView.reloadData()
     }
 }
+
+//MARK: UITableViewDataSource, UITableViewDelegate
 
 extension MWSingleCollectionViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

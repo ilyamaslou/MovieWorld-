@@ -12,7 +12,7 @@ class MWCategoryViewController: MWViewController {
 
     //MARK: - private variables
 
-    private var categories: [String] = Array(repeating: "Top 250", count: 25)
+    private var categories: [MWCollectionModel] = []
     private var categoryCellId: String = "categoryCellId"
 
     //MARK:- gui variables
@@ -22,6 +22,7 @@ class MWCategoryViewController: MWViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.separatorStyle = .none
+        tableView.showsVerticalScrollIndicator = false
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: self.categoryCellId)
         return tableView
     }()
@@ -50,12 +51,10 @@ class MWCategoryViewController: MWViewController {
     private func loadCategories() {
         MWNet.sh.collectionsRequest(succesHandler: { [weak self] (isCreated: Bool) in
             if isCreated {
-                let decodedArray = MWCollectionOfCategoriesHelper.sh.decodeLineByLineFileData(decodeType: MWCategoriesModel.self)
-                print(decodedArray.count)
+                self?.categories = MWCollectionOfCategoriesHelper.sh.decodeLineByLineFileData(decodeType: MWCollectionModel.self)
             }
         })
     }
-
 }
 
 //MARK: - UITableViewDelegate, UITableViewDataSource
@@ -71,7 +70,7 @@ extension MWCategoryViewController: UITableViewDelegate, UITableViewDataSource {
             withIdentifier: self.categoryCellId,
             for: indexPath)
 
-        cell.textLabel?.text = self.categories[indexPath.row]
+        cell.textLabel?.text = self.categories[indexPath.row].name
         cell.textLabel?.font = .systemFont(ofSize: 17)
         cell.accessoryType = .disclosureIndicator
         cell.selectionStyle = .none
@@ -85,5 +84,9 @@ extension MWCategoryViewController: UITableViewDelegate, UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 16
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        MWI.s.pushVC(MWSingleCollectionViewController(collection: self.categories[indexPath.row]))
     }
 }

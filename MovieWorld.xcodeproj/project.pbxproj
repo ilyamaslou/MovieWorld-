@@ -8,8 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		990066A12445342D0015C351 /* MWFavoriteActorsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 990066A02445342D0015C351 /* MWFavoriteActorsViewController.swift */; };
+		99034CA6246618B400182480 /* MWCollectionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99034CA5246618B400182480 /* MWCollectionModel.swift */; };
+		99034CA824661A6C00182480 /* MWSingleCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99034CA724661A6C00182480 /* MWSingleCollectionViewController.swift */; };
 		991420CF243A0FAB00A11F49 /* MWPersonMovies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991420CE243A0FAB00A11F49 /* MWPersonMovies.swift */; };
-		992628E62463617000792F64 /* MWCategoriesUrlPathsAndTitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 992628E52463617000792F64 /* MWCategoriesUrlPathsAndTitle.swift */; };
 		992A1D67242AA61E00D61D65 /* MWMovieCast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 992A1D66242AA61E00D61D65 /* MWMovieCast.swift */; };
 		992A1D69242AB81600D61D65 /* Notification + Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 992A1D68242AB81600D61D65 /* Notification + Ex.swift */; };
 		992A1D6B242AC43200D61D65 /* MWCastMemberCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 992A1D6A242AC43200D61D65 /* MWCastMemberCollectionViewCell.swift */; };
@@ -45,7 +46,7 @@
 		9956E5012462F9F600FF499D /* MWSingleMovieViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9956E5002462F9F600FF499D /* MWSingleMovieViewContainer.swift */; };
 		995F405724153868005DC65F /* MWImageConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995F405624153868005DC65F /* MWImageConfiguration.swift */; };
 		995F405924153DA8005DC65F /* URLPaths.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995F405824153DA8005DC65F /* URLPaths.swift */; };
-		9968012C246373D4008AC0EF /* MWCategoriesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9968012B246373D4008AC0EF /* MWCategoriesModel.swift */; };
+		9968012C246373D4008AC0EF /* MWCategoryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9968012B246373D4008AC0EF /* MWCategoryModel.swift */; };
 		996AA821243142A30001B788 /* MWMovieImages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 996AA820243142A30001B788 /* MWMovieImages.swift */; };
 		996CB0A324124E2F00200EFE /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 996CB0A524124E2F00200EFE /* Localizable.strings */; };
 		996F79E3240BEACF006FF3C0 /* MWNetwork+ExUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 996F79E1240BEACE006FF3C0 /* MWNetwork+ExUtility.swift */; };
@@ -106,8 +107,9 @@
 		0BE71B7BC15D4D1921BA2AA9 /* Pods-MovieWorld.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MovieWorld.debug.xcconfig"; path = "Target Support Files/Pods-MovieWorld/Pods-MovieWorld.debug.xcconfig"; sourceTree = "<group>"; };
 		4EA3DE178F6AFCF3BA8474BC /* Pods-MovieWorld.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MovieWorld.release.xcconfig"; path = "Target Support Files/Pods-MovieWorld/Pods-MovieWorld.release.xcconfig"; sourceTree = "<group>"; };
 		990066A02445342D0015C351 /* MWFavoriteActorsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWFavoriteActorsViewController.swift; sourceTree = "<group>"; };
+		99034CA5246618B400182480 /* MWCollectionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWCollectionModel.swift; sourceTree = "<group>"; };
+		99034CA724661A6C00182480 /* MWSingleCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWSingleCollectionViewController.swift; sourceTree = "<group>"; };
 		991420CE243A0FAB00A11F49 /* MWPersonMovies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWPersonMovies.swift; sourceTree = "<group>"; };
-		992628E52463617000792F64 /* MWCategoriesUrlPathsAndTitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWCategoriesUrlPathsAndTitle.swift; sourceTree = "<group>"; };
 		992A1D66242AA61E00D61D65 /* MWMovieCast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWMovieCast.swift; sourceTree = "<group>"; };
 		992A1D68242AB81600D61D65 /* Notification + Ex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notification + Ex.swift"; sourceTree = "<group>"; };
 		992A1D6A242AC43200D61D65 /* MWCastMemberCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWCastMemberCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -143,7 +145,7 @@
 		9956E5002462F9F600FF499D /* MWSingleMovieViewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWSingleMovieViewContainer.swift; sourceTree = "<group>"; };
 		995F405624153868005DC65F /* MWImageConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWImageConfiguration.swift; sourceTree = "<group>"; };
 		995F405824153DA8005DC65F /* URLPaths.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLPaths.swift; sourceTree = "<group>"; };
-		9968012B246373D4008AC0EF /* MWCategoriesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWCategoriesModel.swift; sourceTree = "<group>"; };
+		9968012B246373D4008AC0EF /* MWCategoryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWCategoryModel.swift; sourceTree = "<group>"; };
 		996AA820243142A30001B788 /* MWMovieImages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWMovieImages.swift; sourceTree = "<group>"; };
 		996CB0932412472500200EFE /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		996CB0A424124E2F00200EFE /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -225,14 +227,6 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
-		992628E7246361C500792F64 /* Controls */ = {
-			isa = PBXGroup;
-			children = (
-				992628E52463617000792F64 /* MWCategoriesUrlPathsAndTitle.swift */,
-			);
-			path = Controls;
-			sourceTree = "<group>";
-		};
 		992A1D65242AA50300D61D65 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -308,7 +302,8 @@
 		9968012A246373AE008AC0EF /* CatagoriesModel */ = {
 			isa = PBXGroup;
 			children = (
-				9968012B246373D4008AC0EF /* MWCategoriesModel.swift */,
+				9968012B246373D4008AC0EF /* MWCategoryModel.swift */,
+				99034CA5246618B400182480 /* MWCollectionModel.swift */,
 			);
 			path = CatagoriesModel;
 			sourceTree = "<group>";
@@ -459,7 +454,6 @@
 			isa = PBXGroup;
 			children = (
 				9968012A246373AE008AC0EF /* CatagoriesModel */,
-				992628E7246361C500792F64 /* Controls */,
 				9979B45D23FFC3DE005421D9 /* Controllers */,
 			);
 			path = Category;
@@ -489,6 +483,7 @@
 			isa = PBXGroup;
 			children = (
 				9979B46023FFCEF4005421D9 /* MWCategoryViewController.swift */,
+				99034CA724661A6C00182480 /* MWSingleCollectionViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -861,6 +856,7 @@
 				994842FC245A27DD009F04AE /* FavoriteActors+CoreDataClass.swift in Sources */,
 				9979B45F23FFC666005421D9 /* MWTabBarViewController.swift in Sources */,
 				99AB2D832433EB1200095464 /* MWTitleButtonView.swift in Sources */,
+				99034CA6246618B400182480 /* MWCollectionModel.swift in Sources */,
 				9941EAB82424F2CF00E0CFE6 /* MWGenreCollectionViewCell.swift in Sources */,
 				996F79E6240BEAE8006FF3C0 /* MWNetwork.swift in Sources */,
 				99AB2D922437714C00095464 /* MWCastMemberTableViewCell.swift in Sources */,
@@ -885,6 +881,7 @@
 				9999E0D323F9F378007EB718 /* MWMainTabViewController.swift in Sources */,
 				9944CFBD24475F3F00C783CD /* MWFavoriteViewController.swift in Sources */,
 				994842F6245A27DD009F04AE /* ImageConfiguration+CoreDataClass.swift in Sources */,
+				99034CA824661A6C00182480 /* MWSingleCollectionViewController.swift in Sources */,
 				992A1D6B242AC43200D61D65 /* MWCastMemberCollectionViewCell.swift in Sources */,
 				9977B54B2462F484001EAB86 /* MWSingleMemberView.swift in Sources */,
 				99CAD4562451007600E88BBD /* MWCountryFilterTableViewCell.swift in Sources */,
@@ -895,7 +892,6 @@
 				9956E5012462F9F600FF499D /* MWSingleMovieViewContainer.swift in Sources */,
 				9981C573243924940079747B /* MWMemberDetails.swift in Sources */,
 				99937CAA243D52C700054731 /* UIImage + Ex.swift in Sources */,
-				992628E62463617000792F64 /* MWCategoriesUrlPathsAndTitle.swift in Sources */,
 				99BAE46E2411A6DC00F45B11 /* MWConfiguration.swift in Sources */,
 				9979B46323FFCF19005421D9 /* MWSearchViewController.swift in Sources */,
 				99CAD4542450F65900E88BBD /* FilterCountryViewController.swift in Sources */,
@@ -921,7 +917,7 @@
 				99915F88240D254800E39CE0 /* MWSpecialError.swift in Sources */,
 				994842FE245A27DD009F04AE /* CastMember+CoreDataClass.swift in Sources */,
 				992DB7D12428CD700047D438 /* MWSingleMovieViewController.swift in Sources */,
-				9968012C246373D4008AC0EF /* MWCategoriesModel.swift in Sources */,
+				9968012C246373D4008AC0EF /* MWCategoryModel.swift in Sources */,
 				996F79E3240BEACF006FF3C0 /* MWNetwork+ExUtility.swift in Sources */,
 				992DB7D32428D8920047D438 /* MWMovieVideo.swift in Sources */,
 				990066A12445342D0015C351 /* MWFavoriteActorsViewController.swift in Sources */,

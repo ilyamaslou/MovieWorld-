@@ -8,21 +8,23 @@
 
 import Foundation
 
-struct MWCategoriesModel: Decodable {
+struct MWCategoryModel: Decodable {
+
+    //MARK: - enum
 
     enum CodingKeys: String, CodingKey {
         case id = "id"
         case name = "name"
+        case overview = "overview"
+        case backdropPath = "backdrop_path"
+        case parts = "parts"
     }
+
+    //MARK:- Parameters
 
     var id: Int?
     var name: String?
-
-    init() {}
-
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.id = try container.decode(Int.self, forKey: .id)
-        self.name = try container.decode(String.self, forKey: .name)
-    }
+    var overview: String?
+    var backdropPath: String?
+    var parts: [MWMovie]?
 }

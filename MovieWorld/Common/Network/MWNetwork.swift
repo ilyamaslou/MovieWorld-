@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Gzip
 typealias MWNet = MWNetwork
 
 class MWNetwork {
@@ -46,20 +47,34 @@ class MWNetwork {
         task.resume()
     }
 
-    func collectionsRequest(succesHandler: @escaping ((Data) -> Void)) {
-        let url = URLPaths.dailyCollectionsURL
+    func collectionsRequest(succesHandler: @escaping ((Bool) -> Void)) {
 
+        let url = URLPaths.dailyCollectionsURL
         guard let requestUrl = URL(string: url) else { return }
         let request = URLRequest(url: requestUrl)
+        let directoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let fileURL = URL(fileURLWithPath: "dailyCollections", relativeTo: directoryURL).appendingPathExtension("txt")
 
-        let task = self.session.dataTask(with: request) { (data, statusCode, error) in
-            if let data = data, error == nil {
-                    DispatchQueue.main.async {
-                        succesHandler(data)
+        let task = self.session.dataTask(with: request) { (data, urlResponse, error) in
+            if let data = data {
+                do {
+
+                    let decompressedData: Data
+                    if data.isGzipped {
+                        decompressedData = try data.gunzipped()
+                        try decompressedData.write(to: fileURL)
+                        print(decompressedData)
+                    } else {
+                        decompressedData = data
+                    }
+                    succesHandler(true)
+                } catch {
+                    print(error)
                 }
             }
         }
         task.resume()
+
     }
 
     func request<T: Decodable>(urlPath: String,

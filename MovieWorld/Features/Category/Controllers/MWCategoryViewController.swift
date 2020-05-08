@@ -48,13 +48,9 @@ class MWCategoryViewController: MWViewController {
     //MARK: - request
 
     private func loadCategories() {
-        MWNet.sh.collectionsRequest(succesHandler: { [weak self] (categories: Data) in
-
-            do {
-                let values = try? JSONDecoder().decode([MWCategoriesModel].self, from: categories)
-                print(values ?? "NOOOOOOOOO")
-            } catch {
-                print("Json decoding failed")
+        MWNet.sh.collectionsRequest(succesHandler: { [weak self] (isCreated: Bool) in
+            if isCreated {
+                print("YOOOOO mafaka")
             }
         })
     }

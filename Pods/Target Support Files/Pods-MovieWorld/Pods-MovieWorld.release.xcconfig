@@ -1,9 +1,9 @@
 ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES
-FRAMEWORK_SEARCH_PATHS = $(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/AvailableHapticFeedback" "${PODS_CONFIGURATION_BUILD_DIR}/MultiSlider" "${PODS_CONFIGURATION_BUILD_DIR}/SnapKit" "${PODS_CONFIGURATION_BUILD_DIR}/SweeterSwift" "${PODS_CONFIGURATION_BUILD_DIR}/YouTubePlayer"
+FRAMEWORK_SEARCH_PATHS = $(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/AvailableHapticFeedback" "${PODS_CONFIGURATION_BUILD_DIR}/GzipSwift" "${PODS_CONFIGURATION_BUILD_DIR}/MultiSlider" "${PODS_CONFIGURATION_BUILD_DIR}/SnapKit" "${PODS_CONFIGURATION_BUILD_DIR}/SweeterSwift" "${PODS_CONFIGURATION_BUILD_DIR}/YouTubePlayer"
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
-HEADER_SEARCH_PATHS = $(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/AvailableHapticFeedback/AvailableHapticFeedback.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/MultiSlider/MultiSlider.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/SnapKit/SnapKit.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/SweeterSwift/SweeterSwift.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/YouTubePlayer/YouTubePlayer.framework/Headers"
+HEADER_SEARCH_PATHS = $(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/AvailableHapticFeedback/AvailableHapticFeedback.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/GzipSwift/Gzip.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/MultiSlider/MultiSlider.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/SnapKit/SnapKit.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/SweeterSwift/SweeterSwift.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/YouTubePlayer/YouTubePlayer.framework/Headers"
 LD_RUNPATH_SEARCH_PATHS = $(inherited) '@executable_path/Frameworks' '@loader_path/Frameworks'
-OTHER_LDFLAGS = $(inherited) -framework "AvailableHapticFeedback" -framework "MultiSlider" -framework "SnapKit" -framework "SweeterSwift" -framework "YouTubePlayer"
+OTHER_LDFLAGS = $(inherited) -l"z" -framework "AvailableHapticFeedback" -framework "Gzip" -framework "MultiSlider" -framework "SnapKit" -framework "SweeterSwift" -framework "YouTubePlayer"
 OTHER_SWIFT_FLAGS = $(inherited) -D COCOAPODS
 PODS_BUILD_DIR = ${BUILD_DIR}
 PODS_CONFIGURATION_BUILD_DIR = ${PODS_BUILD_DIR}/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)

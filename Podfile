@@ -9,4 +9,5 @@ target 'MovieWorld' do
 pod 'SnapKit', '~> 5.0.0'
 pod 'YouTubePlayer'
 pod 'MultiSlider'
+pod 'GzipSwift'
 end

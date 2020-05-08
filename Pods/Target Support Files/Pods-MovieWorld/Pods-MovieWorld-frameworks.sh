@@ -198,6 +198,7 @@ fi
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/AvailableHapticFeedback/AvailableHapticFeedback.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/GzipSwift/Gzip.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/MultiSlider/MultiSlider.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/SweeterSwift/SweeterSwift.framework"
@@ -205,6 +206,7 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/AvailableHapticFeedback/AvailableHapticFeedback.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/GzipSwift/Gzip.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/MultiSlider/MultiSlider.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/SweeterSwift/SweeterSwift.framework"

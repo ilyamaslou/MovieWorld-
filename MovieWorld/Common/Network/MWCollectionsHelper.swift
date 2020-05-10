@@ -55,26 +55,9 @@ class MWCollectionsHelper {
     //MARK: - getters
 
     func getUrl() -> String? {
-        guard let date = Date().toString().separateDate(by: "-"),
-            let month = Int(date.first),
-            let day = Int(date.second),
-            let year = Int(date.third) else { return nil }
-
-        var selectedDay = (day - 1) < 10 ? "0\(day - 1)" : "\(day - 1)"
-        var selectedMonth = month < 10 ? "0\(month)" : "\(month)"
-        var selectedYear = year
-
-        guard selectedDay == "00" else { return String(format: URLPaths.dailyCollectionsURL, selectedMonth, selectedDay, selectedYear) }
-        selectedMonth = (month - 1) < 10 ? "0\(month - 1)" : "\(month - 1)"
-        if selectedMonth != "00" {
-            let numDays = self.getNumOfDays(month: month - 1, year: year)
-            selectedDay = "\(numDays ?? 28)"
-        } else {
-            selectedYear = year - 1
-            selectedMonth = "12"
-            selectedDay = "31"
-        }
-        return String(format: URLPaths.dailyCollectionsURL, selectedMonth, selectedDay, selectedYear)
+        guard let dayBefore = Calendar.current.date(byAdding: .day, value: -1, to: Date()),
+            let date = dayBefore.toString().separateDate(by: "-") else { return nil }
+        return String(format: URLPaths.dailyCollectionsURL, date.first, date.second, date.third)
     }
 
     private func getNumOfDays(month: Int, year: Int) -> Int? {

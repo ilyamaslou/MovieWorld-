@@ -47,24 +47,16 @@ class MWNetwork {
         task.resume()
     }
 
-    func collectionsRequest(succesHandler: @escaping ((Bool) -> Void)) {
-        let url = URLPaths.dailyCollectionsURL
-        guard let requestUrl = URL(string: url) else { return }
+    func collectionsRequest(succesHandler: @escaping (() -> Void)) {
+        guard let url = MWCollectionsHelper.sh.getUrl(),
+            let requestUrl = URL(string: url) else { return }
         let request = URLRequest(url: requestUrl)
-        let directoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        let fileURL = URL(fileURLWithPath: "dailyCollections", relativeTo: directoryURL).appendingPathExtension("txt")
 
         let task = self.session.dataTask(with: request) { (data, urlResponse, error) in
             if let data = data {
                 do {
-                    let decompressedData: Data
-                    if data.isGzipped {
-                        decompressedData = try data.gunzipped()
-                        try decompressedData.write(to: fileURL)
-                    } else {
-                        decompressedData = data
-                    }
-                    succesHandler(true)
+                    try MWCollectionsHelper.sh.saveToFile(data: data)
+                    succesHandler()
                 } catch {
                     print(error)
                 }

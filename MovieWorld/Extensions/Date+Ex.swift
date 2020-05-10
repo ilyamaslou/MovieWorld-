@@ -22,4 +22,10 @@ extension Date {
     var toIntYear: Int {
         return Int(self.toYear) ?? 0
     }
+
+    func toString(format: String = "MM-dd-yyyy") -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = format
+        return dateFormatter.string(from: self)
+    }
 }

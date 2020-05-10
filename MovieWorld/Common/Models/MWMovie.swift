@@ -112,12 +112,6 @@ class MWMovie: Decodable, Hashable {
     }
 
     func getMovieReleaseYear() -> String {
-        var releaseYear = ""
-        if let releaseDate = self.releaseDate {
-            let dividedDate = releaseDate.split(separator: "-")
-            releaseYear = String(dividedDate.first ?? "")
-            releaseYear = releaseYear.isEmpty ? "" : "\(releaseYear)"
-        }
-        return releaseYear
+        return self.releaseDate?.separateDate(by: "-")?.first ?? ""
     }
 }

@@ -49,9 +49,8 @@ class MWCategoryViewController: MWViewController {
     //MARK: - request
 
     private func loadCategories() {
-        MWNet.sh.collectionsRequest(succesHandler: { [weak self] (isCreated: Bool) in
-            guard isCreated  else { return }
-            self?.collections = MWCollectionOfCategoriesHelper.sh.decodeLineByLineFileData(decodeType: MWCollectionFromFile.self)
+        MWNet.sh.collectionsRequest(succesHandler: { [weak self] in
+            self?.collections = MWCollectionsHelper.sh.decodeLineByLineFileData(decodeType: MWCollectionFromFile.self)
         })
     }
 }

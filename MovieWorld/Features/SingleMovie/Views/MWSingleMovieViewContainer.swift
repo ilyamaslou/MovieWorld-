@@ -40,7 +40,7 @@ class MWSingleMovieViewContainer: UIView {
 
     private lazy var descriptionLabel: UILabel = {
         let label = UILabel()
-        label.text = "Description"
+        label.text = "Description".local()
         label.font = .systemFont(ofSize: 17, weight: .bold)
         return label
     }()
@@ -54,7 +54,7 @@ class MWSingleMovieViewContainer: UIView {
 
     lazy var showAllView: MWTitleButtonView = {
         let view = MWTitleButtonView()
-        view.title = "Cast"
+        view.title = "Cast".local()
         return view
     }()
 
@@ -82,7 +82,7 @@ class MWSingleMovieViewContainer: UIView {
 
     private lazy var galleryLabel: UILabel = {
         let label = UILabel()
-        label.text = "Trailers and gallery"
+        label.text = "Trailers and gallery".local()
         label.font = .systemFont(ofSize: 17, weight: .bold)
         return label
     }()

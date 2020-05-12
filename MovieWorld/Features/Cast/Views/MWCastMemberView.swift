@@ -114,15 +114,9 @@ class MWCastMemberView: UIView {
     }
 
     func setUpBirthday(birthday: String) {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
+        guard let age = birthday.toDate() else { return }
+        let formattedBirthday = age.toString(format: "dd.MM.yyyy")
 
-        let stringFormatter = DateFormatter()
-        stringFormatter.dateFormat = "dd.MM.yyyy"
-
-        guard let age = dateFormatter.date(from: birthday) else { return }
-        let formattedBirthday = stringFormatter.string(from: age)
-
-        self.memberBirthLabel.text = "\(formattedBirthday) (\(age.toAge) years)"
+        self.memberBirthLabel.text = "%@ (%d years)".local(args: formattedBirthday, age.toAge)
     }
 }

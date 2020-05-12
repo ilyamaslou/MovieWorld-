@@ -69,7 +69,7 @@ class MWSingleCategoryViewController: MWViewController {
          category: MWMainCategories? = nil,
          totalResultsInfo: (totalResults: Int, totalPages: Int)? = (0, 0)) {
         super.init()
-        self.title = title
+        self.title = title.local()
         self.category = category
         self.totalPages = totalResultsInfo?.totalPages ?? 0
         self.totalItems = totalResultsInfo?.totalResults ?? 0

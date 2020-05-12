@@ -273,7 +273,7 @@ class MWSingleMovieViewController: MWViewController {
     private func setDetails() {
         self.contentViewContainer.descriptionTextLabel.text = self.movieDetails?.overview ?? ""
         guard let movieRuntime = self.movieDetails?.runtime else { return }
-        self.contentViewContainer.movieRuntimeLabel.text = "\(movieRuntime) minutes"
+        self.contentViewContainer.movieRuntimeLabel.text = "%d minutes".local(args: movieRuntime)
     }
 
     private func setShowAllButtonTappedAction() {

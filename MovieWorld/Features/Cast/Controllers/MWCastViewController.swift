@@ -54,7 +54,7 @@ class MWCastViewController: MWViewController {
 
     override func initController() {
         super.initController()
-        self.title = "Cast"
+        self.title = "Cast".local()
     }
 
     // MARK: - constraints

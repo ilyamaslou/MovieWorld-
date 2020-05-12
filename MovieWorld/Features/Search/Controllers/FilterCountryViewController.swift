@@ -33,7 +33,7 @@ class FilterCountryViewController: MWViewController {
     private lazy var searchController = UISearchController(searchResultsController: nil)
 
     private lazy var resetBarButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(title: "Reset",
+        let button = UIBarButtonItem(title: "Reset".local(),
                                      style: .plain,
                                      target: self,
                                      action: #selector(self.resetButtonDidTapped))
@@ -85,7 +85,7 @@ class FilterCountryViewController: MWViewController {
     //MARK: - set navigation bar
 
     private func presetNavBar() {
-        self.title = "Country"
+        self.title = "Country".local()
         self.navigationItem.setRightBarButton(self.resetBarButton, animated: true)
         self.navigationItem.hidesSearchBarWhenScrolling = false
         self.searchController.searchResultsUpdater = self

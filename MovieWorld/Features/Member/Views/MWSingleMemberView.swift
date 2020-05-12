@@ -21,7 +21,7 @@ class MWSingleMemberView: UIView {
 
     private lazy var titleForCollectionView: UILabel = {
         let label = UILabel()
-        label.text = "Filmography"
+        label.text = "Filmography".local()
         label.font = .systemFont(ofSize: 17, weight: .bold)
         return label
     }()

@@ -104,7 +104,7 @@ class MWSearchViewController: MWViewController {
     //MARK: - setting of navigation bar
 
     private func presettingSearchControllerNavBar() {
-        self.title = "Search"
+        self.title = "Search".local()
         self.searchController.searchResultsUpdater = self
         self.searchController.obscuresBackgroundDuringPresentation = false
         self.searchController.searchBar.delegate = self

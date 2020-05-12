@@ -40,7 +40,7 @@ class MWFavoriteViewController: MWViewController {
 
     override func initController() {
         super.initController()
-        self.title = "Favorite"
+        self.title = "Favorites".local()
         self.setupSegmentedControl()
         self.makeConstraints()
         self.updateView()
@@ -93,8 +93,8 @@ class MWFavoriteViewController: MWViewController {
 
     private func setupSegmentedControl() {
         self.segmentedControl.removeAllSegments()
-        self.segmentedControl.insertSegment(withTitle: "Films", at: 0, animated: false)
-        self.segmentedControl.insertSegment(withTitle: "People", at: 1, animated: false)
+        self.segmentedControl.insertSegment(withTitle: "Films".local(), at: 0, animated: false)
+        self.segmentedControl.insertSegment(withTitle: "People".local(), at: 1, animated: false)
         self.segmentedControl.addTarget(self, action: #selector(self.selectionDidChange), for: .valueChanged)
 
         self.segmentedControl.selectedSegmentIndex = 0

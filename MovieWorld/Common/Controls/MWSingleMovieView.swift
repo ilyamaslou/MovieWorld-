@@ -134,9 +134,9 @@ class MWSingleMovieView: UIView {
         self.genresLabel.text = self.setUpGenres(movieGenres: movie.movieGenres)
 
         if let movieRating = movie.voteAvarage, movieRating != 0 {
-            self.ratingsLabel.text = "Rating: \(movieRating)"
+            self.ratingsLabel.text = "Rating: %.1f".local(args: movieRating)
         } else {
-            self.ratingsLabel.text = "Not rated"
+            self.ratingsLabel.text = "Not rated".local()
         }
 
         self.setNeedsUpdateConstraints()

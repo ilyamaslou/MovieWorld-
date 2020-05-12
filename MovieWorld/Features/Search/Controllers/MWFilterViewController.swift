@@ -48,7 +48,7 @@ class MWFilterViewController: MWViewController {
     //MARK:- gui variables
 
     private lazy var resetBarButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(title: "Reset",
+        let button = UIBarButtonItem(title: "Reset".local(),
                                      style: .plain,
                                      target: self,
                                      action: #selector(self.resetButtonDidTapped))
@@ -60,14 +60,14 @@ class MWFilterViewController: MWViewController {
 
     private lazy var countryView: MWLabelsWithArrowView = {
         var view = MWLabelsWithArrowView()
-        view.title = "Country"
+        view.title = "Country".local()
         view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.countryViewDidTapped)))
         return view
     }()
 
     private lazy var yearView: MWLabelsWithArrowView = {
         var view = MWLabelsWithArrowView()
-        view.title = "Year"
+        view.title = "Year".local()
         view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.yearViewDidTapped)))
         return view
     }()
@@ -91,8 +91,9 @@ class MWFilterViewController: MWViewController {
     private lazy var ratingView: MWLabelsWithArrowView = {
         let view: MWLabelsWithArrowView = MWLabelsWithArrowView()
         view.hasArrow = false
-        view.title = "Rating"
-        view.value = "from \(self.selectedRatingRange?.from ?? 1.0) to \(self.selectedRatingRange?.to ?? 10.0)"
+        view.title = "Rating".local()
+        view.value = "from %.1f to %.1f"
+            .local(args: (self.selectedRatingRange?.from ?? 1.0), (self.selectedRatingRange?.to ?? 10.0))
         return view
     }()
 
@@ -113,7 +114,7 @@ class MWFilterViewController: MWViewController {
     private lazy var showButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = UIColor(named: "accentColor")
-        button.setTitle("Show", for: .normal)
+        button.setTitle("Show".local(), for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 17)
         button.layer.cornerRadius = 5
@@ -197,7 +198,7 @@ class MWFilterViewController: MWViewController {
     //MARK: - setup view data actions
 
     private func setUpView() {
-        self.title = "Filter"
+        self.title = "Filter".local()
         self.navigationItem.setRightBarButton(self.resetBarButton, animated: true)
 
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.tapGestureDone))
@@ -271,7 +272,8 @@ class MWFilterViewController: MWViewController {
     }
 
     private func setUpSlider() {
-        self.ratingView.value = "from \(self.selectedRatingRange?.from ?? 1.0) to \(self.selectedRatingRange?.to ?? 10.0)"
+        self.ratingView.value = "from %.1f to %.1f"
+            .local(args: (self.selectedRatingRange?.from ?? 1.0), (self.selectedRatingRange?.to ?? 10.0))
         self.ratingSlider.value = [CGFloat(self.selectedRatingRange?.from ?? 1.0),
                                    CGFloat(self.selectedRatingRange?.to ?? 10.0)]
     }

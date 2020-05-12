@@ -50,17 +50,18 @@ class MWNetwork {
     func collectionsRequest(succesHandler: @escaping (() -> Void)) {
         guard let url = MWCollectionsHelper.sh.getUrl(),
             let requestUrl = URL(string: url) else { return }
-        let request = URLRequest(url: requestUrl)
+        var request = URLRequest(url: requestUrl)
+        request.cachePolicy = .returnCacheDataElseLoad
 
-        let task = self.session.dataTask(with: request) { (data, urlResponse, error) in
+        let task = URLSession.shared.dataTask(with: request) { (data, urlResponse, error) in
             if let data = data {
                 do {
                     try MWCollectionsHelper.sh.saveToFile(data: data)
+                    succesHandler()
                 } catch {
                     print(error)
                 }
             }
-            succesHandler()
         }
         task.resume()
     }

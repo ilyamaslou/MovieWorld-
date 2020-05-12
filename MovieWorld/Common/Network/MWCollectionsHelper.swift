@@ -74,6 +74,12 @@ class MWCollectionsHelper {
         let directoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         let fileURL = URL(fileURLWithPath: "dailyCollections", relativeTo: directoryURL).appendingPathExtension("txt")
 
+        if let attributes = try? FileManager.default.attributesOfItem(atPath: fileURL.path) as [FileAttributeKey: Any],
+            let creationDate = attributes[FileAttributeKey.creationDate] as? Date,
+            creationDate.toString() == Date().toString() {
+            return
+        }
+
         let decompressedData: Data
         if data.isGzipped {
             decompressedData = try data.gunzipped()

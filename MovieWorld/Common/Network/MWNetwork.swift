@@ -56,11 +56,11 @@ class MWNetwork {
             if let data = data {
                 do {
                     try MWCollectionsHelper.sh.saveToFile(data: data)
-                    succesHandler()
                 } catch {
                     print(error)
                 }
             }
+            succesHandler()
         }
         task.resume()
     }

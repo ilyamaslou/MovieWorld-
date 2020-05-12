@@ -25,5 +25,5 @@ struct URLPaths {
     static let personInfo = "person/%d"
     static let personMovies = "search/person"
     static let collectionOfMoviesById = "collection/%d"
-    static let dailyCollectionsURL = "https://files.tmdb.org/p/exports/collection_ids_%@_%@_%d.json.gz"
+    static let dailyCollectionsURL = "https://files.tmdb.org/p/exports/collection_ids_%@_%@_%@.json.gz"
 }

@@ -13,7 +13,7 @@ class MWCastMemberView: UIView {
     //MARK: insets and size variables
 
     private let edgeInsets = UIEdgeInsets(top: 10, left: 16, bottom: 10, right: 16)
-    private let imageSize = CGSize(width: 70, height: 70)
+    private let imageSize = CGSize(width: 80, height: 120)
 
     //MARK: - private variables
 

@@ -14,7 +14,7 @@ class MWSingleMovieView: UIView {
 
     private let edgeInsets = UIEdgeInsets(top: 10, left: 16, bottom: 8, right: -16)
     private let contentInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
-    private let imageSize = CGSize(width: 80, height: 138)
+    private let imageSize = CGSize(width: 80, height: 120)
 
     //MARK: - private variables
 
@@ -77,7 +77,7 @@ class MWSingleMovieView: UIView {
             make.top.equalToSuperview().offset(self.edgeInsets.top)
             make.left.equalToSuperview().offset(self.edgeInsets.left)
             make.bottom.equalToSuperview().inset(10)
-            make.width.equalTo(self.imageSize)
+            make.size.equalTo(self.imageSize)
         }
 
         self.filmNameLabel.snp.updateConstraints { (make) in
@@ -119,11 +119,9 @@ class MWSingleMovieView: UIView {
         self.filmNameLabel.text = movie.title
 
         if let imageData = movie.image {
-            self.filmImageView.image = UIImage(data: imageData)?
-                .resizeImage(targetSize: self.imageSize)
+            self.filmImageView.image = UIImage(data: imageData)
         } else {
-            self.filmImageView.image = UIImage(named: "imageNotFound")?
-                .resizeImage(targetSize: self.imageSize)
+            self.filmImageView.image = UIImage(named: "imageNotFound")
         }
 
         let releasedYear = movie.getMovieReleaseYear().isEmpty ? "" : "\(movie.getMovieReleaseYear()),"

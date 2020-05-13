@@ -71,10 +71,6 @@ class MWMovieGalleryCollectionViewCell: UICollectionViewCell {
 
     private func setAndShowLoadedVideo(videoUrlKey: String?) {
         guard let key = videoUrlKey else { return }
-        let videoUrl = String(format: URLPaths.getVideo, key)
-        let encodedURL = videoUrl.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
-        if let url = URL(string: encodedURL) {
-            self.movieVideoView.loadVideoURL(url)
-        }
+        self.movieVideoView.loadVideoID(key)
     }
 }

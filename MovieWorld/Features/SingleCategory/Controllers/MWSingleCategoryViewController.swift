@@ -228,7 +228,6 @@ extension MWSingleCategoryViewController {
                          querryParameters: query,
                          succesHandler: { [weak self] (movies: MWMoviesResponse)  in
                             guard let self = self else { return }
-
                             self.totalItems = movies.totalResults
                             self.totalPages = movies.totalPages
                             self.setGenres(to: movies.results)
@@ -237,7 +236,6 @@ extension MWSingleCategoryViewController {
             },
                          errorHandler: { [weak self] (error) in
                             guard let self = self else { return }
-
                             let message = error.getErrorDesription()
                             self.errorAlert(message: message)
                             self.loadingSpinner.stopAnimating()

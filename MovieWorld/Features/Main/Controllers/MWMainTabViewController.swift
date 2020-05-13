@@ -79,7 +79,6 @@ class MWMainTabViewController: MWViewController {
                              querryParameters: MWNet.sh.parameters,
                              succesHandler: { [weak self] (movies: MWMoviesResponse)  in
                                 guard let self = self else { return }
-
                                 self.moviesResultsInfoByCategories[category] = (movies.totalResults,
                                                                                 movies.totalPages)
                                 self.setGenres(to: movies.results)
@@ -91,7 +90,6 @@ class MWMainTabViewController: MWViewController {
                 },
                              errorHandler: { [weak self] (error) in
                                 guard let self = self else { return }
-
                                 let message = error.getErrorDesription()
                                 self.errorAlert(message: message)
 

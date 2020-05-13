@@ -71,6 +71,7 @@ class MWSingleMovieViewController: MWViewController {
         view.galleryCollectionView.dataSource = self
         view.castCollectionView.delegate = self
         view.castCollectionView.dataSource = self
+        view.moviePlayer.delegate = self
         return view
     }()
 
@@ -163,13 +164,10 @@ class MWSingleMovieViewController: MWViewController {
                             }
                             self.setAndShowLoadedVideo(videoUrlKey: self.gallery.videos.first)
                             self.reloadGalleryItems()
-                            self.contentViewContainer.loadingIndicator.stopAnimating()
             },
                          errorHandler: { [weak self] (error) in
                             guard let self = self else { return }
-
                             let message = error.getErrorDesription()
-                            self.contentViewContainer.loadingIndicator.stopAnimating()
                             self.errorAlert(message: message)
         })
     }
@@ -197,14 +195,12 @@ class MWSingleMovieViewController: MWViewController {
                          querryParameters: MWNet.sh.parameters,
                          succesHandler: { [weak self] (details: MWMovieAdditionalInfo)  in
                             guard let self = self else { return }
-
                             self.movieDetails = details
                             self.saveAdditionalInfo(info: details)
                             self.setDetails()
             },
                          errorHandler: { [weak self] (error) in
                             guard let self = self else { return }
-
                             let message = error.getErrorDesription()
                             self.errorAlert(message: message)
                             self.setFetchedAddittionalInfo()
@@ -219,13 +215,11 @@ class MWSingleMovieViewController: MWViewController {
                          querryParameters: MWNet.sh.parameters,
                          succesHandler: { [weak self] (images: MWMovieImagesResponse)  in
                             guard let self = self else { return }
-
                             self.imagesResponse = images
                             MWImageLoadingHelper.sh.loadMovieImages(for: self.imagesResponse)
             },
                          errorHandler: { [weak self] (error) in
                             guard let self = self else { return }
-
                             let message = error.getErrorDesription()
                             self.errorAlert(message: message)
         })
@@ -264,11 +258,7 @@ class MWSingleMovieViewController: MWViewController {
 
     private func setAndShowLoadedVideo(videoUrlKey: String?) {
         guard let key = videoUrlKey else { return }
-        let videoUrl = String(format: URLPaths.getVideo, key)
-        let encodedURL = videoUrl.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
-        if let url = URL(string: encodedURL) {
-            self.contentViewContainer.moviePlayer.loadVideoURL(url)
-        }
+        self.contentViewContainer.moviePlayer.loadVideoID(key)
     }
 
     private func setDetails() {
@@ -503,5 +493,13 @@ extension MWSingleMovieViewController {
         movieToRemove.favorite = nil
 
         self.saveContext(context: managedContext)
+    }
+}
+
+//MARK: YouTubePlayerDelegate
+
+extension MWSingleMovieViewController: YouTubePlayerDelegate {
+    func playerReady(_ videoPlayer: YouTubePlayerView) {
+        self.contentViewContainer.loadingIndicator.stopAnimating()
     }
 }

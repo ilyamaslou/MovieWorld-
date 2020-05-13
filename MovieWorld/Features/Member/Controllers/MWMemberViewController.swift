@@ -122,7 +122,6 @@ class MWMemberViewController: MWViewController {
             },
                          errorHandler: { [weak self] (error) in
                             guard let self = self else { return }
-
                             let message = error.getErrorDesription()
                             self.errorAlert(message: message)
         })
@@ -148,7 +147,6 @@ class MWMemberViewController: MWViewController {
             },
                          errorHandler: { [weak self] (error) in
                             guard let self = self else { return }
-
                             let message = error.getErrorDesription()
                             self.errorAlert(message: message)
 

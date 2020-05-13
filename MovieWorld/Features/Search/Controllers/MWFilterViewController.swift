@@ -47,16 +47,8 @@ class MWFilterViewController: MWViewController {
 
     //MARK:- gui variables
 
-    private lazy var resetBarButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(title: "Reset".local(),
-                                     style: .plain,
-                                     target: self,
-                                     action: #selector(self.resetButtonDidTapped))
-        button.tintColor = UIColor(named: "shadowColor")
-        return button
-    }()
-
-    private lazy var collectionView: MWGenresCollectionViewController = MWGenresCollectionViewController()
+    private lazy var resetBarButton = MWResetButton(target: self, action: #selector(self.resetButtonDidTapped))
+    private lazy var collectionView = MWGenresCollectionViewController()
 
     private lazy var countryView: MWLabelsWithArrowView = {
         var view = MWLabelsWithArrowView()
@@ -80,7 +72,7 @@ class MWFilterViewController: MWViewController {
         return picker
     }()
 
-    private lazy var datePickerToolBar: UIToolbar = UIToolbar()
+    private lazy var datePickerToolBar = UIToolbar()
 
     private lazy var viewWithLowAlpha: UIView = {
         let view: UIView = UIView()
@@ -143,7 +135,6 @@ class MWFilterViewController: MWViewController {
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(self.checkReset),
                                                name: .genresChanged, object: nil)
-
         self.checkReset()
         self.setUpView()
         self.setUpToolbar()
@@ -280,20 +271,12 @@ class MWFilterViewController: MWViewController {
 
     //MARK: - resetButton actions
 
-    private func updateResetButton(hasNewValues: Bool) {
-        self.resetBarButton.tintColor = hasNewValues ? UIColor(named: "accentColor") : UIColor(named: "shadowColor")
-        self.resetBarButton.isEnabled = hasNewValues ? true : false
-    }
-
     @objc private func checkReset() {
-        if self.selectedCountries != nil
+        let hasNewValues = self.selectedCountries != nil
             || self.selectedYear != nil
             || self.selectedRatingRange != nil
-            || !self.collectionView.filteredGenres.isEmpty {
-            self.updateResetButton(hasNewValues: true)
-        } else {
-            self.updateResetButton(hasNewValues: false)
-        }
+            || !self.collectionView.filteredGenres.isEmpty
+        self.resetBarButton.updateResetButton(hasNewValues: hasNewValues)
     }
 
     @objc private func resetButtonDidTapped() {

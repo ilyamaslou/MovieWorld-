@@ -31,15 +31,7 @@ class FilterCountryViewController: MWViewController {
     //MARK:- gui variables
 
     private lazy var searchController = UISearchController(searchResultsController: nil)
-
-    private lazy var resetBarButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(title: "Reset".local(),
-                                     style: .plain,
-                                     target: self,
-                                     action: #selector(self.resetButtonDidTapped))
-        button.tintColor = UIColor(named: "shadowColor")
-        return button
-    }()
+    private lazy var resetBarButton = MWResetButton(target: self, action: #selector(self.resetButtonDidTapped))
 
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -138,23 +130,10 @@ class FilterCountryViewController: MWViewController {
     }
 
     private func checkReset() {
-        var selected: [String?] = []
-        for country in self.countries {
-            if country.isSelected == true {
-                selected.append(country.country)
-            }
-        }
-
-        if !selected.isEmpty {
-            self.updateResetButton(hasNewValues: true)
-        } else {
-            self.updateResetButton(hasNewValues: false)
-        }
-    }
-
-    private func updateResetButton(hasNewValues: Bool) {
-        self.resetBarButton.tintColor = hasNewValues ? UIColor(named: "accentColor") : UIColor(named: "shadowColor")
-        self.resetBarButton.isEnabled = hasNewValues ? true : false
+        let selected: [String?] = self.countries
+            .filter { $0.isSelected == true }
+            .map { $0.country }
+        self.resetBarButton.updateResetButton(hasNewValues: !selected.isEmpty)
     }
 
     //MARK: - update content action

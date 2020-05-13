@@ -95,6 +95,7 @@
 		99CB4D4824660D590032947C /* MWCollectionsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CB4D4724660D590032947C /* MWCollectionsHelper.swift */; };
 		99CC6DBF242E30180078B63C /* MWSingleMovieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CC6DBE242E30180078B63C /* MWSingleMovieView.swift */; };
 		99DAFEDF2443CBF200C74F8A /* MWFavoriteMoviesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DAFEDE2443CBF200C74F8A /* MWFavoriteMoviesViewController.swift */; };
+		99EC1356246C9E800050AA13 /* MWResetButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EC1355246C9E800050AA13 /* MWResetButton.swift */; };
 		99F15296244C9B1E008A1923 /* MWGroupsCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F15295244C9B1E008A1923 /* MWGroupsCollectionViewLayout.swift */; };
 		99F1529A244D039E008A1923 /* MWMainCategories.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F15299244D039E008A1923 /* MWMainCategories.swift */; };
 		99F2A4E724436666000910F8 /* MWProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F2A4E624436666000910F8 /* MWProfileViewController.swift */; };
@@ -198,6 +199,7 @@
 		99CB4D4724660D590032947C /* MWCollectionsHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWCollectionsHelper.swift; sourceTree = "<group>"; };
 		99CC6DBE242E30180078B63C /* MWSingleMovieView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWSingleMovieView.swift; sourceTree = "<group>"; };
 		99DAFEDE2443CBF200C74F8A /* MWFavoriteMoviesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWFavoriteMoviesViewController.swift; sourceTree = "<group>"; };
+		99EC1355246C9E800050AA13 /* MWResetButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWResetButton.swift; sourceTree = "<group>"; };
 		99F15295244C9B1E008A1923 /* MWGroupsCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWGroupsCollectionViewLayout.swift; sourceTree = "<group>"; };
 		99F15299244D039E008A1923 /* MWMainCategories.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWMainCategories.swift; sourceTree = "<group>"; };
 		99F2A4E624436666000910F8 /* MWProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWProfileViewController.swift; sourceTree = "<group>"; };
@@ -437,6 +439,7 @@
 				99AB2D822433EB1200095464 /* MWTitleButtonView.swift */,
 				99F4CD4B24523C3200E059A7 /* MWLabelsWithArrowView.swift */,
 				99A7878D246227E700A0F216 /* MWEmptyListLabel.swift */,
+				99EC1355246C9E800050AA13 /* MWResetButton.swift */,
 			);
 			path = Controls;
 			sourceTree = "<group>";
@@ -916,6 +919,7 @@
 				99BAE46A241194AD00F45B11 /* MWInitController.swift in Sources */,
 				99915F88240D254800E39CE0 /* MWSpecialError.swift in Sources */,
 				994842FE245A27DD009F04AE /* CastMember+CoreDataClass.swift in Sources */,
+				99EC1356246C9E800050AA13 /* MWResetButton.swift in Sources */,
 				992DB7D12428CD700047D438 /* MWSingleMovieViewController.swift in Sources */,
 				9968012C246373D4008AC0EF /* MWSingleCollection.swift in Sources */,
 				996F79E3240BEACF006FF3C0 /* MWNetwork+ExUtility.swift in Sources */,

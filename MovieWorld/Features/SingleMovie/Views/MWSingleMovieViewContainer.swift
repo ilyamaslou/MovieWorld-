@@ -14,9 +14,10 @@ class MWSingleMovieViewContainer: UIView {
     //MARK:- insets and sizes variables
 
     private let edgeInsets = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
-    private let castCollectionViewHeight: Int = 237
+    private let castCollectionViewSize = CGSize(width: 130, height: 237)
     private let galleryCollectionViewHeight: Int = 200
     private let moviePlayerHeight: Int = 180
+    private let gallerySize = CGSize(width: 500, height: 200)
 
     //MARK:- gui variables
 
@@ -76,7 +77,7 @@ class MWSingleMovieViewContainer: UIView {
         collectionViewLayout.minimumLineSpacing = 16
         collectionViewLayout.minimumInteritemSpacing = 16
         collectionViewLayout.sectionInset = UIEdgeInsets(top: .zero, left: self.edgeInsets.left, bottom: .zero, right: self.edgeInsets.right)
-        collectionViewLayout.itemSize = CGSize(width: 130, height: 237)
+        collectionViewLayout.itemSize = self.castCollectionViewSize
         return collectionViewLayout
     }()
 
@@ -105,13 +106,15 @@ class MWSingleMovieViewContainer: UIView {
         collectionViewLayout.minimumLineSpacing = 16
         collectionViewLayout.minimumInteritemSpacing = 16
         collectionViewLayout.sectionInset = UIEdgeInsets(top: .zero, left: self.edgeInsets.left, bottom: .zero, right: self.edgeInsets.right)
-        collectionViewLayout.itemSize = CGSize(width: 500, height: 200)
+        collectionViewLayout.itemSize = self.gallerySize
         return collectionViewLayout
     }()
 
     // MARK: - constraints
 
     override func updateConstraints() {
+        self.translatesAutoresizingMaskIntoConstraints = false
+
         self.addSubview(self.movieCellView)
         self.addSubview(self.moviePlayer)
         self.addSubview(self.loadingIndicator)
@@ -168,7 +171,7 @@ class MWSingleMovieViewContainer: UIView {
         self.castCollectionView.snp.updateConstraints { (make) in
             make.top.equalTo(self.showAllView.snp.bottom).offset(self.edgeInsets.top)
             make.left.right.equalToSuperview()
-            make.height.equalTo(self.castCollectionViewHeight)
+            make.height.equalTo(self.castCollectionViewSize)
         }
 
         self.galleryLabel.snp.updateConstraints { (make) in

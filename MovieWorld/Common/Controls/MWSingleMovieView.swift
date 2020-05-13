@@ -14,7 +14,7 @@ class MWSingleMovieView: UIView {
 
     private let edgeInsets = UIEdgeInsets(top: 10, left: 16, bottom: 8, right: -16)
     private let contentInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
-    private let imageSize = CGSize(width: 80, height: 80)
+    private let imageSize = CGSize(width: 80, height: 138)
 
     //MARK: - private variables
 
@@ -33,14 +33,12 @@ class MWSingleMovieView: UIView {
         let label = UILabel()
         label.font = .systemFont(ofSize: 17, weight: .semibold)
         label.numberOfLines = 0
-        label.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
         return label
     }()
 
     private lazy var releaseYearAndCountryLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 15)
-        label.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
         return label
     }()
 
@@ -49,14 +47,12 @@ class MWSingleMovieView: UIView {
         label.font = .systemFont(ofSize: 15, weight: .light)
         label.textColor = .gray
         label.numberOfLines = 0
-        label.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
         return label
     }()
 
     private lazy var ratingsLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 15)
-        label.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
         return label
     }()
 
@@ -81,7 +77,7 @@ class MWSingleMovieView: UIView {
             make.top.equalToSuperview().offset(self.edgeInsets.top)
             make.left.equalToSuperview().offset(self.edgeInsets.left)
             make.bottom.equalToSuperview().inset(10)
-            make.width.equalTo(self.imageSize.width)
+            make.width.equalTo(self.imageSize)
         }
 
         self.filmNameLabel.snp.updateConstraints { (make) in
@@ -103,7 +99,7 @@ class MWSingleMovieView: UIView {
         }
 
         self.ratingsLabel.snp.updateConstraints { (make) in
-            make.top.equalTo(genresLabel.snp.bottom).offset(8)
+            make.top.greaterThanOrEqualTo(genresLabel.snp.bottom).offset(8)
             make.left.equalTo(filmImageView.snp.right).offset(self.edgeInsets.left)
             make.right.equalToSuperview()
             make.bottom.equalToSuperview().inset(self.edgeInsets.bottom)
@@ -123,10 +119,11 @@ class MWSingleMovieView: UIView {
         self.filmNameLabel.text = movie.title
 
         if let imageData = movie.image {
-            self.filmImageView.image = UIImage(data: imageData)
+            self.filmImageView.image = UIImage(data: imageData)?
+                .resizeImage(targetSize: self.imageSize)
         } else {
             self.filmImageView.image = UIImage(named: "imageNotFound")?
-                .resizeImage(targetSize: CGSize(width: 80, height: 100))
+                .resizeImage(targetSize: self.imageSize)
         }
 
         let releasedYear = movie.getMovieReleaseYear().isEmpty ? "" : "\(movie.getMovieReleaseYear()),"

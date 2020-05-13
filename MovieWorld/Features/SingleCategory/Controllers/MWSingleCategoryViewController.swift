@@ -87,6 +87,9 @@ class MWSingleCategoryViewController: MWViewController {
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(self.updateTableByGenres),
                                                name: .genresChanged, object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(self.updateTableView),
+                                               name: .movieImageUpdated, object: nil)
         self.makeConstraints()
     }
 
@@ -150,6 +153,10 @@ class MWSingleCategoryViewController: MWViewController {
 
         self.filteredMovies = tempFilteredMovies
         self.checkFilteredMoviesOnFillness()
+    }
+
+    @objc private func updateTableView() {
+        self.tableView.reloadData()
     }
 }
 

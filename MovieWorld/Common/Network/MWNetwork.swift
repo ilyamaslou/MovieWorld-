@@ -18,7 +18,7 @@ class MWNetwork {
 
     //MARK: - private variables
 
-    private var session = URLSession(configuration: .ephemeral)
+    private var session = URLSession.shared
     private let baseUrl: String = "https://api.themoviedb.org/3/"
     private let apiKey: String = "79d5894567be5b76ab7434fc12879584"
     private(set) lazy var parameters: [String: String] = ["api_key": self.apiKey]
@@ -50,10 +50,9 @@ class MWNetwork {
     func collectionsRequest(succesHandler: @escaping (() -> Void)) {
         guard let url = MWCollectionsHelper.sh.getUrl(),
             let requestUrl = URL(string: url) else { return }
-        var request = URLRequest(url: requestUrl)
-        request.cachePolicy = .returnCacheDataElseLoad
+        let request = URLRequest(url: requestUrl)
 
-        let task = URLSession.shared.dataTask(with: request) { (data, urlResponse, error) in
+        let task = self.session.dataTask(with: request) { (data, urlResponse, error) in
             if let data = data {
                 do {
                     try MWCollectionsHelper.sh.saveToFile(data: data)

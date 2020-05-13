@@ -14,7 +14,7 @@ class MWSingleMovieViewController: MWViewController {
 
     //MARK: - private variables
 
-    private var coreDatadMovie: Movie?
+    private var coreDataMovie: Movie?
 
     private var isFavorite: Bool = false {
         didSet {
@@ -24,7 +24,7 @@ class MWSingleMovieViewController: MWViewController {
 
     private var oldIsFavorite: Bool = false
 
-    private var movie: MWMovie = MWMovie() {
+    private var movie: MWMovie? {
         didSet {
             self.contentViewContainer.castCollectionView.reloadData()
         }
@@ -142,12 +142,13 @@ class MWSingleMovieViewController: MWViewController {
         self.navigationItem.largeTitleDisplayMode = .always
         guard self.isFavorite != self.oldIsFavorite else { return }
         NotificationCenter.default.post(name: .movieIsFavoriteChanged, object: nil)
+        self.contentViewContainer.moviePlayer.clear()
     }
 
     //MARK:- request functions
 
     private func loadMovieVideos() {
-        guard let movieId = self.movie.id else { return }
+        guard let movieId = self.movie?.id else { return }
         let urlPath = String(format: URLPaths.getMovieVideos, movieId)
 
         MWNet.sh.request(urlPath: urlPath ,
@@ -174,7 +175,7 @@ class MWSingleMovieViewController: MWViewController {
     }
 
     private func loadMovieCast() {
-        guard let movieId = self.movie.id else { return }
+        guard let movieId = self.movie?.id else { return }
         let urlPath = String(format: URLPaths.getMovieCredits, movieId)
 
         MWNet.sh.request(urlPath: urlPath ,
@@ -189,7 +190,7 @@ class MWSingleMovieViewController: MWViewController {
     }
 
     private func loadMovieAdditionalInfo() {
-        guard let movieId = self.movie.id else { return }
+        guard let movieId = self.movie?.id else { return }
         let urlPath = String(format: URLPaths.movieAdditionalInfo, movieId)
 
         MWNet.sh.request(urlPath: urlPath ,
@@ -211,7 +212,7 @@ class MWSingleMovieViewController: MWViewController {
     }
 
     private func loadMovieImages() {
-        guard let movieId = self.movie.id else { return }
+        guard let movieId = self.movie?.id else { return }
         let urlPath = String(format: URLPaths.movieImages, movieId)
 
         MWNet.sh.request(urlPath: urlPath ,
@@ -272,7 +273,7 @@ class MWSingleMovieViewController: MWViewController {
 
     private func setDetails() {
         self.contentViewContainer.descriptionTextLabel.text = self.movieDetails?.overview ?? ""
-        guard let movieRuntime = self.movieDetails?.runtime else { return }
+        guard let movieRuntime = self.movieDetails?.runtime, movieRuntime != 0 else { return }
         self.contentViewContainer.movieRuntimeLabel.text = "%d minutes".local(args: movieRuntime)
     }
 
@@ -374,10 +375,10 @@ extension MWSingleMovieViewController {
         let managedContext = CoreDataManager.s.persistentContainer.viewContext
         let fetch: NSFetchRequest<Movie> = Movie.fetchRequest()
         fetch.predicate = NSPredicate(format: "ANY id = %i and title = %@",
-                                      self.movie.id ?? 0,
-                                      self.movie.title ?? "")
+                                      self.movie?.id ?? 0,
+                                      self.movie?.title ?? "")
         do {
-            self.coreDatadMovie = try managedContext.fetch(fetch).last
+            self.coreDataMovie = try managedContext.fetch(fetch).last
         } catch {
             print(error.localizedDescription)
         }
@@ -385,7 +386,7 @@ extension MWSingleMovieViewController {
 
     @discardableResult  private func fetchAdditionalInfo() -> MovieAdditionalInfo? {
         self.fetchMovie()
-        return self.coreDatadMovie?.additionalInfo
+        return self.coreDataMovie?.additionalInfo
     }
 
     private func saveAdditionalInfo (info: MWMovieAdditionalInfo) {
@@ -398,7 +399,7 @@ extension MWSingleMovieViewController {
             newAdditionalInfo.overview = info.overview
             newAdditionalInfo.runtime = Int64(info.runtime ?? 0)
             newAdditionalInfo.tagline = info.tagline
-            self.coreDatadMovie?.additionalInfo = newAdditionalInfo
+            self.coreDataMovie?.additionalInfo = newAdditionalInfo
         } else {
             guard let fetchedInfo = fetchedInfo else { return }
             fetchedInfo.adult = info.adult ?? false
@@ -441,9 +442,9 @@ extension MWSingleMovieViewController {
     }
 
     @discardableResult private func fetchFavoriteMovie() -> Movie? {
-        guard let id = self.movie.id,
-            let title = self.movie.title,
-            let releaseDate = self.movie.releaseDate else { return Movie() }
+        guard let id = self.movie?.id,
+            let title = self.movie?.title,
+            let releaseDate = self.movie?.releaseDate else { return Movie() }
 
         let managedContext = CoreDataManager.s.persistentContainer.viewContext
         let fetch: NSFetchRequest<Movie> = Movie.fetchRequest()
@@ -473,18 +474,18 @@ extension MWSingleMovieViewController {
 
         let favoriteMovies = FavoriteMovies(context: managedContext)
         let newMovie = Movie(context: managedContext)
-        newMovie.id = Int64(self.movie.id ?? 0)
-        newMovie.posterPath = self.movie.posterPath
-        newMovie.genreIds = self.movie.genreIds
-        newMovie.title = self.movie.title
-        newMovie.originalLanguage = self.movie.originalLanguage
-        newMovie.releaseDate = self.movie.releaseDate
+        newMovie.id = Int64(self.movie?.id ?? 0)
+        newMovie.posterPath = self.movie?.posterPath
+        newMovie.genreIds = self.movie?.genreIds
+        newMovie.title = self.movie?.title
+        newMovie.originalLanguage = self.movie?.originalLanguage
+        newMovie.releaseDate = self.movie?.releaseDate
 
-        if let movieRating = self.movie.voteAvarage {
+        if let movieRating = self.movie?.voteAvarage {
             newMovie.voteAvarage = movieRating
         }
 
-        if let imageData = self.movie.image {
+        if let imageData = self.movie?.image {
             newMovie.movieImage = imageData
         }
 

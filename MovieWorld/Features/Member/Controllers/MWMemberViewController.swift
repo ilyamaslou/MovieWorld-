@@ -30,7 +30,9 @@ class MWMemberViewController: MWViewController {
 
     private var isFavorite: Bool = false {
         didSet {
-            self.navigationItem.rightBarButtonItem?.image = isFavorite ?  UIImage(named: "selectedFaovoriteIcon") : UIImage(named: "unselectedFavoriteIcon")
+            self.navigationItem.rightBarButtonItem?.image = isFavorite
+                ? UIImage(named: "selectedFaovoriteIcon")
+                : UIImage(named: "unselectedFavoriteIcon")
         }
     }
 

@@ -72,9 +72,13 @@ struct MWFilterHelper {
     private func filterMoviesByGenre(for moviesForFiltering: [MWMovie]) -> [MWMovie]? {
         guard let genres = self.movieFilters?.genres, !genres.isEmpty else { return nil }
         var tempFilteredMovies: [MWMovie] = []
-        for genre in genres {
-            tempFilteredMovies.append(contentsOf: moviesForFiltering.filter{ ($0.movieGenres?.contains(genre) ?? false) })
-        }
+        tempFilteredMovies.append(contentsOf: moviesForFiltering.filter{ (movie) in
+            var isFiltered: Bool = false
+            for genre in genres {
+                isFiltered = (movie.movieGenres?.contains(genre) ?? false)
+            }
+            return isFiltered && !tempFilteredMovies.contains(movie)
+        })
         return tempFilteredMovies
     }
 

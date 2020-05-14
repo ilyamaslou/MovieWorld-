@@ -207,9 +207,9 @@ class MWSearchViewController: MWViewController {
 
     //MARK: - check and update actions
 
-    private func checkFilteredMoviesOnFillnessAndLoad() {
+    private func checkFilteredMoviesOnFillnessAndLoad(loadMethod: () -> Void) {
         guard self.filteredMovies.count < 5 else { return }
-        self.loadNextPage()
+        loadMethod()
     }
 
     @objc private func movieImageUpdated() {
@@ -227,7 +227,7 @@ class MWSearchViewController: MWViewController {
             self.movieFilters = (genres, countries, year, ratingRange)
             self.filteredMovies = self.movies
             self.setFilters()
-            self.checkFilteredMoviesOnFillnessAndLoad()
+            self.checkFilteredMoviesOnFillnessAndLoad(loadMethod: self.loadNextPage)
         }
     }
 }
@@ -288,7 +288,7 @@ extension MWSearchViewController {
             self.totalPages = movies.totalPages
             self.setGenres(to: movies.results)
             self.movies += movies.results
-            self.checkFilteredMoviesOnFillnessAndLoad()
+            self.checkFilteredMoviesOnFillnessAndLoad(loadMethod: self.loadNextPage)
         }
     }
 
@@ -305,6 +305,7 @@ extension MWSearchViewController {
             self.searchedTotalPages = movies.totalPages
             self.setGenres(to: movies.results)
             self.searchMovies += movies.results
+            self.checkFilteredMoviesOnFillnessAndLoad(loadMethod: self.loadNextSearchPage)
         }
     }
 

@@ -15,7 +15,13 @@ class MWSingleCategoryViewController: MWViewController {
     private var page: Int = 2
     private var totalPages: Int = 0
     private var totalItems: Int = 0
-    private var isRequestBusy: Bool = false
+
+    private var isRequestBusy: Bool = false {
+        didSet{
+            self.isRequestBusy ? self.loadingSpinner.startAnimating() : self.loadingSpinner.stopAnimating()
+        }
+    }
+
     private var shouldUseLoadingMethods = true
 
     //MARK: - size variable
@@ -195,7 +201,7 @@ extension MWSingleCategoryViewController {
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         let rowUnit = self.filteredMovies[indexPath.row]
         guard self.filteredMovies.count > 4 else { return }
-        let unit = self.filteredMovies[self.filteredMovies.count - 4]
+        let unit = self.filteredMovies[self.filteredMovies.count - 2]
         if self.totalItems > self.movies.count,
             rowUnit.id == unit.id {
             self.loadUnits()
@@ -203,7 +209,6 @@ extension MWSingleCategoryViewController {
     }
 
     private func loadUnits() {
-        self.loadingSpinner.startAnimating()
         guard !self.isRequestBusy,
             self.movies.count != self.totalItems else { return }
         self.isRequestBusy = true
@@ -214,7 +219,6 @@ extension MWSingleCategoryViewController {
             self.page += 1
             self.movies += movies
             self.updateTableByGenres()
-            self.loadingSpinner.stopAnimating()
         }
     }
 
@@ -238,7 +242,6 @@ extension MWSingleCategoryViewController {
                             guard let self = self else { return }
                             let message = error.getErrorDesription()
                             self.errorAlert(message: message)
-                            self.loadingSpinner.stopAnimating()
         })
     }
 

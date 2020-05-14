@@ -18,7 +18,12 @@ class MWSearchViewController: MWViewController {
     private var searchedPage: Int = 1
     private var searchedTotalPages: Int = 0
     private var searchedTotalItems: Int = 0
-    private var isRequestBusy: Bool = false
+
+    private var isRequestBusy: Bool = false {
+        didSet{
+            self.isRequestBusy ? self.loadingSpinner.startAnimating() : self.loadingSpinner.stopAnimating()
+        }
+    }
 
     //MARK: - private variables
 
@@ -27,7 +32,6 @@ class MWSearchViewController: MWViewController {
 
     private var movies: [MWMovie] = [] {
         didSet {
-            self.filteredMovies = self.movies
             self.searchMovies = self.movies
             self.tableView.reloadData()
         }
@@ -43,6 +47,7 @@ class MWSearchViewController: MWViewController {
 
     private var filteredMovies: [MWMovie] = [] {
         didSet {
+            self.loadAndSetImage()
             self.tableView.reloadData()
         }
     }
@@ -272,7 +277,6 @@ extension MWSearchViewController {
     }
 
     private func loadMovies() {
-        self.loadingSpinner.startAnimating()
         let urlPath = URLPaths.trandingDayMovies
         var query = MWNet.sh.parameters
         query["page"] = "\(self.page)"
@@ -282,15 +286,13 @@ extension MWSearchViewController {
             self.isRequestBusy = false
             self.totalItems = movies.totalResults
             self.totalPages = movies.totalPages
+            self.setGenres(to: movies.results)
             self.movies += movies.results
-            self.setGenreAndImage(to: self.movies)
             self.checkFilteredMoviesOnFillnessAndLoad()
-            self.loadingSpinner.stopAnimating()
         }
     }
 
     private func loadSearchedMovies() {
-        self.loadingSpinner.startAnimating()
         let urlPath = URLPaths.searchMovies
         var query = MWNet.sh.parameters
         query["query"] = self.searchTitle
@@ -301,16 +303,22 @@ extension MWSearchViewController {
             self.isRequestBusy = false
             self.searchedTotalItems = movies.totalResults
             self.searchedTotalPages = movies.totalPages
-            self.setGenreAndImage(to: movies.results)
+            self.setGenres(to: movies.results)
             self.searchMovies += movies.results
-            self.loadingSpinner.stopAnimating()
         }
     }
 
-    private func setGenreAndImage(to movies: [MWMovie]) {
+    private func loadAndSetImage() {
+        for movie in self.filteredMovies {
+            MWImageLoadingHelper.sh.loadMovieImage(for: movie)
+        }
+    }
+
+    //MARK: - Setter
+
+    private func setGenres(to movies: [MWMovie]) {
         for movie in movies {
             movie.setFilmGenres(genres: MWSys.sh.genres)
-            MWImageLoadingHelper.sh.loadMovieImage(for: movie)
         }
     }
 }
@@ -355,7 +363,7 @@ extension MWSearchViewController {
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         guard let text = searchController.searchBar.text, filteredMovies.count > 4 else { return }
         let rowUnit = self.filteredMovies[indexPath.row]
-        let unit = self.filteredMovies[self.filteredMovies.count - 4]
+        let unit = self.filteredMovies[self.filteredMovies.count - 2]
         if text.isEmpty,
             self.totalItems > self.filteredMovies.count,
             rowUnit.id == unit.id {

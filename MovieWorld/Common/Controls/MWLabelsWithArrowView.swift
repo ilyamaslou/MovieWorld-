@@ -87,16 +87,13 @@ class MWLabelsWithArrowView: UIView {
 
     private func makeConstraints() {
         self.titleLabel.snp.makeConstraints { (make) in
-            make.top.equalToSuperview().offset(self.edgeInsets.top)
-            make.left.equalToSuperview().offset(self.edgeInsets.left)
-            make.bottom.equalToSuperview().inset(self.edgeInsets.bottom)
+            make.top.left.bottom.equalToSuperview().inset(self.edgeInsets)
         }
 
         self.valueLabel.snp.makeConstraints { (make) in
-            make.top.equalToSuperview().offset(self.edgeInsets.top)
+            make.top.bottom.equalToSuperview().inset(self.edgeInsets)
             make.left.greaterThanOrEqualTo(self.titleLabel.snp.right).offset(self.edgeInsets.left)
             make.right.equalTo(self.arrowImage.snp.left)
-            make.bottom.equalToSuperview().inset(self.edgeInsets.bottom)
         }
 
         self.arrowImage.snp.makeConstraints { (make) in

@@ -84,9 +84,7 @@ class MWMainTableViewCell: UITableViewCell {
 
     override func updateConstraints() {
         self.showAllView.snp.updateConstraints { (make) in
-            make.top.equalToSuperview().offset(self.insets.top)
-            make.left.equalToSuperview().offset(self.insets.left)
-            make.right.equalToSuperview().inset(self.insets)
+            make.top.left.right.equalToSuperview().inset(self.insets)
             make.bottom.equalTo(self.collectionView.snp.top).offset(self.insets.bottom)
         }
 

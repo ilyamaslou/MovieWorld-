@@ -16,7 +16,7 @@ class MWCrewMemberTableViewCell: UITableViewCell {
 
     //MARK: - insets
 
-    private let edgeInsets = UIEdgeInsets(top: 11, left: 16, bottom: 11, right: 16)
+    private let edgeInsets = UIEdgeInsets(top: 11, left: 16, bottom: 11, right: .zero)
 
     //MARK: - private variable
 
@@ -46,8 +46,7 @@ class MWCrewMemberTableViewCell: UITableViewCell {
 
     override func updateConstraints() {
         self.memberNameLabel.snp.updateConstraints { (make) in
-            make.top.left.bottom.equalToSuperview().inset(self.edgeInsets)
-            make.right.equalToSuperview()
+            make.edges.equalToSuperview().inset(self.edgeInsets)
         }
 
         super.updateConstraints()

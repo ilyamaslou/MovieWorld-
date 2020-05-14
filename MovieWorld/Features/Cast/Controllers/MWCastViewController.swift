@@ -10,6 +10,10 @@ import UIKit
 
 class MWCastViewController: MWViewController {
 
+    //MARK: - insets variable
+
+    private var edgeInsets = UIEdgeInsets(top: 16, left: .zero, bottom: 10, right: .zero)
+
     //MARK: - private variable
 
     private var movieFullCast: [[Personalized]]? = [] {
@@ -62,9 +66,7 @@ class MWCastViewController: MWViewController {
 
     override func updateViewConstraints() {
         self.tableView.snp.updateConstraints { (make) in
-            make.top.equalToSuperview().offset(16)
-            make.left.right.equalToSuperview()
-            make.bottom.equalToSuperview().inset(10)
+            make.edges.equalToSuperview().inset(self.edgeInsets)
         }
 
         super.updateViewConstraints()

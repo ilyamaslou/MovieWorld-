@@ -113,8 +113,7 @@ class MWSingleCategoryViewController: MWViewController {
 
         self.tableView.snp.makeConstraints { (make) in
             make.top.equalTo(collectionView.view.snp.bottom).offset(16)
-            make.left.right.equalToSuperview()
-            make.bottom.equalToSuperview()
+            make.left.right.bottom.equalToSuperview()
         }
 
         self.loadingSpinner.snp.makeConstraints { (make) in

@@ -35,6 +35,7 @@ class MWSingleCollectionViewController: MWViewController {
 
     init(collection: MWCollectionFromFile) {
         super.init()
+        self.contentView.addSubview(self.tableView)
         self.title = collection.name
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(self.imageLoaded),
@@ -50,9 +51,7 @@ class MWSingleCollectionViewController: MWViewController {
     //MARK: - constraints
 
     override func updateViewConstraints() {
-        self.contentView.addSubview(self.tableView)
-
-        self.tableView.snp.makeConstraints { (make) in
+        self.tableView.snp.updateConstraints { (make) in
             make.edges.equalToSuperview()
         }
         super.updateViewConstraints()

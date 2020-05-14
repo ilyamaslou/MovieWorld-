@@ -96,16 +96,15 @@ class MWSingleCategoryViewController: MWViewController {
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(self.updateTableView),
                                                name: .movieImageUpdated, object: nil)
+        self.add(self.collectionView)
+        self.contentView.addSubview(self.tableView)
+        self.contentView.addSubview(self.loadingSpinner)
         self.makeConstraints()
     }
 
     // MARK: - constraints
 
     private func makeConstraints() {
-        self.add(self.collectionView)
-        self.contentView.addSubview(self.tableView)
-        self.contentView.addSubview(self.loadingSpinner)
-
         self.collectionView.view.snp.makeConstraints {(make) in
             make.top.equalToSuperview().offset(16)
             make.left.right.equalToSuperview()

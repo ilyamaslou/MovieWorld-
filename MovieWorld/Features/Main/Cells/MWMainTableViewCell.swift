@@ -67,6 +67,8 @@ class MWMainTableViewCell: UITableViewCell {
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        self.contentView.addSubview(self.showAllView)
+        self.contentView.addSubview(self.collectionView)
 
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(self.movieImageUpdated),
@@ -81,9 +83,6 @@ class MWMainTableViewCell: UITableViewCell {
     // MARK: - constraints
 
     override func updateConstraints() {
-        self.contentView.addSubview(self.showAllView)
-        self.contentView.addSubview(self.collectionView)
-
         self.showAllView.snp.updateConstraints { (make) in
             make.top.equalToSuperview().offset(self.insets.top)
             make.left.equalToSuperview().offset(self.insets.left)

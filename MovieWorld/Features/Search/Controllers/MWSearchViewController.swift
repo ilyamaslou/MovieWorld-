@@ -89,14 +89,14 @@ class MWSearchViewController: MWViewController {
                                                name: .movieImageUpdated, object: nil)
 
         self.presettingSearchControllerNavBar()
+        self.contentView.addSubview(self.tableView)
+        self.contentView.addSubview(self.loadingSpinner)
         self.makeConstraints()
+
         self.loadMovies()
     }
 
     private func makeConstraints() {
-        self.contentView.addSubview(self.tableView)
-        self.contentView.addSubview(self.loadingSpinner)
-
         self.tableView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }

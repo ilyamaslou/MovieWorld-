@@ -47,7 +47,7 @@ class MWSingleMovieViewController: MWViewController {
     private lazy var rightBarButtonDidFavoriteItem: UIBarButtonItem = UIBarButtonItem( image: UIImage(named: "unselectedFavoriteIcon"),
                                                                                        style: .plain,
                                                                                        target: self,
-                                                                                       action: #selector(self.didFavoriteButtonTapped))
+                                                                                       action: #selector(self.didFavoriteButtonTap))
 
     private lazy var scrollView: UIScrollView = {
         let view = UIScrollView()
@@ -301,13 +301,9 @@ class MWSingleMovieViewController: MWViewController {
 
     //MARK: - button tapped actions
 
-    @objc private func didFavoriteButtonTapped() {
-        self.isFavorite = !self.isFavorite
-        if self.isFavorite {
-            self.save()
-        } else {
-            self.remove()
-        }
+    @objc private func didFavoriteButtonTap() {
+        self.isFavorite.toggle()
+        self.isFavorite ? self.save() : self.remove()
     }
 }
 

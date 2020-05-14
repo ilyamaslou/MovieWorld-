@@ -42,6 +42,8 @@ class MWFavoriteViewController: MWViewController {
         super.initController()
         self.title = "Favorites".local()
         self.setupSegmentedControl()
+
+        self.addSubviews()
         self.makeConstraints()
         self.updateView()
     }
@@ -49,12 +51,6 @@ class MWFavoriteViewController: MWViewController {
     //MARK: - constraints
 
     private func makeConstraints() {
-        self.add(self.moviesViewController)
-        self.add(self.actorsViewController)
-
-        self.contentView.addSubview(self.segmentedControl)
-        self.contentView.addSubview(self.separationView)
-
         self.segmentedControl.snp.makeConstraints { (make) in
             make.top.equalToSuperview()
             make.left.right.equalToSuperview().inset(16)
@@ -75,6 +71,13 @@ class MWFavoriteViewController: MWViewController {
             make.top.equalTo(self.separationView.snp.bottom)
             make.left.right.bottom.equalToSuperview()
         }
+    }
+
+    private func addSubviews() {
+        self.add(self.moviesViewController)
+        self.add(self.actorsViewController)
+        self.contentView.addSubview(self.segmentedControl)
+        self.contentView.addSubview(self.separationView)
     }
 
     //MARK: - viewController life cycle

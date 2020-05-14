@@ -49,6 +49,8 @@ class MWMainTabViewController: MWViewController {
     override func initController() {
         super.initController()
         self.title = "Season".local()
+
+        contentView.addSubview(self.tableView)
         self.makeConstraints()
 
         self.loadMovies()
@@ -58,8 +60,6 @@ class MWMainTabViewController: MWViewController {
     //MARK: - constraints
 
     private func makeConstraints() {
-        contentView.addSubview(self.tableView)
-
         self.tableView.snp.makeConstraints { (make) in
             make.top.left.right.equalToSuperview()
             make.bottom.equalToSuperview().inset(16)

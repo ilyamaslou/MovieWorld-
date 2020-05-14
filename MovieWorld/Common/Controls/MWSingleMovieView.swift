@@ -63,16 +63,20 @@ class MWSingleMovieView: UIView {
         return label
     }()
 
+    //MARK: - initialization
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.addSubviews()
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     // MARK: - constraints
 
     override func updateConstraints() {
-        self.addSubview(self.filmImageView)
-        self.addSubview(self.filmNameLabel)
-        self.addSubview(self.releaseYearAndCountryLabel)
-        self.addSubview(self.genresLabel)
-        self.addSubview(self.ratingsLabel)
-        self.addSubview(self.separationLabel)
-
         self.filmImageView.snp.updateConstraints { (make) in
             make.top.equalToSuperview().offset(self.edgeInsets.top)
             make.left.equalToSuperview().offset(self.edgeInsets.left)
@@ -111,6 +115,15 @@ class MWSingleMovieView: UIView {
         }
 
         super.updateConstraints()
+    }
+
+    private func addSubviews() {
+        self.addSubview(self.filmImageView)
+        self.addSubview(self.filmNameLabel)
+        self.addSubview(self.releaseYearAndCountryLabel)
+        self.addSubview(self.genresLabel)
+        self.addSubview(self.ratingsLabel)
+        self.addSubview(self.separationLabel)
     }
 
     //MARK:- setters

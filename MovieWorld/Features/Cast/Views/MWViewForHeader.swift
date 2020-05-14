@@ -22,15 +22,14 @@ class MWViewForHeader: UIView {
 
     convenience init(title: String?) {
         self.init(frame: .zero)
-        self.makeConstraints()
         self.titleLabel.text = title
+        self.addSubview(self.titleLabel)
+        self.makeConstraints()
     }
 
     //MARK: - constraints
 
     private func makeConstraints() {
-        self.addSubview(self.titleLabel)
-
         self.titleLabel.snp.makeConstraints { (make) in
             make.top.equalToSuperview().offset(24)
             make.left.equalToSuperview().offset(16)

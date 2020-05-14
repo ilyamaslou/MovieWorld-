@@ -28,14 +28,13 @@ class MWProfileViewController: MWViewController {
     override func initController() {
         super.initController()
         self.title = "Profile".local()
+        self.contentView.addSubview(self.favoriteMovies)
         self.makeConstraints()
     }
 
     // MARK: - constraints
 
     private func makeConstraints() {
-        self.contentView.addSubview(self.favoriteMovies)
-
         self.favoriteMovies.snp.makeConstraints { (make) in
             make.top.equalToSuperview().offset(16)
             make.left.right.equalToSuperview()

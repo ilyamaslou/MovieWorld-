@@ -60,6 +60,7 @@ class FilterCountryViewController: MWViewController {
 
     override func initController() {
         super.initController()
+        self.contentView.addSubview(self.tableView)
         self.presetNavBar()
         self.setUpLanguages()
         self.makeConstraints()
@@ -68,7 +69,6 @@ class FilterCountryViewController: MWViewController {
     //MARK: - constraints
 
     private func makeConstraints() {
-        self.contentView.addSubview(self.tableView)
         self.tableView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }

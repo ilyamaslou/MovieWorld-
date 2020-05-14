@@ -132,6 +132,7 @@ class MWFilterViewController: MWViewController {
     }
 
     override func initController() {
+        self.addSubviews()
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(self.checkReset),
                                                name: .genresChanged, object: nil)
@@ -144,46 +145,48 @@ class MWFilterViewController: MWViewController {
     // MARK: - constraints
 
     override func updateViewConstraints() {
-        self.add(self.collectionView)
-        self.contentView.addSubview(self.countryView)
-        self.contentView.addSubview(self.yearView)
-        self.contentView.addSubview(self.ratingView)
-        self.contentView.addSubview(self.ratingSlider)
-        self.contentView.addSubview(self.showButton)
-
-        self.collectionView.view.snp.makeConstraints { (make) in
+        self.collectionView.view.snp.updateConstraints { (make) in
             make.top.equalToSuperview().offset(self.edgeInsets.top)
             make.left.right.equalToSuperview()
             make.height.equalTo(self.collectionViewHeight)
         }
 
-        self.countryView.snp.makeConstraints { (make) in
+        self.countryView.snp.updateConstraints { (make) in
             make.top.equalTo(self.collectionView.view.snp.bottom).offset(self.edgeInsets.top)
             make.left.right.equalToSuperview()
         }
 
-        self.yearView.snp.makeConstraints { (make) in
+        self.yearView.snp.updateConstraints { (make) in
             make.top.equalTo(self.countryView.snp.bottom).offset(self.edgeInsets.top)
             make.left.right.equalToSuperview()
         }
 
-        self.ratingView.snp.makeConstraints { (make) in
+        self.ratingView.snp.updateConstraints { (make) in
             make.top.equalTo(self.yearView.snp.bottom).offset(self.edgeInsets.top)
             make.left.right.equalToSuperview()
         }
 
-        self.ratingSlider.snp.makeConstraints { (make) in
+        self.ratingSlider.snp.updateConstraints { (make) in
             make.top.equalTo(self.ratingView.snp.bottom)
             make.left.right.equalToSuperview().inset(self.edgeInsets)
         }
 
-        self.showButton.snp.makeConstraints { (make) in
+        self.showButton.snp.updateConstraints { (make) in
             make.top.greaterThanOrEqualTo( self.ratingSlider.snp.bottom)
             make.left.right.equalToSuperview().inset(self.edgeInsets)
             make.bottom.equalToSuperview().inset(32)
         }
 
         super.updateViewConstraints()
+    }
+
+    private func addSubviews() {
+        self.add(self.collectionView)
+        self.contentView.addSubview(self.countryView)
+        self.contentView.addSubview(self.yearView)
+        self.contentView.addSubview(self.ratingView)
+        self.contentView.addSubview(self.ratingSlider)
+        self.contentView.addSubview(self.showButton)
     }
 
     //MARK: - setup view data actions

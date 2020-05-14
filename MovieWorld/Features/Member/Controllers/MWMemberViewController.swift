@@ -34,7 +34,7 @@ class MWMemberViewController: MWViewController {
     private lazy var rightBarButtonDidFavoriteItem: UIBarButtonItem = UIBarButtonItem(image: UIImage(named: "unselectedFavoriteIcon"),
                                                                                       style: .plain,
                                                                                       target: self,
-                                                                                      action: #selector(self.didFavoriteButtonTapped))
+                                                                                      action: #selector(self.didFavoriteButtonTap))
 
     private lazy var scrollView: UIScrollView = {
         let view = UIScrollView()
@@ -76,22 +76,22 @@ class MWMemberViewController: MWViewController {
     override func initController() {
         super.initController()
         self.navigationItem.largeTitleDisplayMode = .never
+
+        self.contentView.addSubview(self.scrollView)
+        self.scrollView.addSubview(self.contentViewContainer)
         self.makeConstraints()
     }
 
     // MARK: - constraints
 
     private func makeConstraints() {
-        self.contentView.addSubview(self.scrollView)
-        self.scrollView.addSubview(self.contentViewContainer)
-
         self.scrollView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
 
         self.contentViewContainer.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
-            make.width.equalTo(self.view.snp.width)
+            make.width.equalToSuperview()
         }
     }
 
@@ -180,13 +180,9 @@ class MWMemberViewController: MWViewController {
         self.contentViewContainer.collectionView.reloadData()
     }
 
-    @objc private func didFavoriteButtonTapped() {
-        self.isFavorite = !self.isFavorite
-        if self.isFavorite {
-            self.save()
-        } else {
-            self.remove()
-        }
+    @objc private func didFavoriteButtonTap() {
+        self.isFavorite.toggle()
+        self.isFavorite ? self.save() : self.remove()
     }
 }
 

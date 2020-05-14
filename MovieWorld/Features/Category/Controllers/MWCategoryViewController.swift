@@ -31,6 +31,7 @@ class MWCategoryViewController: MWViewController {
 
     override func initController() {
         super.initController()
+        self.contentView.addSubview(self.tableView)
         self.title = "Category".local()
         self.loadCategories()
     }
@@ -38,9 +39,7 @@ class MWCategoryViewController: MWViewController {
     //MARK: - constraints
 
     override func updateViewConstraints() {
-        self.contentView.addSubview(self.tableView)
-
-        self.tableView.snp.makeConstraints { (make) in
+        self.tableView.snp.updateConstraints { (make) in
             make.edges.equalToSuperview()
         }
         super.updateViewConstraints()

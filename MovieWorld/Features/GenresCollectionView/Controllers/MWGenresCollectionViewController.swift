@@ -51,8 +51,8 @@ class MWGenresCollectionViewController: MWViewController {
     override func initController() {
         super.initController()
         self.setUpGenres()
-        self.contentView.addSubview(self.collectionView)
 
+        self.contentView.addSubview(self.collectionView)
         self.collectionView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }

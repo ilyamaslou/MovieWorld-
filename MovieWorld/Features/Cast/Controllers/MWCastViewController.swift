@@ -55,14 +55,13 @@ class MWCastViewController: MWViewController {
     override func initController() {
         super.initController()
         self.title = "Cast".local()
+        self.contentView.addSubview(self.tableView)
     }
 
     // MARK: - constraints
 
     override func updateViewConstraints() {
-        self.contentView.addSubview(self.tableView)
-
-        self.tableView.snp.makeConstraints { (make) in
+        self.tableView.snp.updateConstraints { (make) in
             make.top.equalToSuperview().offset(16)
             make.left.right.equalToSuperview()
             make.bottom.equalToSuperview().inset(10)

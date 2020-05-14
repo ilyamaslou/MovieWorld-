@@ -110,24 +110,20 @@ class MWSingleMovieViewContainer: UIView {
         return collectionViewLayout
     }()
 
+    //MARK: - initialization
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.addSubviews()
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     // MARK: - constraints
 
     override func updateConstraints() {
-        self.translatesAutoresizingMaskIntoConstraints = false
-
-        self.addSubview(self.movieCellView)
-        self.addSubview(self.moviePlayer)
-        self.addSubview(self.loadingIndicator)
-        self.addSubview(self.descriptionContainerView)
-        self.addSubview(self.showAllView)
-        self.addSubview(self.castCollectionView)
-        self.addSubview(self.galleryLabel)
-        self.addSubview(self.galleryCollectionView)
-
-        self.descriptionContainerView.addSubview(self.descriptionLabel)
-        self.descriptionContainerView.addSubview(self.movieRuntimeLabel)
-        self.descriptionContainerView.addSubview(self.descriptionTextLabel)
-
         self.movieCellView.snp.updateConstraints { (make) in
             make.top.equalToSuperview().offset(self.edgeInsets.top)
             make.left.right.equalToSuperview()
@@ -188,5 +184,20 @@ class MWSingleMovieViewContainer: UIView {
         }
 
         super.updateConstraints()
+    }
+
+    private func addSubviews() {
+        self.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(self.movieCellView)
+        self.addSubview(self.moviePlayer)
+        self.addSubview(self.loadingIndicator)
+        self.addSubview(self.descriptionContainerView)
+        self.addSubview(self.showAllView)
+        self.addSubview(self.castCollectionView)
+        self.addSubview(self.galleryLabel)
+        self.addSubview(self.galleryCollectionView)
+        self.descriptionContainerView.addSubview(self.descriptionLabel)
+        self.descriptionContainerView.addSubview(self.movieRuntimeLabel)
+        self.descriptionContainerView.addSubview(self.descriptionTextLabel)
     }
 }

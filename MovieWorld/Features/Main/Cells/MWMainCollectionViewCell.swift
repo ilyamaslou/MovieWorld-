@@ -51,6 +51,9 @@ class MWMainCollectionViewCell: UICollectionViewCell {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
+        self.contentView.addSubview(self.nameLabel)
+        self.contentView.addSubview(self.infoLabel)
+        self.contentView.addSubview(self.movieImageView)
         self.makeConstraints()
     }
 
@@ -61,10 +64,6 @@ class MWMainCollectionViewCell: UICollectionViewCell {
     // MARK: - constraints
 
     private func makeConstraints() {
-        self.contentView.addSubview(self.nameLabel)
-        self.contentView.addSubview(self.infoLabel)
-        self.contentView.addSubview(self.movieImageView)
-
         self.movieImageView.snp.makeConstraints { (make) in
             make.top.left.right.equalToSuperview()
         }

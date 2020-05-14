@@ -18,10 +18,20 @@ class MWCastMemberTableViewCell: UITableViewCell {
 
     private lazy var castMemberView = MWCastMemberView()
 
+    //MARK: - initialization
+
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        self.contentView.addSubview(self.castMemberView)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     // MARK: - constraints
 
     override func updateConstraints() {
-        self.contentView.addSubview(self.castMemberView)
         self.castMemberView.snp.updateConstraints { (make) in
             make.edges.equalToSuperview()
         }

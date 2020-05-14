@@ -55,15 +55,20 @@ class MWCastMemberView: UIView {
         return view
     }()
 
+    //MARK: - initialization
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.addSubviews()
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     //MARK:- constraints
 
     override func updateConstraints() {
-        self.addSubview(self.memberImageView)
-        self.addSubview(self.memberNameLabel)
-        self.addSubview(self.memberRoleLabel)
-        self.addSubview(self.memberBirthLabel)
-        self.addSubview(self.separationView)
-
         self.memberImageView.snp.updateConstraints { (make) in
             make.top.left.bottom.equalToSuperview().inset(self.edgeInsets)
             make.size.equalTo(self.imageSize)
@@ -93,6 +98,14 @@ class MWCastMemberView: UIView {
             make.height.equalTo(3)
         }
         super.updateConstraints()
+    }
+
+    private func addSubviews() {
+        self.addSubview(self.memberImageView)
+        self.addSubview(self.memberNameLabel)
+        self.addSubview(self.memberRoleLabel)
+        self.addSubview(self.memberBirthLabel)
+        self.addSubview(self.separationView)
     }
 
     //MARK:- setters

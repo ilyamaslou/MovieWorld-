@@ -61,39 +61,52 @@ class MWSingleMemberView: UIView {
         return label
     }()
 
-    // MARK: - constraints
+    //MARK: - initialization
 
-    override func updateConstraints() {
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.addSubviews()
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    private func addSubviews() {
         self.addSubview(self.memberCellView)
         self.addSubview(self.titleForCollectionView)
         self.addSubview(self.collectionView)
         self.addSubview(self.roleLabel)
         self.addSubview(self.bioLabel)
+    }
 
-        self.memberCellView.snp.makeConstraints { (make) in
+    // MARK: - constraints
+
+    override func updateConstraints() {
+        self.memberCellView.snp.updateConstraints { (make) in
             make.top.equalToSuperview().offset(self.edgeInsets.top)
             make.left.right.equalToSuperview()
         }
 
-        self.titleForCollectionView.snp.makeConstraints { (make) in
+        self.titleForCollectionView.snp.updateConstraints { (make) in
             make.top.equalTo(self.memberCellView.snp.bottom).offset(24)
             make.left.equalToSuperview().offset(self.edgeInsets.left)
             make.right.equalToSuperview()
         }
 
-        self.collectionView.snp.makeConstraints { (make) in
+        self.collectionView.snp.updateConstraints { (make) in
             make.top.equalTo(self.titleForCollectionView.snp.bottom).offset(self.edgeInsets.top)
             make.right.left.equalToSuperview()
             make.height.equalTo(self.collectionViewSize.height)
         }
 
-        self.roleLabel.snp.makeConstraints { (make) in
+        self.roleLabel.snp.updateConstraints { (make) in
             make.top.equalTo(self.collectionView.snp.bottom).offset(self.edgeInsets.top)
             make.left.equalToSuperview().offset(self.edgeInsets.left)
             make.right.equalToSuperview()
         }
 
-        self.bioLabel.snp.makeConstraints { (make) in
+        self.bioLabel.snp.updateConstraints { (make) in
             make.top.equalTo(self.roleLabel.snp.bottom).offset(self.edgeInsets.top)
             make.left.right.equalToSuperview().inset(self.edgeInsets)
             make.bottom.equalToSuperview().inset(10)

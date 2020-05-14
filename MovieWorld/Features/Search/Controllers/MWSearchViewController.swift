@@ -27,7 +27,7 @@ class MWSearchViewController: MWViewController {
     //MARK: - private variables
 
     private var searchTitle: String = ""
-    private var movieFilters: (genres: Set<String>?, countries: [String?]?, year: String?, ratingRange: (Float, Float)?)?
+    private var movieFilters: MWFilters?
 
     private var movies: [MWMovie] = [] {
         didSet {
@@ -120,88 +120,11 @@ class MWSearchViewController: MWViewController {
     //MARK: - setter
 
     private func setFilters() {
-        let moviesFilteredByGenre = self.getFilteredMovies(for: self.filteredMovies,
-                                                           filter: self.filterMoviesByGenre)
-        let moviesFilteredByYear = self.getFilteredMovies(for: moviesFilteredByGenre,
-                                                          filter: self.filterMoviesByYear)
-        let moviesFilteredByCountry = self.getFilteredMovies(for: moviesFilteredByYear,
-                                                             filter: self.filterMoviesByCountry)
-        let moviesFilteredByRating = self.getFilteredMovies(for: moviesFilteredByCountry,
-                                                            filter: self.filterMoviesByRating)
-
-        if let finalFilteredMovies = moviesFilteredByRating {
+        if let finalFilteredMovies = MWFilterHelper.sh.filter(for: self.filteredMovies, filters: self.movieFilters) {
             self.filteredMovies = finalFilteredMovies
         } else {
             self.filteredMovies = movies
         }
-    }
-
-    //MARK: - getters
-
-    private func getFilteredMovies(for moviesForFilter: [MWMovie]?,
-                                   filter: ( ([MWMovie]) -> [MWMovie]?)) -> [MWMovie]? {
-        guard let moviesForFilter = moviesForFilter else { return nil }
-        var moviesFilteredByAttribute: [MWMovie]? = []
-        moviesFilteredByAttribute = filter(moviesForFilter)
-
-        if let filtredMovies = moviesFilteredByAttribute, filtredMovies.isEmpty {
-            return []
-        } else if moviesFilteredByAttribute == nil {
-            return moviesForFilter
-        }
-
-        return moviesFilteredByAttribute
-    }
-
-    private func getCountriesIso() -> [String?] {
-        guard let countries = self.movieFilters?.countries else { return [] }
-        var countriesIso: [String?] = []
-        for sysCountry in MWSys.sh.languages {
-            for country in countries {
-                if country == sysCountry.englishName {
-                    countriesIso.append(sysCountry.iso)
-                }
-            }
-        }
-        return countriesIso
-    }
-
-    //MARK: - filter actions
-
-    private func filterMoviesByGenre(for moviesForFiltering: [MWMovie]) -> [MWMovie]? {
-        guard let genres = self.movieFilters?.genres, !genres.isEmpty else { return nil }
-        var tempFilteredMovies: [MWMovie] = []
-        for genre in genres {
-            tempFilteredMovies.append(contentsOf: moviesForFiltering.filter{ ($0.movieGenres?.contains(genre) ?? false) })
-        }
-        return tempFilteredMovies
-    }
-
-    private func filterMoviesByYear(for moviesForFiltering: [MWMovie]) -> [MWMovie]? {
-        guard let year = self.movieFilters?.year, !year.isEmpty else { return nil }
-        var tempFilteredMovies: [MWMovie] = []
-        tempFilteredMovies = moviesForFiltering.filter { $0.getMovieReleaseYear() == year }
-        return tempFilteredMovies
-    }
-
-    private func filterMoviesByCountry(for moviesForFiltering: [MWMovie]) -> [MWMovie]? {
-        let countries = self.getCountriesIso()
-        guard !countries.isEmpty else { return nil }
-        var tempFilteredMovies: [MWMovie] = []
-        for country in countries {
-            tempFilteredMovies.append(contentsOf: moviesForFiltering.filter{ $0.originalLanguage == country })
-        }
-        return tempFilteredMovies
-    }
-
-    private func filterMoviesByRating(for moviesForFiltering: [MWMovie]) -> [MWMovie]? {
-        guard let ratingRange = self.movieFilters?.ratingRange else { return nil }
-        var tempFilteredMovies: [MWMovie] = []
-        let minRating = Double(ratingRange.0)
-        let maxRating = Double(ratingRange.1)
-        tempFilteredMovies = moviesForFiltering.filter{ ($0.voteAvarage ?? 100.0 >= minRating)
-            && ($0.voteAvarage ?? 100.0 <= maxRating) }
-        return tempFilteredMovies
     }
 
     //MARK: - check and update actions
@@ -221,9 +144,9 @@ class MWSearchViewController: MWViewController {
         let controller = MWFilterViewController(filters: self.movieFilters)
         MWI.s.pushVC(controller)
 
-        controller.choosenFilters = { [weak self] (genres, countries, year, ratingRange) in
+        controller.choosenFilters = { [weak self] (filters) in
             guard let self = self else { return }
-            self.movieFilters = (genres, countries, year, ratingRange)
+            self.movieFilters = filters
             self.filteredMovies = self.movies
             self.setFilters()
             self.checkFilteredMoviesOnFillnessAndLoad(loadMethod: self.loadNextPage)

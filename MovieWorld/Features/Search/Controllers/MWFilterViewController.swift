@@ -13,7 +13,7 @@ class MWFilterViewController: MWViewController {
 
     //MARK: - variable
 
-    var choosenFilters: ((_ genres: Set<String>?, _ countries: [String?]?, _ year: String?, _ ratingRange: (Float, Float)?) -> Void)?
+    var choosenFilters: ((MWFilters) -> Void)?
 
     //MARK: - size and insets variables
 
@@ -116,7 +116,7 @@ class MWFilterViewController: MWViewController {
 
     //MARK: - initialization
 
-    init(filters: (genres: Set<String>?, countries: [String?]?, year: String?, ratingRange: (Float, Float)?)?) {
+    init(filters: MWFilters?) {
         super.init()
         guard let filters = filters else { return }
         self.collectionView.filteredGenres = filters.genres ?? []
@@ -347,10 +347,11 @@ class MWFilterViewController: MWViewController {
 
     @objc private func showButtonDidTapped() {
         let filteredGenres = self.collectionView.filteredGenres.isEmpty ? nil : self.collectionView.filteredGenres
-        self.choosenFilters?(filteredGenres,
-                             self.selectedCountries,
-                             self.selectedYear,
-                             self.selectedRatingRange)
+        let filtersToSend = MWFilters(genres: filteredGenres,
+                                      countries: self.selectedCountries,
+                                      year: self.selectedYear,
+                                      ratingRange: self.selectedRatingRange)
+        self.choosenFilters?(filtersToSend)
         MWI.s.popVC()
     }
 }

@@ -44,10 +44,10 @@ class MWSingleMovieViewController: MWViewController {
 
     //MARK:- gui variables
 
-    private lazy var rightBarButtonDidFavoriteItem: UIBarButtonItem = UIBarButtonItem( image: UIImage(named: "unselectedFavoriteIcon"),
-                                                                                       style: .plain,
-                                                                                       target: self,
-                                                                                       action: #selector(self.didFavoriteButtonTap))
+    private lazy var rightBarButtonDidFavoriteItem = UIBarButtonItem( image: UIImage(named: "unselectedFavoriteIcon"),
+                                                                      style: .plain,
+                                                                      target: self,
+                                                                      action: #selector(self.didFavoriteButtonTap))
 
     private lazy var scrollView: UIScrollView = {
         let view = UIScrollView()
@@ -156,12 +156,9 @@ class MWSingleMovieViewController: MWViewController {
                          querryParameters: MWNet.sh.parameters,
                          succesHandler: { [weak self] (videos: MWMovieVideoResponse)  in
                             guard let self = self else { return }
-                            for video in videos.results {
-                                if video.site == "YouTube"{
-                                    guard let url = video.key else { return }
-                                    self.gallery.videos.append(url)
-                                }
-                            }
+                            self.gallery.videos.append(contentsOf: videos.results
+                                .filter { $0.site == "YouTube" }
+                                .compactMap { $0.key } )
                             self.setAndShowLoadedVideo(videoUrlKey: self.gallery.videos.first)
                             self.reloadGalleryItems()
             },
@@ -268,7 +265,8 @@ class MWSingleMovieViewController: MWViewController {
     }
 
     private func setShowAllButtonTappedAction() {
-        self.contentViewContainer.showAllView.buttonIsTapped = {
+        self.contentViewContainer.showAllView.buttonDidTap = { [weak self] in
+            guard let self = self else { return }
             MWI.s.pushVC(MWCastViewController(cast: self.movieFullCast))
         }
     }

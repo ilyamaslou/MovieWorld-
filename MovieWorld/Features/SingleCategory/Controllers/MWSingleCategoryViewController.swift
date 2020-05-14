@@ -190,8 +190,7 @@ extension MWSingleCategoryViewController: UITableViewDataSource, UITableViewDele
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        guard section != 0  else { return 0 }
-        return 16
+        section != 0 ? 16 : 0
     }
 }
 
@@ -252,7 +251,7 @@ extension MWSingleCategoryViewController {
 
     private func setGenres( to movies: [MWMovie]) {
         for movie in movies {
-            movie.setFilmGenres(genres: MWSys.sh.genres)
+            movie.setMovieGenres(genres: MWSys.sh.genres)
         }
     }
 }

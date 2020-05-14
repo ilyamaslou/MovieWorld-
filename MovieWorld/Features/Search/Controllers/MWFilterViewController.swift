@@ -346,12 +346,11 @@ class MWFilterViewController: MWViewController {
     }
 
     @objc private func showButtonDidTapped() {
-        guard let choosenFilters = self.choosenFilters else { return }
         let filteredGenres = self.collectionView.filteredGenres.isEmpty ? nil : self.collectionView.filteredGenres
-        choosenFilters(filteredGenres,
-                       self.selectedCountries,
-                       self.selectedYear,
-                       self.selectedRatingRange)
+        self.choosenFilters?(filteredGenres,
+                             self.selectedCountries,
+                             self.selectedYear,
+                             self.selectedRatingRange)
         MWI.s.popVC()
     }
 }

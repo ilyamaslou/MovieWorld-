@@ -58,16 +58,12 @@ class MWCountryFilterTableViewCell: UITableViewCell {
 
     private func makeConstraints() {
         self.titleLabel.snp.makeConstraints { (make) in
-            make.top.equalToSuperview().offset(self.edgeInsets.top)
-            make.left.equalToSuperview().offset(self.edgeInsets.left)
-            make.bottom.equalToSuperview().inset(self.edgeInsets.bottom)
+            make.top.left.bottom.equalToSuperview().inset(self.edgeInsets)
         }
 
         self.checkImage.snp.makeConstraints { (make) in
-            make.top.equalToSuperview().offset(self.edgeInsets.top)
+            make.top.right.bottom.equalToSuperview().inset(self.edgeInsets)
             make.left.equalTo(self.titleLabel.snp.right)
-            make.right.equalToSuperview().inset(self.edgeInsets.right)
-            make.bottom.equalToSuperview().inset(self.edgeInsets.bottom)
         }
     }
 

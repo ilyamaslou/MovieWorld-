@@ -100,9 +100,7 @@ class MWLabelsWithArrowView: UIView {
         }
 
         self.arrowImage.snp.makeConstraints { (make) in
-            make.top.equalToSuperview().offset(self.edgeInsets.top)
-            make.right.equalToSuperview().inset(self.edgeInsets.right)
-            make.bottom.equalToSuperview().inset(self.edgeInsets.bottom)
+            make.top.right.bottom.equalToSuperview().inset(self.edgeInsets)
         }
     }
 }

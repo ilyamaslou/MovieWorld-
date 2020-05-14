@@ -26,7 +26,7 @@ class MWGenresCollectionViewController: MWViewController {
 
     //MARK:- gui variables
 
-    lazy var collectionView: UICollectionView = {
+    private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: self.collectionViewLayout)
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -40,7 +40,7 @@ class MWGenresCollectionViewController: MWViewController {
         return collectionView
     }()
 
-    lazy var collectionViewLayout: MWGroupsCollectionViewLayout = {
+    private lazy var collectionViewLayout: MWGroupsCollectionViewLayout = {
         let collectionViewLayout = MWGroupsCollectionViewLayout()
         collectionViewLayout.delegate = self
         return collectionViewLayout

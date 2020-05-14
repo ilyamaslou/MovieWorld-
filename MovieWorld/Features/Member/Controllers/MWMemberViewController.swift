@@ -11,6 +11,13 @@ import CoreData
 
 class MWMemberViewController: MWViewController {
 
+    //MARK: - size variable
+
+    private var cellHeight = 237
+    private var cellWidth: Int {
+        return ((Int(self.view.frame.size.width) - 48) / 3)
+    }
+
     //MARK: - private variables
 
     private var member: Personalized?
@@ -31,10 +38,10 @@ class MWMemberViewController: MWViewController {
 
     //MARK:- gui variables
 
-    private lazy var rightBarButtonDidFavoriteItem: UIBarButtonItem = UIBarButtonItem(image: UIImage(named: "unselectedFavoriteIcon"),
-                                                                                      style: .plain,
-                                                                                      target: self,
-                                                                                      action: #selector(self.didFavoriteButtonTap))
+    private lazy var rightBarButtonDidFavoriteItem = UIBarButtonItem(image: UIImage(named: "unselectedFavoriteIcon"),
+                                                                     style: .plain,
+                                                                     target: self,
+                                                                     action: #selector(self.didFavoriteButtonTap))
 
     private lazy var scrollView: UIScrollView = {
         let view = UIScrollView()
@@ -163,7 +170,7 @@ class MWMemberViewController: MWViewController {
 
     private func setGenres() {
         for movie in self.memberMovies {
-            movie.setFilmGenres(genres: MWSys.sh.genres)
+            movie.setMovieGenres(genres: MWSys.sh.genres)
         }
     }
 
@@ -217,8 +224,7 @@ extension MWMemberViewController: UICollectionViewDelegate, UICollectionViewData
 
 extension MWMemberViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = ((Int(self.view.frame.size.width) - 48) / 3)
-        return CGSize(width: width, height: 237)
+        return CGSize(width: self.cellWidth, height: self.cellHeight)
     }
 }
 

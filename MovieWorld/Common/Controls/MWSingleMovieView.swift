@@ -78,8 +78,7 @@ class MWSingleMovieView: UIView {
 
     override func updateConstraints() {
         self.filmImageView.snp.updateConstraints { (make) in
-            make.top.equalToSuperview().offset(self.edgeInsets.top)
-            make.left.equalToSuperview().offset(self.edgeInsets.left)
+            make.top.left.equalToSuperview().inset(self.edgeInsets)
             make.bottom.equalToSuperview().inset(10)
             make.size.equalTo(self.imageSize)
         }

@@ -10,6 +10,10 @@ import UIKit
 
 class MWViewForHeader: UIView {
 
+    //MARK: - insets variable
+
+    private var edgeInsets = UIEdgeInsets(top: 24, left: 16, bottom: .zero, right: 16)
+
     //MARK: - gui variable
 
     private lazy var titleLabel: UILabel = {
@@ -31,10 +35,7 @@ class MWViewForHeader: UIView {
 
     private func makeConstraints() {
         self.titleLabel.snp.makeConstraints { (make) in
-            make.top.equalToSuperview().offset(24)
-            make.left.equalToSuperview().offset(16)
-            make.right.equalToSuperview()
-            make.bottom.equalToSuperview().inset(16)
+            make.edges.equalToSuperview().inset(self.edgeInsets)
         }
     }
 }

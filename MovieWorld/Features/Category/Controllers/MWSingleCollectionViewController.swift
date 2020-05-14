@@ -90,7 +90,7 @@ class MWSingleCollectionViewController: MWViewController {
     private func setGenres() {
         guard let movies = self.collection?.parts else { return }
         for movie in movies {
-            movie.setFilmGenres(genres: MWSys.sh.genres)
+            movie.setMovieGenres(genres: MWSys.sh.genres)
         }
     }
 

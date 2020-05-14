@@ -6,7 +6,6 @@
 //  Copyright © 2020 Ilya Maslou. All rights reserved.
 //
 import UIKit
-import SnapKit
 
 class MWSearchViewController: MWViewController {
 
@@ -319,7 +318,7 @@ extension MWSearchViewController {
 
     private func setGenres(to movies: [MWMovie]) {
         for movie in movies {
-            movie.setFilmGenres(genres: MWSys.sh.genres)
+            movie.setMovieGenres(genres: MWSys.sh.genres)
         }
     }
 }

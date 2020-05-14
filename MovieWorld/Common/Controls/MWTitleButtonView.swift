@@ -24,7 +24,7 @@ class MWTitleButtonView: UIView {
         }
     }
 
-    var buttonIsTapped: (() -> Void)?
+    var buttonDidTap: (() -> Void)?
 
     //MARK:- gui variables
 
@@ -70,7 +70,6 @@ class MWTitleButtonView: UIView {
     //MARK:- Actions
 
     @objc private func showAllButtonDidTapped() {
-        guard let buttonIsTapped = self.buttonIsTapped else { return }
-        buttonIsTapped()
+        self.buttonDidTap?()
     }
 }

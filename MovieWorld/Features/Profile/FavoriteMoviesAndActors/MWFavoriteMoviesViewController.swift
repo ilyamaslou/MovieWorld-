@@ -95,7 +95,7 @@ extension MWFavoriteMoviesViewController {
                 newMovie.image = imageData
             }
 
-            newMovie.setFilmGenres(genres: MWSys.sh.genres)
+            newMovie.setMovieGenres(genres: MWSys.sh.genres)
 
             mwMovies.append(newMovie)
         }

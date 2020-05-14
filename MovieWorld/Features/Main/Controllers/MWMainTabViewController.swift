@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SnapKit
 import CoreData
 
 class MWMainTabViewController: MWViewController {
@@ -50,7 +49,7 @@ class MWMainTabViewController: MWViewController {
         super.initController()
         self.title = "Season".local()
 
-        contentView.addSubview(self.tableView)
+        self.contentView.addSubview(self.tableView)
         self.makeConstraints()
 
         self.loadMovies()
@@ -105,7 +104,7 @@ class MWMainTabViewController: MWViewController {
 
     private func setGenres(to movies: [MWMovie]) {
         for movie in movies {
-            movie.setFilmGenres(genres: MWSys.sh.genres)
+            movie.setMovieGenres(genres: MWSys.sh.genres)
         }
     }
 
@@ -238,7 +237,7 @@ extension MWMainTabViewController {
                 newMovie.image = imageData
             }
 
-            newMovie.setFilmGenres(genres: MWSys.sh.genres)
+            newMovie.setMovieGenres(genres: MWSys.sh.genres)
 
             mwMovies.append(newMovie)
         }

@@ -108,7 +108,8 @@ class MWMainTableViewCell: UITableViewCell {
     }
 
     private func setShowAllButtonTappedAction() {
-        self.showAllView.buttonIsTapped = {
+        self.showAllView.buttonDidTap = { [weak self] in
+            guard let self = self else { return }
             MWI.s.pushVC(MWSingleCategoryViewController(movies: self.movies,
                                                         category: self.category,
                                                         totalResultsInfo: self.totalResults))

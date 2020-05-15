@@ -94,7 +94,7 @@ class MWMainCollectionViewCell: UICollectionViewCell {
     private func setInfoLabelText() -> String {
         let year = self.movie.releaseDate?.separateDate(by: "-")?.first ?? ""
         let genre = self.movie.movieGenres?.first ?? ""
-        return !genre.isEmpty ? "\(year), \(genre)" : "\(year) \(genre)"
+        return (genre.isEmpty || year.isEmpty) ? "\(year) \(genre)" : "\(year), \(genre)"
     }
 
     private func setImageView() -> UIImage? {

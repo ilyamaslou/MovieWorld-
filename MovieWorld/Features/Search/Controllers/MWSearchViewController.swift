@@ -15,12 +15,14 @@ class MWSearchViewController: MWViewController {
     private var totalPages: Int = 0
     private var totalItems: Int = 0
     private var searchedPage: Int = 1
-    private var searchedTotalPages: Int = 0
+    private var searchedTotalPages: Int = 100
     private var searchedTotalItems: Int = 0
 
     private var isRequestBusy: Bool = false {
         didSet{
-            self.isRequestBusy ? self.loadingSpinner.startAnimating() : self.loadingSpinner.stopAnimating()
+            self.isRequestBusy
+                ? self.loadingSpinner.startAnimating()
+                : self.loadingSpinner.stopAnimating()
         }
     }
 
@@ -47,6 +49,7 @@ class MWSearchViewController: MWViewController {
     private var filteredMovies: [MWMovie] = [] {
         didSet {
             self.loadAndSetImage()
+            self.checkFilteredMoviesEmptiness()
             self.tableView.reloadData()
         }
     }
@@ -72,6 +75,12 @@ class MWSearchViewController: MWViewController {
 
     private lazy var searchController = UISearchController(searchResultsController: nil)
 
+    private lazy var emptyListLabel: MWEmptyListLabel = {
+        let label = MWEmptyListLabel()
+        label.isHidden = true
+        return label
+    }()
+
     private lazy var loadingSpinner: UIActivityIndicatorView = {
         let view = UIActivityIndicatorView()
         view.style = .whiteLarge
@@ -88,21 +97,32 @@ class MWSearchViewController: MWViewController {
                                                name: .movieImageUpdated, object: nil)
 
         self.presettingSearchControllerNavBar()
-        self.contentView.addSubview(self.tableView)
-        self.contentView.addSubview(self.loadingSpinner)
+        self.addSubviews()
         self.makeConstraints()
 
         self.loadMovies()
     }
+
+    //MARK: - constraints
 
     private func makeConstraints() {
         self.tableView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
 
+        self.emptyListLabel.snp.makeConstraints { (make) in
+            make.center.equalTo(self.tableView.snp.center)
+        }
+
         self.loadingSpinner.snp.makeConstraints { (make) in
             make.center.equalToSuperview()
         }
+    }
+
+    private func addSubviews() {
+        self.contentView.addSubview(self.tableView)
+        self.contentView.addSubview(self.emptyListLabel)
+        self.contentView.addSubview(self.loadingSpinner)
     }
 
     //MARK: - setting of navigation bar
@@ -132,6 +152,18 @@ class MWSearchViewController: MWViewController {
     private func checkFilteredMoviesOnFillnessAndLoad(loadMethod: () -> Void) {
         guard self.filteredMovies.count < 5 else { return }
         loadMethod()
+    }
+
+    private func checkFilteredMoviesEmptiness(isSearched: Bool = false) {
+        let isLastPage = isSearched
+            ? self.searchedPage >= self.searchedTotalPages
+            : self.page >= self.totalPages
+
+        self.emptyListLabel.isHidden = ( isLastPage
+            && self.filteredMovies.count == 0
+            && !self.isRequestBusy)
+            ? false
+            : true
     }
 
     @objc private func movieImageUpdated() {
@@ -211,6 +243,7 @@ extension MWSearchViewController {
             self.setGenres(to: movies.results)
             self.movies += movies.results
             self.checkFilteredMoviesOnFillnessAndLoad(loadMethod: self.loadNextPage)
+            self.checkFilteredMoviesEmptiness()
         }
     }
 
@@ -228,6 +261,7 @@ extension MWSearchViewController {
             self.setGenres(to: movies.results)
             self.searchMovies += movies.results
             self.checkFilteredMoviesOnFillnessAndLoad(loadMethod: self.loadNextSearchPage)
+            self.checkFilteredMoviesEmptiness(isSearched: true)
         }
     }
 
@@ -254,6 +288,7 @@ extension MWSearchViewController: UISearchResultsUpdating, UISearchBarDelegate {
         if text.isEmpty {
             self.searchMovies = self.movies
         } else {
+            self.setFilteredValuesToDefault()
             self.searchTitle = text
             self.loadSearchedMovies()
             self.searchMovies = self.searchMovies.filter { ($0.title?.contains(text) ?? false) }
@@ -275,7 +310,7 @@ extension MWSearchViewController: UISearchResultsUpdating, UISearchBarDelegate {
 
     private func setFilteredValuesToDefault() {
         self.searchedPage = 1
-        self.searchedTotalPages = 0
+        self.searchedTotalPages = 100
         self.searchedTotalItems = 0
     }
 }
@@ -300,14 +335,16 @@ extension MWSearchViewController {
 
     private func loadNextPage() {
         guard !self.isRequestBusy,
-            self.filteredMovies.count != self.totalItems else { return }
+            self.filteredMovies.count != self.totalItems,
+            self.page <= self.totalPages else { return }
         self.isRequestBusy = true
         self.loadMovies()
     }
 
     private func loadNextSearchPage() {
         guard !self.isRequestBusy,
-            self.filteredMovies.count != self.searchedTotalItems else { return }
+            self.filteredMovies.count != self.searchedTotalItems,
+            self.searchedPage <= self.searchedTotalPages else { return }
         self.isRequestBusy = true
         self.loadSearchedMovies()
     }

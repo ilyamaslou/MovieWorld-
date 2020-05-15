@@ -41,6 +41,7 @@ class MWSingleCategoryViewController: MWViewController {
 
     private var filteredMovies: [MWMovie] = [] {
         didSet {
+            self.checkFilteredMoviesEmptiness()
             self.tableView.reloadData()
         }
     }
@@ -60,6 +61,12 @@ class MWSingleCategoryViewController: MWViewController {
     }()
 
     private lazy var collectionView = MWGenresCollectionViewController()
+
+    private lazy var emptyListLabel: MWEmptyListLabel = {
+        let label = MWEmptyListLabel()
+        label.isHidden = true
+        return label
+    }()
 
     private lazy var loadingSpinner: UIActivityIndicatorView = {
         let view = UIActivityIndicatorView()
@@ -96,9 +103,7 @@ class MWSingleCategoryViewController: MWViewController {
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(self.updateTableView),
                                                name: .movieImageUpdated, object: nil)
-        self.add(self.collectionView)
-        self.contentView.addSubview(self.tableView)
-        self.contentView.addSubview(self.loadingSpinner)
+        self.addSubviews()
         self.makeConstraints()
     }
 
@@ -116,9 +121,20 @@ class MWSingleCategoryViewController: MWViewController {
             make.left.right.bottom.equalToSuperview()
         }
 
+        self.emptyListLabel.snp.makeConstraints { (make) in
+            make.center.equalTo(tableView.snp.center)
+        }
+
         self.loadingSpinner.snp.makeConstraints { (make) in
             make.center.equalToSuperview()
         }
+    }
+
+    private func addSubviews() {
+        self.add(self.collectionView)
+        self.contentView.addSubview(self.tableView)
+        self.contentView.addSubview(self.emptyListLabel)
+        self.contentView.addSubview(self.loadingSpinner)
     }
 
     //MARK:- setter
@@ -128,11 +144,17 @@ class MWSingleCategoryViewController: MWViewController {
         self.shouldUseLoadingMethods = useLoading
     }
 
-    //MARK: - pagination check action
+    //MARK: - check actions
 
     private func checkFilteredMoviesOnFillness() {
         guard self.filteredMovies.count < 5, self.shouldUseLoadingMethods else { return }
         self.loadUnits()
+    }
+
+    private func checkFilteredMoviesEmptiness() {
+        self.emptyListLabel.isHidden = (self.page >= self.totalPages && self.filteredMovies.count == 0)
+            ? false
+            : true
     }
 
     //MARK:- update action

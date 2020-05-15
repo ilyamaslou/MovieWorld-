@@ -1,7 +1,0 @@
-${PODS_ROOT}/Target Support Files/Pods-MovieWorld/Pods-MovieWorld-frameworks.sh
-${BUILT_PRODUCTS_DIR}/AvailableHapticFeedback/AvailableHapticFeedback.framework
-${BUILT_PRODUCTS_DIR}/GzipSwift/Gzip.framework
-${BUILT_PRODUCTS_DIR}/MultiSlider/MultiSlider.framework
-${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework
-${BUILT_PRODUCTS_DIR}/SweeterSwift/SweeterSwift.framework
-${BUILT_PRODUCTS_DIR}/YouTubePlayer/YouTubePlayer.framework

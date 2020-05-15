@@ -50,13 +50,20 @@ class MWGenresCollectionViewController: MWViewController {
 
     override func initController() {
         super.initController()
+        self.setUpView()
         self.setUpGenres()
+    }
 
+    //MARK: - constraints
+
+    private func setUpView() {
         self.contentView.addSubview(self.collectionView)
         self.collectionView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
     }
+
+    //MARK: - setter
 
     func setUpGenres() {
         self.movieGenres = []
@@ -65,6 +72,8 @@ class MWGenresCollectionViewController: MWViewController {
             self.movieGenres.append((genre.name, false))
         }
     }
+
+    //MARK: - actions with genres
 
     func updateGenresByFiltered() {
         for (id, genre) in self.movieGenres.enumerated() {

@@ -109,6 +109,13 @@ class MWSingleCategoryViewController: MWViewController {
 
     // MARK: - constraints
 
+    private func addSubviews() {
+        self.add(self.collectionView)
+        self.contentView.addSubview(self.tableView)
+        self.contentView.addSubview(self.emptyListLabel)
+        self.contentView.addSubview(self.loadingSpinner)
+    }
+
     private func makeConstraints() {
         self.collectionView.view.snp.makeConstraints {(make) in
             make.top.equalToSuperview().offset(16)
@@ -128,13 +135,6 @@ class MWSingleCategoryViewController: MWViewController {
         self.loadingSpinner.snp.makeConstraints { (make) in
             make.center.equalToSuperview()
         }
-    }
-
-    private func addSubviews() {
-        self.add(self.collectionView)
-        self.contentView.addSubview(self.tableView)
-        self.contentView.addSubview(self.emptyListLabel)
-        self.contentView.addSubview(self.loadingSpinner)
     }
 
     //MARK:- setter

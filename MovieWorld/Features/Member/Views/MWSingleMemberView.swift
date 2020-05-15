@@ -72,6 +72,8 @@ class MWSingleMemberView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: - constraints
+
     private func addSubviews() {
         self.addSubview(self.memberCellView)
         self.addSubview(self.titleForCollectionView)
@@ -79,8 +81,6 @@ class MWSingleMemberView: UIView {
         self.addSubview(self.roleLabel)
         self.addSubview(self.bioLabel)
     }
-
-    // MARK: - constraints
 
     override func updateConstraints() {
         self.memberCellView.snp.updateConstraints { (make) in

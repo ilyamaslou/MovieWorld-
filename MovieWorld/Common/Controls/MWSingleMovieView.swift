@@ -76,6 +76,15 @@ class MWSingleMovieView: UIView {
 
     // MARK: - constraints
 
+    private func addSubviews() {
+        self.addSubview(self.filmImageView)
+        self.addSubview(self.filmNameLabel)
+        self.addSubview(self.releaseYearAndCountryLabel)
+        self.addSubview(self.genresLabel)
+        self.addSubview(self.ratingsLabel)
+        self.addSubview(self.separationLabel)
+    }
+
     override func updateConstraints() {
         self.filmImageView.snp.updateConstraints { (make) in
             make.top.left.equalToSuperview().inset(self.edgeInsets)
@@ -114,15 +123,6 @@ class MWSingleMovieView: UIView {
         }
 
         super.updateConstraints()
-    }
-
-    private func addSubviews() {
-        self.addSubview(self.filmImageView)
-        self.addSubview(self.filmNameLabel)
-        self.addSubview(self.releaseYearAndCountryLabel)
-        self.addSubview(self.genresLabel)
-        self.addSubview(self.ratingsLabel)
-        self.addSubview(self.separationLabel)
     }
 
     //MARK:- setters

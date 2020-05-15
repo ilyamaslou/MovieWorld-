@@ -104,10 +104,7 @@ class MWSingleMovieViewController: MWViewController {
         super.initController()
         self.navigationItem.largeTitleDisplayMode = .never
         self.contentViewContainer.loadingIndicator.startAnimating()
-
-        self.contentView.addSubview(self.scrollView)
-        self.scrollView.addSubview(self.contentViewContainer)
-        self.scrollView.addSubview(self.refreshControl)
+        self.addSubviews()
     }
 
     private func observeNotifications() {
@@ -122,6 +119,12 @@ class MWSingleMovieViewController: MWViewController {
     }
 
     //MARK: constraints
+
+    private func addSubviews() {
+        self.contentView.addSubview(self.scrollView)
+        self.scrollView.addSubview(self.contentViewContainer)
+        self.scrollView.addSubview(self.refreshControl)
+    }
 
     override func updateViewConstraints() {
         self.scrollView.snp.updateConstraints { (make) in
@@ -293,7 +296,6 @@ class MWSingleMovieViewController: MWViewController {
         self.loadMovieCast()
         self.loadMovieAdditionalInfo()
         self.loadMovieImages()
-
         self.refreshControl.endRefreshing()
     }
 

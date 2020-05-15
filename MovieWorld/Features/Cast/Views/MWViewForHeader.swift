@@ -27,13 +27,13 @@ class MWViewForHeader: UIView {
     convenience init(title: String?) {
         self.init(frame: .zero)
         self.titleLabel.text = title
-        self.addSubview(self.titleLabel)
-        self.makeConstraints()
+        self.setUpView()
     }
 
     //MARK: - constraints
 
-    private func makeConstraints() {
+    private func setUpView() {
+        self.addSubview(self.titleLabel)
         self.titleLabel.snp.makeConstraints { (make) in
             make.edges.equalToSuperview().inset(self.edgeInsets)
         }

@@ -52,10 +52,7 @@ class MWCastMemberCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = .white
-
-        self.contentView.addSubview(self.nameLabel)
-        self.contentView.addSubview(self.infoLabel)
-        self.contentView.addSubview(self.movieImageView)
+        self.addSubviews()
         self.makeConstraints()
     }
 
@@ -64,6 +61,12 @@ class MWCastMemberCollectionViewCell: UICollectionViewCell {
     }
 
     // MARK: - constraints
+
+    private func addSubviews() {
+        self.contentView.addSubview(self.nameLabel)
+        self.contentView.addSubview(self.infoLabel)
+        self.contentView.addSubview(self.movieImageView)
+    }
 
     private func makeConstraints() {
         self.movieImageView.snp.makeConstraints { (make) in

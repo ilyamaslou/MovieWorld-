@@ -28,13 +28,17 @@ class MWFavoriteMoviesViewController: MWViewController {
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(self.updateTableView),
                                                name: .movieIsFavoriteChanged, object: nil)
-        self.add(self.moviesByGenresController)
-        self.contentView.addSubview(emptyListLabel)
+        self.addSubviews()
         self.makeConstraints()
         self.updateTableView()
     }
 
     // MARK: - constraints
+
+    private func addSubviews() {
+        self.add(self.moviesByGenresController)
+        self.contentView.addSubview(emptyListLabel)
+    }
 
     private func makeConstraints() {
         self.moviesByGenresController.view.snp.makeConstraints { (make) in

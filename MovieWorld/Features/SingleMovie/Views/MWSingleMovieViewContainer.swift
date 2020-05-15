@@ -123,6 +123,21 @@ class MWSingleMovieViewContainer: UIView {
 
     // MARK: - constraints
 
+    private func addSubviews() {
+        self.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(self.movieCellView)
+        self.addSubview(self.moviePlayer)
+        self.addSubview(self.loadingIndicator)
+        self.addSubview(self.descriptionContainerView)
+        self.addSubview(self.showAllView)
+        self.addSubview(self.castCollectionView)
+        self.addSubview(self.galleryLabel)
+        self.addSubview(self.galleryCollectionView)
+        self.descriptionContainerView.addSubview(self.descriptionLabel)
+        self.descriptionContainerView.addSubview(self.movieRuntimeLabel)
+        self.descriptionContainerView.addSubview(self.descriptionTextLabel)
+    }
+
     override func updateConstraints() {
         self.movieCellView.snp.updateConstraints { (make) in
             make.top.equalToSuperview().offset(self.edgeInsets.top)
@@ -184,20 +199,5 @@ class MWSingleMovieViewContainer: UIView {
         }
 
         super.updateConstraints()
-    }
-
-    private func addSubviews() {
-        self.translatesAutoresizingMaskIntoConstraints = false
-        self.addSubview(self.movieCellView)
-        self.addSubview(self.moviePlayer)
-        self.addSubview(self.loadingIndicator)
-        self.addSubview(self.descriptionContainerView)
-        self.addSubview(self.showAllView)
-        self.addSubview(self.castCollectionView)
-        self.addSubview(self.galleryLabel)
-        self.addSubview(self.galleryCollectionView)
-        self.descriptionContainerView.addSubview(self.descriptionLabel)
-        self.descriptionContainerView.addSubview(self.movieRuntimeLabel)
-        self.descriptionContainerView.addSubview(self.descriptionTextLabel)
     }
 }

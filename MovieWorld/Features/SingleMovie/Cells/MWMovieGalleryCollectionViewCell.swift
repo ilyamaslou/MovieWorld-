@@ -30,8 +30,7 @@ class MWMovieGalleryCollectionViewCell: UICollectionViewCell {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.contentView.addSubview(movieImageView)
-        self.contentView.addSubview(movieVideoView)
+        self.addSubviews()
         self.makeConstraints()
     }
 
@@ -40,6 +39,11 @@ class MWMovieGalleryCollectionViewCell: UICollectionViewCell {
     }
 
     // MARK: - constraints
+
+    private func addSubviews() {
+        self.contentView.addSubview(movieImageView)
+        self.contentView.addSubview(movieVideoView)
+    }
 
     private func makeConstraints() {
         self.movieImageView.snp.makeConstraints { (make) in

@@ -68,7 +68,6 @@ class MWCastViewController: MWViewController {
         self.tableView.snp.updateConstraints { (make) in
             make.edges.equalToSuperview().inset(self.edgeInsets)
         }
-
         super.updateViewConstraints()
     }
 

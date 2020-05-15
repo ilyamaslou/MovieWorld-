@@ -45,8 +45,7 @@ class MWCountryFilterTableViewCell: UITableViewCell {
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        self.contentView.addSubview(self.titleLabel)
-        self.contentView.addSubview(self.checkImage)
+        self.addSubviews()
         self.makeConstraints()
     }
 
@@ -55,6 +54,11 @@ class MWCountryFilterTableViewCell: UITableViewCell {
     }
 
     // MARK: - constraints
+
+    private func addSubviews() {
+        self.contentView.addSubview(self.titleLabel)
+        self.contentView.addSubview(self.checkImage)
+    }
 
     private func makeConstraints() {
         self.titleLabel.snp.makeConstraints { (make) in

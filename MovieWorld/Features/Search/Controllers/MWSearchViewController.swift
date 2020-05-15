@@ -99,11 +99,16 @@ class MWSearchViewController: MWViewController {
         self.presettingSearchControllerNavBar()
         self.addSubviews()
         self.makeConstraints()
-
         self.loadMovies()
     }
 
     //MARK: - constraints
+
+    private func addSubviews() {
+        self.contentView.addSubview(self.tableView)
+        self.contentView.addSubview(self.emptyListLabel)
+        self.contentView.addSubview(self.loadingSpinner)
+    }
 
     private func makeConstraints() {
         self.tableView.snp.makeConstraints { (make) in
@@ -117,12 +122,6 @@ class MWSearchViewController: MWViewController {
         self.loadingSpinner.snp.makeConstraints { (make) in
             make.center.equalToSuperview()
         }
-    }
-
-    private func addSubviews() {
-        self.contentView.addSubview(self.tableView)
-        self.contentView.addSubview(self.emptyListLabel)
-        self.contentView.addSubview(self.loadingSpinner)
     }
 
     //MARK: - setting of navigation bar

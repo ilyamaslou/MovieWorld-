@@ -68,6 +68,14 @@ class MWCastMemberView: UIView {
 
     //MARK:- constraints
 
+    private func addSubviews() {
+        self.addSubview(self.memberImageView)
+        self.addSubview(self.memberNameLabel)
+        self.addSubview(self.memberRoleLabel)
+        self.addSubview(self.memberBirthLabel)
+        self.addSubview(self.separationView)
+    }
+
     override func updateConstraints() {
         self.memberImageView.snp.updateConstraints { (make) in
             make.top.left.bottom.equalToSuperview().inset(self.edgeInsets)
@@ -98,14 +106,6 @@ class MWCastMemberView: UIView {
             make.height.equalTo(3)
         }
         super.updateConstraints()
-    }
-
-    private func addSubviews() {
-        self.addSubview(self.memberImageView)
-        self.addSubview(self.memberNameLabel)
-        self.addSubview(self.memberRoleLabel)
-        self.addSubview(self.memberBirthLabel)
-        self.addSubview(self.separationView)
     }
 
     //MARK:- setters

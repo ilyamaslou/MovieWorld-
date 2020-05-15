@@ -144,6 +144,15 @@ class MWFilterViewController: MWViewController {
 
     // MARK: - constraints
 
+    private func addSubviews() {
+        self.add(self.collectionView)
+        self.contentView.addSubview(self.countryView)
+        self.contentView.addSubview(self.yearView)
+        self.contentView.addSubview(self.ratingView)
+        self.contentView.addSubview(self.ratingSlider)
+        self.contentView.addSubview(self.showButton)
+    }
+
     override func updateViewConstraints() {
         self.collectionView.view.snp.updateConstraints { (make) in
             make.top.equalToSuperview().offset(self.edgeInsets.top)
@@ -178,15 +187,6 @@ class MWFilterViewController: MWViewController {
         }
 
         super.updateViewConstraints()
-    }
-
-    private func addSubviews() {
-        self.add(self.collectionView)
-        self.contentView.addSubview(self.countryView)
-        self.contentView.addSubview(self.yearView)
-        self.contentView.addSubview(self.ratingView)
-        self.contentView.addSubview(self.ratingSlider)
-        self.contentView.addSubview(self.showButton)
     }
 
     //MARK: - setup view data actions

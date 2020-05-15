@@ -28,13 +28,17 @@ class MWFavoriteActorsViewController: MWViewController {
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(self.updateTableView),
                                                name: .actorIsFavoriteChanged, object: nil)
-        self.add(self.actorsController)
-        self.contentView.addSubview(self.emptyListLabel)
+        self.addSubviews()
         self.makeConstraints()
         self.updateTableView()
     }
 
     // MARK: - constraints
+
+    private func addSubviews() {
+        self.add(self.actorsController)
+        self.contentView.addSubview(self.emptyListLabel)
+    }
 
     private func makeConstraints() {
         self.actorsController.view.snp.makeConstraints { (make) in

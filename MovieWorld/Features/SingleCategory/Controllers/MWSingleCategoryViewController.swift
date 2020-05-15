@@ -18,7 +18,9 @@ class MWSingleCategoryViewController: MWViewController {
 
     private var isRequestBusy: Bool = false {
         didSet{
-            self.isRequestBusy ? self.loadingSpinner.startAnimating() : self.loadingSpinner.stopAnimating()
+            self.isRequestBusy
+                ? self.loadingSpinner.startAnimating()
+                : self.loadingSpinner.stopAnimating()
         }
     }
 

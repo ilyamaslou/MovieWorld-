@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import CoreData
 
 class MWMemberViewController: MWViewController {
 
@@ -71,7 +70,7 @@ class MWMemberViewController: MWViewController {
                                                selector: #selector(self.imageLoaded),
                                                name: .movieImageUpdated, object: nil)
         self.member = member
-        self.fetchIsFavorite()
+        self.checkIsFavorite()
         self.oldIsFavorite = self.isFavorite
 
         self.loadMemberInfo()
@@ -168,6 +167,14 @@ class MWMemberViewController: MWViewController {
         }
     }
 
+    //MARK: - fetch core data action for checking
+
+    private func checkIsFavorite() {
+        guard let member = self.member else { return }
+        let result = MWCDHelp.sh.fetchFavoriteActor(mwMember: member)
+        self.isFavorite = result != nil ? true : false
+    }
+
     //MARK:- seter and getter for genres
 
     private func setGenres() {
@@ -191,7 +198,10 @@ class MWMemberViewController: MWViewController {
 
     @objc private func didFavoriteButtonTap() {
         self.isFavorite.toggle()
-        self.isFavorite ? self.save() : self.remove()
+        guard let member = self.member else { return }
+        self.isFavorite
+            ? MWCDHelp.sh.saveFavoriteActor(mwMember: member)
+            : MWCDHelp.sh.removeFavoriteActor(mwMember: member)
     }
 }
 
@@ -227,75 +237,5 @@ extension MWMemberViewController: UICollectionViewDelegate, UICollectionViewData
 extension MWMemberViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: self.cellWidth, height: self.cellHeight)
-    }
-}
-
-//MARK: CoreData FavoriteActors
-extension MWMemberViewController {
-    private func saveContext(context: NSManagedObjectContext) {
-        do {
-            try context.save()
-        } catch {
-            print(error.localizedDescription)
-        }
-    }
-
-    @discardableResult private func fetchFavoriteActor() -> CastMember? {
-        let managedContext = CoreDataManager.s.persistentContainer.viewContext
-        let fetch: NSFetchRequest<CastMember> = CastMember.fetchRequest()
-
-        guard let member = self.member as? MWMovieCastMember,
-            let id = member.id,
-            let name = member.name else { return CastMember() }
-        fetch.predicate = NSPredicate(format: "ANY id = %i and name = %@ and favoriteActors != nil", id, name)
-
-        var result: [CastMember] = []
-        do {
-            result = try managedContext.fetch(fetch)
-        } catch {
-            print(error.localizedDescription)
-        }
-
-        return result.first
-    }
-
-    private func fetchIsFavorite() {
-        let result = self.fetchFavoriteActor()
-        if result != nil {
-            self.isFavorite = true
-        } else {
-            self.isFavorite = false
-        }
-    }
-
-    private func save() {
-        guard let member = self.member as? MWMovieCastMember else { return }
-        let managedContext = CoreDataManager.s.persistentContainer.viewContext
-        let favoriteActors = FavoriteActors(context: managedContext)
-        let newMemmber = CastMember(context: managedContext)
-
-        newMemmber.id = Int64(member.id ?? 0)
-        newMemmber.profilePath = member.profilePath
-        newMemmber.character = member.character
-        newMemmber.order = Int64(member.order ?? 0)
-        newMemmber.name = member.name
-
-        if let imageData = member.image {
-            newMemmber.image = imageData
-        }
-
-        favoriteActors.addToActors(newMemmber)
-
-        self.saveContext(context: managedContext)
-    }
-
-    private func remove() {
-        guard let memberToRemove = self.fetchFavoriteActor() else { return }
-        let managedContext = CoreDataManager.s.persistentContainer.viewContext
-        let favoriteActors = FavoriteActors(context: managedContext)
-
-        favoriteActors.removeFromActors(memberToRemove)
-        memberToRemove.favoriteActors = nil
-        self.saveContext(context: managedContext)
     }
 }

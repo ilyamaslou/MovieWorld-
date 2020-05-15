@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import CoreData
 
 class MWImageLoadingHelper{
 
@@ -30,13 +29,11 @@ class MWImageLoadingHelper{
             MWNet.sh.imageRequest(baseUrl: baseUrl,
                                   size: size,
                                   filePath: imagePath,
-                                  succesHandler: { [weak self] (imageData: Data)  in
-                                    guard let self = self else { return }
+                                  succesHandler: { (imageData: Data)  in
                                     movie.image = imageData
                                     NotificationCenter.default.post(name: .movieImageUpdated, object: nil)
-
                                     guard !category.isEmpty else { return }
-                                    self.saveImage(for: movie, imageData: imageData, in: category)
+                                    MWCDHelp.sh.saveImage(for: movie, imageData: imageData, in: category)
             })
         }
     }
@@ -76,34 +73,6 @@ class MWImageLoadingHelper{
                                     imagesResponse.movieImages?.append(imageData)
                                     NotificationCenter.default.post(name: .movieImagesCollectionUpdated, object: nil)
             })
-        }
-    }
-
-    //MARK:- Core Data actions
-
-    private func fetchMovie(for movie: MWMovie, in category: String) -> Movie? {
-        let managedContext = CoreDataManager.s.persistentContainer.viewContext
-        let fetch: NSFetchRequest<Movie> = Movie.fetchRequest()
-        fetch.predicate = NSPredicate(format: "ANY title = %@ and category.movieCategory = %@", movie.title ?? "", category)
-
-        var movie: Movie?
-        do {
-            movie = try managedContext.fetch(fetch).first
-        } catch {
-            print(error.localizedDescription)
-        }
-        return movie
-    }
-
-    private func saveImage(for movie: MWMovie, imageData: Data, in category: String) {
-        let result = self.fetchMovie(for: movie, in: category)
-        result?.movieImage = imageData
-
-        let managedContext = CoreDataManager.s.persistentContainer.viewContext
-        do {
-            try managedContext.save()
-        } catch {
-            print(error.localizedDescription)
         }
     }
 }

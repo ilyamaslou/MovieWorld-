@@ -19,8 +19,6 @@ class MWFavoriteMoviesViewController: MWViewController {
 
     private lazy var moviesByGenresController = MWSingleCategoryViewController(movies: self.movies)
 
-    private lazy var emptyListLabel = MWEmptyListLabel()
-
     //MARK: - initialization
 
     override func initController() {
@@ -28,32 +26,17 @@ class MWFavoriteMoviesViewController: MWViewController {
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(self.updateTableView),
                                                name: .movieIsFavoriteChanged, object: nil)
-        self.addSubviews()
+        self.add(self.moviesByGenresController)
         self.makeConstraints()
         self.updateTableView()
     }
 
     // MARK: - constraints
 
-    private func addSubviews() {
-        self.add(self.moviesByGenresController)
-        self.contentView.addSubview(emptyListLabel)
-    }
-
     private func makeConstraints() {
         self.moviesByGenresController.view.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
-
-        self.emptyListLabel.snp.makeConstraints { (make) in
-            make.center.equalToSuperview()
-        }
-    }
-
-    //MARK: - action if favorites list is empty
-
-    private func setUpVisibleOfEmptyListLabel(listIsEmpty: Bool) {
-        self.emptyListLabel.isHidden = !listIsEmpty
     }
 
     //MARK: - Update TableView action
@@ -78,7 +61,6 @@ extension MWFavoriteMoviesViewController {
             print(error.localizedDescription)
         }
 
-        self.setUpVisibleOfEmptyListLabel(listIsEmpty: result.isEmpty)
         return result
     }
 

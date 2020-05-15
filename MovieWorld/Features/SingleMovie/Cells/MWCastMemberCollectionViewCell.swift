@@ -52,6 +52,10 @@ class MWCastMemberCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = .white
+
+        self.contentView.addSubview(self.nameLabel)
+        self.contentView.addSubview(self.infoLabel)
+        self.contentView.addSubview(self.movieImageView)
         self.makeConstraints()
     }
 
@@ -62,22 +66,18 @@ class MWCastMemberCollectionViewCell: UICollectionViewCell {
     // MARK: - constraints
 
     private func makeConstraints() {
-        self.contentView.addSubview(self.nameLabel)
-        self.contentView.addSubview(self.infoLabel)
-        self.contentView.addSubview(self.movieImageView)
-
-        self.movieImageView.snp.updateConstraints { (make) in
+        self.movieImageView.snp.makeConstraints { (make) in
             make.top.left.right.equalToSuperview()
             make.bottom.lessThanOrEqualTo(self.nameLabel.snp.top).offset(-12)
         }
 
-        self.nameLabel.snp.updateConstraints { (make) in
+        self.nameLabel.snp.makeConstraints { (make) in
             make.top.equalTo(self.movieImageView.snp.bottom).offset(12)
             make.left.equalToSuperview()
             make.right.equalTo(self.movieImageView.snp.right)
         }
 
-        self.infoLabel.snp.updateConstraints { (make) in
+        self.infoLabel.snp.makeConstraints { (make) in
             make.top.equalTo(self.nameLabel.snp.bottom)
             make.left.bottom.equalToSuperview()
             make.right.equalTo(self.movieImageView.snp.right)

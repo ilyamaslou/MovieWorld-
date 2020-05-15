@@ -15,7 +15,13 @@ class MWSingleCategoryViewController: MWViewController {
     private var page: Int = 2
     private var totalPages: Int = 0
     private var totalItems: Int = 0
-    private var isRequestBusy: Bool = false
+
+    private var isRequestBusy: Bool = false {
+        didSet{
+            self.isRequestBusy ? self.loadingSpinner.startAnimating() : self.loadingSpinner.stopAnimating()
+        }
+    }
+
     private var shouldUseLoadingMethods = true
 
     //MARK: - size variable
@@ -24,7 +30,7 @@ class MWSingleCategoryViewController: MWViewController {
 
     //MARK: - private variables
 
-    private var category: MWCategories?
+    private var category: MWMainCategories?
 
     private var movies: [MWMovie] = [] {
         didSet {
@@ -35,6 +41,7 @@ class MWSingleCategoryViewController: MWViewController {
 
     private var filteredMovies: [MWMovie] = [] {
         didSet {
+            self.checkFilteredMoviesEmptiness()
             self.tableView.reloadData()
         }
     }
@@ -55,6 +62,12 @@ class MWSingleCategoryViewController: MWViewController {
 
     private lazy var collectionView = MWGenresCollectionViewController()
 
+    private lazy var emptyListLabel: MWEmptyListLabel = {
+        let label = MWEmptyListLabel()
+        label.isHidden = true
+        return label
+    }()
+
     private lazy var loadingSpinner: UIActivityIndicatorView = {
         let view = UIActivityIndicatorView()
         view.style = .whiteLarge
@@ -66,10 +79,10 @@ class MWSingleCategoryViewController: MWViewController {
 
     init(title: String = "Movies",
          movies: [MWMovie],
-         category: MWCategories? = nil,
+         category: MWMainCategories? = nil,
          totalResultsInfo: (totalResults: Int, totalPages: Int)? = (0, 0)) {
         super.init()
-        self.title = title
+        self.title = title.local()
         self.category = category
         self.totalPages = totalResultsInfo?.totalPages ?? 0
         self.totalItems = totalResultsInfo?.totalResults ?? 0
@@ -87,16 +100,16 @@ class MWSingleCategoryViewController: MWViewController {
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(self.updateTableByGenres),
                                                name: .genresChanged, object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(self.updateTableView),
+                                               name: .movieImageUpdated, object: nil)
+        self.addSubviews()
         self.makeConstraints()
     }
 
     // MARK: - constraints
 
     private func makeConstraints() {
-        self.add(self.collectionView)
-        self.contentView.addSubview(self.tableView)
-        self.contentView.addSubview(self.loadingSpinner)
-
         self.collectionView.view.snp.makeConstraints {(make) in
             make.top.equalToSuperview().offset(16)
             make.left.right.equalToSuperview()
@@ -105,13 +118,23 @@ class MWSingleCategoryViewController: MWViewController {
 
         self.tableView.snp.makeConstraints { (make) in
             make.top.equalTo(collectionView.view.snp.bottom).offset(16)
-            make.left.right.equalToSuperview()
-            make.bottom.equalToSuperview()
+            make.left.right.bottom.equalToSuperview()
+        }
+
+        self.emptyListLabel.snp.makeConstraints { (make) in
+            make.center.equalTo(tableView.snp.center)
         }
 
         self.loadingSpinner.snp.makeConstraints { (make) in
             make.center.equalToSuperview()
         }
+    }
+
+    private func addSubviews() {
+        self.add(self.collectionView)
+        self.contentView.addSubview(self.tableView)
+        self.contentView.addSubview(self.emptyListLabel)
+        self.contentView.addSubview(self.loadingSpinner)
     }
 
     //MARK:- setter
@@ -121,11 +144,17 @@ class MWSingleCategoryViewController: MWViewController {
         self.shouldUseLoadingMethods = useLoading
     }
 
-    //MARK: - pagination check action
+    //MARK: - check actions
 
     private func checkFilteredMoviesOnFillness() {
         guard self.filteredMovies.count < 5, self.shouldUseLoadingMethods else { return }
         self.loadUnits()
+    }
+
+    private func checkFilteredMoviesEmptiness() {
+        self.emptyListLabel.isHidden = (self.page >= self.totalPages && self.filteredMovies.count == 0)
+            ? false
+            : true
     }
 
     //MARK:- update action
@@ -150,6 +179,10 @@ class MWSingleCategoryViewController: MWViewController {
 
         self.filteredMovies = tempFilteredMovies
         self.checkFilteredMoviesOnFillness()
+    }
+
+    @objc private func updateTableView() {
+        self.tableView.reloadData()
     }
 }
 
@@ -178,8 +211,7 @@ extension MWSingleCategoryViewController: UITableViewDataSource, UITableViewDele
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        guard section != 0  else { return 0 }
-        return 16
+        section != 0 ? 16 : 0
     }
 }
 
@@ -188,7 +220,7 @@ extension MWSingleCategoryViewController {
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         let rowUnit = self.filteredMovies[indexPath.row]
         guard self.filteredMovies.count > 4 else { return }
-        let unit = self.filteredMovies[self.filteredMovies.count - 4]
+        let unit = self.filteredMovies[self.filteredMovies.count - 2]
         if self.totalItems > self.movies.count,
             rowUnit.id == unit.id {
             self.loadUnits()
@@ -196,7 +228,6 @@ extension MWSingleCategoryViewController {
     }
 
     private func loadUnits() {
-        self.loadingSpinner.startAnimating()
         guard !self.isRequestBusy,
             self.movies.count != self.totalItems else { return }
         self.isRequestBusy = true
@@ -207,7 +238,6 @@ extension MWSingleCategoryViewController {
             self.page += 1
             self.movies += movies
             self.updateTableByGenres()
-            self.loadingSpinner.stopAnimating()
         }
     }
 
@@ -221,7 +251,6 @@ extension MWSingleCategoryViewController {
                          querryParameters: query,
                          succesHandler: { [weak self] (movies: MWMoviesResponse)  in
                             guard let self = self else { return }
-
                             self.totalItems = movies.totalResults
                             self.totalPages = movies.totalPages
                             self.setGenres(to: movies.results)
@@ -230,10 +259,8 @@ extension MWSingleCategoryViewController {
             },
                          errorHandler: { [weak self] (error) in
                             guard let self = self else { return }
-
                             let message = error.getErrorDesription()
                             self.errorAlert(message: message)
-                            self.loadingSpinner.stopAnimating()
         })
     }
 
@@ -245,7 +272,7 @@ extension MWSingleCategoryViewController {
 
     private func setGenres( to movies: [MWMovie]) {
         for movie in movies {
-            movie.setFilmGenres(genres: MWSys.sh.genres)
+            movie.setMovieGenres(genres: MWSys.sh.genres)
         }
     }
 }

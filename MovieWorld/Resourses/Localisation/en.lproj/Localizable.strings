@@ -21,3 +21,24 @@
 "Unknown error" = "Unknown error";
 "401 Error" = "401 Error";
 "404 Error" = "404 Error";
+"Rating: %.1f" = "Rating: %.1f";
+"Not rated" = "Not rated";
+"This list is empty" = "This list is empty";
+"Filmography" = "Filmography";
+"%@ (%d years)" = "%@ (%d years)";
+"Cast" = "Cast";
+"Description" = "Description";
+"Trailers and gallery" = "Trailers and gallery";
+"%d minutes" = "%d minutes";
+"Movies" = "Movies";
+"Favorites" = "Favorites";
+"Films" = "Films";
+"People" = "People";
+"Reset" = "Reset";
+"Country" = "Country";
+"Year" = "Year";
+"Show" = "Show";
+"from %.1f to %.1f" = "from %.1f to %.1f";
+"Rating" = "Rating";
+"Filter" = "Filter";
+

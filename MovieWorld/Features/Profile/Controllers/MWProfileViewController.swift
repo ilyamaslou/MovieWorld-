@@ -15,7 +15,7 @@ class MWProfileViewController: MWViewController {
 
     private lazy var favoriteMovies: UIButton = {
         var button = UIButton()
-        button.setTitle("Favorites", for: .normal)
+        button.setTitle("Favorites".local(), for: .normal)
         button.setTitleColor(.black, for: .normal)
         button.layer.borderColor = UIColor.black.cgColor
         button.layer.borderWidth = 1
@@ -27,15 +27,14 @@ class MWProfileViewController: MWViewController {
 
     override func initController() {
         super.initController()
-        self.title = "Profile"
+        self.title = "Profile".local()
+        self.contentView.addSubview(self.favoriteMovies)
         self.makeConstraints()
     }
 
     // MARK: - constraints
 
     private func makeConstraints() {
-        self.contentView.addSubview(self.favoriteMovies)
-
         self.favoriteMovies.snp.makeConstraints { (make) in
             make.top.equalToSuperview().offset(16)
             make.left.right.equalToSuperview()

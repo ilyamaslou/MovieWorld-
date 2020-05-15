@@ -8,6 +8,12 @@
 
 import Foundation
 
+protocol Personalized {
+    var id: Int? { get set }
+    var name: String? {get set }
+    var image: Data? { get set }
+}
+
 struct MWMovieCastResponse: Decodable {
 
     //MARK:- Parameters
@@ -97,10 +103,4 @@ class MWMovieCrewMember: Decodable, Personalized {
     let job: String?
     let profilePath: String?
     var image: Data?
-}
-
-protocol Personalized {
-    var id: Int? { get set }
-    var name: String? {get set }
-    var image: Data? { get set }
 }

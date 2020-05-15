@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SnapKit
 
 class MWSingleMovieInCategoryCell: UITableViewCell {
 
@@ -23,11 +22,20 @@ class MWSingleMovieInCategoryCell: UITableViewCell {
 
     private lazy var movieView = MWSingleMovieView()
 
+    //MARK: - initialization
+
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        self.contentView.addSubview(self.movieView)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     // MARK: - constraints
 
     override func updateConstraints() {
-        self.contentView.addSubview(self.movieView)
-
         self.movieView.snp.updateConstraints { (make) in
             make.edges.equalToSuperview()
         }
@@ -40,8 +48,5 @@ class MWSingleMovieInCategoryCell: UITableViewCell {
         self.selectionStyle = .none
         self.movieView.setView(movie: movie)
         self.setNeedsUpdateConstraints()
-
-        // this needed for normally located title and other labels.  Or what alternative?
-        self.layoutIfNeeded()
     }
 }

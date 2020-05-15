@@ -12,7 +12,7 @@ class MWEmptyListLabel: UILabel {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.text = "This list is empty"
+        self.text = "This list is empty".local()
         self.font = .systemFont(ofSize: 24, weight: .bold)
         self.isHidden = true
     }

@@ -30,6 +30,8 @@ class MWMovieGalleryCollectionViewCell: UICollectionViewCell {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
+        self.contentView.addSubview(movieImageView)
+        self.contentView.addSubview(movieVideoView)
         self.makeConstraints()
     }
 
@@ -40,9 +42,6 @@ class MWMovieGalleryCollectionViewCell: UICollectionViewCell {
     // MARK: - constraints
 
     private func makeConstraints() {
-        self.contentView.addSubview(movieImageView)
-        self.contentView.addSubview(movieVideoView)
-
         self.movieImageView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
@@ -71,10 +70,6 @@ class MWMovieGalleryCollectionViewCell: UICollectionViewCell {
 
     private func setAndShowLoadedVideo(videoUrlKey: String?) {
         guard let key = videoUrlKey else { return }
-        let videoUrl = String(format: URLPaths.getVideo, key)
-        let encodedURL = videoUrl.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
-        if let url = URL(string: encodedURL) {
-            self.movieVideoView.loadVideoURL(url)
-        }
+        self.movieVideoView.loadVideoID(key)
     }
 }

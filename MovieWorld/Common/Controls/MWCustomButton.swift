@@ -43,7 +43,7 @@ class MWCustomButton: UIButton {
         self.imageEdgeInsets = UIEdgeInsets(top: .zero, left: titleLabelWidth ?? .zero, bottom: .zero, right: -(titleLabelWidth ?? .zero) - 4)
     }
 
-    func setUpButton(title: String = "All", hasArrow: Bool = true) {
+    func setUpButton(title: String = "All".local(), hasArrow: Bool = true) {
         self.layer.cornerRadius = 5
         self.backgroundColor = UIColor(named: "accentColor")
         self.setTitleColor(.white, for: .normal)

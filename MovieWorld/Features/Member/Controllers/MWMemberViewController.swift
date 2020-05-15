@@ -11,6 +11,13 @@ import CoreData
 
 class MWMemberViewController: MWViewController {
 
+    //MARK: - size variable
+
+    private var cellHeight = 237
+    private var cellWidth: Int {
+        return ((Int(self.view.frame.size.width) - 48) / 3)
+    }
+
     //MARK: - private variables
 
     private var member: Personalized?
@@ -23,7 +30,9 @@ class MWMemberViewController: MWViewController {
 
     private var isFavorite: Bool = false {
         didSet {
-            self.navigationItem.rightBarButtonItem?.image = isFavorite ?  UIImage(named: "selectedFaovoriteIcon") : UIImage(named: "unselectedFavoriteIcon")
+            self.navigationItem.rightBarButtonItem?.image = isFavorite
+                ? UIImage(named: "selectedFaovoriteIcon")
+                : UIImage(named: "unselectedFavoriteIcon")
         }
     }
 
@@ -31,10 +40,10 @@ class MWMemberViewController: MWViewController {
 
     //MARK:- gui variables
 
-    private lazy var rightBarButtonDidFavoriteItem: UIBarButtonItem = UIBarButtonItem(image: UIImage(named: "unselectedFavoriteIcon"),
-                                                                                      style: .plain,
-                                                                                      target: self,
-                                                                                      action: #selector(self.didFavoriteButtonTapped))
+    private lazy var rightBarButtonDidFavoriteItem = UIBarButtonItem(image: UIImage(named: "unselectedFavoriteIcon"),
+                                                                     style: .plain,
+                                                                     target: self,
+                                                                     action: #selector(self.didFavoriteButtonTap))
 
     private lazy var scrollView: UIScrollView = {
         let view = UIScrollView()
@@ -76,22 +85,22 @@ class MWMemberViewController: MWViewController {
     override func initController() {
         super.initController()
         self.navigationItem.largeTitleDisplayMode = .never
+
+        self.contentView.addSubview(self.scrollView)
+        self.scrollView.addSubview(self.contentViewContainer)
         self.makeConstraints()
     }
 
     // MARK: - constraints
 
     private func makeConstraints() {
-        self.contentView.addSubview(self.scrollView)
-        self.scrollView.addSubview(self.contentViewContainer)
-
         self.scrollView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
 
         self.contentViewContainer.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
-            make.width.equalTo(self.view.snp.width)
+            make.width.equalToSuperview()
         }
     }
 
@@ -122,7 +131,6 @@ class MWMemberViewController: MWViewController {
             },
                          errorHandler: { [weak self] (error) in
                             guard let self = self else { return }
-
                             let message = error.getErrorDesription()
                             self.errorAlert(message: message)
         })
@@ -148,7 +156,6 @@ class MWMemberViewController: MWViewController {
             },
                          errorHandler: { [weak self] (error) in
                             guard let self = self else { return }
-
                             let message = error.getErrorDesription()
                             self.errorAlert(message: message)
 
@@ -165,7 +172,7 @@ class MWMemberViewController: MWViewController {
 
     private func setGenres() {
         for movie in self.memberMovies {
-            movie.setFilmGenres(genres: MWSys.sh.genres)
+            movie.setMovieGenres(genres: MWSys.sh.genres)
         }
     }
 
@@ -182,13 +189,9 @@ class MWMemberViewController: MWViewController {
         self.contentViewContainer.collectionView.reloadData()
     }
 
-    @objc private func didFavoriteButtonTapped() {
-        self.isFavorite = !self.isFavorite
-        if self.isFavorite {
-            self.save()
-        } else {
-            self.remove()
-        }
+    @objc private func didFavoriteButtonTap() {
+        self.isFavorite.toggle()
+        self.isFavorite ? self.save() : self.remove()
     }
 }
 
@@ -223,8 +226,7 @@ extension MWMemberViewController: UICollectionViewDelegate, UICollectionViewData
 
 extension MWMemberViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = ((Int(self.view.frame.size.width) - 48) / 3)
-        return CGSize(width: width, height: 237)
+        return CGSize(width: self.cellWidth, height: self.cellHeight)
     }
 }
 

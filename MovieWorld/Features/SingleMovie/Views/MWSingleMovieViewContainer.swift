@@ -14,9 +14,10 @@ class MWSingleMovieViewContainer: UIView {
     //MARK:- insets and sizes variables
 
     private let edgeInsets = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
-    private let castCollectionViewHeight: Int = 237
+    private let castCollectionViewSize = CGSize(width: 130, height: 237)
     private let galleryCollectionViewHeight: Int = 200
     private let moviePlayerHeight: Int = 180
+    private let gallerySize = CGSize(width: 500, height: 200)
 
     //MARK:- gui variables
 
@@ -40,7 +41,7 @@ class MWSingleMovieViewContainer: UIView {
 
     private lazy var descriptionLabel: UILabel = {
         let label = UILabel()
-        label.text = "Description"
+        label.text = "Description".local()
         label.font = .systemFont(ofSize: 17, weight: .bold)
         return label
     }()
@@ -54,7 +55,7 @@ class MWSingleMovieViewContainer: UIView {
 
     lazy var showAllView: MWTitleButtonView = {
         let view = MWTitleButtonView()
-        view.title = "Cast"
+        view.title = "Cast".local()
         return view
     }()
 
@@ -76,13 +77,13 @@ class MWSingleMovieViewContainer: UIView {
         collectionViewLayout.minimumLineSpacing = 16
         collectionViewLayout.minimumInteritemSpacing = 16
         collectionViewLayout.sectionInset = UIEdgeInsets(top: .zero, left: self.edgeInsets.left, bottom: .zero, right: self.edgeInsets.right)
-        collectionViewLayout.itemSize = CGSize(width: 130, height: 237)
+        collectionViewLayout.itemSize = self.castCollectionViewSize
         return collectionViewLayout
     }()
 
     private lazy var galleryLabel: UILabel = {
         let label = UILabel()
-        label.text = "Trailers and gallery"
+        label.text = "Trailers and gallery".local()
         label.font = .systemFont(ofSize: 17, weight: .bold)
         return label
     }()
@@ -105,26 +106,24 @@ class MWSingleMovieViewContainer: UIView {
         collectionViewLayout.minimumLineSpacing = 16
         collectionViewLayout.minimumInteritemSpacing = 16
         collectionViewLayout.sectionInset = UIEdgeInsets(top: .zero, left: self.edgeInsets.left, bottom: .zero, right: self.edgeInsets.right)
-        collectionViewLayout.itemSize = CGSize(width: 500, height: 200)
+        collectionViewLayout.itemSize = self.gallerySize
         return collectionViewLayout
     }()
+
+    //MARK: - initialization
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.addSubviews()
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     // MARK: - constraints
 
     override func updateConstraints() {
-        self.addSubview(self.movieCellView)
-        self.addSubview(self.moviePlayer)
-        self.addSubview(self.loadingIndicator)
-        self.addSubview(self.descriptionContainerView)
-        self.addSubview(self.showAllView)
-        self.addSubview(self.castCollectionView)
-        self.addSubview(self.galleryLabel)
-        self.addSubview(self.galleryCollectionView)
-
-        self.descriptionContainerView.addSubview(self.descriptionLabel)
-        self.descriptionContainerView.addSubview(self.movieRuntimeLabel)
-        self.descriptionContainerView.addSubview(self.descriptionTextLabel)
-
         self.movieCellView.snp.updateConstraints { (make) in
             make.top.equalToSuperview().offset(self.edgeInsets.top)
             make.left.right.equalToSuperview()
@@ -168,7 +167,7 @@ class MWSingleMovieViewContainer: UIView {
         self.castCollectionView.snp.updateConstraints { (make) in
             make.top.equalTo(self.showAllView.snp.bottom).offset(self.edgeInsets.top)
             make.left.right.equalToSuperview()
-            make.height.equalTo(self.castCollectionViewHeight)
+            make.height.equalTo(self.castCollectionViewSize)
         }
 
         self.galleryLabel.snp.updateConstraints { (make) in
@@ -185,5 +184,20 @@ class MWSingleMovieViewContainer: UIView {
         }
 
         super.updateConstraints()
+    }
+
+    private func addSubviews() {
+        self.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(self.movieCellView)
+        self.addSubview(self.moviePlayer)
+        self.addSubview(self.loadingIndicator)
+        self.addSubview(self.descriptionContainerView)
+        self.addSubview(self.showAllView)
+        self.addSubview(self.castCollectionView)
+        self.addSubview(self.galleryLabel)
+        self.addSubview(self.galleryCollectionView)
+        self.descriptionContainerView.addSubview(self.descriptionLabel)
+        self.descriptionContainerView.addSubview(self.movieRuntimeLabel)
+        self.descriptionContainerView.addSubview(self.descriptionTextLabel)
     }
 }

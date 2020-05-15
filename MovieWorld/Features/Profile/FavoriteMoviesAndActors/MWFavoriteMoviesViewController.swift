@@ -28,6 +28,8 @@ class MWFavoriteMoviesViewController: MWViewController {
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(self.updateTableView),
                                                name: .movieIsFavoriteChanged, object: nil)
+        self.add(self.moviesByGenresController)
+        self.contentView.addSubview(emptyListLabel)
         self.makeConstraints()
         self.updateTableView()
     }
@@ -35,9 +37,6 @@ class MWFavoriteMoviesViewController: MWViewController {
     // MARK: - constraints
 
     private func makeConstraints() {
-        self.add(self.moviesByGenresController)
-        self.contentView.addSubview(emptyListLabel)
-
         self.moviesByGenresController.view.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
@@ -96,7 +95,7 @@ extension MWFavoriteMoviesViewController {
                 newMovie.image = imageData
             }
 
-            newMovie.setFilmGenres(genres: MWSys.sh.genres)
+            newMovie.setMovieGenres(genres: MWSys.sh.genres)
 
             mwMovies.append(newMovie)
         }

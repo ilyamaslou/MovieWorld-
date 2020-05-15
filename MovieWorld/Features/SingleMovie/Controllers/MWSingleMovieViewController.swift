@@ -14,7 +14,7 @@ class MWSingleMovieViewController: MWViewController {
 
     //MARK: - private variables
 
-    private var coreDatadMovie: Movie?
+    private var coreDataMovie: Movie?
 
     private var isFavorite: Bool = false {
         didSet {
@@ -24,7 +24,7 @@ class MWSingleMovieViewController: MWViewController {
 
     private var oldIsFavorite: Bool = false
 
-    private var movie: MWMovie = MWMovie() {
+    private var movie: MWMovie? {
         didSet {
             self.contentViewContainer.castCollectionView.reloadData()
         }
@@ -44,10 +44,10 @@ class MWSingleMovieViewController: MWViewController {
 
     //MARK:- gui variables
 
-    private lazy var rightBarButtonDidFavoriteItem: UIBarButtonItem = UIBarButtonItem( image: UIImage(named: "unselectedFavoriteIcon"),
-                                                                                       style: .plain,
-                                                                                       target: self,
-                                                                                       action: #selector(self.didFavoriteButtonTapped))
+    private lazy var rightBarButtonDidFavoriteItem = UIBarButtonItem( image: UIImage(named: "unselectedFavoriteIcon"),
+                                                                      style: .plain,
+                                                                      target: self,
+                                                                      action: #selector(self.didFavoriteButtonTap))
 
     private lazy var scrollView: UIScrollView = {
         let view = UIScrollView()
@@ -71,6 +71,7 @@ class MWSingleMovieViewController: MWViewController {
         view.galleryCollectionView.dataSource = self
         view.castCollectionView.delegate = self
         view.castCollectionView.dataSource = self
+        view.moviePlayer.delegate = self
         return view
     }()
 
@@ -142,39 +143,34 @@ class MWSingleMovieViewController: MWViewController {
         self.navigationItem.largeTitleDisplayMode = .always
         guard self.isFavorite != self.oldIsFavorite else { return }
         NotificationCenter.default.post(name: .movieIsFavoriteChanged, object: nil)
+        self.contentViewContainer.moviePlayer.clear()
     }
 
     //MARK:- request functions
 
     private func loadMovieVideos() {
-        guard let movieId = self.movie.id else { return }
+        guard let movieId = self.movie?.id else { return }
         let urlPath = String(format: URLPaths.getMovieVideos, movieId)
 
         MWNet.sh.request(urlPath: urlPath ,
                          querryParameters: MWNet.sh.parameters,
                          succesHandler: { [weak self] (videos: MWMovieVideoResponse)  in
                             guard let self = self else { return }
-                            for video in videos.results {
-                                if video.site == "YouTube"{
-                                    guard let url = video.key else { return }
-                                    self.gallery.videos.append(url)
-                                }
-                            }
+                            self.gallery.videos.append(contentsOf: videos.results
+                                .filter { $0.site == "YouTube" }
+                                .compactMap { $0.key } )
                             self.setAndShowLoadedVideo(videoUrlKey: self.gallery.videos.first)
                             self.reloadGalleryItems()
-                            self.contentViewContainer.loadingIndicator.stopAnimating()
             },
                          errorHandler: { [weak self] (error) in
                             guard let self = self else { return }
-
                             let message = error.getErrorDesription()
-                            self.contentViewContainer.loadingIndicator.stopAnimating()
                             self.errorAlert(message: message)
         })
     }
 
     private func loadMovieCast() {
-        guard let movieId = self.movie.id else { return }
+        guard let movieId = self.movie?.id else { return }
         let urlPath = String(format: URLPaths.getMovieCredits, movieId)
 
         MWNet.sh.request(urlPath: urlPath ,
@@ -189,21 +185,19 @@ class MWSingleMovieViewController: MWViewController {
     }
 
     private func loadMovieAdditionalInfo() {
-        guard let movieId = self.movie.id else { return }
+        guard let movieId = self.movie?.id else { return }
         let urlPath = String(format: URLPaths.movieAdditionalInfo, movieId)
 
         MWNet.sh.request(urlPath: urlPath ,
                          querryParameters: MWNet.sh.parameters,
                          succesHandler: { [weak self] (details: MWMovieAdditionalInfo)  in
                             guard let self = self else { return }
-
                             self.movieDetails = details
                             self.saveAdditionalInfo(info: details)
                             self.setDetails()
             },
                          errorHandler: { [weak self] (error) in
                             guard let self = self else { return }
-
                             let message = error.getErrorDesription()
                             self.errorAlert(message: message)
                             self.setFetchedAddittionalInfo()
@@ -211,20 +205,18 @@ class MWSingleMovieViewController: MWViewController {
     }
 
     private func loadMovieImages() {
-        guard let movieId = self.movie.id else { return }
+        guard let movieId = self.movie?.id else { return }
         let urlPath = String(format: URLPaths.movieImages, movieId)
 
         MWNet.sh.request(urlPath: urlPath ,
                          querryParameters: MWNet.sh.parameters,
                          succesHandler: { [weak self] (images: MWMovieImagesResponse)  in
                             guard let self = self else { return }
-
                             self.imagesResponse = images
                             MWImageLoadingHelper.sh.loadMovieImages(for: self.imagesResponse)
             },
                          errorHandler: { [weak self] (error) in
                             guard let self = self else { return }
-
                             let message = error.getErrorDesription()
                             self.errorAlert(message: message)
         })
@@ -263,21 +255,18 @@ class MWSingleMovieViewController: MWViewController {
 
     private func setAndShowLoadedVideo(videoUrlKey: String?) {
         guard let key = videoUrlKey else { return }
-        let videoUrl = String(format: URLPaths.getVideo, key)
-        let encodedURL = videoUrl.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
-        if let url = URL(string: encodedURL) {
-            self.contentViewContainer.moviePlayer.loadVideoURL(url)
-        }
+        self.contentViewContainer.moviePlayer.loadVideoID(key)
     }
 
     private func setDetails() {
         self.contentViewContainer.descriptionTextLabel.text = self.movieDetails?.overview ?? ""
-        guard let movieRuntime = self.movieDetails?.runtime else { return }
-        self.contentViewContainer.movieRuntimeLabel.text = "\(movieRuntime) minutes"
+        guard let movieRuntime = self.movieDetails?.runtime, movieRuntime != 0 else { return }
+        self.contentViewContainer.movieRuntimeLabel.text = "%d minutes".local(args: movieRuntime)
     }
 
     private func setShowAllButtonTappedAction() {
-        self.contentViewContainer.showAllView.buttonIsTapped = {
+        self.contentViewContainer.showAllView.buttonDidTap = { [weak self] in
+            guard let self = self else { return }
             MWI.s.pushVC(MWCastViewController(cast: self.movieFullCast))
         }
     }
@@ -310,13 +299,9 @@ class MWSingleMovieViewController: MWViewController {
 
     //MARK: - button tapped actions
 
-    @objc private func didFavoriteButtonTapped() {
-        self.isFavorite = !self.isFavorite
-        if self.isFavorite {
-            self.save()
-        } else {
-            self.remove()
-        }
+    @objc private func didFavoriteButtonTap() {
+        self.isFavorite.toggle()
+        self.isFavorite ? self.save() : self.remove()
     }
 }
 
@@ -374,10 +359,10 @@ extension MWSingleMovieViewController {
         let managedContext = CoreDataManager.s.persistentContainer.viewContext
         let fetch: NSFetchRequest<Movie> = Movie.fetchRequest()
         fetch.predicate = NSPredicate(format: "ANY id = %i and title = %@",
-                                      self.movie.id ?? 0,
-                                      self.movie.title ?? "")
+                                      self.movie?.id ?? 0,
+                                      self.movie?.title ?? "")
         do {
-            self.coreDatadMovie = try managedContext.fetch(fetch).last
+            self.coreDataMovie = try managedContext.fetch(fetch).last
         } catch {
             print(error.localizedDescription)
         }
@@ -385,7 +370,7 @@ extension MWSingleMovieViewController {
 
     @discardableResult  private func fetchAdditionalInfo() -> MovieAdditionalInfo? {
         self.fetchMovie()
-        return self.coreDatadMovie?.additionalInfo
+        return self.coreDataMovie?.additionalInfo
     }
 
     private func saveAdditionalInfo (info: MWMovieAdditionalInfo) {
@@ -398,7 +383,7 @@ extension MWSingleMovieViewController {
             newAdditionalInfo.overview = info.overview
             newAdditionalInfo.runtime = Int64(info.runtime ?? 0)
             newAdditionalInfo.tagline = info.tagline
-            self.coreDatadMovie?.additionalInfo = newAdditionalInfo
+            self.coreDataMovie?.additionalInfo = newAdditionalInfo
         } else {
             guard let fetchedInfo = fetchedInfo else { return }
             fetchedInfo.adult = info.adult ?? false
@@ -441,9 +426,9 @@ extension MWSingleMovieViewController {
     }
 
     @discardableResult private func fetchFavoriteMovie() -> Movie? {
-        guard let id = self.movie.id,
-            let title = self.movie.title,
-            let releaseDate = self.movie.releaseDate else { return Movie() }
+        guard let id = self.movie?.id,
+            let title = self.movie?.title,
+            let releaseDate = self.movie?.releaseDate else { return Movie() }
 
         let managedContext = CoreDataManager.s.persistentContainer.viewContext
         let fetch: NSFetchRequest<Movie> = Movie.fetchRequest()
@@ -473,18 +458,18 @@ extension MWSingleMovieViewController {
 
         let favoriteMovies = FavoriteMovies(context: managedContext)
         let newMovie = Movie(context: managedContext)
-        newMovie.id = Int64(self.movie.id ?? 0)
-        newMovie.posterPath = self.movie.posterPath
-        newMovie.genreIds = self.movie.genreIds
-        newMovie.title = self.movie.title
-        newMovie.originalLanguage = self.movie.originalLanguage
-        newMovie.releaseDate = self.movie.releaseDate
+        newMovie.id = Int64(self.movie?.id ?? 0)
+        newMovie.posterPath = self.movie?.posterPath
+        newMovie.genreIds = self.movie?.genreIds
+        newMovie.title = self.movie?.title
+        newMovie.originalLanguage = self.movie?.originalLanguage
+        newMovie.releaseDate = self.movie?.releaseDate
 
-        if let movieRating = self.movie.voteAvarage {
+        if let movieRating = self.movie?.voteAvarage {
             newMovie.voteAvarage = movieRating
         }
 
-        if let imageData = self.movie.image {
+        if let imageData = self.movie?.image {
             newMovie.movieImage = imageData
         }
 
@@ -502,5 +487,13 @@ extension MWSingleMovieViewController {
         movieToRemove.favorite = nil
 
         self.saveContext(context: managedContext)
+    }
+}
+
+//MARK: YouTubePlayerDelegate
+
+extension MWSingleMovieViewController: YouTubePlayerDelegate {
+    func playerReady(_ videoPlayer: YouTubePlayerView) {
+        self.contentViewContainer.loadingIndicator.stopAnimating()
     }
 }

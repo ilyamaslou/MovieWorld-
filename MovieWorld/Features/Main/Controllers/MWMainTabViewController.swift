@@ -7,20 +7,19 @@
 //
 
 import UIKit
-import SnapKit
 import CoreData
 
 class MWMainTabViewController: MWViewController {
 
     //MARK: - private variables
 
-    private var moviesByCategories: [MWCategories: [MWMovie]] = [:] {
+    private var moviesByCategories: [MWMainCategories: [MWMovie]] = [:] {
         didSet {
             self.tableView.reloadData()
         }
     }
 
-    private var moviesResultsInfoByCategories: [MWCategories: (totalResults: Int, totalPages: Int)] = [:]
+    private var moviesResultsInfoByCategories: [MWMainCategories: (totalResults: Int, totalPages: Int)] = [:]
     private var group = DispatchGroup()
 
     //MARK:- gui variables
@@ -49,6 +48,8 @@ class MWMainTabViewController: MWViewController {
     override func initController() {
         super.initController()
         self.title = "Season".local()
+
+        self.contentView.addSubview(self.tableView)
         self.makeConstraints()
 
         self.loadMovies()
@@ -58,8 +59,6 @@ class MWMainTabViewController: MWViewController {
     //MARK: - constraints
 
     private func makeConstraints() {
-        contentView.addSubview(self.tableView)
-
         self.tableView.snp.makeConstraints { (make) in
             make.top.left.right.equalToSuperview()
             make.bottom.equalToSuperview().inset(16)
@@ -71,7 +70,7 @@ class MWMainTabViewController: MWViewController {
     private func loadMovies() {
         var urlPath = ""
 
-        for category in MWCategories.allCases {
+        for category in MWMainCategories.allCases {
             urlPath = category.getCategoryUrlPath()
 
             self.group.enter()
@@ -79,7 +78,6 @@ class MWMainTabViewController: MWViewController {
                              querryParameters: MWNet.sh.parameters,
                              succesHandler: { [weak self] (movies: MWMoviesResponse)  in
                                 guard let self = self else { return }
-
                                 self.moviesResultsInfoByCategories[category] = (movies.totalResults,
                                                                                 movies.totalPages)
                                 self.setGenres(to: movies.results)
@@ -91,7 +89,6 @@ class MWMainTabViewController: MWViewController {
                 },
                              errorHandler: { [weak self] (error) in
                                 guard let self = self else { return }
-
                                 let message = error.getErrorDesription()
                                 self.errorAlert(message: message)
 
@@ -107,7 +104,7 @@ class MWMainTabViewController: MWViewController {
 
     private func setGenres(to movies: [MWMovie]) {
         for movie in movies {
-            movie.setFilmGenres(genres: MWSys.sh.genres)
+            movie.setMovieGenres(genres: MWSys.sh.genres)
         }
     }
 
@@ -172,7 +169,7 @@ extension MWMainTabViewController {
         self.tableView.reloadData()
     }
 
-    private func fetchMoviesByCategory(by category: MWCategories) -> [Movie] {
+    private func fetchMoviesByCategory(by category: MWMainCategories) -> [Movie] {
         let managedContext = CoreDataManager.s.persistentContainer.viewContext
         let fetch: NSFetchRequest<Movie> = Movie.fetchRequest()
         fetch.predicate = NSPredicate(format: "ANY category.movieCategory = %@", category.rawValue)
@@ -186,7 +183,7 @@ extension MWMainTabViewController {
         return result
     }
 
-    private func save(mwCategory: MWCategories, movies: [MWMovie]) {
+    private func save(mwCategory: MWMainCategories, movies: [MWMovie]) {
         let result = self.fetchMoviesByCategory(by: mwCategory)
         let managedContext = CoreDataManager.s.persistentContainer.viewContext
 
@@ -224,7 +221,7 @@ extension MWMainTabViewController {
         self.saveAndReload(context: managedContext)
     }
 
-    private func setMoviesToCategory(category: MWCategories, movies: [Movie]) {
+    private func setMoviesToCategory(category: MWMainCategories, movies: [Movie]) {
         var mwMovies: [MWMovie] = []
         for movie in movies {
             let newMovie = MWMovie()
@@ -240,7 +237,7 @@ extension MWMainTabViewController {
                 newMovie.image = imageData
             }
 
-            newMovie.setFilmGenres(genres: MWSys.sh.genres)
+            newMovie.setMovieGenres(genres: MWSys.sh.genres)
 
             mwMovies.append(newMovie)
         }

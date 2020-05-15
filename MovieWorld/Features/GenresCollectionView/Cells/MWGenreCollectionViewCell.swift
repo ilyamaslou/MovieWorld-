@@ -33,12 +33,21 @@ class MWGenreCollectionViewCell: UICollectionViewCell {
         return button
     }()
 
+    //MARK: - initialization
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.contentView.addSubview(self.singleGenreButton)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     // MARK: - constraints
 
     override func updateConstraints() {
-        self.contentView.addSubview(self.singleGenreButton)
-
-        self.singleGenreButton.snp.makeConstraints { (make) in
+        self.singleGenreButton.snp.updateConstraints { (make) in
             make.edges.equalToSuperview()
         }
         super.updateConstraints()

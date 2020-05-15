@@ -28,6 +28,8 @@ class MWFavoriteActorsViewController: MWViewController {
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(self.updateTableView),
                                                name: .actorIsFavoriteChanged, object: nil)
+        self.add(self.actorsController)
+        self.contentView.addSubview(self.emptyListLabel)
         self.makeConstraints()
         self.updateTableView()
     }
@@ -35,9 +37,6 @@ class MWFavoriteActorsViewController: MWViewController {
     // MARK: - constraints
 
     private func makeConstraints() {
-        self.add(self.actorsController)
-        self.contentView.addSubview(self.emptyListLabel)
-
         self.actorsController.view.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }

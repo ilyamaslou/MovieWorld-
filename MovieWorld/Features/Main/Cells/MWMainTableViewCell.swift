@@ -29,7 +29,7 @@ class MWMainTableViewCell: UITableViewCell {
 
     //MARK: - private variable
 
-    private var category: MWCategories?
+    private var category: MWMainCategories?
     private var totalResults: (Int, Int)?
 
     //MARK:- gui variables
@@ -67,6 +67,8 @@ class MWMainTableViewCell: UITableViewCell {
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        self.contentView.addSubview(self.showAllView)
+        self.contentView.addSubview(self.collectionView)
 
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(self.movieImageUpdated),
@@ -81,13 +83,8 @@ class MWMainTableViewCell: UITableViewCell {
     // MARK: - constraints
 
     override func updateConstraints() {
-        self.contentView.addSubview(self.showAllView)
-        self.contentView.addSubview(self.collectionView)
-
         self.showAllView.snp.updateConstraints { (make) in
-            make.top.equalToSuperview().offset(self.insets.top)
-            make.left.equalToSuperview().offset(self.insets.left)
-            make.right.equalToSuperview().inset(self.insets)
+            make.top.left.right.equalToSuperview().inset(self.insets)
             make.bottom.equalTo(self.collectionView.snp.top).offset(self.insets.bottom)
         }
 
@@ -101,7 +98,7 @@ class MWMainTableViewCell: UITableViewCell {
 
     //MARK: - setters
 
-    func set(categoryName: MWCategories, totalResults: (Int, Int)?) {
+    func set(categoryName: MWMainCategories, totalResults: (Int, Int)?) {
         self.category = categoryName
         self.totalResults = totalResults
         self.showAllView.title = categoryName.rawValue
@@ -109,7 +106,8 @@ class MWMainTableViewCell: UITableViewCell {
     }
 
     private func setShowAllButtonTappedAction() {
-        self.showAllView.buttonIsTapped = {
+        self.showAllView.buttonDidTap = { [weak self] in
+            guard let self = self else { return }
             MWI.s.pushVC(MWSingleCategoryViewController(movies: self.movies,
                                                         category: self.category,
                                                         totalResultsInfo: self.totalResults))

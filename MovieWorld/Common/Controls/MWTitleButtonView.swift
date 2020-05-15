@@ -24,7 +24,7 @@ class MWTitleButtonView: UIView {
         }
     }
 
-    var buttonIsTapped: (() -> Void)?
+    var buttonDidTap: (() -> Void)?
 
     //MARK:- gui variables
 
@@ -40,12 +40,21 @@ class MWTitleButtonView: UIView {
         return button
     }()
 
+    //MARK: - initialization
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.addSubview(self.label)
+        self.addSubview(self.showAllButton)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     // MARK: - constraints
 
     override func updateConstraints() {
-        self.addSubview(self.label)
-        self.addSubview(self.showAllButton)
-
         self.label.snp.updateConstraints { (make) in
             make.top.left.bottom.equalToSuperview()
         }
@@ -61,7 +70,6 @@ class MWTitleButtonView: UIView {
     //MARK:- Actions
 
     @objc private func showAllButtonDidTapped() {
-        guard let buttonIsTapped = self.buttonIsTapped else { return }
-        buttonIsTapped()
+        self.buttonDidTap?()
     }
 }

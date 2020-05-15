@@ -36,9 +36,10 @@ class MWInitController: MWViewController {
 
     override func initController() {
         super.initController()
+        self.contentView.addSubview(self.loadingIndicator)
         self.makeConstraints()
-
         self.loadingIndicator.startAnimating()
+
         self.loadGenres()
         self.loadLanguages()
         self.loadConfiguration()
@@ -49,8 +50,6 @@ class MWInitController: MWViewController {
     // MARK: - constraints
 
     private func makeConstraints() {
-        self.contentView.addSubview(self.loadingIndicator)
-
         self.loadingIndicator.snp.makeConstraints { (make) in
             make.center.equalToSuperview()
         }

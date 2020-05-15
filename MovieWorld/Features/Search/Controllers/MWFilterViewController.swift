@@ -13,7 +13,7 @@ class MWFilterViewController: MWViewController {
 
     //MARK: - variable
 
-    var choosenFilters: ((_ genres: Set<String>?, _ countries: [String?]?, _ year: String?, _ ratingRange: (Float, Float)?) -> Void)?
+    var choosenFilters: ((MWFilters) -> Void)?
 
     //MARK: - size and insets variables
 
@@ -47,27 +47,19 @@ class MWFilterViewController: MWViewController {
 
     //MARK:- gui variables
 
-    private lazy var resetBarButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(title: "Reset",
-                                     style: .plain,
-                                     target: self,
-                                     action: #selector(self.resetButtonDidTapped))
-        button.tintColor = UIColor(named: "shadowColor")
-        return button
-    }()
-
-    private lazy var collectionView: MWGenresCollectionViewController = MWGenresCollectionViewController()
+    private lazy var resetBarButton = MWResetButton(target: self, action: #selector(self.resetButtonDidTapped))
+    private lazy var collectionView = MWGenresCollectionViewController()
 
     private lazy var countryView: MWLabelsWithArrowView = {
         var view = MWLabelsWithArrowView()
-        view.title = "Country"
+        view.title = "Country".local()
         view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.countryViewDidTapped)))
         return view
     }()
 
     private lazy var yearView: MWLabelsWithArrowView = {
         var view = MWLabelsWithArrowView()
-        view.title = "Year"
+        view.title = "Year".local()
         view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.yearViewDidTapped)))
         return view
     }()
@@ -80,7 +72,7 @@ class MWFilterViewController: MWViewController {
         return picker
     }()
 
-    private lazy var datePickerToolBar: UIToolbar = UIToolbar()
+    private lazy var datePickerToolBar = UIToolbar()
 
     private lazy var viewWithLowAlpha: UIView = {
         let view: UIView = UIView()
@@ -91,8 +83,9 @@ class MWFilterViewController: MWViewController {
     private lazy var ratingView: MWLabelsWithArrowView = {
         let view: MWLabelsWithArrowView = MWLabelsWithArrowView()
         view.hasArrow = false
-        view.title = "Rating"
-        view.value = "from \(self.selectedRatingRange?.from ?? 1.0) to \(self.selectedRatingRange?.to ?? 10.0)"
+        view.title = "Rating".local()
+        view.value = "from %.1f to %.1f"
+            .local(args: (self.selectedRatingRange?.from ?? 1.0), (self.selectedRatingRange?.to ?? 10.0))
         return view
     }()
 
@@ -113,7 +106,7 @@ class MWFilterViewController: MWViewController {
     private lazy var showButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = UIColor(named: "accentColor")
-        button.setTitle("Show", for: .normal)
+        button.setTitle("Show".local(), for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 17)
         button.layer.cornerRadius = 5
@@ -123,7 +116,7 @@ class MWFilterViewController: MWViewController {
 
     //MARK: - initialization
 
-    init(filters: (genres: Set<String>?, countries: [String?]?, year: String?, ratingRange: (Float, Float)?)?) {
+    init(filters: MWFilters?) {
         super.init()
         guard let filters = filters else { return }
         self.collectionView.filteredGenres = filters.genres ?? []
@@ -139,10 +132,10 @@ class MWFilterViewController: MWViewController {
     }
 
     override func initController() {
+        self.addSubviews()
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(self.checkReset),
                                                name: .genresChanged, object: nil)
-
         self.checkReset()
         self.setUpView()
         self.setUpToolbar()
@@ -152,40 +145,33 @@ class MWFilterViewController: MWViewController {
     // MARK: - constraints
 
     override func updateViewConstraints() {
-        self.add(self.collectionView)
-        self.contentView.addSubview(self.countryView)
-        self.contentView.addSubview(self.yearView)
-        self.contentView.addSubview(self.ratingView)
-        self.contentView.addSubview(self.ratingSlider)
-        self.contentView.addSubview(self.showButton)
-
-        self.collectionView.view.snp.makeConstraints { (make) in
+        self.collectionView.view.snp.updateConstraints { (make) in
             make.top.equalToSuperview().offset(self.edgeInsets.top)
             make.left.right.equalToSuperview()
             make.height.equalTo(self.collectionViewHeight)
         }
 
-        self.countryView.snp.makeConstraints { (make) in
+        self.countryView.snp.updateConstraints { (make) in
             make.top.equalTo(self.collectionView.view.snp.bottom).offset(self.edgeInsets.top)
             make.left.right.equalToSuperview()
         }
 
-        self.yearView.snp.makeConstraints { (make) in
+        self.yearView.snp.updateConstraints { (make) in
             make.top.equalTo(self.countryView.snp.bottom).offset(self.edgeInsets.top)
             make.left.right.equalToSuperview()
         }
 
-        self.ratingView.snp.makeConstraints { (make) in
+        self.ratingView.snp.updateConstraints { (make) in
             make.top.equalTo(self.yearView.snp.bottom).offset(self.edgeInsets.top)
             make.left.right.equalToSuperview()
         }
 
-        self.ratingSlider.snp.makeConstraints { (make) in
+        self.ratingSlider.snp.updateConstraints { (make) in
             make.top.equalTo(self.ratingView.snp.bottom)
             make.left.right.equalToSuperview().inset(self.edgeInsets)
         }
 
-        self.showButton.snp.makeConstraints { (make) in
+        self.showButton.snp.updateConstraints { (make) in
             make.top.greaterThanOrEqualTo( self.ratingSlider.snp.bottom)
             make.left.right.equalToSuperview().inset(self.edgeInsets)
             make.bottom.equalToSuperview().inset(32)
@@ -194,10 +180,19 @@ class MWFilterViewController: MWViewController {
         super.updateViewConstraints()
     }
 
+    private func addSubviews() {
+        self.add(self.collectionView)
+        self.contentView.addSubview(self.countryView)
+        self.contentView.addSubview(self.yearView)
+        self.contentView.addSubview(self.ratingView)
+        self.contentView.addSubview(self.ratingSlider)
+        self.contentView.addSubview(self.showButton)
+    }
+
     //MARK: - setup view data actions
 
     private func setUpView() {
-        self.title = "Filter"
+        self.title = "Filter".local()
         self.navigationItem.setRightBarButton(self.resetBarButton, animated: true)
 
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.tapGestureDone))
@@ -271,27 +266,20 @@ class MWFilterViewController: MWViewController {
     }
 
     private func setUpSlider() {
-        self.ratingView.value = "from \(self.selectedRatingRange?.from ?? 1.0) to \(self.selectedRatingRange?.to ?? 10.0)"
+        self.ratingView.value = "from %.1f to %.1f"
+            .local(args: (self.selectedRatingRange?.from ?? 1.0), (self.selectedRatingRange?.to ?? 10.0))
         self.ratingSlider.value = [CGFloat(self.selectedRatingRange?.from ?? 1.0),
                                    CGFloat(self.selectedRatingRange?.to ?? 10.0)]
     }
 
     //MARK: - resetButton actions
 
-    private func updateResetButton(hasNewValues: Bool) {
-        self.resetBarButton.tintColor = hasNewValues ? UIColor(named: "accentColor") : UIColor(named: "shadowColor")
-        self.resetBarButton.isEnabled = hasNewValues ? true : false
-    }
-
     @objc private func checkReset() {
-        if self.selectedCountries != nil
+        let hasNewValues = self.selectedCountries != nil
             || self.selectedYear != nil
             || self.selectedRatingRange != nil
-            || !self.collectionView.filteredGenres.isEmpty {
-            self.updateResetButton(hasNewValues: true)
-        } else {
-            self.updateResetButton(hasNewValues: false)
-        }
+            || !self.collectionView.filteredGenres.isEmpty
+        self.resetBarButton.updateResetButton(hasNewValues: hasNewValues)
     }
 
     @objc private func resetButtonDidTapped() {
@@ -358,12 +346,12 @@ class MWFilterViewController: MWViewController {
     }
 
     @objc private func showButtonDidTapped() {
-        guard let choosenFilters = self.choosenFilters else { return }
         let filteredGenres = self.collectionView.filteredGenres.isEmpty ? nil : self.collectionView.filteredGenres
-        choosenFilters(filteredGenres,
-                       self.selectedCountries,
-                       self.selectedYear,
-                       self.selectedRatingRange)
+        let filtersToSend = MWFilters(genres: filteredGenres,
+                                      countries: self.selectedCountries,
+                                      year: self.selectedYear,
+                                      ratingRange: self.selectedRatingRange)
+        self.choosenFilters?(filtersToSend)
         MWI.s.popVC()
     }
 }

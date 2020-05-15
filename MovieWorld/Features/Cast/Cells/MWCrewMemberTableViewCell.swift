@@ -16,7 +16,7 @@ class MWCrewMemberTableViewCell: UITableViewCell {
 
     //MARK: - insets
 
-    private let edgeInsets = UIEdgeInsets(top: 11, left: 16, bottom: 11, right: 16)
+    private let edgeInsets = UIEdgeInsets(top: 11, left: 16, bottom: 11, right: .zero)
 
     //MARK: - private variable
 
@@ -31,14 +31,22 @@ class MWCrewMemberTableViewCell: UITableViewCell {
         return label
     }()
 
+    //MARK: - initialization
+
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        self.contentView.addSubview(self.memberNameLabel)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     // MARK: - constraints
 
     override func updateConstraints() {
-        self.contentView.addSubview(self.memberNameLabel)
-
         self.memberNameLabel.snp.updateConstraints { (make) in
-            make.top.left.bottom.equalToSuperview().inset(self.edgeInsets)
-            make.right.equalToSuperview()
+            make.edges.equalToSuperview().inset(self.edgeInsets)
         }
 
         super.updateConstraints()

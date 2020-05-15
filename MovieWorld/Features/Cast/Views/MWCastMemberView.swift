@@ -13,7 +13,7 @@ class MWCastMemberView: UIView {
     //MARK: insets and size variables
 
     private let edgeInsets = UIEdgeInsets(top: 10, left: 16, bottom: 10, right: 16)
-    private let imageSize = CGSize(width: 70, height: 70)
+    private let imageSize = CGSize(width: 80, height: 120)
 
     //MARK: - private variables
 
@@ -55,15 +55,20 @@ class MWCastMemberView: UIView {
         return view
     }()
 
+    //MARK: - initialization
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.addSubviews()
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     //MARK:- constraints
 
     override func updateConstraints() {
-        self.addSubview(self.memberImageView)
-        self.addSubview(self.memberNameLabel)
-        self.addSubview(self.memberRoleLabel)
-        self.addSubview(self.memberBirthLabel)
-        self.addSubview(self.separationView)
-
         self.memberImageView.snp.updateConstraints { (make) in
             make.top.left.bottom.equalToSuperview().inset(self.edgeInsets)
             make.size.equalTo(self.imageSize)
@@ -95,6 +100,14 @@ class MWCastMemberView: UIView {
         super.updateConstraints()
     }
 
+    private func addSubviews() {
+        self.addSubview(self.memberImageView)
+        self.addSubview(self.memberNameLabel)
+        self.addSubview(self.memberRoleLabel)
+        self.addSubview(self.memberBirthLabel)
+        self.addSubview(self.separationView)
+    }
+
     //MARK:- setters
 
     func set(castMember: MWMovieCastMember?, birthday: String = "") {
@@ -114,15 +127,9 @@ class MWCastMemberView: UIView {
     }
 
     func setUpBirthday(birthday: String) {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
+        guard let age = birthday.toDate() else { return }
+        let formattedBirthday = age.toString(format: "dd.MM.yyyy")
 
-        let stringFormatter = DateFormatter()
-        stringFormatter.dateFormat = "dd.MM.yyyy"
-
-        guard let age = dateFormatter.date(from: birthday) else { return }
-        let formattedBirthday = stringFormatter.string(from: age)
-
-        self.memberBirthLabel.text = "\(formattedBirthday) (\(age.toAge) years)"
+        self.memberBirthLabel.text = "%@ (%d years)".local(args: formattedBirthday, age.toAge)
     }
 }

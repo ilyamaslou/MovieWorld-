@@ -6,7 +6,6 @@
 //  Copyright © 2020 Ilya Maslou. All rights reserved.
 //
 import UIKit
-import SnapKit
 
 class MWSearchViewController: MWViewController {
 
@@ -16,18 +15,24 @@ class MWSearchViewController: MWViewController {
     private var totalPages: Int = 0
     private var totalItems: Int = 0
     private var searchedPage: Int = 1
-    private var searchedTotalPages: Int = 0
+    private var searchedTotalPages: Int = 100
     private var searchedTotalItems: Int = 0
-    private var isRequestBusy: Bool = false
+
+    private var isRequestBusy: Bool = false {
+        didSet{
+            self.isRequestBusy
+                ? self.loadingSpinner.startAnimating()
+                : self.loadingSpinner.stopAnimating()
+        }
+    }
 
     //MARK: - private variables
 
     private var searchTitle: String = ""
-    private var movieFilters: (genres: Set<String>?, countries: [String?]?, year: String?, ratingRange: (Float, Float)?)?
+    private var movieFilters: MWFilters?
 
     private var movies: [MWMovie] = [] {
         didSet {
-            self.filteredMovies = self.movies
             self.searchMovies = self.movies
             self.tableView.reloadData()
         }
@@ -43,6 +48,8 @@ class MWSearchViewController: MWViewController {
 
     private var filteredMovies: [MWMovie] = [] {
         didSet {
+            self.loadAndSetImage()
+            self.checkFilteredMoviesEmptiness()
             self.tableView.reloadData()
         }
     }
@@ -68,6 +75,12 @@ class MWSearchViewController: MWViewController {
 
     private lazy var searchController = UISearchController(searchResultsController: nil)
 
+    private lazy var emptyListLabel: MWEmptyListLabel = {
+        let label = MWEmptyListLabel()
+        label.isHidden = true
+        return label
+    }()
+
     private lazy var loadingSpinner: UIActivityIndicatorView = {
         let view = UIActivityIndicatorView()
         view.style = .whiteLarge
@@ -84,16 +97,21 @@ class MWSearchViewController: MWViewController {
                                                name: .movieImageUpdated, object: nil)
 
         self.presettingSearchControllerNavBar()
+        self.addSubviews()
         self.makeConstraints()
+
         self.loadMovies()
     }
 
-    private func makeConstraints() {
-        self.contentView.addSubview(self.tableView)
-        self.contentView.addSubview(self.loadingSpinner)
+    //MARK: - constraints
 
+    private func makeConstraints() {
         self.tableView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
+        }
+
+        self.emptyListLabel.snp.makeConstraints { (make) in
+            make.center.equalTo(self.tableView.snp.center)
         }
 
         self.loadingSpinner.snp.makeConstraints { (make) in
@@ -101,10 +119,16 @@ class MWSearchViewController: MWViewController {
         }
     }
 
+    private func addSubviews() {
+        self.contentView.addSubview(self.tableView)
+        self.contentView.addSubview(self.emptyListLabel)
+        self.contentView.addSubview(self.loadingSpinner)
+    }
+
     //MARK: - setting of navigation bar
 
     private func presettingSearchControllerNavBar() {
-        self.title = "Search"
+        self.title = "Search".local()
         self.searchController.searchResultsUpdater = self
         self.searchController.obscuresBackgroundDuringPresentation = false
         self.searchController.searchBar.delegate = self
@@ -116,95 +140,30 @@ class MWSearchViewController: MWViewController {
     //MARK: - setter
 
     private func setFilters() {
-        let moviesFilteredByGenre = self.getFilteredMovies(for: self.filteredMovies,
-                                                           filter: self.filterMoviesByGenre)
-        let moviesFilteredByYear = self.getFilteredMovies(for: moviesFilteredByGenre,
-                                                          filter: self.filterMoviesByYear)
-        let moviesFilteredByCountry = self.getFilteredMovies(for: moviesFilteredByYear,
-                                                             filter: self.filterMoviesByCountry)
-        let moviesFilteredByRating = self.getFilteredMovies(for: moviesFilteredByCountry,
-                                                            filter: self.filterMoviesByRating)
-
-        if let finalFilteredMovies = moviesFilteredByRating {
+        if let finalFilteredMovies = MWFilterHelper.sh.filter(for: self.filteredMovies, filters: self.movieFilters) {
             self.filteredMovies = finalFilteredMovies
         } else {
             self.filteredMovies = movies
         }
     }
 
-    //MARK: - getters
-
-    private func getFilteredMovies(for moviesForFilter: [MWMovie]?,
-                                   filter: ( ([MWMovie]) -> [MWMovie]?)) -> [MWMovie]? {
-        guard let moviesForFilter = moviesForFilter else { return nil }
-        var moviesFilteredByAttribute: [MWMovie]? = []
-        moviesFilteredByAttribute = filter(moviesForFilter)
-
-        if let filtredMovies = moviesFilteredByAttribute, filtredMovies.isEmpty {
-            return []
-        } else if moviesFilteredByAttribute == nil {
-            return moviesForFilter
-        }
-
-        return moviesFilteredByAttribute
-    }
-
-    private func getCountriesIso() -> [String?] {
-        guard let countries = self.movieFilters?.countries else { return [] }
-        var countriesIso: [String?] = []
-        for sysCountry in MWSys.sh.languages {
-            for country in countries {
-                if country == sysCountry.englishName {
-                    countriesIso.append(sysCountry.iso)
-                }
-            }
-        }
-        return countriesIso
-    }
-
-    //MARK: - filter actions
-
-    private func filterMoviesByGenre(for moviesForFiltering: [MWMovie]) -> [MWMovie]? {
-        guard let genres = self.movieFilters?.genres, !genres.isEmpty else { return nil }
-        var tempFilteredMovies: [MWMovie] = []
-        for genre in genres {
-            tempFilteredMovies.append(contentsOf: moviesForFiltering.filter{ ($0.movieGenres?.contains(genre) ?? false) })
-        }
-        return tempFilteredMovies
-    }
-
-    private func filterMoviesByYear(for moviesForFiltering: [MWMovie]) -> [MWMovie]? {
-        guard let year = self.movieFilters?.year, !year.isEmpty else { return nil }
-        var tempFilteredMovies: [MWMovie] = []
-        tempFilteredMovies = moviesForFiltering.filter { $0.getMovieReleaseYear() == year }
-        return tempFilteredMovies
-    }
-
-    private func filterMoviesByCountry(for moviesForFiltering: [MWMovie]) -> [MWMovie]? {
-        let countries = self.getCountriesIso()
-        guard !countries.isEmpty else { return nil }
-        var tempFilteredMovies: [MWMovie] = []
-        for country in countries {
-            tempFilteredMovies.append(contentsOf: moviesForFiltering.filter{ $0.originalLanguage == country })
-        }
-        return tempFilteredMovies
-    }
-
-    private func filterMoviesByRating(for moviesForFiltering: [MWMovie]) -> [MWMovie]? {
-        guard let ratingRange = self.movieFilters?.ratingRange else { return nil }
-        var tempFilteredMovies: [MWMovie] = []
-        let minRating = Double(ratingRange.0)
-        let maxRating = Double(ratingRange.1)
-        tempFilteredMovies = moviesForFiltering.filter{ ($0.voteAvarage ?? 100.0 >= minRating)
-            && ($0.voteAvarage ?? 100.0 <= maxRating) }
-        return tempFilteredMovies
-    }
-
     //MARK: - check and update actions
 
-    private func checkFilteredMoviesOnFillnessAndLoad() {
+    private func checkFilteredMoviesOnFillnessAndLoad(loadMethod: () -> Void) {
         guard self.filteredMovies.count < 5 else { return }
-        self.loadNextPage()
+        loadMethod()
+    }
+
+    private func checkFilteredMoviesEmptiness(isSearched: Bool = false) {
+        let isLastPage = isSearched
+            ? self.searchedPage >= self.searchedTotalPages
+            : self.page >= self.totalPages
+
+        self.emptyListLabel.isHidden = ( isLastPage
+            && self.filteredMovies.count == 0
+            && !self.isRequestBusy)
+            ? false
+            : true
     }
 
     @objc private func movieImageUpdated() {
@@ -217,12 +176,12 @@ class MWSearchViewController: MWViewController {
         let controller = MWFilterViewController(filters: self.movieFilters)
         MWI.s.pushVC(controller)
 
-        controller.choosenFilters = { [weak self] (genres, countries, year, ratingRange) in
+        controller.choosenFilters = { [weak self] (filters) in
             guard let self = self else { return }
-            self.movieFilters = (genres, countries, year, ratingRange)
+            self.movieFilters = filters
             self.filteredMovies = self.movies
             self.setFilters()
-            self.checkFilteredMoviesOnFillnessAndLoad()
+            self.checkFilteredMoviesOnFillnessAndLoad(loadMethod: self.loadNextPage)
         }
     }
 }
@@ -272,7 +231,6 @@ extension MWSearchViewController {
     }
 
     private func loadMovies() {
-        self.loadingSpinner.startAnimating()
         let urlPath = URLPaths.trandingDayMovies
         var query = MWNet.sh.parameters
         query["page"] = "\(self.page)"
@@ -282,15 +240,14 @@ extension MWSearchViewController {
             self.isRequestBusy = false
             self.totalItems = movies.totalResults
             self.totalPages = movies.totalPages
+            self.setGenres(to: movies.results)
             self.movies += movies.results
-            self.setGenreAndImage(to: self.movies)
-            self.checkFilteredMoviesOnFillnessAndLoad()
-            self.loadingSpinner.stopAnimating()
+            self.checkFilteredMoviesOnFillnessAndLoad(loadMethod: self.loadNextPage)
+            self.checkFilteredMoviesEmptiness()
         }
     }
 
     private func loadSearchedMovies() {
-        self.loadingSpinner.startAnimating()
         let urlPath = URLPaths.searchMovies
         var query = MWNet.sh.parameters
         query["query"] = self.searchTitle
@@ -301,16 +258,24 @@ extension MWSearchViewController {
             self.isRequestBusy = false
             self.searchedTotalItems = movies.totalResults
             self.searchedTotalPages = movies.totalPages
-            self.setGenreAndImage(to: movies.results)
+            self.setGenres(to: movies.results)
             self.searchMovies += movies.results
-            self.loadingSpinner.stopAnimating()
+            self.checkFilteredMoviesOnFillnessAndLoad(loadMethod: self.loadNextSearchPage)
+            self.checkFilteredMoviesEmptiness(isSearched: true)
         }
     }
 
-    private func setGenreAndImage(to movies: [MWMovie]) {
-        for movie in movies {
-            movie.setFilmGenres(genres: MWSys.sh.genres)
+    private func loadAndSetImage() {
+        for movie in self.filteredMovies {
             MWImageLoadingHelper.sh.loadMovieImage(for: movie)
+        }
+    }
+
+    //MARK: - Setter
+
+    private func setGenres(to movies: [MWMovie]) {
+        for movie in movies {
+            movie.setMovieGenres(genres: MWSys.sh.genres)
         }
     }
 }
@@ -323,6 +288,7 @@ extension MWSearchViewController: UISearchResultsUpdating, UISearchBarDelegate {
         if text.isEmpty {
             self.searchMovies = self.movies
         } else {
+            self.setFilteredValuesToDefault()
             self.searchTitle = text
             self.loadSearchedMovies()
             self.searchMovies = self.searchMovies.filter { ($0.title?.contains(text) ?? false) }
@@ -344,7 +310,7 @@ extension MWSearchViewController: UISearchResultsUpdating, UISearchBarDelegate {
 
     private func setFilteredValuesToDefault() {
         self.searchedPage = 1
-        self.searchedTotalPages = 0
+        self.searchedTotalPages = 100
         self.searchedTotalItems = 0
     }
 }
@@ -355,7 +321,7 @@ extension MWSearchViewController {
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         guard let text = searchController.searchBar.text, filteredMovies.count > 4 else { return }
         let rowUnit = self.filteredMovies[indexPath.row]
-        let unit = self.filteredMovies[self.filteredMovies.count - 4]
+        let unit = self.filteredMovies[self.filteredMovies.count - 2]
         if text.isEmpty,
             self.totalItems > self.filteredMovies.count,
             rowUnit.id == unit.id {
@@ -369,14 +335,16 @@ extension MWSearchViewController {
 
     private func loadNextPage() {
         guard !self.isRequestBusy,
-            self.filteredMovies.count != self.totalItems else { return }
+            self.filteredMovies.count != self.totalItems,
+            self.page <= self.totalPages else { return }
         self.isRequestBusy = true
         self.loadMovies()
     }
 
     private func loadNextSearchPage() {
         guard !self.isRequestBusy,
-            self.filteredMovies.count != self.searchedTotalItems else { return }
+            self.filteredMovies.count != self.searchedTotalItems,
+            self.searchedPage <= self.searchedTotalPages else { return }
         self.isRequestBusy = true
         self.loadSearchedMovies()
     }

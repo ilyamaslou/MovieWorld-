@@ -48,6 +48,7 @@ class MWCastViewController: MWViewController {
     init(cast: MWMovieCastResponse?) {
         super.init()
         self.movieFullCast = cast?.getFullCast()
+        self.setUpVisibleOfEmptyListLabel()
     }
 
     init(castMembers: [[MWMovieCastMember]]) {
@@ -88,8 +89,11 @@ class MWCastViewController: MWViewController {
     //MARK: - action if favorites list is empty
 
     private func setUpVisibleOfEmptyListLabel() {
-        guard let cast = self.movieFullCast else { return }
-        self.emptyListLabel.isHidden = cast.isEmpty
+        guard let cast = self.movieFullCast?.first else {
+            self.emptyListLabel.isHidden = false
+            return
+        }
+        self.emptyListLabel.isHidden = !cast.isEmpty
     }
 }
 

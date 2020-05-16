@@ -19,6 +19,7 @@ class MWCoreDataHelper {
     //MARK: - private variable
 
     private let managedContext = CoreDataManager.s.persistentContainer.viewContext
+
     //MARK: - initialization
 
     private init() {}
@@ -203,7 +204,7 @@ class MWCoreDataHelper {
         self.saveContext()
     }
 
-    private func saveContext(managedContext: NSManagedObjectContext = CoreDataManager.s.persistentContainer.viewContext) {
+    private func saveContext() {
         do {
             try self.managedContext.save()
         } catch {

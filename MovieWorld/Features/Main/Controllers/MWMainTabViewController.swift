@@ -90,7 +90,7 @@ class MWMainTabViewController: MWViewController {
                                 let message = error.getErrorDesription()
                                 self.errorAlert(message: message)
 
-                                let movies = MWCDHelp.sh.fetchMoviesByCategory(category: category)
+                                let movies = MWCDHelp.sh.fetchMoviesByCategory(category: category).mwMovies
                                 self.setMoviesToCategory(category: category, movies: movies)
                                 self.refreshControl.endRefreshing()
                                 self.group.leave()
@@ -112,27 +112,8 @@ class MWMainTabViewController: MWViewController {
         }
     }
 
-    private func setMoviesToCategory(category: MWMainCategories, movies: [Movie]) {
-        var mwMovies: [MWMovie] = []
-        for movie in movies {
-            let newMovie = MWMovie()
-            newMovie.id = Int(movie.id)
-            newMovie.posterPath = movie.posterPath
-            newMovie.genreIds = movie.genreIds
-            newMovie.title = movie.title
-            newMovie.originalLanguage = movie.originalLanguage
-            newMovie.releaseDate = movie.releaseDate
-            newMovie.voteAvarage = movie.voteAvarage
-
-            if let imageData = movie.movieImage {
-                newMovie.image = imageData
-            }
-
-            newMovie.setMovieGenres(genres: MWSys.sh.genres)
-
-            mwMovies.append(newMovie)
-        }
-        self.moviesByCategories[category] = mwMovies
+    private func setMoviesToCategory(category: MWMainCategories, movies: [MWMovie]) {
+        self.moviesByCategories[category] = movies
         self.tableView.reloadData()
     }
 

@@ -31,52 +31,25 @@ class MWCoreDataHelper {
             fetch.predicate = predicate
         }
 
-        var movie: Movie?
-        do {
-            movie = try self.managedContext.fetch(fetch).first
-        } catch {
-            print(error.localizedDescription)
-        }
-        return movie
+        return self.fetchItems(fetch: fetch).first
     }
 
     func fetchImageConfiguration() -> (coreDataConfiguration: ImageConfiguration?, mwConfiguration: MWImageConfiguration) {
         let fetch: NSFetchRequest<ImageConfiguration> = ImageConfiguration.fetchRequest()
-        var configuration: ImageConfiguration? = ImageConfiguration()
-        var imageConfiguration = MWImageConfiguration()
-        do {
-            configuration = try self.managedContext.fetch(fetch).last
-
-            imageConfiguration = MWImageConfiguration(
-                baseUrl: configuration?.baseUrl,
-                secureBaseUrl: configuration?.secureBaseUrl,
-                backdropSizes: configuration?.backdropSizes,
-                logoSizes: configuration?.logoSizes,
-                posterSizes: configuration?.posterSizes,
-                profileSizes: configuration?.profileSizes,
-                stillSizes: configuration?.stillSizes)
-        } catch {
-            print(error.localizedDescription)
-        }
-
+        let configuration: ImageConfiguration? = self.fetchItems(fetch: fetch).last
+        let imageConfiguration = self.convertImageConfiguration(from: configuration)
         return (configuration, imageConfiguration)
     }
 
     func fetchGenres() -> (coreDataGenres: [Genre], mwGenres: [MWGenre]) {
-        var mwGenres: [MWGenre] = []
-        var genres: [Genre] = []
-
         let fetch: NSFetchRequest<Genre> = Genre.fetchRequest()
-        do {
-            genres = try self.managedContext.fetch(fetch)
-            for genre in genres {
-                let mwGenre = MWGenre(id: Int(genre.id), name: genre.name ?? "")
-                mwGenres.append(mwGenre)
-            }
-        } catch {
-            print(error.localizedDescription)
-        }
+        var mwGenres: [MWGenre] = []
+        let genres: [Genre] = self.fetchItems(fetch: fetch)
 
+        for genre in genres {
+            let mwGenre = MWGenre(id: Int(genre.id), name: genre.name ?? "")
+            mwGenres.append(mwGenre)
+        }
         return (genres, mwGenres)
     }
 
@@ -87,15 +60,7 @@ class MWCoreDataHelper {
 
         let fetch: NSFetchRequest<CastMember> = CastMember.fetchRequest()
         fetch.predicate = NSPredicate(format: "ANY id = %i and name = %@ and favoriteActors != nil", id, name)
-
-        var result: [CastMember] = []
-        do {
-            result = try self.managedContext.fetch(fetch)
-        } catch {
-            print(error.localizedDescription)
-        }
-
-        return result.first
+        return self.fetchItems(fetch: fetch).first
     }
 
     func fetchFavoriteMovie(mwMovie: MWMovie?) -> Movie? {
@@ -105,64 +70,43 @@ class MWCoreDataHelper {
 
         let fetch: NSFetchRequest<Movie> = Movie.fetchRequest()
         fetch.predicate = NSPredicate(format: "ANY id = %i and title = %@ and releaseDate = %@ and favorite != nil", id, title, releaseDate)
-
-        var result: [Movie] = []
-        do {
-            result = try self.managedContext.fetch(fetch)
-        } catch {
-            print(error.localizedDescription)
-        }
-
-        return result.first
+        return self.fetchItems(fetch: fetch).first
     }
 
-    func fetchMovieForAdditionalInfo(for movie: MWMovie) -> Movie? {
+    func fetchMovieForAdditionalInfo(for movie: MWMovie) -> (cdMovie: Movie?, mwInfo: MWMovieAdditionalInfo) {
         let predicate = NSPredicate(format: "ANY id = %i and title = %@",
                                     movie.id ?? 0,
                                     movie.title ?? "")
-        return self.fetchMovie(withPredicate: predicate)
+        let movie = self.fetchMovie(withPredicate: predicate)
+        return (cdMovie: movie, mwInfo: self.convertAdditionalInfo(from: movie?.additionalInfo) )
     }
 
-    func fetchMoviesByCategory(category: MWMainCategories) -> [Movie] {
+    func fetchMoviesByCategory(category: MWMainCategories) -> (cdMovies: [Movie], mwMovies: [MWMovie]) {
         let fetch: NSFetchRequest<Movie> = Movie.fetchRequest()
         fetch.predicate = NSPredicate(format: "ANY category.movieCategory = %@", category.rawValue)
+        let movies = self.fetchItems(fetch: fetch)
+        return (cdMovies: movies, mwMovies: self.convertMovies(movies: movies))
+    }
 
-        var result: [Movie] = []
+    func fetchFavoriteMovies() -> [MWMovie] {
+        let fetch: NSFetchRequest<Movie> = Movie.fetchRequest()
+        fetch.predicate = NSPredicate(format: "ANY favorite != nil")
+        return self.convertFavoriteMovies(from: self.fetchItems(fetch: fetch))
+    }
+
+    func fetchFavoriteActors() -> [[MWMovieCastMember]] {
+        let fetch: NSFetchRequest<CastMember> = CastMember.fetchRequest()
+        fetch.predicate = NSPredicate(format: "ANY favoriteActors != nil")
+        return self.convertFavoriteActors(from: self.fetchItems(fetch: fetch))
+    }
+
+    private func fetchItems<T>(fetch: NSFetchRequest<T>) -> [T] {
+        var result: [T] = []
         do {
             result = try self.managedContext.fetch(fetch)
         } catch {
             print(error.localizedDescription)
         }
-        return result
-    }
-
-    func fetchFavoriteMovies() -> [Movie] {
-        let managedContext = CoreDataManager.s.persistentContainer.viewContext
-        let fetch: NSFetchRequest<Movie> = Movie.fetchRequest()
-        fetch.predicate = NSPredicate(format: "ANY favorite != nil")
-
-        var result: [Movie] = []
-        do {
-            result = try managedContext.fetch(fetch)
-        } catch {
-            print(error.localizedDescription)
-        }
-
-        return result
-    }
-
-    func fetchFavoriteActors() -> [CastMember] {
-        let managedContext = CoreDataManager.s.persistentContainer.viewContext
-        let fetch: NSFetchRequest<CastMember> = CastMember.fetchRequest()
-        fetch.predicate = NSPredicate(format: "ANY favoriteActors != nil")
-
-        var result: [CastMember] = []
-        do {
-            result = try managedContext.fetch(fetch)
-        } catch {
-            print(error.localizedDescription)
-        }
-
         return result
     }
 
@@ -180,25 +124,13 @@ class MWCoreDataHelper {
 
         if fetchedImageConfiguration == nil {
             let newConfiguration = ImageConfiguration(context: self.managedContext)
-            self.didSaveOrUpdateImageConfiguration(cdConfiguration: newConfiguration, mwConfiguration: imageConfiguration)
+            self.setMWImageConfigurationToCoreData(mwConfiguration: imageConfiguration, cdConfiguration: newConfiguration)
 
         } else {
             guard let configuration = fetchedImageConfiguration else { return }
-            self.didSaveOrUpdateImageConfiguration(cdConfiguration: configuration, mwConfiguration: imageConfiguration)
+            self.setMWImageConfigurationToCoreData(mwConfiguration: imageConfiguration, cdConfiguration: configuration)
         }
-    }
-
-    private func didSaveOrUpdateImageConfiguration(cdConfiguration: ImageConfiguration, mwConfiguration: MWImageConfiguration) {
-        cdConfiguration.baseUrl = mwConfiguration.baseUrl
-        cdConfiguration.secureBaseUrl = mwConfiguration.secureBaseUrl
-        cdConfiguration.backdropSizes = mwConfiguration.backdropSizes
-        cdConfiguration.logoSizes = mwConfiguration.logoSizes
-        cdConfiguration.posterSizes = mwConfiguration.posterSizes
-        cdConfiguration.profileSizes = mwConfiguration.profileSizes
-        cdConfiguration.stillSizes = mwConfiguration.stillSizes
-
-        guard let context = cdConfiguration.managedObjectContext  else { return }
-        self.saveContext(managedContext: context)
+        self.saveContext()
     }
 
     func saveGenres (genres: [MWGenre]) {
@@ -220,98 +152,52 @@ class MWCoreDataHelper {
     }
 
     func saveFavoriteActor(mwMember: Personalized) {
-        guard let member = mwMember as? MWMovieCastMember else { return }
         let favoriteActors = FavoriteActors(context: self.managedContext)
         let newMemmber = CastMember(context: self.managedContext)
-
-        newMemmber.id = Int64(member.id ?? 0)
-        newMemmber.profilePath = member.profilePath
-        newMemmber.character = member.character
-        newMemmber.order = Int64(member.order ?? 0)
-        newMemmber.name = member.name
-
-        if let imageData = member.image {
-            newMemmber.image = imageData
-        }
-
+        self.setMWMemberValuesToCoreDataMember(mwMember: mwMember, for: newMemmber)
         favoriteActors.addToActors(newMemmber)
-
         self.saveContext()
     }
 
     func saveFavoriteMovie(mwMovie: MWMovie?) {
+        guard let mwMovie = mwMovie else { return }
         let favoriteMovies = FavoriteMovies(context: self.managedContext)
         let newMovie = Movie(context: self.managedContext)
-        newMovie.id = Int64(mwMovie?.id ?? 0)
-        newMovie.posterPath = mwMovie?.posterPath
-        newMovie.genreIds = mwMovie?.genreIds
-        newMovie.title = mwMovie?.title
-        newMovie.originalLanguage = mwMovie?.originalLanguage
-        newMovie.releaseDate = mwMovie?.releaseDate
-
-        if let movieRating = mwMovie?.voteAvarage {
-            newMovie.voteAvarage = movieRating
-        }
-
-        if let imageData = mwMovie?.image {
-            newMovie.movieImage = imageData
-        }
-
+        self.setMwMovieValuesToCoreDataMovie(mwMovie: mwMovie, for: newMovie)
         favoriteMovies.addToMovies(newMovie)
         self.saveContext()
     }
 
     func saveAdditionalInfo (info: MWMovieAdditionalInfo, forMovie: MWMovie?) {
         guard let movie = forMovie else { return }
-        let coreDataMovie = self.fetchMovieForAdditionalInfo(for: movie)
+        let coreDataMovie = self.fetchMovieForAdditionalInfo(for: movie).cdMovie
 
         if coreDataMovie?.additionalInfo == nil {
-            let newAdditionalInfo = MovieAdditionalInfo(context: managedContext)
-            newAdditionalInfo.adult = info.adult ?? false
-            newAdditionalInfo.overview = info.overview
-            newAdditionalInfo.runtime = Int64(info.runtime ?? 0)
-            newAdditionalInfo.tagline = info.tagline
+            let newAdditionalInfo = MovieAdditionalInfo(context: self.managedContext)
+            self.setMWMovieAdditionalInfoToCoreDataAdditionalInfo(mwInfo: info, for: newAdditionalInfo)
             coreDataMovie?.additionalInfo = newAdditionalInfo
         } else {
             guard let fetchedInfo = coreDataMovie?.additionalInfo else { return }
-            fetchedInfo.adult = info.adult ?? false
-            fetchedInfo.overview = info.overview
-            fetchedInfo.runtime = Int64(info.runtime ?? 0)
-            fetchedInfo.tagline = info.tagline
+            self.setMWMovieAdditionalInfoToCoreDataAdditionalInfo(mwInfo: info, for: fetchedInfo)
         }
         self.saveContext()
     }
 
     func saveMoviesInCategory(mwCategory: MWMainCategories, movies: [MWMovie]) {
-        let result = self.fetchMoviesByCategory(category: mwCategory)
+        let result = self.fetchMoviesByCategory(category: mwCategory).cdMovies
         if result.isEmpty {
             let category = MovieCategory(context: self.managedContext)
             category.movieCategory = mwCategory.rawValue
 
             for movie in movies {
                 let newMovie = Movie(context: self.managedContext)
-                newMovie.id = Int64(movie.id ?? 0)
-                newMovie.posterPath = movie.posterPath
-                newMovie.genreIds = movie.genreIds
-                newMovie.title = movie.title
-                newMovie.originalLanguage = movie.originalLanguage
-                newMovie.releaseDate = movie.releaseDate
-                if let movieRating = movie.voteAvarage {
-                    newMovie.voteAvarage = movieRating
-                }
+                self.setMwMovieValuesToCoreDataMovie(mwMovie: movie, for: newMovie)
                 category.addToMovies(newMovie)
             }
         } else {
             for (id, movie) in movies.enumerated() {
                 let movieToUpdate = result[id]
-                movieToUpdate.id = Int64(movie.id ?? 0)
-                movieToUpdate.posterPath = movie.posterPath
-                movieToUpdate.genreIds = movie.genreIds
-                movieToUpdate.title = movie.title
-                movieToUpdate.originalLanguage = movie.originalLanguage
-                movieToUpdate.releaseDate = movie.releaseDate
-                guard let movieRating = movie.voteAvarage else { return }
-                movieToUpdate.voteAvarage = movieRating
+                self.setMwMovieValuesToCoreDataMovie(mwMovie: movie, for: movieToUpdate)
             }
         }
         self.saveContext()
@@ -319,7 +205,7 @@ class MWCoreDataHelper {
 
     private func saveContext(managedContext: NSManagedObjectContext = CoreDataManager.s.persistentContainer.viewContext) {
         do {
-            try managedContext.save()
+            try self.managedContext.save()
         } catch {
             print(error.localizedDescription)
         }
@@ -330,7 +216,6 @@ class MWCoreDataHelper {
     func removeFavoriteActor(mwMember: Personalized) {
         guard let memberToRemove = self.fetchFavoriteActor(mwMember: mwMember) else { return }
         let favoriteActors = FavoriteActors(context: self.managedContext)
-
         favoriteActors.removeFromActors(memberToRemove)
         memberToRemove.favoriteActors = nil
         self.saveContext()
@@ -342,5 +227,138 @@ class MWCoreDataHelper {
         favoriteMovies.removeFromMovies(movieToRemove)
         movieToRemove.favorite = nil
         self.saveContext()
+    }
+
+    //MARK: - setters
+
+    private func setMwMovieValuesToCoreDataMovie(mwMovie: MWMovie, for movie: Movie) {
+        movie.id = Int64(mwMovie.id ?? 0)
+        movie.posterPath = mwMovie.posterPath
+        movie.genreIds = mwMovie.genreIds
+        movie.title = mwMovie.title
+        movie.originalLanguage = mwMovie.originalLanguage
+        movie.releaseDate = mwMovie.releaseDate
+
+        if let movieRating = mwMovie.voteAvarage {
+            movie.voteAvarage = movieRating
+        }
+
+        guard let imageData = mwMovie.image else { return }
+        movie.movieImage = imageData
+    }
+
+    private func setMWMemberValuesToCoreDataMember(mwMember: Personalized, for member: CastMember) {
+        guard let mwMember = mwMember as? MWMovieCastMember else { return }
+        member.id = Int64(mwMember.id ?? 0)
+        member.profilePath = mwMember.profilePath
+        member.character = mwMember.character
+        member.order = Int64(mwMember.order ?? 0)
+        member.name = mwMember.name
+
+        guard let imageData = mwMember.image else { return }
+        member.image = imageData
+    }
+
+    private func setMWMovieAdditionalInfoToCoreDataAdditionalInfo(mwInfo: MWMovieAdditionalInfo, for info: MovieAdditionalInfo) {
+        info.adult = mwInfo.adult ?? false
+        info.overview = mwInfo.overview
+        info.runtime = Int64(mwInfo.runtime ?? 0)
+        info.tagline = mwInfo.tagline
+    }
+
+    private func setMWImageConfigurationToCoreData(mwConfiguration: MWImageConfiguration, cdConfiguration: ImageConfiguration) {
+        cdConfiguration.baseUrl = mwConfiguration.baseUrl
+        cdConfiguration.secureBaseUrl = mwConfiguration.secureBaseUrl
+        cdConfiguration.backdropSizes = mwConfiguration.backdropSizes
+        cdConfiguration.logoSizes = mwConfiguration.logoSizes
+        cdConfiguration.posterSizes = mwConfiguration.posterSizes
+        cdConfiguration.profileSizes = mwConfiguration.profileSizes
+        cdConfiguration.stillSizes = mwConfiguration.stillSizes
+    }
+
+    //MARK: - convert from core data actions
+
+    private func convertImageConfiguration(from configuration: ImageConfiguration?) -> MWImageConfiguration {
+        return MWImageConfiguration(
+            baseUrl: configuration?.baseUrl,
+            secureBaseUrl: configuration?.secureBaseUrl,
+            backdropSizes: configuration?.backdropSizes,
+            logoSizes: configuration?.logoSizes,
+            posterSizes: configuration?.posterSizes,
+            profileSizes: configuration?.profileSizes,
+            stillSizes: configuration?.stillSizes)
+    }
+
+    private func convertFavoriteActors(from favoriteActors: [CastMember]) -> [[MWMovieCastMember]] {
+        var mwMembers: [MWMovieCastMember] = []
+        for actor in favoriteActors {
+            let newMemmber = MWMovieCastMember()
+            newMemmber.id = Int(actor.id )
+            newMemmber.profilePath = actor.profilePath
+            newMemmber.character = actor.character
+            newMemmber.order = Int(actor.order )
+            newMemmber.name = actor.name
+
+            if let imageData = actor.image {
+                newMemmber.image = imageData
+            }
+
+            mwMembers.append(newMemmber)
+        }
+        return [mwMembers]
+    }
+
+    private func convertFavoriteMovies(from movies: [Movie]) -> [MWMovie] {
+        var mwMovies: [MWMovie] = []
+        for movie in movies {
+            let newMovie = MWMovie()
+            newMovie.id = Int(movie.id)
+            newMovie.posterPath = movie.posterPath
+            newMovie.genreIds = movie.genreIds
+            newMovie.title = movie.title
+            newMovie.originalLanguage = movie.originalLanguage
+            newMovie.releaseDate = movie.releaseDate
+            newMovie.voteAvarage = movie.voteAvarage
+
+            if let imageData = movie.movieImage {
+                newMovie.image = imageData
+            }
+
+            newMovie.setMovieGenres(genres: MWSys.sh.genres)
+
+            mwMovies.append(newMovie)
+        }
+        return mwMovies
+    }
+
+    private func convertAdditionalInfo(from info: MovieAdditionalInfo?) -> MWMovieAdditionalInfo {
+        guard let info = info else { return MWMovieAdditionalInfo() }
+        return MWMovieAdditionalInfo(adult: info.adult,
+                                     overview: info.overview,
+                                     runtime: Int(info.runtime),
+                                     tagline: info.tagline)
+    }
+
+    private func convertMovies(movies: [Movie]) -> [MWMovie] {
+        var mwMovies: [MWMovie] = []
+        for movie in movies {
+            let newMovie = MWMovie()
+            newMovie.id = Int(movie.id)
+            newMovie.posterPath = movie.posterPath
+            newMovie.genreIds = movie.genreIds
+            newMovie.title = movie.title
+            newMovie.originalLanguage = movie.originalLanguage
+            newMovie.releaseDate = movie.releaseDate
+            newMovie.voteAvarage = movie.voteAvarage
+
+            if let imageData = movie.movieImage {
+                newMovie.image = imageData
+            }
+
+            newMovie.setMovieGenres(genres: MWSys.sh.genres)
+
+            mwMovies.append(newMovie)
+        }
+        return mwMovies
     }
 }

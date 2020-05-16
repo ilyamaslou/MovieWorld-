@@ -25,48 +25,22 @@ class MWFavoriteMoviesViewController: MWViewController {
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(self.updateTableView),
                                                name: .movieIsFavoriteChanged, object: nil)
-        self.add(self.moviesByGenresController)
-        self.makeConstraints()
+        self.setUpView()
         self.updateTableView()
     }
 
     // MARK: - constraints
 
-    private func makeConstraints() {
+    private func setUpView() {
+        self.add(self.moviesByGenresController)
         self.moviesByGenresController.view.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
     }
 
-    //MARK: - getter
-
-    private func getFavoriteMovies() -> [MWMovie] {
-        let movies = MWCDHelp.sh.fetchFavoriteMovies()
-        var mwMovies: [MWMovie] = []
-        for movie in movies {
-            let newMovie = MWMovie()
-            newMovie.id = Int(movie.id)
-            newMovie.posterPath = movie.posterPath
-            newMovie.genreIds = movie.genreIds
-            newMovie.title = movie.title
-            newMovie.originalLanguage = movie.originalLanguage
-            newMovie.releaseDate = movie.releaseDate
-            newMovie.voteAvarage = movie.voteAvarage
-
-            if let imageData = movie.movieImage {
-                newMovie.image = imageData
-            }
-
-            newMovie.setMovieGenres(genres: MWSys.sh.genres)
-
-            mwMovies.append(newMovie)
-        }
-        return mwMovies
-    }
-
     //MARK: - Update TableView action
 
     @objc private func updateTableView() {
-        self.moviesByGenresController.setTableViewMovies(movies: self.getFavoriteMovies())
+        self.moviesByGenresController.setTableViewMovies(movies: MWCDHelp.sh.fetchFavoriteMovies())
     }
 }

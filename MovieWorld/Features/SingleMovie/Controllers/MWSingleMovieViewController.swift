@@ -279,15 +279,9 @@ class MWSingleMovieViewController: MWViewController {
     }
 
     private func setFetchedAddittionalInfo() {
-        guard let mwMovie = self.movie,
-            let fetchedInfo = MWCDHelp.sh.fetchMovieForAdditionalInfo(for: mwMovie)?.additionalInfo else { return }
-
-        var newInfo = MWMovieAdditionalInfo()
-        newInfo.adult = fetchedInfo.adult
-        newInfo.overview = fetchedInfo.overview
-        newInfo.runtime = Int(fetchedInfo.runtime)
-        newInfo.tagline = fetchedInfo.tagline
-        self.movieDetails = newInfo
+        guard let mwMovie = self.movie else { return }
+        let fetchedInfo = MWCDHelp.sh.fetchMovieForAdditionalInfo(for: mwMovie).mwInfo
+        self.movieDetails = fetchedInfo
         self.setDetails()
     }
 

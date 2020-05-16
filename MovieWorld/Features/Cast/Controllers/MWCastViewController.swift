@@ -18,6 +18,7 @@ class MWCastViewController: MWViewController {
 
     private var movieFullCast: [[Personalized]]? = [] {
         didSet {
+            self.setUpVisibleOfEmptyListLabel()
             self.tableView.reloadData()
         }
     }
@@ -40,6 +41,8 @@ class MWCastViewController: MWViewController {
         return tableView
     }()
 
+    private lazy var emptyListLabel = MWEmptyListLabel()
+
     //MARK: - initialization
 
     init(cast: MWMovieCastResponse?) {
@@ -60,6 +63,7 @@ class MWCastViewController: MWViewController {
         super.initController()
         self.title = "Cast".local()
         self.contentView.addSubview(self.tableView)
+        self.contentView.addSubview(self.emptyListLabel)
     }
 
     // MARK: - constraints
@@ -68,6 +72,10 @@ class MWCastViewController: MWViewController {
         self.tableView.snp.updateConstraints { (make) in
             make.edges.equalToSuperview().inset(self.edgeInsets)
         }
+
+        self.emptyListLabel.snp.updateConstraints { (make) in
+            make.center.equalTo(self.tableView.snp.center)
+        }
         super.updateViewConstraints()
     }
 
@@ -75,6 +83,13 @@ class MWCastViewController: MWViewController {
 
     func updateTableView(cast: [[MWMovieCastMember]]) {
         self.movieFullCast = cast
+    }
+
+    //MARK: - action if favorites list is empty
+
+    private func setUpVisibleOfEmptyListLabel() {
+        guard let cast = self.movieFullCast else { return }
+        self.emptyListLabel.isHidden = cast.isEmpty
     }
 }
 

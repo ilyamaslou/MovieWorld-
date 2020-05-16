@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import CoreData
 
 class MWFavoriteMoviesViewController: MWViewController {
 
@@ -39,33 +38,10 @@ class MWFavoriteMoviesViewController: MWViewController {
         }
     }
 
-    //MARK: - Update TableView action
-
-    @objc private func updateTableView() {
-        self.moviesByGenresController.setTableViewMovies(movies: self.getFavoriteMovies())
-    }
-}
-
-//MARK: - CoreData FavoritesMovies
-
-extension MWFavoriteMoviesViewController {
-    @discardableResult private func fetchFavoriteMovies() -> [Movie] {
-        let managedContext = CoreDataManager.s.persistentContainer.viewContext
-        let fetch: NSFetchRequest<Movie> = Movie.fetchRequest()
-        fetch.predicate = NSPredicate(format: "ANY favorite != nil")
-
-        var result: [Movie] = []
-        do {
-            result = try managedContext.fetch(fetch)
-        } catch {
-            print(error.localizedDescription)
-        }
-
-        return result
-    }
+    //MARK: - getter
 
     private func getFavoriteMovies() -> [MWMovie] {
-        let movies = self.fetchFavoriteMovies()
+        let movies = MWCDHelp.sh.fetchFavoriteMovies()
         var mwMovies: [MWMovie] = []
         for movie in movies {
             let newMovie = MWMovie()
@@ -86,5 +62,11 @@ extension MWFavoriteMoviesViewController {
             mwMovies.append(newMovie)
         }
         return mwMovies
+    }
+
+    //MARK: - Update TableView action
+
+    @objc private func updateTableView() {
+        self.moviesByGenresController.setTableViewMovies(movies: self.getFavoriteMovies())
     }
 }

@@ -8,13 +8,10 @@
 
 import UIKit
 import YouTubePlayer
-import CoreData
 
 class MWSingleMovieViewController: MWViewController {
 
     //MARK: - private variables
-
-    private var coreDataMovie: Movie?
 
     private var isFavorite: Bool = false {
         didSet {
@@ -196,7 +193,7 @@ class MWSingleMovieViewController: MWViewController {
                          succesHandler: { [weak self] (details: MWMovieAdditionalInfo)  in
                             guard let self = self else { return }
                             self.movieDetails = details
-                            self.saveAdditionalInfo(info: details)
+                            MWCDHelp.sh.saveAdditionalInfo(info: details, forMovie: self.movie)
                             self.setDetails()
             },
                          errorHandler: { [weak self] (error) in
@@ -239,6 +236,13 @@ class MWSingleMovieViewController: MWViewController {
         }
     }
 
+    //MARK: check isFavorite by loading from core data
+
+    private func fetchIsFavorite() {
+        let result = MWCDHelp.sh.fetchFavoriteMovie(mwMovie: self.movie)
+        self.isFavorite = result != nil ? true : false
+    }
+
     //MARK:- setters
 
     private func setCast(cast: MWMovieCastResponse) {
@@ -274,6 +278,19 @@ class MWSingleMovieViewController: MWViewController {
         }
     }
 
+    private func setFetchedAddittionalInfo() {
+        guard let mwMovie = self.movie,
+            let fetchedInfo = MWCDHelp.sh.fetchMovieForAdditionalInfo(for: mwMovie)?.additionalInfo else { return }
+
+        var newInfo = MWMovieAdditionalInfo()
+        newInfo.adult = fetchedInfo.adult
+        newInfo.overview = fetchedInfo.overview
+        newInfo.runtime = Int(fetchedInfo.runtime)
+        newInfo.tagline = fetchedInfo.tagline
+        self.movieDetails = newInfo
+        self.setDetails()
+    }
+
     //MARK:- update view actions
 
     private func reloadGalleryItems() {
@@ -303,7 +320,9 @@ class MWSingleMovieViewController: MWViewController {
 
     @objc private func didFavoriteButtonTap() {
         self.isFavorite.toggle()
-        self.isFavorite ? self.save() : self.remove()
+        self.isFavorite
+            ? MWCDHelp.sh.saveFavoriteMovie(mwMovie: self.movie)
+            : MWCDHelp.sh.removeFavoriteMovie(mwMovie: self.movie)
     }
 }
 
@@ -352,143 +371,6 @@ extension MWSingleMovieViewController: UICollectionViewDataSource, UICollectionV
         if collectionView == self.contentViewContainer.castCollectionView {
             MWI.s.pushVC(MWMemberViewController(member: self.movieFullCast?.cast[indexPath.item]))
         }
-    }
-}
-
-//MARK: CoreData Additional movie Info
-extension MWSingleMovieViewController {
-    private func fetchMovie() {
-        let managedContext = CoreDataManager.s.persistentContainer.viewContext
-        let fetch: NSFetchRequest<Movie> = Movie.fetchRequest()
-        fetch.predicate = NSPredicate(format: "ANY id = %i and title = %@",
-                                      self.movie?.id ?? 0,
-                                      self.movie?.title ?? "")
-        do {
-            self.coreDataMovie = try managedContext.fetch(fetch).last
-        } catch {
-            print(error.localizedDescription)
-        }
-    }
-
-    @discardableResult  private func fetchAdditionalInfo() -> MovieAdditionalInfo? {
-        self.fetchMovie()
-        return self.coreDataMovie?.additionalInfo
-    }
-
-    private func saveAdditionalInfo (info: MWMovieAdditionalInfo) {
-        let fetchedInfo = self.fetchAdditionalInfo()
-
-        let managedContext = CoreDataManager.s.persistentContainer.viewContext
-        if fetchedInfo == nil {
-            let newAdditionalInfo = MovieAdditionalInfo(context: managedContext)
-            newAdditionalInfo.adult = info.adult ?? false
-            newAdditionalInfo.overview = info.overview
-            newAdditionalInfo.runtime = Int64(info.runtime ?? 0)
-            newAdditionalInfo.tagline = info.tagline
-            self.coreDataMovie?.additionalInfo = newAdditionalInfo
-        } else {
-            guard let fetchedInfo = fetchedInfo else { return }
-            fetchedInfo.adult = info.adult ?? false
-            fetchedInfo.overview = info.overview
-            fetchedInfo.runtime = Int64(info.runtime ?? 0)
-            fetchedInfo.tagline = info.tagline
-        }
-        self.save(managedContext: managedContext)
-    }
-
-    private func setFetchedAddittionalInfo() {
-        guard let fetchedInfo = self.fetchAdditionalInfo() else { return }
-        var newInfo = MWMovieAdditionalInfo()
-        newInfo.adult = fetchedInfo.adult
-        newInfo.overview = fetchedInfo.overview
-        newInfo.runtime = Int(fetchedInfo.runtime)
-        newInfo.tagline = fetchedInfo.tagline
-
-        self.movieDetails = newInfo
-        self.setDetails()
-    }
-
-    private func save(managedContext: NSManagedObjectContext) {
-        do {
-            try managedContext.save()
-        } catch {
-            print(error.localizedDescription)
-        }
-    }
-}
-
-//MARK: CoreData FavoriteMovies
-extension MWSingleMovieViewController {
-    private func saveContext(context: NSManagedObjectContext) {
-        do {
-            try context.save()
-        } catch {
-            print(error.localizedDescription)
-        }
-    }
-
-    @discardableResult private func fetchFavoriteMovie() -> Movie? {
-        guard let id = self.movie?.id,
-            let title = self.movie?.title,
-            let releaseDate = self.movie?.releaseDate else { return Movie() }
-
-        let managedContext = CoreDataManager.s.persistentContainer.viewContext
-        let fetch: NSFetchRequest<Movie> = Movie.fetchRequest()
-        fetch.predicate = NSPredicate(format: "ANY id = %i and title = %@ and releaseDate = %@ and favorite != nil", id, title, releaseDate)
-
-        var result: [Movie] = []
-        do {
-            result = try managedContext.fetch(fetch)
-        } catch {
-            print(error.localizedDescription)
-        }
-
-        return result.first
-    }
-
-    private func fetchIsFavorite() {
-        let result = self.fetchFavoriteMovie()
-        if result != nil {
-            self.isFavorite = true
-        } else {
-            self.isFavorite = false
-        }
-    }
-
-    private func save() {
-        let managedContext = CoreDataManager.s.persistentContainer.viewContext
-
-        let favoriteMovies = FavoriteMovies(context: managedContext)
-        let newMovie = Movie(context: managedContext)
-        newMovie.id = Int64(self.movie?.id ?? 0)
-        newMovie.posterPath = self.movie?.posterPath
-        newMovie.genreIds = self.movie?.genreIds
-        newMovie.title = self.movie?.title
-        newMovie.originalLanguage = self.movie?.originalLanguage
-        newMovie.releaseDate = self.movie?.releaseDate
-
-        if let movieRating = self.movie?.voteAvarage {
-            newMovie.voteAvarage = movieRating
-        }
-
-        if let imageData = self.movie?.image {
-            newMovie.movieImage = imageData
-        }
-
-        favoriteMovies.addToMovies(newMovie)
-
-        self.saveContext(context: managedContext)
-    }
-
-    private func remove() {
-        guard let movieToRemove = self.fetchFavoriteMovie() else { return }
-        let managedContext = CoreDataManager.s.persistentContainer.viewContext
-        let favoriteMovies = FavoriteMovies(context: managedContext)
-
-        favoriteMovies.removeFromMovies(movieToRemove)
-        movieToRemove.favorite = nil
-
-        self.saveContext(context: managedContext)
     }
 }
 

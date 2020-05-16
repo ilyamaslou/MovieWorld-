@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import CoreData
 
 class MWFavoriteActorsViewController: MWViewController {
 
@@ -56,34 +55,12 @@ class MWFavoriteActorsViewController: MWViewController {
         self.emptyListLabel.isHidden = !listIsEmpty
     }
 
-    //MARK: - Update TableView action
-
-    @objc private func updateTableView() {
-        self.actorsController.updateTableView(cast: self.getFavoriteActors())
-    }
-}
-
-//MARK: - CoreData FavoriteActors
-
-extension MWFavoriteActorsViewController {
-    @discardableResult private func fetchFavoriteActors() -> [CastMember] {
-        let managedContext = CoreDataManager.s.persistentContainer.viewContext
-        let fetch: NSFetchRequest<CastMember> = CastMember.fetchRequest()
-        fetch.predicate = NSPredicate(format: "ANY favoriteActors != nil")
-
-        var result: [CastMember] = []
-        do {
-            result = try managedContext.fetch(fetch)
-        } catch {
-            print(error.localizedDescription)
-        }
-
-        self.setUpVisibleOfEmptyListLabel(listIsEmpty: result.isEmpty)
-        return result
-    }
+    //MARK: - getter
 
     private func getFavoriteActors() -> [[MWMovieCastMember]]{
-        let actors = self.fetchFavoriteActors()
+        let actors = MWCDHelp.sh.fetchFavoriteActors()
+        self.setUpVisibleOfEmptyListLabel(listIsEmpty: actors.isEmpty)
+
         var mwMembers: [MWMovieCastMember] = []
         for actor in actors {
             let newMemmber = MWMovieCastMember()
@@ -100,5 +77,11 @@ extension MWFavoriteActorsViewController {
             mwMembers.append(newMemmber)
         }
         return [mwMembers]
+    }
+
+    //MARK: - Update TableView action
+
+    @objc private func updateTableView() {
+        self.actorsController.updateTableView(cast: self.getFavoriteActors())
     }
 }

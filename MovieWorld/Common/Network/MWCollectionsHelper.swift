@@ -29,7 +29,7 @@ class MWCollectionsHelper {
             myStrings = data.components(separatedBy: .newlines)
             myStrings.removeLast()
         } catch {
-            print(error)
+            print(error.localizedDescription)
         }
         return myStrings
     }
@@ -80,12 +80,11 @@ class MWCollectionsHelper {
             return
         }
 
-        let decompressedData: Data
         if data.isGzipped {
-            decompressedData = try data.gunzipped()
+            let decompressedData = try data.gunzipped()
             try decompressedData.write(to: fileURL)
         } else {
-            decompressedData = data
+            try data.write(to: fileURL)
         }
     }
 }

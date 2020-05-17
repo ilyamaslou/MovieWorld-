@@ -63,7 +63,7 @@ class MWSingleCollectionViewController: MWViewController {
         guard let collectionIndex = self.collectionIndex else { return }
         let urlPath = String(format: URLPaths.collectionOfMoviesById, collectionIndex)
 
-        MWNet.sh.request(urlPath: urlPath ,
+        MWNet.sh.request(urlPath: urlPath,
                          querryParameters: MWNet.sh.parameters,
                          succesHandler: { [weak self] (collection: MWSingleCollection)  in
                             guard let self = self else { return }
@@ -72,9 +72,8 @@ class MWSingleCollectionViewController: MWViewController {
                             self.setGenres()
             },
                          errorHandler: { [weak self] (error) in
-                            guard let self = self else { return }
                             let message = error.getErrorDesription()
-                            self.errorAlert(message: message)
+                            self?.errorAlert(message: message)
         })
     }
 

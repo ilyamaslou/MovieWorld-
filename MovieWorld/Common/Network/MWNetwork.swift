@@ -18,7 +18,7 @@ class MWNetwork {
 
     //MARK: - private variables
 
-    private var session = URLSession(configuration: .ephemeral)
+    private var session = URLSession.shared
     private let baseUrl: String = "https://api.themoviedb.org/3/"
     private let apiKey: String = "79d5894567be5b76ab7434fc12879584"
     private(set) lazy var parameters: [String: String] = ["api_key": self.apiKey]

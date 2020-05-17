@@ -16,10 +16,7 @@ extension MWViewController {
     }
 
     func removeChild() {
-        guard self.parent != nil else {
-            return
-        }
-
+        guard self.parent != nil else { return }
         self.willMove(toParent: nil)
         self.view.removeFromSuperview()
         self.removeFromParent()

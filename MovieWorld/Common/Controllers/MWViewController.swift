@@ -64,9 +64,7 @@ class MWViewController: UIViewController {
         let alertAction = UIAlertAction(title: "OK",
                                         style: .cancel,
                                         handler: nil)
-
         alert.addAction(alertAction)
-
         present(alert, animated: true)
     }
 }

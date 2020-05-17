@@ -37,7 +37,6 @@ class MWCastViewController: MWViewController {
                            forCellReuseIdentifier: MWCastMemberTableViewCell.reuseIdentifier)
         tableView.register(MWCrewMemberTableViewCell.self,
                            forCellReuseIdentifier: MWCrewMemberTableViewCell.reuseIdentifier)
-
         return tableView
     }()
 
@@ -109,21 +108,17 @@ extension MWCastViewController: UITableViewDelegate, UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
         if let castMember = self.movieFullCast?[indexPath.section][indexPath.row] as? MWMovieCastMember {
             let cell = tableView.dequeueReusableCell(
                 withIdentifier: MWCastMemberTableViewCell.reuseIdentifier, for: indexPath)
             (cell as? MWCastMemberTableViewCell)?.set(castMember: castMember)
-
             return cell
-        } else if let crewMember = self.movieFullCast?[indexPath.section][indexPath.row] as? MWMovieCrewMember {
+        } else {
+            let crewMember = self.movieFullCast?[indexPath.section][indexPath.row] as? MWMovieCrewMember
             let cell = tableView.dequeueReusableCell(
                 withIdentifier: MWCrewMemberTableViewCell.reuseIdentifier, for: indexPath)
             (cell as? MWCrewMemberTableViewCell)?.set(crewMember: crewMember)
-
             return cell
-        } else {
-            fatalError("You have some problems with members of cast")
         }
     }
 
@@ -147,10 +142,6 @@ extension MWCastViewController: UITableViewDelegate, UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if section == 0 {
-            return 0
-        } else {
-            return 57
-        }
+        return section == 0 ? 0 : 57
     }
 }

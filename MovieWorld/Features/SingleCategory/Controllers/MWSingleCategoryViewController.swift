@@ -88,7 +88,6 @@ class MWSingleCategoryViewController: MWViewController {
         self.category = category
         self.totalPages = totalResultsInfo?.totalPages ?? 0
         self.totalItems = totalResultsInfo?.totalResults ?? 0
-
         self.setTableViewMovies(movies: movies, useLoading: true)
     }
 
@@ -98,7 +97,6 @@ class MWSingleCategoryViewController: MWViewController {
 
     override func initController() {
         super.initController()
-
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(self.updateTableByGenres),
                                                name: .genresChanged, object: nil)
@@ -168,7 +166,6 @@ class MWSingleCategoryViewController: MWViewController {
         }
 
         var tempFilteredMovies: [MWMovie] = []
-
         var filteredMovies: [MWMovie] = []
         self.collectionView.filteredGenres.forEach { (genre) in
             filteredMovies.append(contentsOf: self.movies.filter{ ($0.movieGenres?.contains(genre) ?? false) })
@@ -191,7 +188,6 @@ class MWSingleCategoryViewController: MWViewController {
 //MARK:- UITableViewDataSource, UITableViewDelegate
 
 extension MWSingleCategoryViewController: UITableViewDataSource, UITableViewDelegate {
-
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.filteredMovies.count
     }
@@ -249,7 +245,7 @@ extension MWSingleCategoryViewController {
         let urlPath = category.getCategoryUrlPath()
         var query = MWNet.sh.parameters
         query["page"] = String(self.page)
-        MWNet.sh.request(urlPath: urlPath ,
+        MWNet.sh.request(urlPath: urlPath,
                          querryParameters: query,
                          succesHandler: { [weak self] (movies: MWMoviesResponse)  in
                             guard let self = self else { return }
@@ -260,9 +256,8 @@ extension MWSingleCategoryViewController {
                             completion(movies.results)
             },
                          errorHandler: { [weak self] (error) in
-                            guard let self = self else { return }
                             let message = error.getErrorDesription()
-                            self.errorAlert(message: message)
+                            self?.errorAlert(message: message)
         })
     }
 

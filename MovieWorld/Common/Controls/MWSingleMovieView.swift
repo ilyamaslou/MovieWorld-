@@ -160,7 +160,6 @@ class MWSingleMovieView: UIView {
         if !genres.isEmpty {
             genres.removeLast(2)
         }
-
         return genres
     }
 }

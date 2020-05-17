@@ -158,7 +158,6 @@ extension FilterCountryViewController: UITableViewDelegate, UITableViewDataSourc
         let cell = tableView.dequeueReusableCell(
             withIdentifier: MWCountryFilterTableViewCell.reuseIdentifier, for: indexPath)
         (cell as? MWCountryFilterTableViewCell)?.set(country: self.filteredCountries[indexPath.row])
-
         return cell
     }
 
@@ -189,7 +188,6 @@ extension FilterCountryViewController: UISearchResultsUpdating, UISearchBarDeleg
         } else {
             self.filteredCountries = self.countries.filter { ($0.country?.contains(text) ?? false) }
         }
-
         self.tableView.reloadData()
     }
 }

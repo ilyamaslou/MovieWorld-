@@ -34,11 +34,9 @@ class MWInterface {
     func setup(window: UIWindow) {
         self.window = window
         self.window?.backgroundColor = .white
-
-        self.setUpNavigationBarStyle()
-
         self.window?.rootViewController = self.initController
         self.window?.makeKeyAndVisible()
+        self.setUpNavigationBarStyle()
     }
 
     private func setUpNavigationBarStyle() {

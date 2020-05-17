@@ -10,7 +10,7 @@ import UIKit
 
 class MWInitController: MWViewController {
 
-    //MARK: - private variables
+    //MARK: - private variable
 
     private var group = DispatchGroup()
 
@@ -55,56 +55,50 @@ class MWInitController: MWViewController {
 
     private func loadGenres() {
         self.group.enter()
-        MWNet.sh.request(urlPath: URLPaths.getGenres ,
+        MWNet.sh.request(urlPath: URLPaths.getGenres,
                          querryParameters: MWNet.sh.parameters,
                          succesHandler: { [weak self] (genres: MWGenreResponse)  in
-                            guard let self = self else { return }
                             MWCDHelp.sh.saveGenres(genres: genres.genres)
                             MWSys.sh.genres = genres.genres
-                            self.group.leave()
+                            self?.group.leave()
             },
                          errorHandler: { [weak self] (error) in
-                            guard let self = self else { return }
                             let message = error.getErrorDesription()
                             print(message)
                             MWSys.sh.genres = MWCDHelp.sh.fetchGenres().mwGenres
-                            self.group.leave()
+                            self?.group.leave()
         })
     }
 
     private func loadConfiguration() {
         self.group.enter()
-        MWNet.sh.request(urlPath: URLPaths.getConfiguration ,
+        MWNet.sh.request(urlPath: URLPaths.getConfiguration,
                          querryParameters: MWNet.sh.parameters,
                          succesHandler: { [weak self] (configuration: MWConfiguration)  in
-                            guard let self = self else { return }
                             MWCDHelp.sh.saveImageConfiguration(imageConfiguration: configuration.images ?? MWImageConfiguration())
                             MWSys.sh.configuration = configuration
-                            self.group.leave()
+                            self?.group.leave()
             },
                          errorHandler: { [weak self] (error) in
-                            guard let self = self else { return }
                             let message = error.getErrorDesription()
                             print(message)
                             MWSys.sh.configuration = MWConfiguration(images: MWCDHelp.sh.fetchImageConfiguration().mwConfiguration)
-                            self.group.leave()
+                            self?.group.leave()
         })
     }
 
     private func loadLanguages() {
         self.group.enter()
-        MWNet.sh.request(urlPath: URLPaths.getLanguages ,
+        MWNet.sh.request(urlPath: URLPaths.getLanguages,
                          querryParameters: MWNet.sh.parameters,
                          succesHandler: { [weak self] (languages: [MWLanguageConfiguration])  in
-                            guard let self = self else { return }
                             MWSys.sh.languages = languages
-                            self.group.leave()
+                            self?.group.leave()
             },
                          errorHandler: { [weak self] (error) in
-                            guard let self = self else { return }
                             let message = error.getErrorDesription()
                             print(message)
-                            self.group.leave()
+                            self?.group.leave()
         })
     }
 }

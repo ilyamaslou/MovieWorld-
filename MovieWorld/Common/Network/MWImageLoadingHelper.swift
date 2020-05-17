@@ -21,7 +21,6 @@ class MWImageLoadingHelper{
     //MARK:- request functions
 
     func loadMovieImage(for movie: MWMovie, in category: String = "") {
-        //TODO: change poster size later by providing getNextSize() in Sizes
         if let imagePath = movie.posterPath,
             let baseUrl = MWSys.sh.configuration?.images?.secureBaseUrl,
             let size = MWSys.sh.configuration?.images?.posterSizes?.first,
@@ -53,7 +52,6 @@ class MWImageLoadingHelper{
         }
     }
 
-    //TODO: fix problems with sizes and make this less hardcoded
     func loadMovieImages(for imagesToLoad: MWMovieImagesResponse?) {
         guard let backdrops = imagesToLoad?.backdrops else { return }
         if imagesToLoad?.movieImages == nil {

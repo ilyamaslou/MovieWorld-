@@ -62,12 +62,10 @@ class MWSingleMovieViewContainer: UIView {
     lazy var castCollectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: self.castCollectionViewLayout)
         collectionView.register(MWCastMemberCollectionViewCell.self, forCellWithReuseIdentifier: MWCastMemberCollectionViewCell.reuseIdentifier)
-
         collectionView.backgroundColor = .white
         collectionView.contentInsetAdjustmentBehavior = .never
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
-
         return collectionView
     }()
 
@@ -91,12 +89,10 @@ class MWSingleMovieViewContainer: UIView {
     lazy var galleryCollectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: self.galleryViewLayout)
         collectionView.register(MWMovieGalleryCollectionViewCell.self, forCellWithReuseIdentifier: MWMovieGalleryCollectionViewCell.reuseIdentifier)
-
         collectionView.backgroundColor = .white
         collectionView.contentInsetAdjustmentBehavior = .never
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
-
         return collectionView
     }()
 

@@ -65,7 +65,6 @@ class MWMemberViewController: MWViewController {
     init(member: Personalized?) {
         super.init()
         self.navigationItem.setRightBarButton(self.rightBarButtonDidFavoriteItem, animated: true)
-
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(self.imageLoaded),
                                                name: .movieImageUpdated, object: nil)
@@ -121,7 +120,7 @@ class MWMemberViewController: MWViewController {
 
     private func loadInfo(id: Int) {
         let urlPath = String(format: URLPaths.personInfo, id)
-        MWNet.sh.request(urlPath: urlPath ,
+        MWNet.sh.request(urlPath: urlPath,
                          querryParameters: MWNet.sh.parameters,
                          succesHandler: { [weak self] (info: MWMemberDetails)  in
                             guard let self = self else { return }
@@ -129,9 +128,8 @@ class MWMemberViewController: MWViewController {
                             self.updateView()
             },
                          errorHandler: { [weak self] (error) in
-                            guard let self = self else { return }
                             let message = error.getErrorDesription()
-                            self.errorAlert(message: message)
+                            self?.errorAlert(message: message)
         })
     }
 
@@ -140,23 +138,20 @@ class MWMemberViewController: MWViewController {
         var querryParameters: [String: String] = MWNet.sh.parameters
         querryParameters["query"] = self.member?.name
 
-        MWNet.sh.request(urlPath: urlPath ,
+        MWNet.sh.request(urlPath: urlPath,
                          querryParameters: querryParameters,
-                         succesHandler: { [weak self] (moviesResponse: MWPersonMoviesResponse)  in
-
+                         succesHandler: { [weak self] (moviesResponse: MWMwmberMoviesResponse) in
                             guard let self = self,
                                 let results = moviesResponse.results,
-                                let memberKnownForMovies = results.first?.knownFor
-                                else { return }
+                                let memberKnownForMovies = results.first?.knownFor else { return }
 
                             self.memberMovies = memberKnownForMovies
                             self.setGenres()
                             self.loadAndSetImages()
             },
                          errorHandler: { [weak self] (error) in
-                            guard let self = self else { return }
                             let message = error.getErrorDesription()
-                            self.errorAlert(message: message)
+                            self?.errorAlert(message: message)
 
         })
     }
@@ -208,22 +203,19 @@ class MWMemberViewController: MWViewController {
 //MARK:- UICollectionViewDelegate, UICollectionViewDataSource
 
 extension MWMemberViewController: UICollectionViewDelegate, UICollectionViewDataSource {
-
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.memberMovies.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-
         guard let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: MWMainCollectionViewCell.reuseIdentifier,
             for: indexPath) as? MWMainCollectionViewCell else { return UICollectionViewCell() }
 
         if self.memberMovies.count > 0 {
-            let singleFilm = self.memberMovies[indexPath.item]
-            cell.set(movie: singleFilm)
+            let singleMovie = self.memberMovies[indexPath.item]
+            cell.set(movie: singleMovie)
         }
-
         return cell
     }
 

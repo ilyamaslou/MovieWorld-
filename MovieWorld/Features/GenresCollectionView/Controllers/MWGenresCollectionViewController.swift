@@ -31,7 +31,6 @@ class MWGenresCollectionViewController: MWViewController {
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(MWGenreCollectionViewCell.self, forCellWithReuseIdentifier: MWGenreCollectionViewCell.reuseIdentifier)
-
         collectionView.backgroundColor = .white
         collectionView.contentInsetAdjustmentBehavior = .never
         collectionView.showsVerticalScrollIndicator = false
@@ -97,7 +96,6 @@ class MWGenresCollectionViewController: MWViewController {
 //MARK:- UICollectionViewDataSource,  UICollectionViewDelegate
 
 extension MWGenresCollectionViewController: UICollectionViewDelegate, UICollectionViewDataSource {
-
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.movieGenres.count
     }
@@ -123,7 +121,6 @@ extension MWGenresCollectionViewController: UICollectionViewDelegate, UICollecti
             NotificationCenter.default.post(name: .genresChanged, object: nil)
             self.selectUnselectGenre(genreToChange: genre)
         }
-
         return cell
     }
 }

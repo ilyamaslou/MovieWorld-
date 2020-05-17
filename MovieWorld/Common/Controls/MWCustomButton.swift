@@ -34,10 +34,8 @@ class MWCustomButton: UIButton {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-
         let imageWidth = self.imageView?.frame.size.width
         let titleLabelWidth = self.titleLabel?.frame.size.width
-
         self.contentEdgeInsets = UIEdgeInsets(top: 4, left: 12, bottom: 4, right: 12)
         self.titleEdgeInsets = UIEdgeInsets(top: .zero, left: -((imageWidth ?? -4) + 4), bottom: .zero, right: (imageWidth ?? -4) + 4)
         self.imageEdgeInsets = UIEdgeInsets(top: .zero, left: titleLabelWidth ?? .zero, bottom: .zero, right: -(titleLabelWidth ?? .zero) - 4)
@@ -48,7 +46,6 @@ class MWCustomButton: UIButton {
         self.backgroundColor = UIColor(named: "accentColor")
         self.setTitleColor(.white, for: .normal)
         self.setTitleColor(.white, for: .highlighted)
-
         self.setTitle(title, for: .normal)
         self.titleLabel?.font = .systemFont(ofSize: 13)
 

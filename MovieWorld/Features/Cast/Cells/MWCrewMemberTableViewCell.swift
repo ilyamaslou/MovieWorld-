@@ -48,7 +48,6 @@ class MWCrewMemberTableViewCell: UITableViewCell {
         self.memberNameLabel.snp.updateConstraints { (make) in
             make.edges.equalToSuperview().inset(self.edgeInsets)
         }
-
         super.updateConstraints()
     }
 

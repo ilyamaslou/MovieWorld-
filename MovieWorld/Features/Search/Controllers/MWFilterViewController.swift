@@ -123,7 +123,6 @@ class MWFilterViewController: MWViewController {
         self.selectedCountries = filters.countries
         self.selectedYear = filters.year
         self.selectedRatingRange = filters.ratingRange
-
         self.setUpDataOnViews()
     }
 
@@ -185,7 +184,6 @@ class MWFilterViewController: MWViewController {
             make.left.right.equalToSuperview().inset(self.edgeInsets)
             make.bottom.equalToSuperview().inset(32)
         }
-
         super.updateViewConstraints()
     }
 
@@ -204,7 +202,6 @@ class MWFilterViewController: MWViewController {
         self.setUpYear()
         self.setUpSlider()
         self.collectionView.updateGenresByFiltered()
-
         self.checkReset()
     }
 
@@ -223,7 +220,6 @@ class MWFilterViewController: MWViewController {
         if !countries.isEmpty {
             countries.removeLast(2)
         }
-
         self.countryView.value = countries
     }
 
@@ -309,8 +305,7 @@ class MWFilterViewController: MWViewController {
         MWI.s.pushVC(controller)
 
         controller.choosenCountries = { [weak self] (countries) in
-            guard let self = self else { return }
-            self.selectedCountries = countries
+            self?.selectedCountries = countries
         }
     }
 

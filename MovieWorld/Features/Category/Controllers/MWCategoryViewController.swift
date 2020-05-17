@@ -70,7 +70,6 @@ extension MWCategoryViewController: UITableViewDelegate, UITableViewDataSource {
         cell.textLabel?.font = .systemFont(ofSize: 17)
         cell.accessoryType = .disclosureIndicator
         cell.selectionStyle = .none
-
         return cell
     }
 

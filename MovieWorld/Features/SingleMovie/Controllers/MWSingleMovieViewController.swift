@@ -112,7 +112,6 @@ class MWSingleMovieViewController: MWViewController {
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(self.movieImagesCollectionUpdated),
                                                name: .movieImagesCollectionUpdated, object: nil)
-
     }
 
     //MARK: constraints
@@ -132,7 +131,6 @@ class MWSingleMovieViewController: MWViewController {
             make.edges.equalTo(self.scrollView)
             make.width.equalTo(self.view.snp.width)
         }
-
         super.updateViewConstraints()
     }
 
@@ -152,7 +150,7 @@ class MWSingleMovieViewController: MWViewController {
         guard let movieId = self.movie?.id else { return }
         let urlPath = String(format: URLPaths.getMovieVideos, movieId)
 
-        MWNet.sh.request(urlPath: urlPath ,
+        MWNet.sh.request(urlPath: urlPath,
                          querryParameters: MWNet.sh.parameters,
                          succesHandler: { [weak self] (videos: MWMovieVideoResponse)  in
                             guard let self = self else { return }
@@ -163,9 +161,8 @@ class MWSingleMovieViewController: MWViewController {
                             self.reloadGalleryItems()
             },
                          errorHandler: { [weak self] (error) in
-                            guard let self = self else { return }
                             let message = error.getErrorDesription()
-                            self.errorAlert(message: message)
+                            self?.errorAlert(message: message)
         })
     }
 
@@ -173,7 +170,7 @@ class MWSingleMovieViewController: MWViewController {
         guard let movieId = self.movie?.id else { return }
         let urlPath = String(format: URLPaths.getMovieCredits, movieId)
 
-        MWNet.sh.request(urlPath: urlPath ,
+        MWNet.sh.request(urlPath: urlPath,
                          querryParameters: MWNet.sh.parameters,
                          succesHandler: { [weak self] (cast: MWMovieCastResponse)  in
                             self?.setCast(cast: cast)
@@ -188,7 +185,7 @@ class MWSingleMovieViewController: MWViewController {
         guard let movieId = self.movie?.id else { return }
         let urlPath = String(format: URLPaths.movieAdditionalInfo, movieId)
 
-        MWNet.sh.request(urlPath: urlPath ,
+        MWNet.sh.request(urlPath: urlPath,
                          querryParameters: MWNet.sh.parameters,
                          succesHandler: { [weak self] (details: MWMovieAdditionalInfo)  in
                             guard let self = self else { return }
@@ -208,7 +205,7 @@ class MWSingleMovieViewController: MWViewController {
         guard let movieId = self.movie?.id else { return }
         let urlPath = String(format: URLPaths.movieImages, movieId)
 
-        MWNet.sh.request(urlPath: urlPath ,
+        MWNet.sh.request(urlPath: urlPath,
                          querryParameters: MWNet.sh.parameters,
                          succesHandler: { [weak self] (images: MWMovieImagesResponse)  in
                             guard let self = self else { return }
@@ -216,9 +213,8 @@ class MWSingleMovieViewController: MWViewController {
                             MWImageLoadingHelper.sh.loadMovieImages(for: self.imagesResponse)
             },
                          errorHandler: { [weak self] (error) in
-                            guard let self = self else { return }
                             let message = error.getErrorDesription()
-                            self.errorAlert(message: message)
+                            self?.errorAlert(message: message)
         })
     }
 
@@ -231,8 +227,6 @@ class MWSingleMovieViewController: MWViewController {
             for people in peoples {
                 MWImageLoadingHelper.sh.loadPersonImage(for: people, path: people.profilePath)
             }
-        } else {
-            return
         }
     }
 
@@ -247,7 +241,6 @@ class MWSingleMovieViewController: MWViewController {
 
     private func setCast(cast: MWMovieCastResponse) {
         self.movieFullCast = cast
-
         let sortedCast = cast.cast.sorted { (member1, member2: MWMovieCastMember) in
             guard let order1 = member1.order, let order2 = member2.order else { return false }
             return order1 < order2
@@ -273,8 +266,7 @@ class MWSingleMovieViewController: MWViewController {
 
     private func setShowAllButtonTappedAction() {
         self.contentViewContainer.showAllView.buttonDidTap = { [weak self] in
-            guard let self = self else { return }
-            MWI.s.pushVC(MWCastViewController(cast: self.movieFullCast))
+            MWI.s.pushVC(MWCastViewController(cast: self?.movieFullCast))
         }
     }
 
@@ -323,7 +315,6 @@ class MWSingleMovieViewController: MWViewController {
 //MARK:- UICollectionViewDelegate
 
 extension MWSingleMovieViewController: UICollectionViewDelegate {
-
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == self.contentViewContainer.galleryCollectionView {
             return self.galleryItems.count
@@ -342,7 +333,6 @@ extension MWSingleMovieViewController: UICollectionViewDelegate {
                 withReuseIdentifier: MWMovieGalleryCollectionViewCell.reuseIdentifier,
                 for: indexPath)
             (cell as? MWMovieGalleryCollectionViewCell)?.set(galleryItem: self.galleryItems[indexPath.item])
-
             return cell
         }
 
@@ -353,7 +343,6 @@ extension MWSingleMovieViewController: UICollectionViewDelegate {
         if let memberOfCast = self.movieFullCast?.cast[indexPath.item] {
             cell.set(actor: memberOfCast)
         }
-
         return cell
     }
 }

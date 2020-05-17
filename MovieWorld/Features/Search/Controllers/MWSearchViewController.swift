@@ -95,7 +95,6 @@ class MWSearchViewController: MWViewController {
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(self.movieImageUpdated),
                                                name: .movieImageUpdated, object: nil)
-
         self.presettingSearchControllerNavBar()
         self.addSubviews()
         self.makeConstraints()
@@ -160,9 +159,7 @@ class MWSearchViewController: MWViewController {
 
         self.emptyListLabel.isHidden = ( isLastPage
             && self.filteredMovies.count == 0
-            && !self.isRequestBusy)
-            ? false
-            : true
+            && !self.isRequestBusy) ? false : true
     }
 
     @objc private func movieImageUpdated() {
@@ -217,15 +214,14 @@ extension MWSearchViewController: UITableViewDelegate, UITableViewDataSource {
 
 extension MWSearchViewController {
     private func load(urlPath: String, querry: [String: String], completion: @escaping (MWMoviesResponse) -> Void) {
-        MWNet.sh.request(urlPath: urlPath ,
+        MWNet.sh.request(urlPath: urlPath,
                          querryParameters: querry,
                          succesHandler: { (movies: MWMoviesResponse)  in
                             completion(movies)
         },
                          errorHandler: { [weak self] (error) in
-                            guard let self = self else { return }
                             let message = error.getErrorDesription()
-                            self.errorAlert(message: message)
+                            self?.errorAlert(message: message)
         })
     }
 
@@ -292,7 +288,6 @@ extension MWSearchViewController: UISearchResultsUpdating, UISearchBarDelegate {
             self.loadSearchedMovies()
             self.searchMovies = self.searchMovies.filter { ($0.title?.contains(text) ?? false) }
         }
-
         self.tableView.reloadData()
     }
 

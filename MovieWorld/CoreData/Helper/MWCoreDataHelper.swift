@@ -31,7 +31,6 @@ class MWCoreDataHelper {
         if let predicate = predicate {
             fetch.predicate = predicate
         }
-
         return self.fetchItems(fetch: fetch).first
     }
 
@@ -126,7 +125,6 @@ class MWCoreDataHelper {
         if fetchedImageConfiguration == nil {
             let newConfiguration = ImageConfiguration(context: self.managedContext)
             self.setMWImageConfigurationToCoreData(mwConfiguration: imageConfiguration, cdConfiguration: newConfiguration)
-
         } else {
             guard let configuration = fetchedImageConfiguration else { return }
             self.setMWImageConfigurationToCoreData(mwConfiguration: imageConfiguration, cdConfiguration: configuration)
@@ -136,7 +134,6 @@ class MWCoreDataHelper {
 
     func saveGenres (genres: [MWGenre]) {
         let fetchedGenres = self.fetchGenres().coreDataGenres
-
         if fetchedGenres.isEmpty {
             for genre in genres {
                 let newGenre = Genre(context: self.managedContext)
@@ -173,13 +170,12 @@ class MWCoreDataHelper {
         guard let movie = forMovie else { return }
         let coreDataMovie = self.fetchMovieForAdditionalInfo(for: movie).cdMovie
 
-        if coreDataMovie?.additionalInfo == nil {
+        if let fetchedInfo = coreDataMovie?.additionalInfo{
+            self.setMWMovieAdditionalInfoToCoreDataAdditionalInfo(mwInfo: info, for: fetchedInfo)
+        } else {
             let newAdditionalInfo = MovieAdditionalInfo(context: self.managedContext)
             self.setMWMovieAdditionalInfoToCoreDataAdditionalInfo(mwInfo: info, for: newAdditionalInfo)
             coreDataMovie?.additionalInfo = newAdditionalInfo
-        } else {
-            guard let fetchedInfo = coreDataMovie?.additionalInfo else { return }
-            self.setMWMovieAdditionalInfoToCoreDataAdditionalInfo(mwInfo: info, for: fetchedInfo)
         }
         self.saveContext()
     }
@@ -303,7 +299,6 @@ class MWCoreDataHelper {
             if let imageData = actor.image {
                 newMemmber.image = imageData
             }
-
             mwMembers.append(newMemmber)
         }
         return [mwMembers]
@@ -324,9 +319,7 @@ class MWCoreDataHelper {
             if let imageData = movie.movieImage {
                 newMovie.image = imageData
             }
-
             newMovie.setMovieGenres(genres: MWSys.sh.genres)
-
             mwMovies.append(newMovie)
         }
         return mwMovies
@@ -355,9 +348,7 @@ class MWCoreDataHelper {
             if let imageData = movie.movieImage {
                 newMovie.image = imageData
             }
-
             newMovie.setMovieGenres(genres: MWSys.sh.genres)
-
             mwMovies.append(newMovie)
         }
         return mwMovies

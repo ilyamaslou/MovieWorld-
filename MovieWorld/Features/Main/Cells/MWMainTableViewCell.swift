@@ -45,12 +45,10 @@ class MWMainTableViewCell: UITableViewCell {
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(MWMainCollectionViewCell.self, forCellWithReuseIdentifier: MWMainCollectionViewCell.reuseIdentifier)
-
         collectionView.backgroundColor = .white
         collectionView.contentInsetAdjustmentBehavior = .never
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
-
         return collectionView
     }()
 
@@ -67,6 +65,7 @@ class MWMainTableViewCell: UITableViewCell {
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        self.selectionStyle = .none
         self.contentView.addSubview(self.showAllView)
         self.contentView.addSubview(self.collectionView)
 
@@ -129,7 +128,6 @@ extension MWMainTableViewCell: UICollectionViewDelegate {
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-
         guard let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: MWMainCollectionViewCell.reuseIdentifier,
             for: indexPath) as? MWMainCollectionViewCell else { return UICollectionViewCell() }

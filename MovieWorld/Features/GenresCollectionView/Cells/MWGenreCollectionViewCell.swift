@@ -19,7 +19,9 @@ class MWGenreCollectionViewCell: UICollectionViewCell {
     var selectedGenre: ((String, Bool) -> Void)?
     var buttonIsSelected: Bool = false {
         didSet {
-            self.singleGenreButton.backgroundColor = buttonIsSelected ? UIColor(named: "accentColor") : UIColor(named: "lightAccentColor")
+            self.singleGenreButton.backgroundColor = buttonIsSelected
+                ? UIColor(named: "accentColor")
+                : UIColor(named: "lightAccentColor")
         }
     }
 

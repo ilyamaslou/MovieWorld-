@@ -67,12 +67,11 @@ class MWMainTabViewController: MWViewController {
 
     private func loadMovies() {
         var urlPath = ""
-
         for category in MWMainCategories.allCases {
             urlPath = category.getCategoryUrlPath()
 
             self.group.enter()
-            MWNet.sh.request(urlPath: urlPath ,
+            MWNet.sh.request(urlPath: urlPath,
                              querryParameters: MWNet.sh.parameters,
                              succesHandler: { [weak self] (movies: MWMoviesResponse)  in
                                 guard let self = self else { return }
@@ -146,9 +145,6 @@ extension MWMainTabViewController: UITableViewDataSource, UITableViewDelegate {
             cell.movies = movies
             cell.set(categoryName: category, totalResults: self.moviesResultsInfoByCategories[category])
         }
-
-        cell.selectionStyle = .none
-
         return cell
     }
 

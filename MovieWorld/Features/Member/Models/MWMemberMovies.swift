@@ -6,11 +6,11 @@
 //  Copyright © 2020 Ilya Maslou. All rights reserved.
 //
 
-struct MWPersonMoviesResponse: Decodable {
-    var results: [MWPersonMovies]?
+struct MWMwmberMoviesResponse: Decodable {
+    var results: [MWMemberMovies]?
 }
 
-struct MWPersonMovies: Decodable {
+struct MWMemberMovies: Decodable {
 
     //MARK:- enum
 

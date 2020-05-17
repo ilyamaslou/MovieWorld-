@@ -24,7 +24,7 @@ class MWGroupsCollectionViewLayout: UICollectionViewLayout {
     private let cellPadding: CGFloat = 6
 
     private var contentHeight: CGFloat {
-        guard let collectionView = collectionView else { return 0 }
+        guard let collectionView = self.collectionView else { return 0 }
         let insets = collectionView.contentInset
         return collectionView.bounds.height - (insets.top + insets.bottom)
     }
@@ -32,44 +32,43 @@ class MWGroupsCollectionViewLayout: UICollectionViewLayout {
     private var contentWidth: CGFloat = 0
 
     override var collectionViewContentSize: CGSize {
-        return CGSize(width: contentWidth, height: contentHeight)
+        return CGSize(width: self.contentWidth, height: self.contentHeight)
     }
 
     //MARK:- update collectionView cells function
 
     override func prepare() {
-        guard cache.isEmpty == true,
-            let collectionView = collectionView else { return }
+        guard self.cache.isEmpty == true,
+            let collectionView = self.collectionView else { return }
 
-        let rowHeight = contentHeight / CGFloat(numberOfColumns)
+        let rowHeight = self.contentHeight / CGFloat(self.numberOfColumns)
         var yOffset: [CGFloat] = []
-        for column in 0..<numberOfColumns {
+        for column in 0..<self.numberOfColumns {
             yOffset.append(CGFloat(column) * rowHeight)
         }
         var column = 0
-        var xOffset: [CGFloat] = .init(repeating: 0, count: numberOfColumns)
+        var xOffset: [CGFloat] = .init(repeating: 0, count: self.numberOfColumns)
 
         for item in 0..<collectionView.numberOfItems(inSection: 0) {
             let indexPath = IndexPath(item: item, section: 0)
 
-            let labelWidth = delegate?.collectionView(
+            let labelWidth = self.delegate?.collectionView(
                 collectionView,
                 widthForLabelAtIndexPath: indexPath) ?? 180
-            let width = cellPadding * 2 + labelWidth
+            let width = self.cellPadding * 2 + labelWidth
             let frame = CGRect(x: xOffset[column],
                                y: yOffset[column],
                                width: width,
                                height: rowHeight)
-            let insetFrame = frame.insetBy(dx: cellPadding, dy: cellPadding)
+            let insetFrame = frame.insetBy(dx: self.cellPadding, dy: self.cellPadding)
 
             let attributes = UICollectionViewLayoutAttributes(forCellWith: indexPath)
             attributes.frame = insetFrame
-            cache.append(attributes)
+            self.cache.append(attributes)
 
-            contentWidth = max(contentWidth, frame.maxX)
+            self.contentWidth = max(self.contentWidth, frame.maxX)
             xOffset[column] = xOffset[column] + width
-
-            column = column < (numberOfColumns - 1) ? (column + 1) : 0
+            column = column < (self.numberOfColumns - 1) ? (column + 1) : 0
         }
     }
 
@@ -78,7 +77,7 @@ class MWGroupsCollectionViewLayout: UICollectionViewLayout {
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
         var visibleLayoutAttributes: [UICollectionViewLayoutAttributes] = []
 
-        for attributes in cache {
+        for attributes in self.cache {
             if attributes.frame.intersects(rect) {
                 visibleLayoutAttributes.append(attributes)
             }
@@ -87,7 +86,7 @@ class MWGroupsCollectionViewLayout: UICollectionViewLayout {
     }
 
     override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
-        return cache[indexPath.item]
+        return self.cache[indexPath.item]
     }
 }
 

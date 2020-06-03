@@ -75,7 +75,6 @@
 		9999E0D823F9F37A007EB718 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9999E0D723F9F37A007EB718 /* Assets.xcassets */; };
 		9999E0DB23F9F37A007EB718 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9999E0D923F9F37A007EB718 /* LaunchScreen.storyboard */; };
 		999E6002241B7B6800F3103F /* MWModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 999E6000241B7B6800F3103F /* MWModel.xcdatamodeld */; };
-		999E6004241B7B7500F3103F /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999E6003241B7B7500F3103F /* CoreDataManager.swift */; };
 		99A7878E246227E700A0F216 /* MWEmptyListLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A7878D246227E700A0F216 /* MWEmptyListLabel.swift */; };
 		99A7879024622B7C00A0F216 /* MWViewForHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A7878F24622B7C00A0F216 /* MWViewForHeader.swift */; };
 		99A787922462DE2000A0F216 /* UIViewController + Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A787912462DE2000A0F216 /* UIViewController + Ex.swift */; };
@@ -85,6 +84,7 @@
 		99AB2D832433EB1200095464 /* MWTitleButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99AB2D822433EB1200095464 /* MWTitleButtonView.swift */; };
 		99AB2D902437682500095464 /* MWCastViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99AB2D8F2437682500095464 /* MWCastViewController.swift */; };
 		99AB2D922437714C00095464 /* MWCastMemberTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99AB2D912437714C00095464 /* MWCastMemberTableViewCell.swift */; };
+		99AE16912487BB88009B8659 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99AE16902487BB88009B8659 /* CoreDataManager.swift */; };
 		99B481F82439501200017903 /* Date+Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99B481F72439501200017903 /* Date+Ex.swift */; };
 		99BAE46A241194AD00F45B11 /* MWInitController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BAE469241194AD00F45B11 /* MWInitController.swift */; };
 		99BAE46C2411A22600F45B11 /* MWSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BAE46B2411A22600F45B11 /* MWSystem.swift */; };
@@ -182,7 +182,6 @@
 		9999E0DA23F9F37A007EB718 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9999E0DC23F9F37A007EB718 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		999E6001241B7B6800F3103F /* MWModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MWModel.xcdatamodel; sourceTree = "<group>"; };
-		999E6003241B7B7500F3103F /* CoreDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CoreDataManager.swift; path = ../../../../Downloads/CourceCoreData/CourceCoreData/CoreData/CoreDataManager.swift; sourceTree = "<group>"; };
 		99A7878D246227E700A0F216 /* MWEmptyListLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWEmptyListLabel.swift; sourceTree = "<group>"; };
 		99A7878F24622B7C00A0F216 /* MWViewForHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWViewForHeader.swift; sourceTree = "<group>"; };
 		99A787912462DE2000A0F216 /* UIViewController + Ex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController + Ex.swift"; sourceTree = "<group>"; };
@@ -192,6 +191,7 @@
 		99AB2D822433EB1200095464 /* MWTitleButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWTitleButtonView.swift; sourceTree = "<group>"; };
 		99AB2D8F2437682500095464 /* MWCastViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWCastViewController.swift; sourceTree = "<group>"; };
 		99AB2D912437714C00095464 /* MWCastMemberTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWCastMemberTableViewCell.swift; sourceTree = "<group>"; };
+		99AE16902487BB88009B8659 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		99B481F72439501200017903 /* Date+Ex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Ex.swift"; sourceTree = "<group>"; };
 		99BAE469241194AD00F45B11 /* MWInitController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWInitController.swift; sourceTree = "<group>"; };
 		99BAE46B2411A22600F45B11 /* MWSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWSystem.swift; sourceTree = "<group>"; };
@@ -561,7 +561,7 @@
 				99D7AD9D24715FAC00BAE909 /* Helper */,
 				999E6005241B7BFE00F3103F /* DataClasses */,
 				999E6000241B7B6800F3103F /* MWModel.xcdatamodeld */,
-				999E6003241B7B7500F3103F /* CoreDataManager.swift */,
+				99AE16902487BB88009B8659 /* CoreDataManager.swift */,
 			);
 			path = CoreData;
 			sourceTree = "<group>";
@@ -916,7 +916,6 @@
 				99F1529A244D039E008A1923 /* MWMainCategories.swift in Sources */,
 				99A7878E246227E700A0F216 /* MWEmptyListLabel.swift in Sources */,
 				9979B46523FFD0D5005421D9 /* MWViewController.swift in Sources */,
-				999E6004241B7B7500F3103F /* CoreDataManager.swift in Sources */,
 				994842FA245A27DD009F04AE /* Movie+CoreDataClass.swift in Sources */,
 				994E3D0023FAA0170034B4D2 /* MWSingleMovieInCategoryCell.swift in Sources */,
 				997BA63524393893007AA974 /* MWMemberViewController.swift in Sources */,
@@ -929,6 +928,7 @@
 				992A1D6B242AC43200D61D65 /* MWCastMemberCollectionViewCell.swift in Sources */,
 				9977B54B2462F484001EAB86 /* MWSingleMemberView.swift in Sources */,
 				99CAD4562451007600E88BBD /* MWCountryFilterTableViewCell.swift in Sources */,
+				99AE16912487BB88009B8659 /* CoreDataManager.swift in Sources */,
 				9999E0CF23F9F378007EB718 /* AppDelegate.swift in Sources */,
 				99A787922462DE2000A0F216 /* UIViewController + Ex.swift in Sources */,
 				997870E124563E6500CD2ACC /* MWGenresCollectionViewController.swift in Sources */,
@@ -1070,6 +1070,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_COMPILATION_MODE = singlefile;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
